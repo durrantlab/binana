@@ -9,3 +9,5 @@ TODO List
    in 3Dmol.js.
 6. Pyodide testing in browser.
 7. Writing manuscript.
+8. Does BINANA renumber residues and atoms? If it does, it would be good to 
+   change it so it does not renumber things.
