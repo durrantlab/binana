@@ -9,7 +9,7 @@ import math
 import os
 import sys
 import textwrap
-# import json
+import json
 
 """
 Class Point defines a point on the grid
