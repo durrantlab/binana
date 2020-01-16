@@ -11,6 +11,7 @@ TODO List
 7. Writing manuscript.
 8. Does BINANA renumber residues and atoms? If it does, it would be good to
    change it so it does not renumber things.
+9. Consider applying Binana to all the complexes of the BindingDB.
 
 Need to make better examples. And also some sort of unit test.
 
