@@ -12,6 +12,7 @@ import os
 import sys
 import textwrap
 import json
+import re # split on multiple delimiters
 
 """
 Class Point defines a point on the grid
@@ -3143,7 +3144,7 @@ class Binana:
         if parameters.params["output_dir"] != "":
             if not os.path.exists(parameters.params["output_dir"]):
                 os.mkdir(parameters.params["output_dir"])
-
+        self.json_file(hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
         """'# old output format
         output = ""
         output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist1_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_less_than_two_half) + "\n"
@@ -3620,6 +3621,7 @@ class Binana:
             f.write(self.vmd_state_file())
             f.close()
             # TODO: JY put json_file() call here?
+        
         if (
             parameters.params["output_file"] == ""
             and parameters.params["output_dir"] == ""
@@ -4040,338 +4042,222 @@ class Binana:
         return "\n".join(vmd)
 
     # json output
-    def json_file(self):
+    def json_file(self, hydrophobic_interactions, pi_stacking_interactions, t_stacking_interactions, cat_pi_interactions, salt_bridge_interactions):
         json_output = {}
-        # display information
-        json_output["display"] = [
-            "set viewplist {}",
-            "set fixedlist {}",
-            "# Display settings",
-            "display projection   Orthographic",
-            "display depthcue   on",
-            "display cuestart   0.500000",
-            "display cueend     10.000000",
-            "display cuedensity 0.200000",
-            "display cuemode    Exp2",
-        ]
+        # first level keys
+        json_output["hydrophobic_contacts"] = []
+        json_output["pi-pi_stacking_interactions"] = []
+        json_output["T-stacking_interactions"] = []
+        json_output["cation-pi_interactions"] = []
+        json_output["salt_bridges"] = []
+        
+        # counter for ligand-receptor pair 
+        i = 0
 
-        # new back_bone
-        json_output["new back_bone"] = [
-            "mol new back_bone.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top back_bone.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
+        # populate the lists
 
-        # new side_chain
-        json_output["new side_chain"] = [
-            "mol new side_chain.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top side_chain.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
+        # hydrophobic contacts 
+        for atom_pairs in hydrophobic_interactions:
+            # add new dictionary to hydrophobic_interactions list
+            json_output["hydrophobic_contacts"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["hydrophobic_contacts"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }   
+            # increment counter
+            i += 1
 
-        # new close_contacts
-        json_output["new close_contacts"] = [
-            "mol new close_contacts.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top close_contacts.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
+        # counter for ligand-receptor pair 
+        i = 0
+        # pi-pi stacking interactions
+        for atom_pair in pi_stacking_interactions:
+            # add new dictionary to pi_stacking list
+            json_output["pi-pi_stacking_interactions"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["pi-pi_stacking_interactions"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }
+            # increment counter
+            i += 1
+        
+        # counter for ligand-receptor pair 
+        i = 0
+        # t stacking interactions
+        for atom_pair in t_stacking_interactions:
+            # add new dictionary to t_stacking list
+            json_output["T-stacking_interactions"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["T-stacking_interactions"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }
+            # increment counter
+            i += 1 
+        
+        # counter for ligand-receptor pair 
+        i = 0
+        # cat-pi stacking interactions
+        for atom_pair in cat_pi_interactions:
+            # add new dictionary to cation-pi list
+            json_output["cation-pi_interactions"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["cation-pi_interactions"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }
+            # increment counter
+            i += 1
 
-        # new contacts
-        json_output["new contacts"] = [
-            "mol new contacts.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top contacts.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
+        # counter for ligand-receptor pair 
+        i = 0
+        # salt bridge interactions
+        for atom_pair in salt_bridge_interactions:
+            # add new dictionary to salt bridges list
+            json_output["salt_bridges"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["salt_bridges"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }
+            # increment counter
+            i += 1     
 
-        # new contacts_alpha_helix
-        json_output["new contacts_alpha_helix"] = [
-            "mol new contacts_alpha_helix.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top contacts_alpha_helix.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new contacts_beta_sheet
-        json_output["new contacts_beta_sheet"] = [
-            "mol new contacts_beta_sheet.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top contacts_beta_sheet.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new contacts_other_secondary_structure
-        json_output["new contacts_other_secondary_structure"] = [
-            "mol new contacts_other_secondary_structure.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top contacts_other_secondary_structure.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new hydrophobic
-        json_output["new hydrophobic"] = [
-            "mol new hydrophobic.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top hydrophobic.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new hydrogen_bonds
-        json_output["new hydrogen_bonds"] = [
-            "mol new hydrogen_bonds.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top hydrogen_bonds.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new salt_bridges
-        json_output["new salt_bridges"] = [
-            "mol new salt_bridges.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top salt_bridges.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new cat_pi
-        json_output["new cat_pi"] = [
-            "mol new cat_pi.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top cat_pi.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new pi_pi_stacking
-        json_output["new pi_pi_stacking"] = [
-            "mol new pi_pi_stacking.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top pi_pi_stacking.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new T_stacking
-        json_output["new T_stacking"] = [
-            "mol new T_stacking.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top T_stacking.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new ligand
-        json_output["new ligand"] = [
-            "mol new ligand.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top ligand.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # new receptor
-        json_output["new receptor"] = [
-            "mol new receptor.pdb type pdb first 0 last -1 step 1 filebonds 1 autobonds 1 waitfor all",
-            "mol delrep 0 top",
-            "mol representation VDW 1.000000 8.000000",
-            "mol color Name",
-            "mol selsection {all}",
-            "mol material Opaque",
-            "mol addrep top",
-            "mol selupdate 0 top 0",
-            "mol colupdate 0 to 0",
-            "mol scaleminmax top 0 0.000000 0.000000",
-            "mol smoothrep top 0 0",
-            "mol drawfrarmes top 0 {now}",
-            "mol rename top receptor.pdb",
-            "molinfo top set drawn 0",
-            "set viewpoints([molinfo top]) {{{1 0 0 -75.1819} {0 1 0 -83.0219} {0 0 1 -119.981} {0 0 0 1}} {{-0.0620057 0.672762 -0.737291 0} {0.428709 0.685044 0.589035 0} {0.90135 -0.279568 -0.33089 0} {0 0 0 1}} {{0.11999 0 0 0} {0 0.11999 0 0} {0 0 0.11999 0} {0 0 0 1}} {{1 0 0 0} {0 1 0 0} {0 0 1 0} {0 0 0 1}}}"
-            "lappend viewplist [molinfo top]",
-        ]
-
-        # more display
-        json_output = [
-            "foreach v $viewplist {",
-            "  mol $v set {center_matrix rotate_matrix scale_matrix global_matrix} $viewpoints($v)",
-            "}",
-            "foreach v $fixedlist {",
-            "  molinfo $v set fixed 1",
-            "}",
-            "unset viewplist",
-            "unset fixedlist",
-            "mol top $topmol",
-            "unset topmol",
-            "color Display {Background} white",
-        ]
-
-        # return output as dictionary
-        return json.dumps(json_output)
+        # dump to json file
+        with open('json_output.json', 'w') as jfile:
+                json.dump(json_output, jfile)
 
 
 class CommandLineParameters:
