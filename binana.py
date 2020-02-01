@@ -3144,7 +3144,7 @@ class Binana:
         if parameters.params["output_dir"] != "":
             if not os.path.exists(parameters.params["output_dir"]):
                 os.mkdir(parameters.params["output_dir"])
-        self.json_file(hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
+        self.json_file(close_contacts_labels, contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
         """'# old output format
         output = ""
         output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist1_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_less_than_two_half) + "\n"
@@ -4042,20 +4042,160 @@ class Binana:
         return "\n".join(vmd)
 
     # json output
-    def json_file(self, hydrophobic_interactions, pi_stacking_interactions, t_stacking_interactions, cat_pi_interactions, salt_bridge_interactions):
+    def json_file(self, close_contact_interactions, contact_interactions, hydrogen_bonds, hydrophobic_interactions, pi_stacking_interactions, t_stacking_interactions, cat_pi_interactions, salt_bridge_interactions):
         json_output = {}
         # first level keys
+        json_output["contacts_within_2.5A"] = []
+        json_output["contacts_within_4.0A"] = []
+        json_output["hydrogen_bonds"] = []
         json_output["hydrophobic_contacts"] = []
         json_output["pi-pi_stacking_interactions"] = []
         json_output["T-stacking_interactions"] = []
         json_output["cation-pi_interactions"] = []
         json_output["salt_bridges"] = []
         
-        # counter for ligand-receptor pair 
-        i = 0
-
         # populate the lists
+        
+        # counter for interactions
+        i = 0
+        # atom pairs within 2.5 angstroms
+        for atom_pairs in close_contact_interactions:
+            # add new dictionary to contacts_within_2.5A list
+            json_output["contacts_within_2.5A"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["contacts_within_2.5A"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }   
+            # increment counter
+            i += 1
 
+        # reset counter for interaction 
+        i = 0
+        # atom pairs within 4.0 angstroms
+        for atom_pairs in contact_interactions:
+            # add new dictionary to contacts_within_4.0A list
+            json_output["contacts_within_4.0A"].append({})
+            # parse atom_pairs
+            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
+            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # remove whitespace
+            for detail in ligand_atom_details:
+                if detail == "":
+                    ligand_atom_details.remove(detail)
+            for detail in receptor_atom_details:
+                if detail == "":
+                    receptor_atom_details.remove(detail)
+            
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            json_output["contacts_within_4.0A"][i] = {
+                "ligand_atoms": [
+                    {
+                        "chain": "A",
+                        "resID": int(ligand_atom_details[1]),
+                        "resName": ligand_atom_details[0],
+                        "atomName": ligand_atom_details[2],
+                        "atomIndex": int(ligand_atom_details[3])
+                    }
+                ],
+                "receptor_atoms": [
+                    {
+                        "chain": receptor_atom_details[0],
+                        "resID": int(receptor_atom_details[2]),
+                        "resName": receptor_atom_details[1],
+                        "atomName": receptor_atom_details[3],
+                        "atomIndex": int(receptor_atom_details[4])
+                    }
+                ]
+            }   
+            # increment counter
+            i += 1
+
+        # reset counter for interaction 
+        i = 0
+        # hydrogen bonds
+        for atom_pairs in hydrogen_bonds:
+            # add new dictionary to hydrogen_bonds list
+            json_output["hydrogen_bonds"].append({})
+            # parse atom_trios
+            ligand_and_receptor = [
+                re.split(r'[():]', atom_pairs[0]),
+                re.split(r'[():]', atom_pairs[1]),
+                re.split(r'[():]', atom_pairs[2])
+            ]
+            ligand_atom_details = []
+            receptor_atom_details = []
+            # put atoms in appropriate group
+            for atom in ligand_and_receptor:
+                if len(atom[0]) > 1: # ligand ("ATP")
+                    ligand_atom_details.append(atom)
+                else: # receptor ("A")
+                    receptor_atom_details.append(atom)
+            # remove whitespace
+            for atom in ligand_atom_details:
+                for detail in atom:
+                    print("\'" + detail + "\'")
+                    if detail == "":
+                        atom.remove(detail)
+            for atom in receptor_atom_details:
+                for detail in atom:
+                    if detail == "":
+                        atom.remove(detail)
+            # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+            # add "ligand_atoms" and "receptor_atoms" keys to dictionary
+            json_output["hydrogen_bonds"][i] = {"ligand_atoms": [], "receptor_atoms": []}
+            for detail in ligand_atom_details:
+                json_output["hydrogen_bonds"][i]["ligand_atoms"].append(
+                    {
+                        "chain": "A",
+                        "resID": int(detail[1]),
+                        "resName": detail[0],
+                        "atomName": detail[2],
+                        "atomIndex": int(detail[3])
+                    }
+                )
+            for detail in receptor_atom_details:
+                json_output["hydrogen_bonds"][i]["receptor_atoms"].append(
+                    {
+                        "chain": detail[0],
+                        "resID": int(detail[2]),
+                        "resName": detail[1],
+                        "atomName": detail[3],
+                        "atomIndex": detail[4]
+                    }
+                )
+            # increment counter
+            i += 1
+       
+        # reset counter for interaction 
+        i = 0
         # hydrophobic contacts 
         for atom_pairs in hydrophobic_interactions:
             # add new dictionary to hydrophobic_interactions list
@@ -4095,165 +4235,217 @@ class Binana:
             # increment counter
             i += 1
 
-        # counter for ligand-receptor pair 
+        # reset counter for interaction 
         i = 0
         # pi-pi stacking interactions
         for atom_pair in pi_stacking_interactions:
             # add new dictionary to pi_stacking list
             json_output["pi-pi_stacking_interactions"].append({})
-            # parse atom_pairs
-            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
-            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # parse atom_pairs into individual atoms
+            individual_ligand_atoms = atom_pair[0].split("/")
+            individual_receptor_atoms = atom_pair[1].split("/")
+            # parse individual atoms into details
+            individual_ligand_atoms_details = []
+            for atom in individual_ligand_atoms:
+                if atom != "":
+                    individual_ligand_atoms_details.append(re.split(r'[\[\]():]', atom))
+            individual_receptor_atoms_details = []
+            for atom in individual_receptor_atoms:
+                if atom != "":
+                    individual_receptor_atoms_details.append(re.split(r'[\[\]():]', atom))
             # remove whitespace
-            for detail in ligand_atom_details:
-                if detail == "":
-                    ligand_atom_details.remove(detail)
-            for detail in receptor_atom_details:
-                if detail == "":
-                    receptor_atom_details.remove(detail)
+            for detail_list in individual_ligand_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
+            for detail_list in individual_receptor_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
             # add each detail to the appropriate key in ligand_atoms and receptor_atoms
-            json_output["pi-pi_stacking_interactions"][i] = {
-                "ligand_atoms": [
+            # add "ligand_atoms" and "receptor_atoms" keys to dictionary
+            json_output["pi-pi_stacking_interactions"][i] = {"ligand_atoms": [], "receptor_atoms": []}
+            for detail in individual_ligand_atoms_details:
+                json_output["pi-pi_stacking_interactions"][i]["ligand_atoms"].append(
                     {
                         "chain": "A",
-                        "resID": int(ligand_atom_details[1]),
-                        "resName": ligand_atom_details[0],
-                        "atomName": ligand_atom_details[2],
-                        "atomIndex": int(ligand_atom_details[3])
+                        "resID": int(detail[1]),
+                        "resName": detail[0],
+                        "atomName": detail[2],
+                        "atomIndex": int(detail[3])
                     }
-                ],
-                "receptor_atoms": [
+                )
+            for detail in individual_receptor_atoms_details:
+                json_output["pi-pi_stacking_interactions"][i]["receptor_atoms"].append(
                     {
-                        "chain": receptor_atom_details[0],
-                        "resID": int(receptor_atom_details[2]),
-                        "resName": receptor_atom_details[1],
-                        "atomName": receptor_atom_details[3],
-                        "atomIndex": int(receptor_atom_details[4])
+                        "chain": detail[0],
+                        "resID": int(detail[2]),
+                        "resName": detail[1],
+                        "atomName": detail[3],
+                        "atomIndex": detail[4]
                     }
-                ]
-            }
-            # increment counter
+                )
+            # increment counter 
             i += 1
-        
-        # counter for ligand-receptor pair 
+
+        # reset counter for interaction  
         i = 0
         # t stacking interactions
         for atom_pair in t_stacking_interactions:
             # add new dictionary to t_stacking list
             json_output["T-stacking_interactions"].append({})
-            # parse atom_pairs
-            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
-            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # parse atom_pairs into individual atoms
+            individual_ligand_atoms = atom_pair[0].split("/")
+            individual_receptor_atoms = atom_pair[1].split("/")
+            # parse individual atoms into details
+            individual_ligand_atoms_details = []
+            for atom in individual_ligand_atoms:
+                if atom != "":
+                    individual_ligand_atoms_details.append(re.split(r'[\[\]():]', atom))
+            individual_receptor_atoms_details = []
+            for atom in individual_receptor_atoms:
+                if atom != "":
+                    individual_receptor_atoms_details.append(re.split(r'[\[\]():]', atom))
             # remove whitespace
-            for detail in ligand_atom_details:
-                if detail == "":
-                    ligand_atom_details.remove(detail)
-            for detail in receptor_atom_details:
-                if detail == "":
-                    receptor_atom_details.remove(detail)
+            for detail_list in individual_ligand_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
+            for detail_list in individual_receptor_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
             # add each detail to the appropriate key in ligand_atoms and receptor_atoms
-            json_output["T-stacking_interactions"][i] = {
-                "ligand_atoms": [
+            # add "ligand_atoms" and "receptor_atoms" keys to dictionary
+            json_output["T-stacking_interactions"][i] = {"ligand_atoms": [], "receptor_atoms": []}
+            for detail in individual_ligand_atoms_details:
+                json_output["T-stacking_interactions"][i]["ligand_atoms"].append(
                     {
                         "chain": "A",
-                        "resID": int(ligand_atom_details[1]),
-                        "resName": ligand_atom_details[0],
-                        "atomName": ligand_atom_details[2],
-                        "atomIndex": int(ligand_atom_details[3])
+                        "resID": int(detail[1]),
+                        "resName": detail[0],
+                        "atomName": detail[2],
+                        "atomIndex": int(detail[3])
                     }
-                ],
-                "receptor_atoms": [
+                )
+            for detail in individual_receptor_atoms_details:
+                json_output["T-stacking_interactions"][i]["receptor_atoms"].append(
                     {
-                        "chain": receptor_atom_details[0],
-                        "resID": int(receptor_atom_details[2]),
-                        "resName": receptor_atom_details[1],
-                        "atomName": receptor_atom_details[3],
-                        "atomIndex": int(receptor_atom_details[4])
+                        "chain": detail[0],
+                        "resID": int(detail[2]),
+                        "resName": detail[1],
+                        "atomName": detail[3],
+                        "atomIndex": detail[4]
                     }
-                ]
-            }
-            # increment counter
-            i += 1 
+                )
+            # increment counter 
+            i += 1
         
-        # counter for ligand-receptor pair 
+        # reset counter for interaction 
         i = 0
         # cat-pi stacking interactions
         for atom_pair in cat_pi_interactions:
-            # add new dictionary to cation-pi list
+            # add new dictionary to cation-pi_stacking list
             json_output["cation-pi_interactions"].append({})
-            # parse atom_pairs
-            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
-            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # parse atom_pairs into individual atoms
+            individual_ligand_atoms = atom_pair[0].split("/")
+            individual_receptor_atoms = atom_pair[1].split("/")
+            # parse individual atoms into details
+            individual_ligand_atoms_details = []
+            for atom in individual_ligand_atoms:
+                if atom != "":
+                    individual_ligand_atoms_details.append(re.split(r'[\[\]():]', atom))
+            individual_receptor_atoms_details = []
+            for atom in individual_receptor_atoms:
+                if atom != "":
+                    individual_receptor_atoms_details.append(re.split(r'[\[\]():]', atom))
             # remove whitespace
-            for detail in ligand_atom_details:
-                if detail == "":
-                    ligand_atom_details.remove(detail)
-            for detail in receptor_atom_details:
-                if detail == "":
-                    receptor_atom_details.remove(detail)
+            for detail_list in individual_ligand_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
+            for detail_list in individual_receptor_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
             # add each detail to the appropriate key in ligand_atoms and receptor_atoms
-            json_output["cation-pi_interactions"][i] = {
-                "ligand_atoms": [
+            # add "ligand_atoms" and "receptor_atoms" keys to dictionary
+            json_output["cation-pi_interactions"][i] = {"ligand_atoms": [], "receptor_atoms": []}
+            for detail in individual_ligand_atoms_details:
+                json_output["cation-pi_interactions"][i]["ligand_atoms"].append(
                     {
                         "chain": "A",
-                        "resID": int(ligand_atom_details[1]),
-                        "resName": ligand_atom_details[0],
-                        "atomName": ligand_atom_details[2],
-                        "atomIndex": int(ligand_atom_details[3])
+                        "resID": int(detail[1]),
+                        "resName": detail[0],
+                        "atomName": detail[2],
+                        "atomIndex": int(detail[3])
                     }
-                ],
-                "receptor_atoms": [
+                )
+            for detail in individual_receptor_atoms_details:
+                json_output["cation-pi_interactions"][i]["receptor_atoms"].append(
                     {
-                        "chain": receptor_atom_details[0],
-                        "resID": int(receptor_atom_details[2]),
-                        "resName": receptor_atom_details[1],
-                        "atomName": receptor_atom_details[3],
-                        "atomIndex": int(receptor_atom_details[4])
+                        "chain": detail[0],
+                        "resID": int(detail[2]),
+                        "resName": detail[1],
+                        "atomName": detail[3],
+                        "atomIndex": detail[4]
                     }
-                ]
-            }
-            # increment counter
+                )
+            # increment counter 
             i += 1
-
-        # counter for ligand-receptor pair 
+            
+        # reset counter for interaction 
         i = 0
         # salt bridge interactions
         for atom_pair in salt_bridge_interactions:
-            # add new dictionary to salt bridges list
+            # add new dictionary to salt_bridges list
             json_output["salt_bridges"].append({})
-            # parse atom_pairs
-            ligand_atom_details = re.split(r'[():]', atom_pairs[0])
-            receptor_atom_details = re.split(r'[():]', atom_pairs[1])
+            # parse atom_pairs into individual atoms
+            individual_ligand_atoms = atom_pair[0].split("/")
+            individual_receptor_atoms = atom_pair[1].split("/")
+            # parse individual atoms into details
+            individual_ligand_atoms_details = []
+            for atom in individual_ligand_atoms:
+                if atom != "":
+                    individual_ligand_atoms_details.append(re.split(r'[\[\]():]', atom))
+            individual_receptor_atoms_details = []
+            for atom in individual_receptor_atoms:
+                if atom != "":
+                    individual_receptor_atoms_details.append(re.split(r'[\[\]():]', atom))
             # remove whitespace
-            for detail in ligand_atom_details:
-                if detail == "":
-                    ligand_atom_details.remove(detail)
-            for detail in receptor_atom_details:
-                if detail == "":
-                    receptor_atom_details.remove(detail)
+            for detail_list in individual_ligand_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
+            for detail_list in individual_receptor_atoms_details:
+                for detail in detail_list:
+                    if detail == "":
+                        detail_list.remove(detail)
             # add each detail to the appropriate key in ligand_atoms and receptor_atoms
-            json_output["salt_bridges"][i] = {
-                "ligand_atoms": [
+            # add "ligand_atoms" and "receptor_atoms" keys to dictionary
+            json_output["salt_bridges"][i] = {"ligand_atoms": [], "receptor_atoms": []}
+            for detail in individual_ligand_atoms_details:
+                json_output["salt_bridges"][i]["ligand_atoms"].append(
                     {
                         "chain": "A",
-                        "resID": int(ligand_atom_details[1]),
-                        "resName": ligand_atom_details[0],
-                        "atomName": ligand_atom_details[2],
-                        "atomIndex": int(ligand_atom_details[3])
+                        "resID": int(detail[1]),
+                        "resName": detail[0],
+                        "atomName": detail[2],
+                        "atomIndex": int(detail[3])
                     }
-                ],
-                "receptor_atoms": [
+                )
+            for detail in individual_receptor_atoms_details:
+                json_output["salt_bridges"][i]["receptor_atoms"].append(
                     {
-                        "chain": receptor_atom_details[0],
-                        "resID": int(receptor_atom_details[2]),
-                        "resName": receptor_atom_details[1],
-                        "atomName": receptor_atom_details[3],
-                        "atomIndex": int(receptor_atom_details[4])
+                        "chain": detail[0],
+                        "resID": int(detail[2]),
+                        "resName": detail[1],
+                        "atomName": detail[3],
+                        "atomIndex": detail[4]
                     }
-                ]
-            }
-            # increment counter
-            i += 1     
+                )
+            # increment counter 
+            i += 1
 
         # dump to json file
         with open('json_output.json', 'w') as jfile:
