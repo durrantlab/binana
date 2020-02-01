@@ -4448,7 +4448,7 @@ def intro():
     lines = []
     lines.append("")
     lines.append("BINANA " + VERSION)
-    lines.append("============")
+    lines.append("=" * len("BINANA " + VERSION))
     lines.append(
         "   BINANA is released under the GNU General Public License (see http://www.gnu.org/licenses/gpl.html). If you have any questions, comments, or suggestions, please don't hesitate to contact me, Jacob Durrant, at jdurrant [at] ucsd [dot] edu. If you use BINANA in your work, please cite [REFERENCE HERE]."
     )

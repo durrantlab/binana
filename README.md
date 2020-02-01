@@ -1,4 +1,4 @@
-# BNANA 1.3
+# BINANA 1.3
 
 BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing
 ligand binding. The program identifies key binding characteristics like
