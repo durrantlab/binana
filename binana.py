@@ -147,8 +147,7 @@ class Atom:
     # Param index (integer): index of the point
     def create_PDB_line(self, index):
         output = "ATOM "
-        output = output + str(index).rjust(6) + self.atom_name.rjust(5)
-        +self.residue.rjust(4)
+        output = output + str(index).rjust(6) + self.atom_name.rjust(5) + self.residue.rjust(4)
         output = output + ("%.3f" % self.coordinates.x).rjust(18)
         output = output + ("%.3f" % self.coordinates.y).rjust(8)
         output = output + ("%.3f" % self.coordinates.z).rjust(8)
