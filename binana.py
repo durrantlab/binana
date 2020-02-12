@@ -14,11 +14,12 @@ import textwrap
 import json
 import re # split on multiple delimiters
 
+VERSION = "1.3"
+
+
 """
 Class Point defines a point on the grid
 """
-
-
 class Point:
     x = 99999.0
     y = 99999.0
@@ -147,8 +148,7 @@ class Atom:
     # Param index (integer): index of the point
     def create_PDB_line(self, index):
         output = "ATOM "
-        output = output + str(index).rjust(6) + self.atom_name.rjust(5)
-        +self.residue.rjust(4)
+        output = output + str(index).rjust(6) + self.atom_name.rjust(5) + self.residue.rjust(4)
         output = output + ("%.3f" % self.coordinates.x).rjust(18)
         output = output + ("%.3f" % self.coordinates.y).rjust(8)
         output = output + ("%.3f" % self.coordinates.z).rjust(8)
@@ -4523,11 +4523,10 @@ class CommandLineParameters:
 
 
 def intro():
-    version = "1.2.1"
     lines = []
     lines.append("")
-    lines.append("BINANA " + version)
-    lines.append("============")
+    lines.append("BINANA " + VERSION)
+    lines.append("=" * len("BINANA " + VERSION))
     lines.append(
         "   BINANA is released under the GNU General Public License (see http://www.gnu.org/licenses/gpl.html). If you have any questions, comments, or suggestions, please don't hesitate to contact me, Jacob Durrant, at jdurrant [at] ucsd [dot] edu. If you use BINANA in your work, please cite [REFERENCE HERE]."
     )
