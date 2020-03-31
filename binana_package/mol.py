@@ -1,19 +1,21 @@
-# this file containd the class PDB
+# this file containd the class Mol
 # for binana.py
 
 from math_functions import MathFunctions
 from atom import Atom
 from point import Point
 import math
+import textwrap
+import shiv
 
 """
-Class PDB handles PDB filing
+Class Mol handles PDB filing
 """
 
 
-class PDB:
+class Mol:
 
-    # Initialize PDB
+    # Initialize Mol
     def __init__(self):
         self.all_atoms = {}
         self.non_protein_atoms = {}
@@ -196,7 +198,7 @@ class PDB:
         self.assign_charges()
 
     # Print the PDB line
-    # Param self (PDB)
+    # Param self (Mol)
     # Param the_string (string)
     def printout(self, the_string):
         lines = textwrap.wrap(the_string, 80)
@@ -204,7 +206,7 @@ class PDB:
             print(line)
 
     # Write and save PDB line to a file
-    # Param self (PDB)
+    # Param self (Mol)
     # Param file_name (string)
     def save_PDB(self, file_name):
         f = open(file_name, "w")
@@ -216,12 +218,12 @@ class PDB:
         f.close()
 
     # Returns a new PDB line
-    # Param self (PDB)
+    # Param self (Mol)
     def save_PDB_String(self):
         to_output = ""
 
         # Write coordinates of all atoms
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             to_output = (
                 to_output
                 + self.all_atoms[atom_index].create_PDB_line(atom_index)
@@ -230,8 +232,8 @@ class PDB:
 
         return to_output
 
-    # Adds a new atom to this PDB
-    # Param self (PDB)
+    # Adds a new atom to this Mol
+    # Param self (Mol)
     # Param atom (Atom): new atom being added
     def add_new_atom(self, atom):
         # first get available index
@@ -243,14 +245,14 @@ class PDB:
         self.all_atoms[t] = atom
 
     # Assign residue name to atom
-    # Param self (PDB)
+    # Param self (Mol)
     # Param  resname (string): residue name
     def set_resname(self, resname):
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             self.all_atoms[atom_index].residue = resname
 
     # Returns a list of the indeces of atoms connected to a given element
-    # Param self (PDB)
+    # Param self (Mol)
     # Param index (integer): index of atom
     # Param connected_atom_element (string): element in question
     def connected_atoms_of_given_element(self, index, connected_atom_element):
@@ -263,7 +265,7 @@ class PDB:
         return connected_atoms
 
     # Returns a list of the indeces of heavy atoms connected at specified index
-    # Param self (PDB)
+    # Param self (Mol)
     # Param index (integer): index of atom
     def connected_heavy_atoms(self, index):
         atom = self.all_atoms[index]
@@ -275,13 +277,13 @@ class PDB:
         return connected_atoms
 
     # Correct format of the protein
-    # Param self (PDB)
+    # Param self (Mol)
     def check_protein_format(self):
         curr_res = ""
         first = True
         residue = []
 
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
@@ -303,7 +305,7 @@ class PDB:
         self.check_protein_format_process_residue(residue, last_key)
 
     # Correct format of the protein and residues
-    # Param self (PDB)
+    # Param self (Mol)
     # Param residue ()
     # Param last_key ()
     def check_protein_format_process_residue(self, residue, last_key):
@@ -613,13 +615,13 @@ class PDB:
     # ==============================================================
 
     # Define bonds between atoms using distance on the grid
-    # Param self (PDB)
+    # Param self (Mol)
     def create_bonds_by_distance(self):
-        for AtomIndex1 in self.non_protein_atoms:
+        for AtomIndex1 in self.non_protein_atoms.keys():
             atom1 = self.non_protein_atoms[AtomIndex1]
             if atom1.residue[-3:] not in self.protein_resnames:
                 # so it's not a protein residue
-                for AtomIndex2 in self.non_protein_atoms:
+                for AtomIndex2 in self.non_protein_atoms.keys():
                     if AtomIndex1 != AtomIndex2:
                         atom2 = self.non_protein_atoms[AtomIndex2]
                         if not atom2.residue[-3:] in self.protein_resnames:
@@ -636,7 +638,7 @@ class PDB:
                                 atom2.add_neighbor_atom_index(AtomIndex1)
 
     # Retuns bond length between two elements
-    # Param self (PDB)
+    # Param self (Mol)
     # Param element1 (string): symbol of first element
     # Param element2 (string): symbol of second element
     def bond_length(self, element1, element2):
@@ -813,13 +815,13 @@ class PDB:
     # ======================================
 
     # Assign Charges to atoms in protein
-    # Param self (PDB)
+    # Param self (Mol)
     def assign_charges(self):
         # Get all the quartinary amines on non-protein residues (these are the
         # only non-protein groups that will be identified as positively
         # charged)
         all_charged = []
-        for atom_index in self.non_protein_atoms:
+        for atom_index in self.non_protein_atoms.keys():
             atom = self.non_protein_atoms[atom_index]
             if (
                 atom.element == "MG"
@@ -1042,7 +1044,7 @@ class PDB:
         first = True
         residue = []
 
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
@@ -1064,7 +1066,7 @@ class PDB:
         self.assign_charged_from_protein_process_residue(residue, last_key)
 
     # Assign charges but with protein residue
-    # Param self (PDB)
+    # Param self (Mol)
     # Param residue ()
     # Param last_key ()
     def assign_charged_from_protein_process_residue(self, residue, last_key):
@@ -1349,9 +1351,10 @@ class PDB:
 
     # Denote aromatic rings
     def assign_aromatic_rings(self):
+
         # Get all the rings containing each of the atoms in the ligand
         all_rings = []
-        for atom_index in self.non_protein_atoms:
+        for atom_index in self.non_protein_atoms.keys():
             all_rings.extend(self.all_rings_containing_atom(atom_index))
 
         for ring_index_1 in range(len(all_rings)):
@@ -1373,13 +1376,18 @@ class PDB:
             ring = all_rings[ring_index]
             is_flat = True
             for t in range(-3, len(ring) - 3):
-                pt1 = self.non_protein_atoms[ring[t]].coordinates
-                pt2 = self.non_protein_atoms[ring[t + 1]].coordinates
-                pt3 = self.non_protein_atoms[ring[t + 2]].coordinates
-                pt4 = self.non_protein_atoms[ring[t + 3]].coordinates
+                # For transcrypt compatibility, don't use negative index.
+                while (t < 0):
+                    t = t + len(ring)
+
+                # Also need to mod index for transcrypt.
+                pt1 = self.non_protein_atoms[ring[t % len(ring)]].coordinates
+                pt2 = self.non_protein_atoms[ring[(t + 1) % len(ring)]].coordinates
+                pt3 = self.non_protein_atoms[ring[(t + 2) % len(ring)]].coordinates
+                pt4 = self.non_protein_atoms[ring[(t + 3) % len(ring)]].coordinates
 
                 # first, let's see if the last atom in this ring is a carbon connected to four atoms. That would be a quick way of telling this is not an aromatic ring
-                cur_atom = self.non_protein_atoms[ring[t + 3]]
+                cur_atom = self.non_protein_atoms[ring[(t + 3) % len(ring)]]
                 if cur_atom.element == "C" and cur_atom.number_of_neighbors() == 4:
                     is_flat = False
                     break
@@ -1431,7 +1439,7 @@ class PDB:
         first = True
         residue = []
 
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
@@ -1623,12 +1631,11 @@ class PDB:
 
     # Return indecies of atoms in ring
     def all_rings_containing_atom(self, index):
-
         all_rings = []
 
         atom = self.all_atoms[index]
-        for conneceted_atom in atom.indecies_of_atoms_connecting:
-            self.ring_recursive(conneceted_atom, [index], index, all_rings)
+        for connected_atom in atom.indecies_of_atoms_connecting:
+            self.ring_recursive(connected_atom, [index], index, all_rings)
 
         return all_rings
 
@@ -1643,10 +1650,13 @@ class PDB:
         temp = already_crossed[:]
         temp.append(index)
 
-        for conneceted_atom in atom.indecies_of_atoms_connecting:
-            if not conneceted_atom in already_crossed:
-                self.ring_recursive(conneceted_atom, temp, orig_atom, all_rings)
-            if conneceted_atom == orig_atom and orig_atom != already_crossed[-1]:
+        for connected_atom in atom.indecies_of_atoms_connecting:
+            if not connected_atom in already_crossed:
+                self.ring_recursive(connected_atom, temp, orig_atom, all_rings)
+
+            # if connected_atom == orig_atom and orig_atom != already_crossed[-1]:
+            # Cannot have negative indexes in transcrypts
+            if connected_atom == orig_atom and orig_atom != already_crossed[len(already_crossed) - 1]:
                 all_rings.append(temp)
 
     # Functions to assign secondary structure to protein residues
@@ -1656,7 +1666,7 @@ class PDB:
         # first, we need to know what resid's are available
         resids = []
         last_key = "-99999_Z"
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             key = str(atom.resid) + "_" + atom.chain
             if key != last_key:
@@ -1669,7 +1679,7 @@ class PDB:
 
         atoms = []
 
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             if atom.side_chain_or_backbone() == "BACKBONE":
                 if len(atoms) < 8:
@@ -1684,7 +1694,7 @@ class PDB:
                         atoms[0].resid == atoms[1].resid
                         and atoms[0].resid == atoms[2].resid
                         and atoms[0].resid == atoms[3].resid
-                        and atoms[0] != atoms[4].resid
+                        and atoms[0].resid != atoms[4].resid
                         and atoms[4].resid == atoms[5].resid
                         and atoms[4].resid == atoms[6].resid
                         and atoms[4].resid == atoms[7].resid
@@ -1750,14 +1760,14 @@ class PDB:
                             structure[key2] = "BETA"
 
         # Now update each of the atoms with this structural information
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             key = str(atom.resid) + "_" + atom.chain
             atom.structure = structure[key]
 
         # Some more post processing.
         CA_list = []  # first build a list of the indices of all the alpha carbons
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             if (
                 atom.residue.strip() in self.protein_resnames
@@ -2019,8 +2029,7 @@ class PDB:
                         change = True
 
     def set_structure_of_residue(self, chain, resid, structure):
-        for atom_index in self.all_atoms:
+        for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             if atom.chain == chain and atom.resid == resid:
                 atom.structure = structure
-

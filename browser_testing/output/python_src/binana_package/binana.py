@@ -8,10 +8,10 @@
 import __future__
 
 import math
-import os
-import sys
-import textwrap
-import json
+import shiv as os
+import shiv as sys
+import shiv as textwrap
+import shiv as json
 import re  # split on multiple delimiters
 import shiv
 
@@ -230,7 +230,7 @@ class Binana:
                         # now we need to check the angles
                         for hydrogen in hydrogens:
                             if (
-                                math.fabs(
+                                shiv.fabs(
                                     180
                                     - functions.angle_between_three_points(
                                         ligand_atom.coordinates,
@@ -321,9 +321,9 @@ class Binana:
                     )
 
                     if (
-                        math.fabs(angle_between_planes - 0)
+                        shiv.fabs(angle_between_planes - 0)
                         < parameters.params["pi_stacking_angle_tolerance"]
-                        or math.fabs(angle_between_planes - 180)
+                        or shiv.fabs(angle_between_planes - 180)
                         < parameters.params["pi_stacking_angle_tolerance"]
                     ):
                         # so they're more or less parallel, it's probably
@@ -411,9 +411,9 @@ class Binana:
                             )
 
                     elif (
-                        math.fabs(angle_between_planes - 90)
+                        shiv.fabs(angle_between_planes - 90)
                         < parameters.params["T_stacking_angle_tolerance"]
-                        or math.fabs(angle_between_planes - 270)
+                        or shiv.fabs(angle_between_planes - 270)
                         < parameters.params["T_stacking_angle_tolerance"]
                     ):
                         # so they're more or less perpendicular, it's probably
@@ -1175,11 +1175,11 @@ class Binana:
             ligand.save_PDB(parameters.params["output_dir"] + "/ligand.pdb")
             receptor.save_PDB(parameters.params["output_dir"] + "/receptor.pdb")
 
-            f = open(parameters.params["output_dir"] + "log.txt", "w")
+            f = shiv.OpenFile(parameters.params["output_dir"] + "log.txt", "w")
             f.write(output.replace("REMARK ", ""))
             f.close()
 
-            f = open(parameters.params["output_dir"] + "state.vmd", "w")
+            f = shiv.OpenFile(parameters.params["output_dir"] + "state.vmd", "w")
             f.write(self.vmd_state_file())
             f.close()
 
@@ -1261,7 +1261,7 @@ class Binana:
             json_output = self.json_file(close_contacts_labels, contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
             print(json_output)"""
 
-            f = open(parameters.params["output_file"], "w")
+            f = shiv.OpenFile(parameters.params["output_file"], "w")
             f.write(output)
             f.close()
 
@@ -1895,7 +1895,7 @@ class Binana:
         outputFileName = self.ligfi[:-6] + "_" + self.recfi[:-6] + "_output.json"
 
         # Important not to use 'as f' fopr transcrypt
-        jfile = open(outputFileName, 'w')
+        jfile = shiv.OpenFile(outputFileName, 'w')
         json.dump(json_output, jfile)
         jfile.close()
 
@@ -2154,5 +2154,5 @@ def main(args=None):
 
     d = Binana(lig, rec, cmd_params)
 
-if __name__ == '__main__':
+if False:
     main()

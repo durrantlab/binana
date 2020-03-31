@@ -1,7 +1,7 @@
 # this file contains the CommandLineParameters class
 # for binana.py
 
-import os
+import shiv as os
 
 """
 Class CommmandLineParameters

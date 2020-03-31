@@ -2507,7 +2507,7 @@ class Binana:
     # The meat of the class
     def __init__(self, ligand_pdbqt_filename, receptor_pdbqt_filename, parameters):
         # JY- giving Binana filename attributes so json_file() can name the output file
-        self.ligfi = ligand_pdbqt_filename 
+        self.ligfi = ligand_pdbqt_filename
         self.recfi = receptor_pdbqt_filename
         # JY
         ligand = PDB()
@@ -3150,8 +3150,8 @@ class Binana:
         if parameters.params["output_dir"] != "":
             if not os.path.exists(parameters.params["output_dir"]):
                 os.mkdir(parameters.params["output_dir"])
-        
-        # call json_file 
+
+        # call json_file
         # have it return the dictionary and dump to a json file
         json_output = self.json_file(close_contacts_labels, contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
         print("json output:")
@@ -3631,7 +3631,7 @@ class Binana:
             f = open(parameters.params["output_dir"] + "state.vmd", "w")
             f.write(self.vmd_state_file())
             f.close()
-        
+
         if (
             parameters.params["output_file"] == ""
             and parameters.params["output_dir"] == ""
@@ -3705,7 +3705,7 @@ class Binana:
                 + pdb_salt_bridges.save_PDB_String()
                 + "TER\n"
             )
-            """# call json_file 
+            """# call json_file
             # have it return the dictionary and dump to a json file
             json_output = self.json_file(close_contacts_labels, contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
             print(json_output)"""
@@ -4056,12 +4056,12 @@ class Binana:
         return "\n".join(vmd)
 
 
-    # takes care of pairwise interactions 
+    # takes care of pairwise interactions
     # interaction_name: string
     # interaction_labels: list containind raw data to be parsed into the dictionary
     # returns list
     def json_helper(self, interaction_labels):
-        # set counter for interaction 
+        # set counter for interaction
         i = 0
         interaction_list = []
 
@@ -4079,7 +4079,7 @@ class Binana:
             for detail in receptor_atom_details:
                 if detail == "":
                     receptor_atom_details.remove(detail)
-            
+
             # add each detail to the appropriate key in ligand_atoms and receptor_atoms
             #json_output[interaction_name][i] = {
             interaction_list[i] = {
@@ -4101,21 +4101,21 @@ class Binana:
                         "atomIndex": int(receptor_atom_details[4])
                     }
                 ]
-            }   
+            }
             # increment counter
             i += 1
         return interaction_list
 
     # json output
     def json_file(
-        self, 
-        close_contact_interactions, 
-        contact_interactions, 
-        hydrogen_bonds, 
-        hydrophobic_interactions, 
-        pi_stacking_interactions, 
-        t_stacking_interactions, 
-        cat_pi_interactions, 
+        self,
+        close_contact_interactions,
+        contact_interactions,
+        hydrogen_bonds,
+        hydrophobic_interactions,
+        pi_stacking_interactions,
+        t_stacking_interactions,
+        cat_pi_interactions,
         salt_bridge_interactions
         ):
         json_output = {}
@@ -4128,14 +4128,14 @@ class Binana:
         json_output["tStackingInteractions"] = []
         json_output["cationPiInteractions"] = []
         json_output["saltBridges"] = []
-        
+
         # populate the lists
         # use helper function to populate lists for pairwise interactions
         json_output["contactsWithin2.5A"] = self.json_helper(close_contact_interactions)
         json_output["contactsWithin4.0A"] = self.json_helper(contact_interactions)
         json_output["hydrophobicContacts"] = self.json_helper(hydrophobic_interactions)
 
-        # reset counter for interaction 
+        # reset counter for interaction
         i = 0
         # hydrogen bonds
         for atom_pairs in hydrogen_bonds:
@@ -4190,7 +4190,7 @@ class Binana:
             # increment counter
             i += 1
 
-        # reset counter for interaction 
+        # reset counter for interaction
         i = 0
         # pi-pi stacking interactions
         for atom_pair in pi_stacking_interactions:
@@ -4240,10 +4240,10 @@ class Binana:
                         "atomIndex": detail[4]
                     }
                 )
-            # increment counter 
+            # increment counter
             i += 1
 
-        # reset counter for interaction  
+        # reset counter for interaction
         i = 0
         # t stacking interactions
         for atom_pair in t_stacking_interactions:
@@ -4293,10 +4293,10 @@ class Binana:
                         "atomIndex": detail[4]
                     }
                 )
-            # increment counter 
+            # increment counter
             i += 1
-        
-        # reset counter for interaction 
+
+        # reset counter for interaction
         i = 0
         # cat-pi stacking interactions
         for atom_pair in cat_pi_interactions:
@@ -4346,10 +4346,10 @@ class Binana:
                         "atomIndex": detail[4]
                     }
                 )
-            # increment counter 
+            # increment counter
             i += 1
-            
-        # reset counter for interaction 
+
+        # reset counter for interaction
         i = 0
         # salt bridge interactions
         for atom_pair in salt_bridge_interactions:
@@ -4399,13 +4399,13 @@ class Binana:
                         "atomIndex": detail[4]
                     }
                 )
-            # increment counter 
+            # increment counter
             i += 1
 
         # dump to json file
         outputFileName = self.ligfi[:-6] + "_" + self.recfi[:-6] + "_output.json"
         #with open('output.json', 'w') as jfile:
-        with open(outputFileName, 'w') as jfile: 
+        with open(outputFileName, 'w') as jfile:
                 json.dump(json_output, jfile)
         # return json object to terminal
         return json_output
@@ -4669,27 +4669,30 @@ def intro():
     for i in wrapped:
         print(i)
 
+def main():
+    intro()
 
-intro()
+    cmd_params = CommandLineParameters(sys.argv[:])
 
-cmd_params = CommandLineParameters(sys.argv[:])
+    if cmd_params.okay_to_proceed() == False:
+        print(
+            "Error: You need to specify the ligand and receptor PDBQT files to analyze using\nthe -receptor and -ligand tags from the command line.\n"
+        )
+        sys.exit(0)
 
-if cmd_params.okay_to_proceed() == False:
-    print(
-        "Error: You need to specify the ligand and receptor PDBQT files to analyze using\nthe -receptor and -ligand tags from the command line.\n"
-    )
-    sys.exit(0)
+    if cmd_params.error != "":
+        print("Warning: The following command-line parameters were not recognized:")
+        print(("   " + cmd_params.error + "\n"))
 
-if cmd_params.error != "":
-    print("Warning: The following command-line parameters were not recognized:")
-    print(("   " + cmd_params.error + "\n"))
+    lig = cmd_params.params["ligand"]
+    rec = cmd_params.params["receptor"]
 
-lig = cmd_params.params["ligand"]
-rec = cmd_params.params["receptor"]
+    # ligand = PDB()
+    # receptor = PDB()
+    # ligand.LoadPDB(lig)
+    # receptor.LoadPDB(rec)
 
-# ligand = PDB()
-# receptor = PDB()
-# ligand.LoadPDB(lig)
-# receptor.LoadPDB(rec)
+    d = Binana(lig, rec, cmd_params)
 
-d = Binana(lig, rec, cmd_params)
+if __name__ == "__main__":
+    main()
