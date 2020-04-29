@@ -260,6 +260,7 @@ class Binana:
                                         ligand_atom.string_id(),
                                         hydrogen.string_id(),
                                         receptor_atom.string_id(),
+                                        hydrogen.comment
                                     )
                                 )
 
@@ -1666,6 +1667,7 @@ class Binana:
         cat_pi_interactions,
         salt_bridge_interactions
         ):
+
         json_output = {}
         # first level keys
         json_output["contactsWithin2.5A"] = []
@@ -1691,18 +1693,25 @@ class Binana:
             json_output["hydrogenBonds"].append({})
             # parse atom_trios
             ligand_and_receptor = [
-                re.split(r'[():]', atom_pairs[0]),
-                re.split(r'[():]', atom_pairs[1]),
-                re.split(r'[():]', atom_pairs[2])
+                re.split(r'[():]', atom_pairs[0]),  # Ligand
+                re.split(r'[():]', atom_pairs[1]),  # hydrogen (Ligand or receptor)
+                re.split(r'[():]', atom_pairs[2])   # receptor
             ]
-            ligand_atom_details = []
-            receptor_atom_details = []
+
             # put atoms in appropriate group
-            for atom in ligand_and_receptor:
-                if len(atom[0]) > 1: # ligand ("ATP")
-                    ligand_atom_details.append(atom)
-                else: # receptor ("A")
-                    receptor_atom_details.append(atom)
+            ligand_atom_details = [ligand_and_receptor[0]]
+            receptor_atom_details = [ligand_and_receptor[2]]
+            if atom_pairs[3] == "RECEPTOR":
+                receptor_atom_details.append(ligand_and_receptor[1])
+            else:
+                ligand_atom_details.append(ligand_and_receptor[1])
+
+            # for atom in ligand_and_receptor:
+            #     if len(atom[0]) > 1: # ligand ("ATP")
+            #         ligand_atom_details.append(atom)
+            #     else: # receptor ("A")
+            #         receptor_atom_details.append(atom)
+
             # remove whitespace
             for atom in ligand_atom_details:
                 for detail in atom:
