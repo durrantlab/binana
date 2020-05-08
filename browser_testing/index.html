@@ -2672,6 +2672,26 @@ TORSDOF 11</textarea>
         <button onclick="start();">Run Binana</button>
         <h2>Output</h2>
         <textarea id="output-txt">Your JSON output will go here...</textarea>
+        <div id="container-00" class="interactions"></div>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 0);">Closest Contact Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 1);">Close Contact Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 2);">Hydrogen Bonding Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 3);">Hydrophobic Contact Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 4);">Pi-Pi Stacking Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 5);">T Stacking Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 6);">Cation-Pi Atoms</button>
+        <button onclick="highlight(json_obj, viewer, receptor, ligand, 7);">Salt Bridge Atoms</button>
+        <button onclick="clearInteraction(viewer, receptor, ligand);">Clear</button>
+
+        <script src="http://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
+        <div id="container-01" class="mol-container"></div>
+        <style>
+            .mol-container {
+            width: 450px;
+            height: 450px;
+            position: relative;
+            }
+        </style>
 
         <script>
             function start() {
@@ -2688,10 +2708,57 @@ TORSDOF 11</textarea>
 
                 // Get the json output.
                 var json_txt = binana.load_from_fake_fs("liga_recept_output.json");
-                var json_obj = JSON.parse(json_txt);
+                //var json_obj = JSON.parse(json_txt);
+                json_obj = JSON.parse(json_txt);
 
                 // Display the json.
                 document.getElementById("output-txt").value = JSON.stringify(json_obj);
+
+                // Display the viewer
+                let element = $('#container-01');
+                let config = { backgroundColor: 'black'};
+                //let viewer = $3Dmol.createViewer( element, config );
+                viewer = $3Dmol.createViewer( element, config );
+                viewer.setViewStyle({style:"outline"});
+                //var receptor = viewer.addModel(pdbtxt, "pdb");
+                //var ligand = viewer.addModel(ligtxt, "pdb");
+                receptor = viewer.addModel(pdbtxt, "pdb");
+                ligand = viewer.addModel(ligtxt, "pdb");
+
+                receptor.setStyle({},{stick: {color: 'red'}});
+                ligand.setStyle({}, {sphere: {color: 'green'}});
+                viewer.zoomTo();
+                viewer.render();
+                viewer.zoom(1.2,1000);
+                //highlight(json_obj, viewer, receptor, ligand);
+            }
+            
+            // sets the atoms involved in the interaction to a different color
+            function highlight(obj, v, r, l, choice) {
+                // make an array for the interactions
+                var interactions = Object.keys(obj);
+                
+                // loop through the interactions
+                for (var i = 0; i < obj[interactions[choice]].length; i++){
+                    // loop through the ligand atoms
+                    for (var j = 0; j < obj[interactions[choice]][i].ligandAtoms.length; j++) {
+                        // change the color for the atom
+                        l.setStyle({atom: obj[interactions[choice]][i].ligandAtoms[j].atomName, serial: obj[interactions[choice]][i].ligandAtoms[j].atomIndex, resi: obj[interactions[choice]][i].ligandAtoms[j].resID}, {sphere: {color:'white'}});
+                    }
+                    // loop through the receptor atoms
+                    for (var k = 0; k < obj[interactions[choice]][i].receptorAtoms.length; k++) {
+                        // change the color for the atom
+                        r.setStyle({atom: obj[interactions[choice]][i].receptorAtoms[k].atomName, serial: obj[interactions[choice]][i].receptorAtoms[k].atomIndex, resi: obj[interactions[choice]][i].receptorAtoms[k].resID}, {stick: {color:'white'}});
+                    }
+                    v.render();
+                }
+            }
+
+            // resets the viewer to the original style
+            function clearInteraction(v, r, l) {
+                r.setStyle({},{stick: {color: 'red'}});
+                l.setStyle({}, {sphere: {color: 'green'}});
+                v.render();
             }
         </script>
     </body>
