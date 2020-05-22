@@ -2694,6 +2694,15 @@ TORSDOF 11</textarea>
         </style>
 
         <script>
+            function pdbqtToPdb(pdbqtTxt) {
+                return "\n".join(
+                    pdbqtTxt.split("\n").filter(
+                        l => l.startsWith("ATOM") || l.startsWith("HETATM")
+                    )
+                );
+
+            }
+
             function start() {
                 var pdbtxt = document.getElementById("receptor-txt").value;
                 var ligtxt = document.getElementById("ligand-txt").value;
@@ -2722,8 +2731,8 @@ TORSDOF 11</textarea>
                 viewer.setViewStyle({style:"outline"});
                 //var receptor = viewer.addModel(pdbtxt, "pdb");
                 //var ligand = viewer.addModel(ligtxt, "pdb");
-                receptor = viewer.addModel(pdbtxt, "pdb");
-                ligand = viewer.addModel(ligtxt, "pdb");
+                receptor = viewer.addModel(pdbqtToPdb(pdbtxt), "pdb");
+                ligand = viewer.addModel(pdbqtToPdb(ligtxt), "pdb");
 
                 receptor.setStyle({},{stick: {color: 'red'}});
                 ligand.setStyle({}, {sphere: {color: 'green'}});
@@ -2732,12 +2741,12 @@ TORSDOF 11</textarea>
                 viewer.zoom(1.2,1000);
                 //highlight(json_obj, viewer, receptor, ligand);
             }
-            
+
             // sets the atoms involved in the interaction to a different color
             function highlight(obj, v, r, l, choice) {
                 // make an array for the interactions
                 var interactions = Object.keys(obj);
-                
+
                 // loop through the interactions
                 for (var i = 0; i < obj[interactions[choice]].length; i++){
                     // loop through the ligand atoms
@@ -2750,6 +2759,7 @@ TORSDOF 11</textarea>
                         // change the color for the atom
                         r.setStyle({atom: obj[interactions[choice]][i].receptorAtoms[k].atomName, serial: obj[interactions[choice]][i].receptorAtoms[k].atomIndex, resi: obj[interactions[choice]][i].receptorAtoms[k].resID}, {stick: {color:'white'}});
                     }
+
                     v.render();
                 }
             }

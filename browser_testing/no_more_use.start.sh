@@ -1,3 +1,9 @@
+quit
+exit
+stop
+kjldsfglhkjlhjkdfsg
+
+
 # First delete any old version of the output directory.
 rm -rf output
 mkdir output
