@@ -16,6 +16,10 @@
     </head>
     <body>
         <h2>Protein PDB:</h2>
+        <div>
+            <label for="pdbFile">Upload Receptor PDB</label>
+            <input type="file" onchange="uploadPdb('receptor-txt');" id="pdbFile">
+        </div>
         <textarea id="receptor-txt">ATOM      1  N   GLN A  52      42.237  16.800  35.823  1.00 12.04    -0.066 N
 ATOM      2  HN1 GLN A  52      41.862  17.501  36.462  1.00  0.00     0.275 HD
 ATOM      3  HN2 GLN A  52      43.257  16.790  35.815  1.00  0.00     0.275 HD
@@ -2594,6 +2598,10 @@ ATOM   2575  CD1 LEU A 316      52.050  20.171   2.774  1.00 22.84     0.009 C
 ATOM   2576  CD2 LEU A 316      53.762  19.249   1.167  1.00 22.88     0.009 C
 TER    2577      LEU A 316 </textarea>
         <h2>Ligand PDB:</h2>
+        <div>
+            <label for="pdbFile">Upload Ligand PDB</label>
+            <input type="file" onchange="uploadPdb('ligand-txt');" id="pdbFile">
+        </div>
         <textarea id="ligand-txt">REMARK  11 active torsions:
 REMARK  status: ('A' for Active; 'I' for Inactive)
 REMARK    1  A    between atoms: PG_2  and  O3B_5
@@ -2672,16 +2680,18 @@ TORSDOF 11</textarea>
         <button onclick="start();">Run Binana</button>
         <h2>Output</h2>
         <textarea id="output-txt">Your JSON output will go here...</textarea>
-        <div id="container-00" class="interactions"></div>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 0);">Closest Contact Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 1);">Close Contact Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 2);">Hydrogen Bonding Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 3);">Hydrophobic Contact Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 4);">Pi-Pi Stacking Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 5);">T Stacking Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 6);">Cation-Pi Atoms</button>
-        <button onclick="highlight(json_obj, viewer, receptor, ligand, 7);">Salt Bridge Atoms</button>
-        <button onclick="clearInteraction(viewer, receptor, ligand);">Clear</button>
+        <button onclick="downloadFiles();" id="download">Download Files</button>
+        <div id="container-00" class="interactions">
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 0);">Closest Contact Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 1);">Close Contact Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 2);">Hydrogen Bonding Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 3);">Hydrophobic Contact Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 4);">Pi-Pi Stacking Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 5);">T Stacking Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 6);">Cation-Pi Atoms</button>
+                <button onclick="highlight(json_obj, viewer, receptor, ligand, 7);">Salt Bridge Atoms</button>
+                <button onclick="clearInteraction(viewer, receptor, ligand);">Clear</button>
+        </div>
 
         <script src="http://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
         <div id="container-01" class="mol-container"></div>
@@ -2692,8 +2702,37 @@ TORSDOF 11</textarea>
             position: relative;
             }
         </style>
-
+        <script type="module">
+            import * as JsZip from './node_modules/jszip/dist/jszip.js';
+        </script>
         <script>
+            //import JSZip from 'jszip';
+            function downloadFiles(){
+                
+                var zip = new JSZip();
+                zip.folder("binana_files").file("receptor.txt", document.getElementById("receptor-txt").value).file("ligand.txt", document.getElementById("ligand-txt").value).file("binana.json", document.getElementById("output-txt").value);
+                zip.generateAsync({type:"download"}).then(function (download) {saveAs(dowload, "binana.zip")});
+            }
+            function uploadPdb(box){
+                var textBox = document.getElementById(box);
+                pdbFile = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+
+                reader.onload = function (event) {
+                    textBox.innerHTML = event.target.result;
+                }
+                reader.readAsText(pdbFile);
+            }
+
+            function pdbqtToPdb(pdbqtTxt) {
+                return "\n".join(
+                    pdbqtTxt.split("\n").filter(
+                        l => l.startsWith("ATOM") || l.startsWith("HETATM")
+                    )
+                );
+
+            }
+
             function start() {
                 var pdbtxt = document.getElementById("receptor-txt").value;
                 var ligtxt = document.getElementById("ligand-txt").value;
@@ -2722,8 +2761,8 @@ TORSDOF 11</textarea>
                 viewer.setViewStyle({style:"outline"});
                 //var receptor = viewer.addModel(pdbtxt, "pdb");
                 //var ligand = viewer.addModel(ligtxt, "pdb");
-                receptor = viewer.addModel(pdbtxt, "pdb");
-                ligand = viewer.addModel(ligtxt, "pdb");
+                receptor = viewer.addModel(pdbqtToPdb(pdbtxt), "pdb");
+                ligand = viewer.addModel(pdbqtToPdb(ligtxt), "pdb");
 
                 receptor.setStyle({},{stick: {color: 'red'}});
                 ligand.setStyle({}, {sphere: {color: 'green'}});
