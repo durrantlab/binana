@@ -2710,10 +2710,10 @@ TORSDOF 11</textarea>
         <script>
             //import JSZip from 'jszip';
             function downloadFiles(){
-
+                
                 var zip = new JSZip();
                 zip.folder("binana_files").file
-                    ("receptor.txt",
+                    ("receptor.txt", 
                     document.getElementById("receptor-txt").value
                 ).file(
                     "ligand.txt",
@@ -2722,7 +2722,7 @@ TORSDOF 11</textarea>
                     "binana.json",
                     document.getElementById("output-txt").value
                 );
-                zip.generateAsync({type:"blob"}).then(
+                zip.generateAsync({type:"blob"}).then( 
                     function (blob) {
                         saveAs(blob, "binana.zip");
                     }
@@ -2786,28 +2786,49 @@ TORSDOF 11</textarea>
                 viewer.zoom(1.2,1000);
                 //highlight(json_obj, viewer, receptor, ligand);
             }
-
+            
             // sets the atoms involved in the interaction to a different color
             function highlight(obj, v, r, l, choice) {
                 // make an array for the interactions
                 var interactions = Object.keys(obj);
-
+                
                 // loop through the interactions
                 for (var i = 0; i < obj[interactions[choice]].length; i++){
                     // loop through the ligand atoms
                     for (var j = 0; j < obj[interactions[choice]][i].ligandAtoms.length; j++) {
                         // change the color for the atom
                         l.setStyle({atom: obj[interactions[choice]][i].ligandAtoms[j].atomName, serial: obj[interactions[choice]][i].ligandAtoms[j].atomIndex, resi: obj[interactions[choice]][i].ligandAtoms[j].resID}, {sphere: {color:'white'}});
-                        thisAtom = obj[interactions[choice]][i].ligandAtoms[j];//.name?
-                        //thisResID = String(obj[interactions[choice]][i].ligandAtoms[j].resName);
+                        
                         // set hoverable
                         l.setHoverable(
                             {atom: obj[interactions[choice]][i].ligandAtoms[j].atomName, serial: obj[interactions[choice]][i].ligandAtoms[j].atomIndex, resi: obj[interactions[choice]][i].ligandAtoms[j].resID},
                             true,
-                            function(atom,v, event) {
-                                // debugger;
+                            function(atom, v, event) {
                                 if(!atom.label) {
-                                    atom.label = v.addLabel(thisAtom.resName + ":" + atom.atom, {position: atom, backgroundColor: 'pink', fontColor: 'black'});
+                                    atom.label = v.addLabel(atom.resn + ":" + atom.atom, {position: atom, backgroundColor: 'pink', fontColor: 'black'});
+                                }
+                            },
+                            function(atom) {
+                                if(atom.label) {
+                                    v.removeLabel(atom.label);
+                                    delete atom.label;
+                                }
+                        });
+                        
+                    }
+                    //debugger;
+                    // loop through the receptor atoms
+                    for (var k = 0; k < obj[interactions[choice]][i].receptorAtoms.length; k++) {
+                        // change the color for the atom
+                        r.setStyle({atom: obj[interactions[choice]][i].receptorAtoms[k].atomName, serial: obj[interactions[choice]][i].receptorAtoms[k].atomIndex, resi: obj[interactions[choice]][i].receptorAtoms[k].resID}, {stick: {color:'white'}});
+
+                        // set hoverable
+                        r.setHoverable(
+                            {atom: obj[interactions[choice]][i].receptorAtoms[k].atomName, serial: obj[interactions[choice]][i].receptorAtoms[k].atomIndex, resi: obj[interactions[choice]][i].receptorAtoms[k].resID},
+                            true,
+                            function(atom, v, event) {
+                                if(!atom.label) {
+                                    atom.label = v.addLabel(atom.resn + ":" + atom.atom, {position: atom, backgroundColor: 'orange', fontColor: 'black'});
                                 }
                             },
                             function(atom) {
@@ -2818,11 +2839,19 @@ TORSDOF 11</textarea>
                             }
                         );
                     }
-                    // loop through the receptor atoms
-                    for (var k = 0; k < obj[interactions[choice]][i].receptorAtoms.length; k++) {
-                        // change the color for the atom
-                        r.setStyle({atom: obj[interactions[choice]][i].receptorAtoms[k].atomName, serial: obj[interactions[choice]][i].receptorAtoms[k].atomIndex, resi: obj[interactions[choice]][i].receptorAtoms[k].resID}, {stick: {color:'white'}});
-                    }
+                    
+                    // add "bonds" between atoms
+                    // need coordinates
+                    // if choice == 2 || choice == 7 (hydrogen bond or salt bridge)....
+                    // COORDINATES BELOW ARE TAKEN FROM THE PDB FILES
+                    v.addCylinder({dashed:true, 
+                        start:{x:37.793,y:14.733,z:13.206},
+                        end:{x:40.573,y:14.911,z:12.597},
+                        radius:0.10,
+                        fromCap:false,
+                        toCap:true,
+                        color:'teal'});
+
                     v.render();
                 }
             }
