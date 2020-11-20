@@ -1,1 +1,17 @@
 *.pyc
+node_modules
+*.zip
+dist
+__pycache__
+old
+.DS_Store
+technical_docs
+tmp
+old
+*.old
+old_delme
+.DS_Store
+testing_openbabel
+*.swp
+TODO.md
+rsync.sh

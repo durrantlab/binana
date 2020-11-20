@@ -1,0 +1,49 @@
+{
+    "name": "binana",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build_old": "utils/build/before.sh; webpack --config ./utils/webpack.configs/webpack.prod.js; utils/build/after_build.sh",
+        "build": "export NODE_OPTIONS=--max_old_space_size=4096; utils/build/before.sh; webpack --config ./utils/webpack.configs/webpack.prod.js; utils/build/after_build.sh",
+        "start": "utils/build/before.sh; webpack-dashboard -- webpack-dev-server --open --config ./utils/webpack.configs/webpack.dev.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/jquery": "^3.3.34",
+        "clean-webpack-plugin": "^3.0.0",
+        "closure-webpack-plugin": "^2.3.0",
+        "copy-webpack-plugin": "^5.1.1",
+        "css-loader": "^3.5.1",
+        "duplicate-package-checker-webpack-plugin": "^3.0.0",
+        "file-loader": "^4.3.0",
+        "google-closure-compiler": "^20190929.0.0",
+        "html-webpack-plugin": "^3.2.0",
+        "jquery": "^3.5.1",
+        "mini-css-extract-plugin": "^0.8.2",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "raw-loader": "^3.1.0",
+        "style-loader": "^1.1.3",
+        "ts-loader": "^6.2.2",
+        "typescript": "^3.8.3",
+        "vuex": "^3.1.3",
+        "webpack": "^4.42.1",
+        "webpack-bundle-analyzer": "^3.6.1",
+        "webpack-cli": "^3.3.11",
+        "webpack-dashboard": "^3.2.0",
+        "webpack-dev-server": "^3.11.0",
+        "webpack-merge": "^4.2.2",
+        "worker-loader": "^2.0.0"
+    },
+    "dependencies": {
+        "3dmol": "^1.5.1",
+        "bootstrap": "^4.4.1",
+        "bootstrap-vue": "^2.11.0",
+        "file-saver": "^2.0.2",
+        "popper.js": "^1.16.1",
+        "vue": "^2.6.11"
+    }
+}

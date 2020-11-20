@@ -1,0 +1,409 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <!--
+            This file is part of BINANA, released under the Apache 2.0
+            License. See LICENSE.md or go to
+            https://opensource.org/licenses/Apache-2.0 for full details.
+            Copyright 2020 Jacob D. Durrant.
+        -->
+        <meta charset="utf-8">
+
+        <title>BINANA Minimal Example</title>
+        <meta name="description" content="BINANA Minimal Example">
+        <meta name="author" content="Jacob Durrant">
+    </head>
+
+    <body>
+        <p>This file serves as a minimal working example of BINANA.</p>
+        <pre><code id="output"></code></pre>
+
+        <script>
+            // Get text of protein-receptor and ligand PDBQT files.
+            var receptorPDBQT =
+                "ATOM      1  N   ILE A   1      -9.534  15.237  54.871  0.00  0.00    -0.320 NA\n" +
+                "ATOM      2  H1  ILE A   1      -9.046  14.342  54.847  0.00  0.00    +0.119 HD\n" +
+                "ATOM      3  H2  ILE A   1      -9.820  15.493  53.926  0.00  0.00    +0.119 HD\n" +
+                "ATOM      4  CA  ILE A   1     -10.734  15.123  55.738  0.00  0.00    +0.141 C \n" +
+                "ATOM      5  CB  ILE A   1     -10.342  14.738  57.169  0.00  0.00    +0.011 C \n" +
+                "ATOM      6  CG1 ILE A   1      -9.616  15.853  57.909  0.00  0.00    +0.002 C \n" +
+                "ATOM      7  CD1 ILE A   1      -8.997  15.348  59.206  0.00  0.00    +0.004 C \n" +
+                "ATOM      8  CG2 ILE A   1      -9.492  13.475  57.142  0.00  0.00    +0.009 C \n" +
+                "ATOM      9  C   ILE A   1     -11.540  16.417  55.773  0.00  0.00    +0.233 C \n" +
+                "ATOM     10  N   PRO A   2     -12.880  16.283  55.810  0.00  0.00    -0.289 N \n" +
+                "ATOM     11  CA  PRO A   2     -13.815  17.372  55.836  0.00  0.00    +0.162 C \n" +
+                "ATOM     12  C   PRO A   2     -13.815  18.222  57.108  0.00  0.00    +0.234 C \n" +
+                "ATOM     13  O   PRO A   2     -13.335  17.820  58.171  0.00  0.00    -0.274 OA\n" +
+                "ATOM     14  N   GLU A   3     -14.417  19.393  56.987  0.00  0.00    -0.302 N \n" +
+                "ATOM     15  H   GLU A   3     -14.750  19.655  56.098  0.00  0.00    +0.150 HD\n" +
+                "ATOM     16  CA  GLU A   3     -14.613  20.305  58.079  0.00  0.00    +0.159 C \n" +
+                "ATOM     17  C   GLU A   3     -15.377  19.667  59.240  0.00  0.00    +0.234 C \n" +
+                "ATOM     18  N   ALA A   4     -15.024  20.114  60.447  0.00  0.00    -0.303 N \n" +
+                "ATOM     19  H   ALA A   4     -14.234  20.695  60.530  0.00  0.00    +0.149 HD\n" +
+                "ATOM     20  CA  ALA A   4     -15.776  19.765  61.646  0.00  0.00    +0.156 C \n" +
+                "ATOM     21  CB  ALA A   4     -14.908  20.008  62.883  0.00  0.00    +0.038 C \n" +
+                "ATOM     22  C   ALA A   4     -17.060  20.578  61.721  0.00  0.00    +0.236 C \n" +
+                "ATOM     23  N   PRO A   5     -18.051  20.153  62.525  0.00  0.00    -0.288 N \n" +
+                "ATOM     24  CD  PRO A   5     -18.121  18.992  63.419  0.00  0.00    +0.109 C \n" +
+                "ATOM     25  CG  PRO A   5     -19.588  18.905  63.680  0.00  0.00    +0.021 C \n" +
+                "ATOM     26  CB  PRO A   5     -19.951  20.347  63.849  0.00  0.00    +0.033 C \n" +
+                "ATOM     27  CA  PRO A   5     -19.180  21.054  62.750  0.00  0.00    +0.162 C \n" +
+                "ATOM     28  C   PRO A   5     -18.780  22.483  63.123  0.00  0.00    +0.234 C \n" +
+                "ATOM     29  O   PRO A   5     -17.770  22.656  63.773  0.00  0.00    -0.274 OA\n" +
+                "ATOM     30  N   ARG A   6     -19.530  23.483  62.670  0.00  0.00    -0.302 N \n" +
+                "ATOM     31  H   ARG A   6     -20.305  23.275  62.099  0.00  0.00    +0.150 HD\n" +
+                "ATOM     32  CA  ARG A   6     -19.248  24.863  62.986  0.00  0.00    +0.159 C \n" +
+                "ATOM     33  C   ARG A   6     -20.372  25.315  63.910  0.00  0.00    +0.234 C \n" +
+                "ATOM     34  N   ASP A   7     -20.161  25.132  65.201  0.00  0.00    -0.302 N \n" +
+                "ATOM     35  H   ASP A   7     -19.259  24.890  65.512  0.00  0.00    +0.150 HD\n" +
+                "ATOM     36  CA  ASP A   7     -21.239  25.281  66.177  0.00  0.00    +0.169 C \n" +
+                "ATOM     37  C   ASP A   7     -20.779  25.789  67.531  0.00  0.00    +0.234 C \n" +
+                "ATOM     38  O   ASP A   7     -21.470  25.624  68.516  0.00  0.00    -0.274 OA\n" +
+                "ATOM     39  N   GLY A   8     -19.619  26.423  67.588  0.00  0.00    -0.305 N \n" +
+                "ATOM     40  H   GLY A   8     -19.081  26.508  66.768  0.00  0.00    +0.149 HD\n" +
+                "ATOM     41  CA  GLY A   8     -19.108  27.004  68.836  0.00  0.00    +0.200 C \n" +
+                "ATOM     42  C   GLY A   8     -18.422  26.003  69.755  0.00  0.00    +0.231 C \n" +
+                "ATOM     43  O   GLY A   8     -18.093  26.311  70.918  0.00  0.00    -0.274 OA\n" +
+                "ATOM     44  N   GLN A   9     -18.304  24.766  69.285  0.00  0.00    -0.303 N \n" +
+                "ATOM     45  H   GLN A   9     -18.641  24.567  68.382  0.00  0.00    +0.149 HD\n" +
+                "ATOM     46  CA  GLN A   9     -17.690  23.688  70.063  0.00  0.00    +0.159 C \n" +
+                "ATOM     47  CB  GLN A   9     -18.614  22.513  70.311  0.00  0.00    +0.041 C \n" +
+                "ATOM     48  CG  GLN A   9     -19.853  22.887  71.102  0.00  0.00    +0.098 C \n" +
+                "ATOM     49  CD  GLN A   9     -19.522  23.022  72.585  0.00  0.00    +0.211 C \n" +
+                "ATOM     50  NE2 GLN A   9     -20.322  23.801  73.294  0.00  0.00    -0.329 N \n" +
+                "ATOM     51 HE21 GLN A   9     -20.155  23.933  74.255  0.00  0.00    +0.145 HD\n" +
+                "ATOM     52 HE22 GLN A   9     -21.084  24.249  72.860  0.00  0.00    +0.145 HD\n" +
+                "ATOM     53  OE1 GLN A   9     -18.539  22.430  73.089  0.00  0.00    -0.276 OA\n" +
+                "ATOM     54  C   GLN A   9     -16.402  23.164  69.413  0.00  0.00    +0.234 C \n" +
+                "ATOM     55  N   ALA A  10     -15.438  22.784  70.242  0.00  0.00    -0.303 N \n" +
+                "ATOM     56  H   ALA A  10     -15.573  22.908  71.209  0.00  0.00    +0.149 HD\n" +
+                "ATOM     57  CA  ALA A  10     -14.188  22.191  69.785  0.00  0.00    +0.156 C \n" +
+                "ATOM     58  CB  ALA A  10     -13.119  22.355  70.806  0.00  0.00    +0.038 C \n" +
+                "ATOM     59  C   ALA A  10     -14.309  20.710  69.515  0.00  0.00    +0.234 C \n" +
+                "ATOM     60  O   ALA A  10     -14.973  19.955  70.297  0.00  0.00    -0.274 OA\n" +
+                "ATOM     61  N   TYR A  11     -13.642  20.241  68.481  0.00  0.00    -0.302 N \n" +
+                "ATOM     62  H   TYR A  11     -13.109  20.874  67.947  0.00  0.00    +0.150 HD\n" +
+                "ATOM     63  CA  TYR A  11     -13.647  18.837  68.080  0.00  0.00    +0.163 C \n" +
+                "ATOM     64  C   TYR A  11     -12.226  18.286  67.931  0.00  0.00    +0.234 C \n" +
+                "ATOM     65  N   VAL A  12     -12.112  16.997  68.209  0.00  0.00    -0.302 N \n" +
+                "ATOM     66  H   VAL A  12     -12.887  16.539  68.607  0.00  0.00    +0.150 HD\n" +
+                "ATOM     67  CA  VAL A  12     -10.913  16.220  67.962  0.00  0.00    +0.161 C \n" +
+                "ATOM     68  CB  VAL A  12     -10.300  15.684  69.297  0.00  0.00    +0.012 C \n" +
+                "ATOM     69  CG2 VAL A  12      -9.866  16.814  70.217  0.00  0.00    +0.009 C \n" +
+                "ATOM     70  CG1 VAL A  12     -11.279  14.771  69.996  0.00  0.00    +0.009 C \n" +
+                "ATOM     71  C   VAL A  12     -11.208  15.078  66.968  0.00  0.00    +0.234 C \n" +
+                "ATOM     72  O   VAL A  12     -12.358  14.804  66.719  0.00  0.00    -0.274 OA\n" +
+                "ATOM     73  N   ARG A  13     -10.169  14.466  66.413  0.00  0.00    -0.302 N \n" +
+                "ATOM     74  H   ARG A  13      -9.258  14.676  66.723  0.00  0.00    +0.150 HD\n" +
+                "ATOM     75  CA  ARG A  13     -10.361  13.484  65.348  0.00  0.00    +0.159 C \n" +
+                "ATOM     76  C   ARG A  13     -10.193  12.068  65.910  0.00  0.00    +0.234 C \n" +
+                "ATOM     77  O   ARG A  13      -9.168  11.773  66.579  0.00  0.00    -0.274 OA\n" +
+                "ATOM     78  N   LYS A  14     -11.182  11.224  65.684  0.00  0.00    -0.302 N \n" +
+                "ATOM     79  H   LYS A  14     -11.939  11.499  65.117  0.00  0.00    +0.150 HD\n" +
+                "ATOM     80  CA  LYS A  14     -11.163   9.891  66.266  0.00  0.00    +0.159 C \n" +
+                "ATOM     81  CB  LYS A  14     -11.761   9.924  67.683  0.00  0.00    +0.032 C \n" +
+                "ATOM     82  CG  LYS A  14     -11.941   8.567  68.364  0.00  0.00    +0.003 C \n" +
+                "ATOM     83  CD  LYS A  14     -12.521   8.779  69.750  0.00  0.00    +0.015 C \n" +
+                "ATOM     84  CE  LYS A  14     -12.542   7.548  70.628  0.00  0.00    +0.077 C \n" +
+                "ATOM     85  NZ  LYS A  14     -13.672   6.697  70.222  0.00  0.00    -0.330 NA\n" +
+                "ATOM     86  HZ1 LYS A  14     -13.700   5.865  70.811  0.00  0.00    +0.118 HD\n" +
+                "ATOM     87  HZ2 LYS A  14     -14.544   7.217  70.326  0.00  0.00    +0.118 HD\n" +
+                "ATOM     88  C   LYS A  14     -11.955   8.999  65.372  0.00  0.00    +0.234 C \n" +
+                "ATOM     89  N   ASP A  15     -11.433   7.811  65.057  0.00  0.00    -0.302 N \n" +
+                "ATOM     90  H   ASP A  15     -10.513   7.593  65.332  0.00  0.00    +0.150 HD\n" +
+                "ATOM     91  CA  ASP A  15     -12.233   6.811  64.291  0.00  0.00    +0.169 C \n" +
+                "ATOM     92  CB  ASP A  15     -13.465   6.283  65.116  0.00  0.00    +0.152 C \n" +
+                "ATOM     93  CG  ASP A  15     -13.075   5.572  66.398  0.00  0.00    +0.307 C \n" +
+                "ATOM     94  OD2 ASP A  15     -13.861   5.623  67.381  0.00  0.00    -0.481 OA\n" +
+                "ATOM     95  HD2 ASP A  15     -14.658   6.112  67.319  0.00  0.00    +0.295 HD\n" +
+                "ATOM     96  OD1 ASP A  15     -12.016   4.945  66.424  0.00  0.00    -0.251 OA\n" +
+                "ATOM     97  C   ASP A  15     -12.742   7.379  62.956  0.00  0.00    +0.234 C \n" +
+                "ATOM     98  O   ASP A  15     -13.838   7.049  62.536  0.00  0.00    -0.274 OA\n" +
+                "ATOM     99  N   GLY A  16     -12.007   8.330  62.351  0.00  0.00    -0.305 N \n" +
+                "ATOM    100  H   GLY A  16     -11.157   8.621  62.753  0.00  0.00    +0.149 HD\n" +
+                "ATOM    101  CA  GLY A  16     -12.473   8.944  61.078  0.00  0.00    +0.200 C \n" +
+                "ATOM    102  C   GLY A  16     -13.701   9.830  61.209  0.00  0.00    +0.231 C \n" +
+                "ATOM    103  N   GLU A  17     -13.853  10.419  62.386  0.00  0.00    -0.303 N \n" +
+                "ATOM    104  H   GLU A  17     -13.157  10.252  63.062  0.00  0.00    +0.149 HD\n" +
+                "ATOM    105  CA  GLU A  17     -14.940  11.280  62.768  0.00  0.00    +0.159 C \n" +
+                "ATOM    106  CB  GLU A  17     -15.943  10.499  63.636  0.00  0.00    +0.043 C \n" +
+                "ATOM    107  CG  GLU A  17     -16.436   9.206  63.035  0.00  0.00    +0.123 C \n" +
+                "ATOM    108  CD  GLU A  17     -17.405   8.503  63.949  0.00  0.00    +0.305 C \n" +
+                "ATOM    109  OE2 GLU A  17     -17.212   8.631  65.180  0.00  0.00    -0.481 OA\n" +
+                "ATOM    110  HE2 GLU A  17     -16.498   9.152  65.491  0.00  0.00    +0.295 HD\n" +
+                "ATOM    111  OE1 GLU A  17     -18.333   7.827  63.431  0.00  0.00    -0.251 OA\n" +
+                "ATOM    112  C   GLU A  17     -14.444  12.435  63.592  0.00  0.00    +0.234 C \n" +
+                "ATOM    113  O   GLU A  17     -13.375  12.373  64.180  0.00  0.00    -0.274 OA\n" +
+                "ATOM    114  N   TRP A  18     -15.228  13.491  63.639  0.00  0.00    -0.302 N \n" +
+                "ATOM    115  H   TRP A  18     -15.975  13.548  63.001  0.00  0.00    +0.150 HD\n" +
+                "ATOM    116  CA  TRP A  18     -15.045  14.574  64.584  0.00  0.00    +0.163 C \n" +
+                "ATOM    117  C   TRP A  18     -15.889  14.312  65.803  0.00  0.00    +0.234 C \n" +
+                "ATOM    118  N   VAL A  19     -15.263  14.338  66.967  0.00  0.00    -0.302 N \n" +
+                "ATOM    119  H   VAL A  19     -14.306  14.571  66.958  0.00  0.00    +0.150 HD\n" +
+                "ATOM    120  CA  VAL A  19     -15.862  14.054  68.253  0.00  0.00    +0.161 C \n" +
+                "ATOM    121  C   VAL A  19     -15.622  15.238  69.160  0.00  0.00    +0.234 C \n" +
+                "ATOM    122  N   LEU A  20     -16.647  15.606  69.929  0.00  0.00    -0.302 N \n" +
+                "ATOM    123  H   LEU A  20     -17.512  15.141  69.860  0.00  0.00    +0.150 HD\n" +
+                "ATOM    124  CA  LEU A  20     -16.473  16.716  70.885  0.00  0.00    +0.159 C \n" +
+                "ATOM    125  C   LEU A  20     -15.278  16.593  71.817  0.00  0.00    +0.234 C \n" +
+                "ATOM    126  O   LEU A  20     -15.138  15.592  72.488  0.00  0.00    -0.274 OA\n" +
+                "ATOM    127  N   LEU A  21     -14.479  17.631  71.930  0.00  0.00    -0.302 N \n" +
+                "ATOM    128  H   LEU A  21     -14.609  18.417  71.351  0.00  0.00    +0.150 HD\n" +
+                "ATOM    129  CA  LEU A  21     -13.401  17.619  72.912  0.00  0.00    +0.159 C \n" +
+                "ATOM    130  C   LEU A  21     -13.942  17.492  74.334  0.00  0.00    +0.234 C \n" +
+                "ATOM    131  O   LEU A  21     -13.353  16.855  75.192  0.00  0.00    -0.274 OA\n" +
+                "ATOM    132  N   SER A  22     -15.055  18.164  74.608  0.00  0.00    -0.301 N \n" +
+                "ATOM    133  H   SER A  22     -15.513  18.658  73.890  0.00  0.00    +0.150 HD\n" +
+                "ATOM    134  CA  SER A  22     -15.604  18.180  75.947  0.00  0.00    +0.184 C \n" +
+                "ATOM    135  C   SER A  22     -15.851  16.778  76.500  0.00  0.00    +0.236 C \n" +
+                "ATOM    136  O   SER A  22     -15.790  16.571  77.707  0.00  0.00    -0.274 OA\n" +
+                "ATOM    137  N   THR A  23     -16.094  15.792  75.664  0.00  0.00    -0.300 N \n" +
+                "ATOM    138  H   THR A  23     -16.109  15.973  74.696  0.00  0.00    +0.150 HD\n" +
+                "ATOM    139  CA  THR A  23     -16.340  14.443  76.138  0.00  0.00    +0.187 C \n" +
+                "ATOM    140  C   THR A  23     -15.156  13.861  76.888  0.00  0.00    +0.236 C \n" +
+                "ATOM    141  O   THR A  23     -15.305  13.028  77.796  0.00  0.00    -0.274 OA\n" +
+                "ATOM    142  N   PHE A  24     -13.982  14.261  76.472  0.00  0.00    -0.302 N \n" +
+                "ATOM    143  H   PHE A  24     -13.947  14.910  75.732  0.00  0.00    +0.150 HD\n" +
+                "ATOM    144  CA  PHE A  24     -12.710  13.795  77.049  0.00  0.00    +0.163 C \n" +
+                "ATOM    145  C   PHE A  24     -12.226  14.651  78.208  0.00  0.00    +0.234 C \n" +
+                "ATOM    146  O   PHE A  24     -11.363  14.227  78.936  0.00  0.00    -0.274 OA\n" +
+                "ATOM    147  N   LEU A  25     -12.721  15.864  78.352  0.00  0.00    -0.304 N \n" +
+                "ATOM    148  H   LEU A  25     -13.374  16.203  77.698  0.00  0.00    +0.149 HD\n" +
+                "ATOM    149  CA  LEU A  25     -12.318  16.702  79.456  0.00  0.00    +0.136 C \n" +
+                "ATOM    150  C   LEU A  25     -13.204  16.484  80.635  0.00  0.00    +0.245 C \n" +
+                "ATOM    151  O   LEU A  25     -14.388  16.069  80.536  0.00  0.00    -0.299 OA\n" +
+                "ATOM    152  CB  LEU A  25     -12.396  18.176  79.084  0.00  0.00    +0.032 C \n" +
+                "ATOM    153  CG  LEU A  25     -11.700  18.552  77.799  0.00  0.00    -0.015 C \n" +
+                "ATOM    154  CD2 LEU A  25     -10.260  18.097  77.812  0.00  0.00    +0.007 C \n" +
+                "ATOM    155  CD1 LEU A  25     -11.825  20.039  77.613  0.00  0.00    +0.007 C \n" +
+                "ATOM    156  CB  PHE A  24     -11.610  13.771  75.974  0.00  0.00    +0.067 C \n" +
+                "ATOM    157  CG  PHE A  24     -11.951  12.922  74.793  0.00  0.00    -0.045 A \n" +
+                "ATOM    158  CD2 PHE A  24     -11.761  11.561  74.830  0.00  0.00    +0.004 A \n" +
+                "ATOM    159  CE2 PHE A  24     -12.098  10.770  73.746  0.00  0.00    +0.000 A \n" +
+                "ATOM    160  CZ  PHE A  24     -12.702  11.322  72.625  0.00  0.00    +0.000 A \n" +
+                "ATOM    161  CE1 PHE A  24     -12.889  12.679  72.580  0.00  0.00    +0.000 A \n" +
+                "ATOM    162  CD1 PHE A  24     -12.548  13.458  73.673  0.00  0.00    +0.004 A \n" +
+                "ATOM    163  CB  THR A  23     -16.706  13.595  74.917  0.00  0.00    +0.141 C \n" +
+                "ATOM    164  CG2 THR A  23     -16.910  12.134  75.282  0.00  0.00    +0.040 C \n" +
+                "ATOM    165  OG1 THR A  23     -17.908  14.144  74.337  0.00  0.00    -0.390 OA\n" +
+                "ATOM    166  HG1 THR A  23     -18.626  14.109  74.988  0.00  0.00    +0.210 HD\n" +
+                "ATOM    167  CB  SER A  22     -16.892  18.997  75.990  0.00  0.00    +0.187 C \n" +
+                "ATOM    168  OG  SER A  22     -17.905  18.468  75.132  0.00  0.00    -0.393 OA\n" +
+                "ATOM    169  H   SER A  22     -18.134  17.570  75.418  0.00  0.00    +0.209 HD\n" +
+                "ATOM    170  CB  LEU A  21     -12.544  18.893  72.746  0.00  0.00    +0.034 C \n" +
+                "ATOM    171  CG  LEU A  21     -11.527  19.158  73.805  0.00  0.00    -0.015 C \n" +
+                "ATOM    172  CD2 LEU A  21     -10.482  18.105  73.765  0.00  0.00    +0.007 C \n" +
+                "ATOM    173  CD1 LEU A  21     -10.930  20.522  73.580  0.00  0.00    +0.007 C \n" +
+                "ATOM    174  CB  LEU A  20     -17.722  16.917  71.703  0.00  0.00    +0.034 C \n" +
+                "ATOM    175  CG  LEU A  20     -18.959  17.439  70.979  0.00  0.00    -0.015 C \n" +
+                "ATOM    176  CD2 LEU A  20     -20.222  17.252  71.783  0.00  0.00    +0.007 C \n" +
+                "ATOM    177  CD1 LEU A  20     -18.763  18.934  70.701  0.00  0.00    +0.007 C \n" +
+                "ATOM    178  O   VAL A  19     -14.533  15.799  69.150  0.00  0.00    -0.274 OA\n" +
+                "ATOM    179  CB  VAL A  19     -15.340  12.733  68.852  0.00  0.00    +0.012 C \n" +
+                "ATOM    180  CG2 VAL A  19     -15.923  12.374  70.227  0.00  0.00    +0.009 C \n" +
+                "ATOM    181  CG1 VAL A  19     -15.462  11.530  67.906  0.00  0.00    +0.009 C \n" +
+                "ATOM    182  O   TRP A  18     -17.110  14.189  65.711  0.00  0.00    -0.274 OA\n" +
+                "ATOM    183  CB  TRP A  18     -15.410  15.910  63.928  0.00  0.00    +0.069 C \n" +
+                "ATOM    184  CG  TRP A  18     -14.531  16.324  62.823  0.00  0.00    -0.020 A \n" +
+                "ATOM    185  CD2 TRP A  18     -13.202  16.772  62.967  0.00  0.00    +0.003 A \n" +
+                "ATOM    186  CE3 TRP A  18     -12.372  16.939  64.074  0.00  0.00    +0.010 A \n" +
+                "ATOM    187  CZ3 TRP A  18     -11.122  17.394  63.890  0.00  0.00    +0.001 A \n" +
+                "ATOM    188  CH2 TRP A  18     -10.697  17.791  62.609  0.00  0.00    +0.002 A \n" +
+                "ATOM    189  CZ2 TRP A  18     -11.490  17.656  61.519  0.00  0.00    +0.026 A \n" +
+                "ATOM    190  CE2 TRP A  18     -12.750  17.170  61.713  0.00  0.00    +0.047 A \n" +
+                "ATOM    191  NE1 TRP A  18     -13.772  16.942  60.827  0.00  0.00    -0.360 N \n" +
+                "ATOM    192  HE1 TRP A  18     -13.729  17.110  59.858  0.00  0.00    +0.165 HD\n" +
+                "ATOM    193  CD1 TRP A  18     -14.852  16.450  61.488  0.00  0.00    +0.087 A \n" +
+                "ATOM    194  O   GLY A  16     -14.418  10.033  60.273  0.00  0.00    -0.274 OA\n" +
+                "ATOM    195  O   LYS A  14     -13.056   9.335  65.017  0.00  0.00    -0.274 OA\n" +
+                "ATOM    196  CB  ARG A  13      -9.349  13.767  64.240  0.00  0.00    +0.035 C \n" +
+                "ATOM    197  CG  ARG A  13      -9.617  13.006  62.951  0.00  0.00    +0.043 C \n" +
+                "ATOM    198  CD  ARG A  13     -10.881  13.490  62.284  0.00  0.00    +0.243 C \n" +
+                "ATOM    199  NE  ARG A  13     -11.142  12.773  61.064  0.00  0.00    -0.114 NA\n" +
+                "ATOM    200  CZ  ARG A  13     -12.269  12.912  60.373  0.00  0.00    +0.376 C \n" +
+                "ATOM    201  NH2 ARG A  13     -13.177  13.782  60.771  0.00  0.00    -0.289 N \n" +
+                "ATOM    202 HH21 ARG A  13     -13.019  14.325  61.577  0.00  0.00    +0.255 HD\n" +
+                "ATOM    203 HH22 ARG A  13     -14.013  13.888  60.262  0.00  0.00    +0.255 HD\n" +
+                "ATOM    204  NH1 ARG A  13     -12.457  12.256  59.256  0.00  0.00    -0.289 N \n" +
+                "ATOM    205 HH11 ARG A  13     -11.759  11.650  58.917  0.00  0.00    +0.255 HD\n" +
+                "ATOM    206 HH12 ARG A  13     -13.297  12.369  58.754  0.00  0.00    +0.255 HD\n" +
+                "ATOM    207  O   TYR A  11     -11.261  18.971  67.578  0.00  0.00    -0.274 OA\n" +
+                "ATOM    208  CB  TYR A  11     -14.354  18.674  66.761  0.00  0.00    +0.067 C \n" +
+                "ATOM    209  CG  TYR A  11     -15.860  18.918  66.859  0.00  0.00    -0.045 A \n" +
+                "ATOM    210  CD2 TYR A  11     -16.768  17.877  67.085  0.00  0.00    +0.007 A \n" +
+                "ATOM    211  CE2 TYR A  11     -18.131  18.095  67.224  0.00  0.00    +0.045 A \n" +
+                "ATOM    212  CZ  TYR A  11     -18.623  19.391  67.150  0.00  0.00    +0.117 A \n" +
+                "ATOM    213  OH  TYR A  11     -19.980  19.594  67.277  0.00  0.00    -0.507 OA\n" +
+                "ATOM    214  HH  TYR A  11     -20.330  20.462  67.230  0.00  0.00    +0.292 HD\n" +
+                "ATOM    215  CE1 TYR A  11     -17.733  20.443  66.941  0.00  0.00    +0.045 A \n" +
+                "ATOM    216  CD1 TYR A  11     -16.369  20.209  66.812  0.00  0.00    +0.007 A \n" +
+                "ATOM    217  O   GLN A   9     -16.267  23.148  68.206  0.00  0.00    -0.274 OA\n" +
+                "ATOM    218  CB  ASP A   7     -21.935  23.947  66.360  0.00  0.00    +0.152 C \n" +
+                "ATOM    219  CG  ASP A   7     -21.006  22.847  66.897  0.00  0.00    +0.307 C \n" +
+                "ATOM    220  OD2 ASP A   7     -19.841  23.168  67.245  0.00  0.00    -0.481 OA\n" +
+                "ATOM    221  HD2 ASP A   7     -19.555  24.056  67.160  0.00  0.00    +0.295 HD\n" +
+                "ATOM    222  OD1 ASP A   7     -21.441  21.672  66.989  0.00  0.00    -0.251 OA\n" +
+                "ATOM    223  O   ARG A   6     -21.406  25.802  63.472  0.00  0.00    -0.274 OA\n" +
+                "ATOM    224  CB  ARG A   6     -19.200  25.703  61.718  0.00  0.00    +0.035 C \n" +
+                "ATOM    225  CG  ARG A   6     -17.988  25.417  60.836  0.00  0.00    +0.043 C \n" +
+                "ATOM    226  CD  ARG A   6     -18.119  26.109  59.488  0.00  0.00    +0.243 C \n" +
+                "ATOM    227  NE  ARG A   6     -18.096  27.562  59.628  0.00  0.00    -0.114 NA\n" +
+                "ATOM    228  CZ  ARG A   6     -17.121  28.370  59.204  0.00  0.00    +0.376 C \n" +
+                "ATOM    229  NH2 ARG A   6     -17.232  29.680  59.408  0.00  0.00    -0.289 N \n" +
+                "ATOM    230 HH21 ARG A   6     -18.025  30.041  59.866  0.00  0.00    +0.255 HD\n" +
+                "ATOM    231 HH22 ARG A   6     -16.521  30.288  59.101  0.00  0.00    +0.255 HD\n" +
+                "ATOM    232  NH1 ARG A   6     -16.047  27.899  58.567  0.00  0.00    -0.289 N \n" +
+                "ATOM    233 HH11 ARG A   6     -15.959  26.933  58.399  0.00  0.00    +0.255 HD\n" +
+                "ATOM    234 HH12 ARG A   6     -15.343  28.518  58.265  0.00  0.00    +0.255 HD\n" +
+                "ATOM    235  O   ALA A   4     -17.189  21.583  61.030  0.00  0.00    -0.274 OA\n" +
+                "ATOM    236  O   GLU A   3     -16.221  18.801  59.063  0.00  0.00    -0.274 OA\n" +
+                "ATOM    237  CB  GLU A   3     -15.359  21.533  57.550  0.00  0.00    +0.043 C \n" +
+                "ATOM    238  CG  GLU A   3     -15.466  22.705  58.518  0.00  0.00    +0.123 C \n" +
+                "ATOM    239  CD  GLU A   3     -14.120  23.163  59.061  0.00  0.00    +0.305 C \n" +
+                "ATOM    240  OE2 GLU A   3     -13.743  22.733  60.168  0.00  0.00    -0.481 OA\n" +
+                "ATOM    241  HE2 GLU A   3     -14.261  22.101  60.626  0.00  0.00    +0.295 HD\n" +
+                "ATOM    242  OE1 GLU A   3     -13.458  24.008  58.415  0.00  0.00    -0.251 OA\n" +
+                "ATOM    243  CB  PRO A   2     -15.166  16.691  55.729  0.00  0.00    +0.033 C \n" +
+                "ATOM    244  CG  PRO A   2     -14.927  15.354  55.187  0.00  0.00    +0.021 C \n" +
+                "ATOM    245  CD  PRO A   2     -13.568  14.983  55.656  0.00  0.00    +0.108 C \n" +
+                "ATOM    246  O   ILE A   1     -10.953  17.519  55.702  0.00  0.00    -0.274 OA\n" +
+                "TER \n";
+
+            var ligandPDBQT =
+                "ROOT\n" +
+                "ATOM      1  C   UNL     1      -6.634  18.301  82.060  0.00  0.00    +0.038 A \n" +
+                "ATOM      2  C   UNL     1      -7.536  19.375  82.084  0.00  0.00    +0.026 A \n" +
+                "ATOM      3  C   UNL     1      -8.932  19.195  82.066  0.00  0.00    +0.038 A \n" +
+                "ATOM      4  C   UNL     1      -9.417  17.887  82.069  0.00  0.00    +0.026 A \n" +
+                "ATOM      5  C   UNL     1      -8.574  16.774  82.069  0.00  0.00    +0.038 A \n" +
+                "ATOM      6  C   UNL     1      -7.190  17.007  82.083  0.00  0.00    +0.026 A \n" +
+                "ENDROOT\n" +
+                "BRANCH   3   7\n" +
+                "ATOM      7  C   UNL     1      -9.874  20.242  82.104  0.00  0.00    +0.244 C \n" +
+                "ATOM      8  N   UNL     1      -9.436  21.509  82.223  0.00  0.00    -0.312 N \n" +
+                "ATOM      9  H   UNL     1      -8.468  21.688  82.218  0.00  0.00    +0.149 HD\n" +
+                "ATOM     10  O   UNL     1     -11.083  19.989  82.148  0.00  0.00    -0.270 OA\n" +
+                "BRANCH   8  11\n" +
+                "ATOM     11  C   UNL     1     -10.369  22.622  82.359  0.00  0.00    +0.101 C \n" +
+                "ATOM     12  C   UNL     1      -9.573  23.742  83.063  0.00  0.00    +0.024 C \n" +
+                "ENDBRANCH   8  11\n" +
+                "ENDBRANCH   3   7\n" +
+                "BRANCH   1  15\n" +
+                "ATOM     13  N   UNL     1      -4.331  17.589  82.249  0.00  0.00    -0.312 N \n" +
+                "ATOM     14  H   UNL     1      -4.656  16.660  82.246  0.00  0.00    +0.149 HD\n" +
+                "ATOM     15  C   UNL     1      -5.226  18.604  82.113  0.00  0.00    +0.244 C \n" +
+                "ATOM     16  O   UNL     1      -4.828  19.776  82.127  0.00  0.00    -0.270 OA\n" +
+                "BRANCH  13  18\n" +
+                "ATOM     17  C   UNL     1      -2.251  16.566  82.921  0.00  0.00    +0.024 C \n" +
+                "ATOM     18  C   UNL     1      -2.870  17.847  82.403  0.00  0.00    +0.101 C \n" +
+                "ENDBRANCH  13  18\n" +
+                "ENDBRANCH   1  15\n" +
+                "BRANCH   5  19\n" +
+                "ATOM     19  C   UNL     1      -9.027  15.422  82.092  0.00  0.00    +0.244 C \n" +
+                "ATOM     20  N   UNL     1     -10.356  15.142  82.206  0.00  0.00    -0.312 N \n" +
+                "ATOM     21  H   UNL     1     -11.006  15.881  82.223  0.00  0.00    +0.149 HD\n" +
+                "ATOM     22  O   UNL     1      -8.200  14.510  82.111  0.00  0.00    -0.270 OA\n" +
+                "BRANCH  20  23\n" +
+                "ATOM     23  C   UNL     1     -10.834  13.759  82.304  0.00  0.00    +0.101 C \n" +
+                "ATOM     24  C   UNL     1     -12.230  13.778  82.939  0.00  0.00    +0.024 C \n" +
+                "ENDBRANCH  20  23\n" +
+                "ENDBRANCH   5  19\n" +
+                "TORSDOF 6\n";
+
+            // Define an object with the BINANA parameters. Uses the same names as
+            // vina, except --receptor and --ligand are not supported (must pass
+            // text instead).
+            let binanaParams = {
+                center_x: -8,
+                center_y: 19,
+                center_z: 79,
+                size_x: 15,
+                size_y: 15,
+                size_z: 15,
+                cpu: 1,
+                exhaustiveness: 1
+            }
+        </script>
+
+        <!-- Load the BINANA library. -->
+        <script src="Webina/Webina.min.js"></script>
+
+        <script>
+            // Let the user know that BINANA is running.
+            outputDiv = document.getElementById("output");
+
+            // Make a little helper function to show a message and then delay
+            // a bit. The delay gives the browser time to display the variable
+            // contents..
+            var showMsg = function(msg, alertMsg, varName) {
+                outputDiv.innerHTML = msg;
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (varName !== undefined) {
+                            alert(alertMsg + "\n\nShowing contents of variable: " + varName);
+                        }
+                        resolve();
+                    }, 100);
+                });
+            }
+
+            // Tell the user you're about to start BINANA.
+            var response = confirm(
+                "Please confirm that you would like to run BINANA in your browser."
+            );
+
+            if (response === true) {
+                showMsg("BINANA is running. This could take a while. This tab " +
+                        "might become unresponsive in the mean time.")
+                .then(() => {
+                    // Start BINANA.
+                    BINANA.start(
+                        binanaParams, receptorPDBQT, ligandPDBQT,
+                        (outPDBQT, stdOut, stdErr) => {
+                            // This callback fires when BINANA finishes.
+                            // outPDBQT contains the contents of the output
+                            // PDBQT file (docked poses). stdOut contains the
+                            // contents of the standard output. stdErr
+                            // contains the contents of the standard error.
+
+                            alert("BINANA has finished.");
+
+                            showMsg(
+                                outPDBQT,
+                                "The output PDBQT file with the ligand poses is currently displayed.",
+                                "outPDBQT"
+                            )
+                            .then(() => {
+                                return showMsg(
+                                    stdOut,
+                                    "Now displaying what BINANA wrote to the standard output.",
+                                    "stdOut"
+                                );
+                            })
+                            .then(() => {
+                                return showMsg(
+                                    stdErr,
+                                    "And now the standard error (should be blank).",
+                                    "stdErr"
+                                );
+                            })
+                        },
+                        () => {
+                            // This callback function runs when BINANA throws
+                            // an error.
+                            alert("Some error!");
+                        },
+
+                        // The location, relative to the server root, where
+                        // the Webina.min.js and related files can be found.
+                        // If you're running a server where
+                        // minimal_example.html (this file) is at the root,
+                        // then Webina.min.js is located in /Webina/.
+                        "/Webina/"
+                    )
+                })
+            }
+        </script>
+    </body>
+</html>

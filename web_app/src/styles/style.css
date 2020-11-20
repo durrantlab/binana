@@ -1,0 +1,235 @@
+body {
+  font-family: arial;
+  margin: 0;
+  padding: none
+}
+
+/* .emscripten {
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block
+}
+
+div.emscripten {
+    text-align: center
+}
+
+div.emscripten_border {
+    border: 1px solid #000
+}
+
+canvas.emscripten {
+    border: 0 none;
+    background-color: #000
+}
+
+#emscripten_logo {
+    display: inline-block;
+    margin: 0
+} */
+
+.spinner {
+  height: 30px;
+  width: 30px;
+  margin: 0;
+  margin-top: 20px;
+  margin-left: 20px;
+  display: inline-block;
+  vertical-align: top;
+  -webkit-animation: rotation .8s linear infinite;
+  -moz-animation: rotation .8s linear infinite;
+  -o-animation: rotation .8s linear infinite;
+  animation: rotation .8s linear infinite;
+  border-left: 5px solid #ebebeb;
+  border-right: 5px solid #ebebeb;
+  border-bottom: 5px solid #ebebeb;
+  border-top: 5px solid #787878;
+  border-radius: 100%;
+  background-color: #bdd72e
+}
+
+@-webkit-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0)
+  }
+
+  to {
+    -webkit-transform: rotate(360deg)
+  }
+}
+
+@-moz-keyframes rotation {
+  from {
+    -moz-transform: rotate(0)
+  }
+
+  to {
+    -moz-transform: rotate(360deg)
+  }
+}
+
+@-o-keyframes rotation {
+  from {
+    -o-transform: rotate(0)
+  }
+
+  to {
+    -o-transform: rotate(360deg)
+  }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0)
+  }
+
+  to {
+    transform: rotate(360deg)
+  }
+}
+
+#status {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 30px;
+  margin-left: 20px;
+  font-weight: 700;
+  color: #787878
+}
+
+#progress {
+  height: 20px;
+  width: 300px
+}
+
+#controls {
+  display: inline-block;
+  float: right;
+  vertical-align: top;
+  margin-top: 30px;
+  margin-right: 20px
+}
+
+/* #output {
+    width: 100%;
+    height: 200px;
+    margin: 0 auto;
+    margin-top: 10px;
+    border-left: 0;
+    border-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+    display: block;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Lucida Console', Monaco, monospace;
+    outline: 0
+} */
+
+* {
+  /* See https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                    supported by Chrome, Opera and Firefox */
+}
+
+/* Some adjustments to bootstrap... */
+.custom-file-label {
+  overflow: hidden;
+}
+
+.tab-content {
+  margin-top: 0 !important;
+}
+
+.col-form-label {
+  hyphens: auto;
+  max-width: 135px !important;
+  /* Depends on biggest label (words) */
+}
+
+td {
+  cursor: pointer;
+}
+
+.jumbotron {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  padding-top: 32px;
+  padding-bottom: 32px;
+  padding-left: 32px;
+  padding-right: 2px;
+}
+
+/** Let user know that mobile is no go */
+
+#no-mobile {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 100;
+  padding: 15px;
+}
+
+@media (min-width: 600px) {
+  #no-mobile {
+    display: none;
+  }
+}
+
+.download-button {
+  margin-top: 5px;
+  /* transform: scale(0.8); */
+  position: relative;
+  left: 8px;
+  font-size: 75%;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+body.waiting,
+body.waiting * {
+  cursor: wait !important;
+}
+
+.jumbo {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Enable word wrapping of different descriptions under file inputs. */
+div.col small {
+  line-height: 18px;
+}
+
+/* Fix button bar. See
+https://stackoverflow.com/questions/37190248/how-to-get-button-groups-that-span-the-full-width-of-a-parent-in-bootstrap
+*/
+div.better-btn-spacing {
+  display: flex;
+}
+
+.better-btn-spacing .btn-group {
+  flex: 1
+}
+
+.btn-group-toggle.d-inline-block, .btn-group-toggle.d-inline-block label {
+    width: 100%;
+}

@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "module": "es6",
+        "target": "es5",
+        "jsx": "react",
+        "allowJs": true
+    },
+    "include": [
+        "./src/global.d.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "types": [
+        "babylonjs",
+        "babylonjs-gui"
+    ]
+}
