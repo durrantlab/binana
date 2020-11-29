@@ -32,23 +32,24 @@ let computedFunctions = {
                 .map((e) => e.replace(/ /g, "").replace(/\./, ""));
 
             if (convertExt.indexOf(ext) !== -1) {
+                // TODO: Cruft?
                 // Set the filename.
                 this.$store.commit("updateFileName", {
                     type: this["id"],
                     filename: val.name,
                 });
 
-                this.getModelFileContents(val).then((text: string) => {
-                    this.$store.commit("openConvertFileModal", {
-                        ext: ext,
-                        type: this["id"],
-                        file: text,
-                    });
-                });
+                // this.getModelFileContents(val).then((text: string) => {
+                //     this.$store.commit("openConvertFileModal", {
+                //         ext: ext,
+                //         type: this["id"],
+                //         file: text,
+                //     });
+                // });
                 return;
             } else if (acceptableExt.indexOf(ext) === -1) {
                 // It is not one of the acceptable extensions that can be
-                // converted to pdbqt. Need to cancel.
+                // converted. Need to cancel.
                 let extsAllowed = acceptableExt.concat(convertExt);
 
                 let msg = "The file must end in ";
@@ -143,14 +144,6 @@ let methodsFunctions = {
                 resolve(new TextDecoder("utf-8").decode(data));
             };
             fr.readAsArrayBuffer(fileObj);
-
-            // Reset the show non-protein atom's link.
-            if (this["id"] === "receptor") {
-                this.$store.commit("setVar", {
-                    name: "showKeepProteinOnlyLink",
-                    val: true,
-                });
-            }
         });
     },
 };

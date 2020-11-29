@@ -4,7 +4,6 @@
 
 
 import * as Utils from "../Utils";
-import * as ThreeDMol from "../UI/ThreeDMol";
 
 // @ts-ignore
 import ExampleReceptorPDBQT from "../example/1xdn.pdbqt";
@@ -28,11 +27,6 @@ interface iVueXParam {
     val: any;
 }
 
-interface IParamAccess {
-    stateVarName: string;
-    name: string;
-}
-
 interface IModal {
     title: string;
     body: string;
@@ -47,6 +41,13 @@ interface IFileConvertModal {
 interface IInputFileNames {
     type: string;
     filename: string;
+}
+
+export const enum InteractionColoring {
+    // Note: const enum needed for closure-compiler compatibility.
+    MOLECULE = 1,
+    INTERACTION = 2,
+    NONE = 3
 }
 
 export var defaultColorMsg = "No atoms selected.";
@@ -71,43 +72,33 @@ export const store = new Vuex.Store({
             "salt_bridge_dist_cutoff" : 5.5,
         },
         "validation": {},
-        // hideDockingBoxParams: false,
         "tabIdx": 0,
         "receptorFileName": "",
         "ligandFileName": "",
         "receptorContents": "",
         "receptorContentsExample": ExampleReceptorPDBQT,
-        "showKeepProteinOnlyLink": true,
+        // "showKeepProteinOnlyLink": true,
         "ligandContents": "",
         "ligandContentsExample": ExampleLigandPDBQT,
-        // "crystalContents": "",
-        // "crystalContentsExample": ExampleLigandPDBQT,
         "outputContents": "",
         "outputContentsExample": ExampleOutputPDBQT,
-        // "dockedContents": "",
-        "parametersTabDisabled": false,
-        "existingVinaOutputTabDisabled": false,
-        "runningTabDisabled": true,
-        // "startOverTabDisabled": true,
-        "outputTabDisabled": true,
-        "pdbOutputFrames": [],
-        "stdOut": "",
-        "convertFileModalShow": false,
-        "convertFileExt": "PDB",
-        "convertFileType": "receptor",
-        "convertFile": null,
-        "receptorForceValidate": false,
-        "ligandForceValidate": false,
+        // TODO: Cruft?
+        // "convertFileModalShow": false,
+        // "convertFileExt": "PDB",
+        // "convertFileType": "receptor",
+        // "convertFile": null,
         "modalShow": false,
         "modalTitle": "Title",
         "modalBody": "Some text here...",
-        "vinaParamsValidates": false,
+        "binanaParamsValidates": false,
         "time": 0,  // Used to keep track of execution time.
         "receptorMol": undefined,
         "ligandMol": undefined,
         "renderProteinSticks": false,
-        "colorByInteraction": false,
-        "colorMessage": defaultColorMsg
+        "colorByInteraction": InteractionColoring.MOLECULE,
+        "bondVisible": false,
+        "colorMessage": defaultColorMsg,
+        "jsonOutput": "{}"
     },
     "mutations": {
         /**
@@ -123,22 +114,22 @@ export const store = new Vuex.Store({
         },
 
         /**
-         * Set one of the vina parameters.
+         * Set one of the binana parameters.
          * @param  {any}        state    The VueX state.
          * @param  {iVueXParam} payload  An object with information about
-         *                               which vina parameter to set.
+         *                               which binana parameter to set.
          * @returns void
          */
-        "setBinanaParam"(state: any, payload: iVueXParam): void {
-            // By redefining the whole variable, it becomes reactive. Directly
-            // changing individual properties is not reactive.
-            state["binanaParams"] = Utils.getNewObjWithUpdate(
-                state["binanaParams"],
-                payload.name,
-                payload.val
-            );
-            // state.hideDockingBoxParams = state["binanaParams"]["score_only"] === true
-        },
+        // TODO: Cruft
+        // "setBinanaParam"(state: any, payload: iVueXParam): void {
+        //     // By redefining the whole variable, it becomes reactive. Directly
+        //     // changing individual properties is not reactive.
+        //     state["binanaParams"] = Utils.getNewObjWithUpdate(
+        //         state["binanaParams"],
+        //         payload.name,
+        //         payload.val
+        //     );
+        // },
 
         /**
          * Set a validation parameter (either validates or doesn't).
@@ -158,70 +149,6 @@ export const store = new Vuex.Store({
         },
 
         /**
-         * Disable or enable tabs.
-         * @param  {any} state    The VueX stste.
-         * @param  {any} payload  An object containing information about which
-         *                        tabs should be enabled or disabled.
-         * @returns void
-         */
-        "disableTabs"(state: any, payload: any): void {
-            const tabDisableVarNames = Object.keys(payload);
-            const tabDisableVarNamesLen = tabDisableVarNames.length;
-            for (let i = 0; i < tabDisableVarNamesLen; i++) {
-                const tabDisableVarName = tabDisableVarNames[i];
-                let val = payload[tabDisableVarName];
-                val = val === undefined ? true : val;
-                state[tabDisableVarName] = val;
-            }
-
-            // If the output tab has been enabled, you should also warn the
-            // user about closing the website.
-            if (payload["outputTabDisabled"] === false) {
-                window.addEventListener("beforeunload", (event) => {
-                    event.preventDefault();
-
-                    // No modern browser respects the returnValue anymore. See
-                    // https://stackoverflow.com/questions/45088861/whats-the-point-of-beforeunload-returnvalue-if-the-message-does-not-get-set
-                    event.returnValue = "";
-                });
-            }
-        },
-
-        /**
-         * Extract and save relevant data about the poses from the Vina
-         * output.
-         * @param  {any} state  The VueX state.
-         * @returns void
-         */
-        // "outputToData"(state: any): void {
-        //     let data = [];
-
-        //     let outPdbqtFileTxt = state["outputContents"];
-
-        //     // Get info like score and rmsd from output file.
-        //     let re = /^REMARK VINA RESULT:\W+?([0-9\.\-]+)\W+?([0-9\.\-]+)\W+?([0-9\.\-]+)$/gm
-        //     let match;
-        //     let i = 1;
-        //     while (match = re.exec(outPdbqtFileTxt)) {
-        //         data.push([
-        //             i, match[1], match[2], match[3]
-        //         ].map(d => +d));
-        //         i++;
-        //     }
-
-        //     // Get pdb frames from output pdbqt file.
-        //     let framesPDBQTs = outPdbqtFileTxt.split("ENDMDL");
-        //     let framePDBs = framesPDBQTs
-        //                     .map(t => ThreeDMol.pdbqtToPDB(t, this.$store))
-        //                     .filter(t => t !== "")
-        //                     .map((t, i) => { return [data[i], t]; });
-        //     state["pdbOutputFrames"] = framePDBs;
-
-        //     // Set the first docked frame as the selected one.
-        //     // state["dockedContents"] = framePDBs[0][1];
-        // },
-
-        /**
          * Open the modal.
          * @param  {*}      state    The VueX state.
          * @param  {IModal} payload  An object with the title and body.
@@ -235,31 +162,6 @@ export const store = new Vuex.Store({
         },
 
         /**
-         * Open the modal.
-         * @param  {*}                 state    The VueX state.
-         * @param  {IFileConvertModal} payload  An object with the ext, type,
-         *                                      and file.
-         * @returns void
-         */
-        "openConvertFileModal"(state: any, payload: IFileConvertModal): void {
-            state["convertFileModalShow"] = true;
-            state["convertFileExt"] = payload.ext;
-            state["convertFileType"] = payload.type;
-            state["convertFile"] = payload.file;
-            jQuery("body").removeClass("waiting");
-        },
-
-        // /**
-        //  * Open the modal.
-        //  * @param  {*}                 state    The VueX state.
-        //  * @returns void
-        //  */
-        // "drawSmilesModal"(state: any): void {
-        //     state["drawSmilesModalShow"] = true;
-        //     jQuery("body").removeClass("waiting");
-        // },
-
-        /**
          * Update the filenames of the receptor and ligand input files.
          * @param  {any}             state    The VueX state.
          * @param  {IInputFileNames} payload  An object describing the
@@ -267,15 +169,11 @@ export const store = new Vuex.Store({
          * @returns void
          */
         "updateFileName"(state: any, payload: IInputFileNames): void {
-            // Also update file names so example vina command line is valid.
+            // Also update file names so example binana command line is valid.
             state[payload.type + "FileName"] = payload.filename;
         }
     }
 });
-
-// export function getStoreVal(name: string): any {
-//     return store["state"][name];
-// }
 
 // Good for debugging.
 window["store"] = store;

@@ -35,21 +35,11 @@ export function setup(): void {
 
                 <b-card no-body class="mb-3">
                     <b-tabs v-model="tabIdx" card fill pills vertical content-class="mt-3"> <!-- vertical -->
-                        <b-tab title="BINANA" active :disabled="parametersTabDisabled">
+                        <b-tab title="BINANA" active>
                             <b-card-text>
-                                <vina-params></vina-params>
+                                <binana-params></binana-params>
                             </b-card-text>
                         </b-tab>
-                        <!-- <b-tab title="Running BINANA" :disabled="runningTabDisabled">
-                            <b-card-text>
-                                <vina-running></vina-running>
-                            </b-card-text>
-                        </b-tab>
-                        <b-tab title="Output" :disabled="outputTabDisabled">
-                            <b-card-text>
-                                <vina-output></vina-output>
-                            </b-card-text>
-                        </b-tab>-->
                         <b-tab title="Start Over">
                             <b-card-text>
                                 <start-over></start-over>
@@ -86,36 +76,31 @@ export function setup(): void {
             },
 
             /**
-             * Determine whether the parameters tab is disabled.
-             * @returns boolean  True if it is disabled, false otherwise.
-             */
-            "parametersTabDisabled"(): boolean {
-                return this.$store.state["parametersTabDisabled"];
-            },
-
-            /**
              * Determine whether the running tab is disabled.
              * @returns boolean  True if it is disabled, false otherwise.
-             */
-            "runningTabDisabled"(): boolean {
-                return this.$store.state["runningTabDisabled"];
-            },
+            //  */
+            // TODO: Cruft?
+            // "runningTabDisabled"(): boolean {
+            //     return this.$store.state["runningTabDisabled"];
+            // },
 
             /**
              * Determine whether the output tab is disabled.
              * @returns boolean  True if it is disabled, false otherwise.
              */
-            "outputTabDisabled"(): boolean {
-                return this.$store.state["outputTabDisabled"];
-            },
+            // TODO: Cruft?
+            // "outputTabDisabled"(): boolean {
+            //     return this.$store.state["outputTabDisabled"];
+            // },
 
             /**
-             * Determine whether the existing vina output tab is disabled.
+             * Determine whether the existing binana output tab is disabled.
              * @returns boolean  True if it is disabled, false otherwise.
              */
-            "existingVinaOutputTabDisabled"(): boolean {
-                return this.$store.state["existingVinaOutputTabDisabled"];
-            },
+            // TODO: Cruft?
+            // "existingVinaOutputTabDisabled"(): boolean {
+            //     return this.$store.state["existingVinaOutputTabDisabled"];
+            // },
 
             /**
              * Determine whether the start over tab is disabled.

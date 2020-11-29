@@ -10,10 +10,11 @@ let methodsFunctions = {
      * Runs when the start-over button is clicked.
      * @returns void
      */
-    "onSubmitClick"(): void {
-        jQuery("body").addClass("waiting");
-        location.reload();
-    }
+    // TODO: Cruft?
+    // "onSubmitClick"(): void {
+    //     jQuery("body").addClass("waiting");
+    //     location.reload();
+    // }
 }
 
 /**

@@ -14,6 +14,9 @@ module.exports = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            jszip: path.join(__dirname, 'node_modules/jszip/lib/index.js') // src
+        }
         // alias: {
         //     'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
         // }

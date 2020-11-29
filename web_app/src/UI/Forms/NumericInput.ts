@@ -58,9 +58,6 @@ let computedFunctions = {
      */
     "desc"(): string {
         let toAdd = "";
-        // if ((this["required"] !== true) && (this["default"] === undefined)) {
-            // toAdd = " (Leave blank to use default value.)";
-        // }
         return this["description"] + toAdd;
     },
 

@@ -3,7 +3,6 @@
 // details. Copyright 2020 Jacob D. Durrant.
 
 import * as BINANAInterface from "../BINANAInterface";
-import * as OpenModal from "../UI/Modal/OpenModal";
 import { store } from "../Vue/Store";
 
 declare var $3Dmol;
@@ -11,7 +10,8 @@ declare var jQuery;
 declare var Vue;
 
 export var viewer;
-let bigMolAlreadyModalDisplayed = false;
+
+var runBINANATimeout;
 
 /**
 * Show a sticks representation if it is appropriate given user
@@ -68,9 +68,10 @@ let computedFunctions = {
      * Get the value of the binanaParams variable.
      * @returns string  The value.
      */
-    binanaParams(): string {
-        return this.$store.state["binanaParams"];
-    },
+    // TODO: Cruft?
+    // binanaParams(): string {
+    //     return this.$store.state["binanaParams"];
+    // },
 
     /**
      * Get the value of the surfBtnVariant variable.
@@ -93,19 +94,20 @@ let computedFunctions = {
      * been loaded.
      * @returns boolean  True if it has been loaded, false otherwise.
      */
-    appropriateReceptorPdbLoaded(): boolean {
-        return this.$store.state["receptorContents"] !== "";
-        //  || this.$store.state["crystalContents"] !== "";
-    },
+    // TODO: Cruft?
+    // appropriateReceptorPdbLoaded(): boolean {
+    //     return this.$store.state["receptorContents"] !== "";
+    // },
 
     /**
      * Determines whether the appropriate ligand PDB content has been
      * loaded.
      * @returns boolean  True if it has been loaded, false otherwise.
      */
-    appropriateLigandPdbLoaded(): boolean {
-        return this.$store.state["ligandContents"] !== "";
-    },
+    // TODO: Cruft?
+    // appropriateLigandPdbLoaded(): boolean {
+    //     return this.$store.state["ligandContents"] !== "";
+    // },
 }
 
 /** An object containing the vue-component methods functions. */
@@ -117,12 +119,6 @@ let methodsFunctions = {
      * @returns void
      */
     modelAdded(duration: number): void {
-        // First, check to make sure the added model is relevant to this
-        // 3dmoljs instance.
-        // if (this["appropriatePdbLoaded"] === false) {
-            // return;
-        // }
-
         // Put app into waiting state.
         jQuery("body").addClass("waiting");
         this["msg"] = "Loading...";
@@ -138,32 +134,56 @@ let methodsFunctions = {
                 viewer["enableFog"](true);
             }
 
-            let loadPDBTxt = (typeStr: string): any => {
-                let origPDBContent = this[typeStr + "Contents"];
-                let pdb = pdbqtToPDB(origPDBContent, this.$store);
-                if (pdb !== "") {
-                    if (this[typeStr + "PdbOfLoaded"] !== pdb) {
-                        // console.log(this["type"], "Adding " + typeStr, pdb.length);
-                        this[typeStr + "PdbOfLoaded"] = pdb;
+            BINANAInterface.clearInteraction();
 
+            let loadModelTxt = (typeStr: string): any => {
+                let origModelContent = this[typeStr + "Contents"];
+
+                let filename = this.$store.state[typeStr + "FileName"];
+                let ext = filename.split(".").slice(filename.split(".").length - 1)[0].toLowerCase()
+
+                let modelContent = origModelContent;
+                if (ext === "pdbqt") {
+                    modelContent = pdbqtToPDB(origModelContent, this.$store);
+                    ext = "pdb"
+                    this.$store.commit("setVar", {
+                        name: typeStr + "Contents",
+                        val: modelContent
+                    });
+                    this.$store.commit("setVar", {
+                        name: typeStr + "FileName",
+                        val: "myfile.pdb"
+                    });
+                }
+
+                if (modelContent !== "") {
+                    if (this[typeStr + "Mol"] !== undefined) {
                         viewer["removeModel"](this[typeStr + "Mol"]);
                         viewer["resize"]();
-
-                        this[typeStr + "Mol"] = viewer["addModel"](pdb, "pdb", {"keepH": true});
-
-                        this.msgIfNoHydrogens(this[typeStr + "Mol"]);
-
-                        // newModel = this[typeStr + "Mol"];
-                        // callBack(this[typeStr + "Mol"]);
-                        return this[typeStr + "Mol"];
+                        viewer["render"]();
                     }
-                } else if (origPDBContent !== "") {
+
+                    this[typeStr + "Mol"] = viewer["addModel"](modelContent, ext, {"keepH": true});
+                    if (ext !== "pdb") {
+                        // Some other format that 3dmol can read directly,
+                        // that needs to be converted to pdb for binana.
+                        modelContent = mol3DToPDB(this[typeStr + "Mol"]);
+                        this.$store.commit("setVar", {
+                            name: typeStr + "Contents",
+                            val: modelContent
+                        });
+                        this.$store.commit("setVar", {
+                            name: typeStr + "FileName",
+                            val: "myfile.pdb"
+                        });
+                    }
+
+                    this.msgIfNoHydrogens(this[typeStr + "Mol"]);
+
+                    return this[typeStr + "Mol"];
+                } else if (origModelContent !== "") {
                     // It's empty, but shouldn't be. Probably not
                     // properly formed.
-
-                    // viewer.removeModel(this[typeStr + "Mol"]);
-                    // viewer.removeAllShapes();
-                    // viewer.resize();
 
                     this.$store.commit("openModal", {
                         title: "Invalid Input File!",
@@ -175,7 +195,7 @@ let methodsFunctions = {
             viewer["removeAllSurfaces"]();
             this["surfaceObj"] = undefined;
 
-            let receptorModel = loadPDBTxt("receptor");
+            let receptorModel = loadModelTxt("receptor");
             if (receptorModel !== undefined) {
                 this.$store.commit("setVar", {
                     name: "receptorMol", val: receptorModel
@@ -183,22 +203,13 @@ let methodsFunctions = {
                 this.receptorAdded(receptorModel);
             }
 
-            //     if (somethingChanged === true) {
-            //         // viewer.resize();  // To make sure. Had some problems in testing.
-            //         viewer.render();
-            //         viewer.zoomTo({"model": newModel}, duration);
-            //         viewer.zoom(0.8, duration);
-            //     }
-            // // }
-
-            // if (["ligand"].indexOf(this["type"]) !== -1) {
-            let ligandModel = loadPDBTxt("ligand");
+            let ligandModel = loadModelTxt("ligand");
             if (ligandModel !== undefined) {
                 this.ligandAdded(ligandModel);
                 this.$store.commit("setVar", {
                     name: "ligandMol",
                     val: ligandModel
-                })
+                });
             }
 
             // viewer.resize();  // To make sure. Had some problems in testing.
@@ -212,8 +223,15 @@ let methodsFunctions = {
             viewer["zoom"](0.8, duration);
 
             if ((this.$store.state["ligandMol"] !== undefined) && (this.$store.state["receptorMol"] !== undefined)) {
-                BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
-                BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
+                // Good to strategically delay running BINANA in case the app
+                // reconverts some of the files to PDB format.
+                if (runBINANATimeout !== undefined) {
+                    clearTimeout(runBINANATimeout);
+                }
+                runBINANATimeout = setTimeout(() => {
+                    BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
+                    BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
+                }, 250);
             }
 
             // Stop waiting state.
@@ -247,11 +265,6 @@ let methodsFunctions = {
             "stick": { "radius": 0.4 }
         });
         viewer["render"]();
-
-        // if (isCrystal === true) {
-        //     this.makeAtomsClickable(mol);
-        //     this.showCrystalAsAppropriate();
-        // }
     },
 
     /**
@@ -298,24 +311,25 @@ let methodsFunctions = {
     },
 
     /**
-     * Sets a vina parameter only if it is currently undefined. Used
+     * Sets a BINANA parameter only if it is currently undefined. Used
      * for setting default values, I think.
      * @param  {string} name  The variable name.
      * @param  {any}    val   The value.
      * @returns void
      */
-    setBinanaParamIfUndefined(name: string, val: any): void {
-        if (this.$store.state["binanaParams"][name] === undefined) {
-            this.$store.commit("setBinanaParam", {
-                name,
-                val
-            });
-            this.$store.commit("setValidationParam", {
-                name,
-                val: true
-            })
-        }
-    },
+    // TODO: Cruft?
+    // setBinanaParamIfUndefined(name: string, val: any): void {
+    //     if (this.$store.state["binanaParams"][name] === undefined) {
+    //         this.$store.commit("setBinanaParam", {
+    //             name,
+    //             val
+    //         });
+    //         this.$store.commit("setValidationParam", {
+    //             name,
+    //             val: true
+    //         })
+    //     }
+    // },
 
     /**
      * Show a molecular surface representation if it is appropriate
@@ -379,7 +393,6 @@ let methodsFunctions = {
      * @returns void
      */
     "toggleSticks"(): void {
-        // this["renderProteinSticks"] = !this["renderProteinSticks"];
         this.$store.commit("setVar", {
             name: "renderProteinSticks",
             val: !this.$store.state["renderProteinSticks"]
@@ -398,7 +411,19 @@ let methodsFunctions = {
             // No hydrogens
             this.$store.commit("openModal", {
                 title: "Warning!",
-                body: "<p>This file has no hydrogen atoms. BINANA may not be able to identify some interactions (e.g., hydrogen bonds).</p>"
+                body: `<p>
+                    One of your files has no hydrogen atoms. BINANA may not be
+                    able to identify some interactions (e.g., hydrogen bonds).
+                    Consider using <a href="http://server.poissonboltzmann.org/"
+                    target="_blank">PDB2PQR</a> to add hydrogen atoms to your
+                    receptor, and/or <a href="http://durrantlab.com/gypsum-dl/"
+                    target="_blank">Gypsum-DL</a> to add hydrogen atoms to your
+                    ligand.
+                </p>
+                <p>
+                    You may also get this error if one or more of your files is
+                    improperly formatted.
+                </p>`
             });
         }
     }
@@ -418,7 +443,6 @@ let watchFunctions = {
 
         let duration: number = (newReceptorContents === "") ? 0 : 500;
         this.modelAdded(duration);
-        // this.updateBox();  // So when invalid pdb loaded, can recover with valid pdb.
     },
 
     /**
@@ -455,7 +479,6 @@ export function setup(): void {
          */
         "data"() {
             return {
-                // "viewer": undefined,
                 "surfaceObj": undefined,
                 "receptorPdbOfLoaded": "",  // To prevent from loading twice.
                 "ligandPdbOfLoaded": "",  // To prevent from loading twice.
@@ -499,7 +522,6 @@ export function setup(): void {
                     </div>
                     </div>
                     `,
-        // <form-button v-if="crystalContents!==''" @click.native="toggleCrystal" :variant="crystalBtnVariant" :small="true">Correct Pose</form-button>
         "watch": watchFunctions,
         "props": {
             "type": String, // receptor, ligand, or docked. Used only to
@@ -524,6 +546,20 @@ export function setup(): void {
 }
 
 /**
+ * Given an atom name, returns the name of the element.
+ * @param  {string} atomName  The atom name.
+ * @returns string  The name of the element.
+ */
+export function elementFromAtomName(atomName: string): string {
+    atomName = atomName.trim().replace(/[0-9]/g, "").substr(0, 2).toUpperCase();
+    if (["BR", "CL", "ZN", "MG", "AU", "MN", "FE"].indexOf(atomName) !== -1) {
+        return atomName;
+    } else {
+        return atomName.substring(0, 1);
+    }
+}
+
+/**
  * Converts a pdbqt string to pdb.
  * @param  {string}           pdbqtTxt  The pdbqt text.
  * @param  {any=undefined}    store?    A VueX store object.
@@ -541,49 +577,83 @@ export function pdbqtToPDB(pdbqtTxt: string, store?: any): string {
     });
 
     // Get the element names
-    let elements = lines.map(l => l.substring(11, 17).trim().replace(/[0-9]/g, "").substr(0, 2).toUpperCase());
-    elements = elements.map((e) => {
-        if (["BR", "CL", "ZN", "MG", "AU", "MN", "FE"].indexOf(e) !== -1) {
-            return e;
-        } else {
-            return e.substring(0, 1);
-        }
-    });
+    let elements = lines.map(l => elementFromAtomName(l.substring(11, 17)));
 
     lines = lines.map((l, i) => {
         return l.substring(0, 77) + elements[i];
     });
 
-    // let numAtoms = lines.length;
-
-    // // You may need to remove some atoms if there are to many atoms.
-    // let msg = "";
-    // if (lines.length > 5000) {
-    //     // Remove hydrogen atoms
-    //     lines = lines.filter(l => l.slice(12, 16).replace(/ /g, '').replace(/[0-9]/g, "").slice(0, 1).toUpperCase() !== "H");
-    //     msg = "hydrogen atoms";
-    // }
-
-    // if (lines.length > 5000) {
-    //     // Remove sidechains
-    //     lines = lines.filter(l => ["CA", "O", "C", "N"].indexOf(l.slice(12, 16).replace(/ /g, '')) !== -1);
-    //     msg = "hydrogen atoms and side chains";
-    // }
-
-    // if (lines.length > 5000) {
-    //     // Remove O too.
-    //     lines = lines.filter(l => l.slice(12, 16).replace(/ /g, '') !== "O");
-    //     msg = "hydrogen atoms, side chains, and backbone carbonyl oxygen atoms";
-    // }
-
-    // if ((bigMolAlreadyModalDisplayed === false) && (msg !== "") && (store !== undefined)) {
-    //     bigMolAlreadyModalDisplayed = true;
-    //     store.commit("openModal", {
-    //         title: "Large Molecule!",
-    //         body: "<p>The PDB or PDBQT file you provided contains " + numAtoms.toString() + " atoms. A version of your file without " + msg + " will be displayed to speed visualization.</p>"
-    //     });
-    // }
-
     pdbqtTxt = lines.join("\n");
     return pdbqtTxt;
+}
+
+/**
+ * Justifies text. Useful for constructing the PDB string.
+ * @param  {string}  str           The string to justify.
+ * @param  {number}  cols          The number of columns.
+ * @param  {boolean} [right=true]  Whether to right justify (vs. left).
+ * @param  {string}  [deflt="X"]   The default value if str is undefined.
+ * @returns string  The justified string.
+ */
+function justify(str: string, cols: number, right = true, deflt = "X"): string {
+    if (str === undefined) {
+        str = deflt;
+    }
+
+    if (str.length > cols) {
+        // String is too long. Trim it.
+        if (right) {
+            return str.slice(str.length - cols);
+        } else {
+            return str.slice(0, cols);
+        }
+    } else {
+        // String is not too long. Pad it.
+        let padNum = cols - str.length;
+        for (let i = 0; i < padNum; i++) {
+            if (right) {
+                str = " " + str;
+            } else {
+                str = str + " ";
+            }
+        }
+        return str;
+    }
+}
+
+/**
+ * Given a 3Dmol.js molecule, create a PDB-formatted string.
+ * @param  {*} mol  The 3Dmol.js molecule.
+ * @returns string  The PDB-formatted string.
+ */
+function mol3DToPDB(mol: any): string {
+    let atoms: any[] = mol.selectedAtoms({});
+    const atomsLen = atoms.length;
+    let pdbTxt = "";
+    for (let i = 0; i < atomsLen; i++) {
+        const atom = atoms[i];
+        if (atom["pdbline"] !== undefined) {
+            // pdbline already exists, so just use that.
+            pdbTxt += atom["pdbline"] + "\n";
+        } else {
+            // You will need to reconstruct the pdb line.
+            let hetFlag = atom["hetflag"] ? "ATOM  " : "HETATM";
+            let idx = justify((i + 1).toString(), 5, true);  // right
+
+            let atomName = justify(atom["atom"], 5, true, "X");  // left. note not exactly correct, but works for deepfrag.
+            let resName = justify(atom["resn"], 4, true, "XXX");  // right
+            let chain = justify(atom["chain"], 2, true, "X");  // right
+            let resnum = justify(atom["resi"], 4, true, "1");  // right
+
+            let x = justify(atom["x"].toFixed(3), 11, true, "0.000");
+            let y = justify(atom["y"].toFixed(3), 8, true, "0.000");
+            let z = justify(atom["z"].toFixed(3), 8, true, "0.000");
+
+            let elem = justify(atom["elem"], 2, true, "X");
+
+            pdbTxt += hetFlag + idx + atomName + resName + chain + resnum + " " + x + y + z + "  1.00  0.00          " + elem + "\n";
+        }
+    }
+
+    return pdbTxt;
 }

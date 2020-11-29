@@ -3,15 +3,15 @@
 // details. Copyright 2020 Jacob D. Durrant.
 
 import * as ThreeDMol from "./UI/ThreeDMol";
-import { store, defaultColorMsg } from "./Vue/Store";
+import * as Store from "./Vue/Store";
 
 let viewer;
 let receptorMol;
-let mol;
+let ligandMol;
 let binanaData;
 
-// A single atom may participate in multiple interactions with other
-// atoms. Make sure each atom is rendered in the viewer only once.
+// A single atom may participate in multiple interactions with other atoms.
+// Make sure each atom is rendered in the viewer only once.
 let idxOfAtomsSeen;
 
 /**
@@ -23,7 +23,7 @@ let idxOfAtomsSeen;
 export function setup(view: any, recep: any, lig: any) {
     viewer = view;
     receptorMol = recep;
-    mol = lig;
+    ligandMol = lig;
 }
 
 /**
@@ -41,7 +41,7 @@ export function start(pdbtxt: string, ligtxt: string): void {
 
     let params = ["-receptor", "receptor.pdb", "-ligand", "ligand.pdb"];
 
-    let binanaParams = store.state["binanaParams"];
+    let binanaParams = Store.store.state["binanaParams"];
     const binanaParamNames = Object.keys(binanaParams);
     const binanaParamNamesLen = binanaParamNames.length;
     for (let i = 0; i < binanaParamNamesLen; i++) {
@@ -59,7 +59,11 @@ export function start(pdbtxt: string, ligtxt: string): void {
 
     binanaData = json;
 
-    // highlight(1);
+    // Update the store too.
+    Store.store.commit("setVar", {
+        name: "jsonOutput",
+        val: JSON.stringify(binanaData, undefined, 1)
+    });
 }
 
 /**
@@ -80,7 +84,7 @@ export function highlight(interactionName: string): void {
     let ligAtomInfs = [];
     let recAtomInfs = [];
 
-    let colorMsg = defaultColorMsg;
+    let colorMsg = Store.defaultColorMsg;
 
     // loop through the interactions
     for (let i = 0; i < interactionType.length; i++) {
@@ -92,7 +96,7 @@ export function highlight(interactionName: string): void {
         let recepColor = "red";
         colorMsg = "Ligand atoms are highlighted in yellow, and receptor atoms are highlighted in red.";
 
-        if (store["state"]["colorByInteraction"]) {
+        if (Store.store["state"]["colorByInteraction"] === Store.InteractionColoring.INTERACTION) {
             // Instead color by interaction.
             switch (interactionName) {
                 case "hydrogenBonds":
@@ -120,17 +124,27 @@ export function highlight(interactionName: string): void {
             }
         }
 
-        store.commit("setVar", {
+        Store.store.commit("setVar", {
             name: "colorMessage",
             val: colorMsg
         });
 
-        ligAtomInfs = ligAtomInfs.concat(getAtomObjRadiusColor(mol, ligandAtomInfs, ligColor));
-        recAtomInfs = recAtomInfs.concat(getAtomObjRadiusColor(receptorMol, receptorAtomInfs, recepColor));
+        ligAtomInfs = ligAtomInfs.concat(
+            getAtomObjRadiusColor(ligandMol, ligandAtomInfs, ligColor)
+        );
+        recAtomInfs = recAtomInfs.concat(
+            getAtomObjRadiusColor(receptorMol, receptorAtomInfs, recepColor)
+        );
     }
 
     // Add spheres
-    drawSpheres(ligAtomInfs.concat(recAtomInfs));
+    if (Store.store["state"]["colorByInteraction"] !== Store.InteractionColoring.NONE) {
+        drawSpheres(ligAtomInfs.concat(recAtomInfs));
+    }
+
+    if (Store.store["state"]["bondVisible"]) {
+        drawCylinders(interactionType, interactionName);
+    }
 
     // Render sticks of protein model too.
     ThreeDMol.showSticksAsAppropriate();
@@ -164,8 +178,81 @@ function drawSpheres(atomInfs: any[]): void {
             "center": {"x": atom["x"], "y": atom["y"], "z": atom["z"]},
             "radius": 0.6 * atomInf[1],   // scale down vdw radius a bit.
             "color": atomInf[2],
-            "opacity": 0.8
+            "opacity": 0.65
         });
+    }
+}
+
+/**
+ * Draws the cylinders representing the interactions.
+ * @param  {*}      interactionType  The atom informations that match this
+ *                                   interaction type.
+ * @param  {string} interactionName  The name of the interaction.
+ * @returns void
+ */
+function drawCylinders(interactionType: any[], interactionName: string): void {
+    // Get atoms.
+    let interactionTypeAtoms = interactionType.map(i => [
+        i["ligandAtoms"].map(l => atomInfTo3DMolAtom(ligandMol, l)),
+        i["receptorAtoms"].map(r => atomInfTo3DMolAtom(receptorMol, r))
+    ]);
+
+    switch (interactionName) {
+        case "hydrogenBonds":
+            let hBondHeavyAtomPairs = interactionTypeAtoms.map(i => [
+                [2 - i[0].length, i[0].filter(a => a["elem"] !== "H")[0]],
+                [2 - i[1].length, i[1].filter(a => a["elem"] !== "H")[0]]
+            ]);
+            hBondHeavyAtomPairs = hBondHeavyAtomPairs.map(i => i.sort().map(i2 => i2[1]));
+
+            for (let i = 0; i < hBondHeavyAtomPairs.length; i++){
+                // viewer["addCylinder"]({
+                viewer["addArrow"]({
+                    "dashed": true,
+                    "start": {"x": hBondHeavyAtomPairs[i][0]["x"], "y": hBondHeavyAtomPairs[i][0]["y"], "z": hBondHeavyAtomPairs[i][0]["z"]},
+                    "end": {"x": hBondHeavyAtomPairs[i][1]["x"], "y": hBondHeavyAtomPairs[i][1]["y"], "z": hBondHeavyAtomPairs[i][1]["z"]},
+                    "radius": 0.1,
+                    "radiusRatio": 3.0,
+                    "mid": 0.7,
+                    "fromCap": 2,
+                    "toCap": 2,
+                    "color": 'black'
+                });
+            }
+            break;
+        default:
+            // If not hydrogen bond, just line between geometric centers.
+            let centerPoints = interactionTypeAtoms.map(i => [
+                [i[0].length, i[0].map(a => [a["x"], a["y"], a["z"]]).reduce(
+                    (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
+                )],
+                [i[1].length, i[1].map(a => [a["x"], a["y"], a["z"]]).reduce(
+                    (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
+                )],
+            ]);
+            centerPoints = centerPoints.map(i => [
+                i[0][1].map(v => v / i[0][0]),
+                i[1][1].map(v => v / i[1][0]),
+            ]);
+
+            for (let i = 0; i < centerPoints.length; i++) {
+                let start = {"x": centerPoints[i][0][0], "y": centerPoints[i][0][1], "z": centerPoints[i][0][2]};
+                let end = {"x": centerPoints[i][1][0], "y": centerPoints[i][1][1], "z": centerPoints[i][1][2]};
+
+                viewer["addCylinder"]({
+                // viewer["addArrow"]({
+                    "dashed": true,
+                    "start": start,
+                    "end": end,
+                    "radius": 0.1,
+                    // "radiusRatio": 3.0,
+                    // "mid": 0.7,
+                    "fromCap": 2,
+                    "toCap": 2,
+                    "color": 'black'
+                });
+            }
+            break;
     }
 }
 
@@ -228,6 +315,22 @@ let vdwRadii = {
 }
 
 /**
+ * Converts atom information to a 3dmoljs atom.
+ * @param  {*} mol      The 3dmol.js molecule.
+ * @param  {*} atomInf  Information about the atom.
+ * @returns *  The 3dmoljs atom.
+ */
+function atomInfTo3DMolAtom(mol: any, atomInf: any): any {
+    let selecteds = mol["selectedAtoms"]({
+        "atom": atomInf["atomName"],
+        "serial": atomInf["atomIndex"],
+        "resi": atomInf["resID"]
+    });
+    let selected = selecteds[0];  //  Should be only one such atom.
+    return selected;
+}
+
+/**
  * Gets the info about the atoms.
  * @param  {*} mol         The molecule with the atoms.
  * @param  {*} atomInfs    The atom information.
@@ -243,16 +346,12 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
     for (let j = 0; j < atomInfs.length; j++) {
         // change the color for the atom
         let atomInf = atomInfs[j];
+
         if (idxOfAtomsSeen.has(atomInf["atomIndex"])) {
             continue;
         }
         idxOfAtomsSeen.add(atomInf["atomIndex"]);
-        let atom = mol["selectedAtoms"]({
-            "atom": atomInf["atomName"],
-            "serial": atomInf["atomIndex"],
-            "resi": atomInf["resID"]
-        })[0];  //  Should be only one such atom.
-
+        let atom = atomInfTo3DMolAtom(mol, atomInf)
         let radius = vdwRadii[atom["elem"]];
         radius = radius === undefined ? 1.5 : radius;
 
@@ -267,13 +366,14 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
  * @returns void
  */
 export function clearInteraction(): void {
-    // receptorMol["setStyle"]({},{"stick": {"color": 'red'}});
-    // mol["setStyle"]({}, {"sphere": {"color": 'green'}});
-
-    store.commit("setVar", {
+    Store.store.commit("setVar", {
         name: "colorMessage",
-        val: defaultColorMsg
+        val: Store.defaultColorMsg
     });
+
+    if (viewer === undefined) {
+        return;
+    }
 
     ThreeDMol.showSticksAsAppropriate();
 
