@@ -246,9 +246,10 @@ let methodsFunctions = {
      */
     receptorAdded(mol: any): void {
         // Make the atoms of the protein clickable if it is receptor.
-        if (this["type"] === "receptor") {
-            this.makeAtomsClickable(mol);
-        }
+        // TODO: Cruft?
+        // if (this["type"] === "receptor") {
+            this.makeAtomsHoverable(mol);
+        // }
 
         this.showSurfaceAsAppropriate();
         showSticksAsAppropriate();
@@ -260,7 +261,7 @@ let methodsFunctions = {
      * @returns void
      */
     ligandAdded(mol, isCrystal = false): void {
-        let stickStyle = {};
+        this.makeAtomsHoverable(mol);
         mol.setStyle({}, {
             "stick": { "radius": 0.4 }
         });
@@ -272,21 +273,22 @@ let methodsFunctions = {
      * @param  {any} mol  The 3dmol.js molecule.
      * @returns void
      */
-    makeAtomsClickable(mol: any): void {
-        mol.setClickable({}, true, (e) => {
-            this.$store.commit("setBinanaParam", {
-                name: "center_x",
-                val: e["x"]
-            });
-            this.$store.commit("setBinanaParam", {
-                name: "center_y",
-                val: e["y"]
-            });
-            this.$store.commit("setBinanaParam", {
-                name: "center_z",
-                val: e["z"]
-            });
-        });
+    makeAtomsHoverable(mol: any): void {
+        // TODO: Cruft?
+        // mol.setClickable({}, true, (e) => {
+        //     this.$store.commit("setBinanaParam", {
+        //         name: "center_x",
+        //         val: e["x"]
+        //     });
+        //     this.$store.commit("setBinanaParam", {
+        //         name: "center_y",
+        //         val: e["y"]
+        //     });
+        //     this.$store.commit("setBinanaParam", {
+        //         name: "center_z",
+        //         val: e["z"]
+        //     });
+        // });
 
         // Also make labels.
         var atoms = mol.selectedAtoms({});
@@ -295,8 +297,10 @@ let methodsFunctions = {
             // If there are a lot of atoms, this becomes slow. So only if <
             // 5000 atoms.
             for (var i = 0; i < len; i++) {
-                let atom = atoms[i];
-                viewer["setHoverable"]({}, true, (atom: any) => {
+                // let atom = atoms[i];
+
+                mol["setHoverable"]({}, true, (atom: any) => {
+                    // debugger;
                     let lbl = atom["resn"].trim() + atom["resi"].toString() + ":" + atom["atom"].trim();
                     atom["chain"] = atom["chain"].trim();
                     if (atom["chain"] !== "") {
@@ -307,6 +311,8 @@ let methodsFunctions = {
                     viewer["removeAllLabels"]();
                 })
             }
+        } else {
+            console.log("No labels on atoms because too many: " + len.toString() + " > 5000")
         }
     },
 
