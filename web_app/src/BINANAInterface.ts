@@ -52,18 +52,22 @@ export function start(pdbtxt: string, ligtxt: string): void {
     }
 
     // Run binana
-    binana["run"](params);
+    jQuery("body").addClass("waiting");
+    setTimeout(() => {
+        binana["run"](params);
+        jQuery("body").removeClass("waiting");
 
-    // Get the json output.
-    let json = binana["load_from_fake_fs"]("./ligand_receptor_output.json");
+        // Get the json output.
+        let json = binana["load_from_fake_fs"]("./ligand_receptor_output.json");
 
-    binanaData = json;
+        binanaData = json;
 
-    // Update the store too.
-    Store.store.commit("setVar", {
-        name: "jsonOutput",
-        val: JSON.stringify(binanaData, undefined, 1)
-    });
+        // Update the store too.
+        Store.store.commit("setVar", {
+            name: "jsonOutput",
+            val: JSON.stringify(binanaData, undefined, 1)
+        });
+    }, 250);
 }
 
 /**

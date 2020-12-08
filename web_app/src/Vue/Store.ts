@@ -77,16 +77,10 @@ export const store = new Vuex.Store({
         "ligandFileName": "",
         "receptorContents": "",
         "receptorContentsExample": ExampleReceptorPDBQT,
-        // "showKeepProteinOnlyLink": true,
         "ligandContents": "",
         "ligandContentsExample": ExampleLigandPDBQT,
         "outputContents": "",
         "outputContentsExample": ExampleOutputPDBQT,
-        // TODO: Cruft?
-        // "convertFileModalShow": false,
-        // "convertFileExt": "PDB",
-        // "convertFileType": "receptor",
-        // "convertFile": null,
         "modalShow": false,
         "modalTitle": "Title",
         "modalBody": "Some text here...",
@@ -120,16 +114,15 @@ export const store = new Vuex.Store({
          *                               which binana parameter to set.
          * @returns void
          */
-        // TODO: Cruft
-        // "setBinanaParam"(state: any, payload: iVueXParam): void {
-        //     // By redefining the whole variable, it becomes reactive. Directly
-        //     // changing individual properties is not reactive.
-        //     state["binanaParams"] = Utils.getNewObjWithUpdate(
-        //         state["binanaParams"],
-        //         payload.name,
-        //         payload.val
-        //     );
-        // },
+        "setBinanaParam"(state: any, payload: iVueXParam): void {
+            // By redefining the whole variable, it becomes reactive. Directly
+            // changing individual properties is not reactive.
+            state["binanaParams"] = Utils.getNewObjWithUpdate(
+                state["binanaParams"],
+                payload.name,
+                payload.val
+            );
+        },
 
         /**
          * Set a validation parameter (either validates or doesn't).

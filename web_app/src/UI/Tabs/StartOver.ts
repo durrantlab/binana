@@ -5,17 +5,7 @@
 declare var Vue;
 
 /** An object containing the vue-component methods functions. */
-let methodsFunctions = {
-    /**
-     * Runs when the start-over button is clicked.
-     * @returns void
-     */
-    // TODO: Cruft?
-    // "onSubmitClick"(): void {
-    //     jQuery("body").addClass("waiting");
-    //     location.reload();
-    // }
-}
+let methodsFunctions = {}
 
 /**
  * Setup the start-over Vue commponent.

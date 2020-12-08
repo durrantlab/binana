@@ -14,21 +14,6 @@ declare var Vue;
 
 /** An object containing the vue-component computed functions. */
 let computedFunctions = {
-    /** Whether to show the keep-protein-only link. Has both a getter and a setter. */
-    // TODO: Cruft?
-    // "showKeepProteinOnlyLink": {
-    //     get(): number {
-    //         return this.$store.state["showKeepProteinOnlyLink"];
-    //     },
-
-    //     set(val: number): void {
-    //         this.$store.commit("setVar", {
-    //             name: "showKeepProteinOnlyLink",
-    //             val: val
-    //         });
-    //     }
-    // },
-
     /**
      * Gets text describing the current interaction coloring scheme.
      * @returns string  The text.
@@ -79,9 +64,9 @@ let methodsFunctions = {
                 val: this.$store.state["ligandContentsExample"]
             });
 
-            // Also update file names so example BINANA command line is valid.  // TODO: Cruft?
-            this.$store.commit("updateFileName", { type: "ligand", filename: "ligand_example.pdbqt" });
-            this.$store.commit("updateFileName", { type: "receptor", filename: "receptor_example.pdbqt" });
+            // Also update file names so example BINANA command line is valid.
+            this.$store.commit("updateFileName", { type: "ligand", filename: "ATP.pdbqt" });
+            this.$store.commit("updateFileName", { type: "receptor", filename: "1xdn.pdbqt" });
 
             // These values should now validate.
             let validateVars = ["receptor", "ligand"];
@@ -278,7 +263,7 @@ export function setup(): void {
                                     <b-card class="mb-2 text-center" style="margin-bottom:1.4rem !important;">
                                         <b-card-text>Parameters used to identify close contacts.</b-card-text>
                                         <numeric-input
-                                            label="Close Contacts Dist1 Cutoff"
+                                            label="Closest Contacts Dist1 Cutoff"
                                             id="close_contacts_dist1_cutoff"
                                             description="Ligand/protein atoms that come within this number of
                                             angstroms are &quot;closest contacts.&quot;" placeholder="$store.state.close_contacts_dist1_cutoff"

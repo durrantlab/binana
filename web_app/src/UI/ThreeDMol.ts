@@ -65,15 +65,6 @@ let computedFunctions = {
     },
 
     /**
-     * Get the value of the binanaParams variable.
-     * @returns string  The value.
-     */
-    // TODO: Cruft?
-    // binanaParams(): string {
-    //     return this.$store.state["binanaParams"];
-    // },
-
-    /**
      * Get the value of the surfBtnVariant variable.
      * @returns string|boolean  The value.
      */
@@ -88,26 +79,6 @@ let computedFunctions = {
     "allAtmBtnVariant"(): string|boolean {
         return (this.$store.state["renderProteinSticks"] === true) ? undefined : "default";
     },
-
-    /**
-     * Determines whether the appropriate receptor PDB content has
-     * been loaded.
-     * @returns boolean  True if it has been loaded, false otherwise.
-     */
-    // TODO: Cruft?
-    // appropriateReceptorPdbLoaded(): boolean {
-    //     return this.$store.state["receptorContents"] !== "";
-    // },
-
-    /**
-     * Determines whether the appropriate ligand PDB content has been
-     * loaded.
-     * @returns boolean  True if it has been loaded, false otherwise.
-     */
-    // TODO: Cruft?
-    // appropriateLigandPdbLoaded(): boolean {
-    //     return this.$store.state["ligandContents"] !== "";
-    // },
 }
 
 /** An object containing the vue-component methods functions. */
@@ -178,6 +149,24 @@ let methodsFunctions = {
                         });
                     }
 
+                    let firstFrame = keepOnlyFirstFrame(modelContent);
+                    if (firstFrame[0]) {
+                        // So it changed.
+                        this.$store.commit("setVar", {
+                            name: typeStr + "Contents",
+                            val: firstFrame[1]
+                        });
+
+                        if(firstFrame[2] > 1) {
+                            // Had more than one frame...
+                            this.$store.commit("openModal", {
+                                title: "Multiple Models!",
+                                body: `<p>The selected input file contains ${firstFrame[2].toString()} molecular models. Keeping only the first one.</p>`
+                            });
+
+                        }
+                    }
+
                     this.msgIfNoHydrogens(this[typeStr + "Mol"]);
 
                     return this[typeStr + "Mol"];
@@ -246,10 +235,7 @@ let methodsFunctions = {
      */
     receptorAdded(mol: any): void {
         // Make the atoms of the protein clickable if it is receptor.
-        // TODO: Cruft?
-        // if (this["type"] === "receptor") {
-            this.makeAtomsHoverable(mol);
-        // }
+        this.makeAtomsHoverable(mol);
 
         this.showSurfaceAsAppropriate();
         showSticksAsAppropriate();
@@ -274,22 +260,6 @@ let methodsFunctions = {
      * @returns void
      */
     makeAtomsHoverable(mol: any): void {
-        // TODO: Cruft?
-        // mol.setClickable({}, true, (e) => {
-        //     this.$store.commit("setBinanaParam", {
-        //         name: "center_x",
-        //         val: e["x"]
-        //     });
-        //     this.$store.commit("setBinanaParam", {
-        //         name: "center_y",
-        //         val: e["y"]
-        //     });
-        //     this.$store.commit("setBinanaParam", {
-        //         name: "center_z",
-        //         val: e["z"]
-        //     });
-        // });
-
         // Also make labels.
         var atoms = mol.selectedAtoms({});
         let len = atoms.length;
@@ -315,27 +285,6 @@ let methodsFunctions = {
             console.log("No labels on atoms because too many: " + len.toString() + " > 5000")
         }
     },
-
-    /**
-     * Sets a BINANA parameter only if it is currently undefined. Used
-     * for setting default values, I think.
-     * @param  {string} name  The variable name.
-     * @param  {any}    val   The value.
-     * @returns void
-     */
-    // TODO: Cruft?
-    // setBinanaParamIfUndefined(name: string, val: any): void {
-    //     if (this.$store.state["binanaParams"][name] === undefined) {
-    //         this.$store.commit("setBinanaParam", {
-    //             name,
-    //             val
-    //         });
-    //         this.$store.commit("setValidationParam", {
-    //             name,
-    //             val: true
-    //         })
-    //     }
-    // },
 
     /**
      * Show a molecular surface representation if it is appropriate
@@ -574,9 +523,10 @@ export function elementFromAtomName(atomName: string): string {
 export function pdbqtToPDB(pdbqtTxt: string, store?: any): string {
     let lines: string[] = pdbqtTxt.split("\n");
 
-    lines = lines.map(l => l.replace(/^HETATM/g, "ATOM  "))
+    lines = lines.map(l => l.replace(/^HETATM/g, "ATOM  "));
+    lines = lines.map(l => l === "END" ? "ENDMDL" : l);
     lines = lines.filter(l => {
-        if (l.substring(0, 4) === "ATOM") {
+        if ((l.substring(0, 4) === "ATOM") || (l === "ENDMDL")) {
             return true;
         }
         return false;
@@ -662,4 +612,19 @@ function mol3DToPDB(mol: any): string {
     }
 
     return pdbTxt;
+}
+
+/**
+ * Determines (and corrects) if a file has more than one molecular model.
+ * @param  {string} pdbTxt  The pdb text contained in the file.
+ * @returns *  An array containing [changed (bool), first-frame PDB text,
+ *             number of frames detected.]
+ */
+function keepOnlyFirstFrame(pdbTxt: string): any {
+    pdbTxt = pdbTxt + "\n";
+    let pdbTxtParts = pdbTxt
+        .replace("\nEND\n", "\nENDMDL\n")
+        .split("\nENDMDL\n").filter(p => p !== "" && p !== "\n");
+    let newPDBTxt = pdbTxtParts[0]
+    return [(newPDBTxt !== pdbTxt) && (pdbTxtParts.length > 1), newPDBTxt, pdbTxtParts.length];
 }

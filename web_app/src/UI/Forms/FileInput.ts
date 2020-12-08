@@ -34,18 +34,11 @@ let computedFunctions = {
             if (convertExt.indexOf(ext) !== -1) {
                 // TODO: Cruft?
                 // Set the filename.
+                debugger;
                 this.$store.commit("updateFileName", {
                     type: this["id"],
                     filename: val.name,
                 });
-
-                // this.getModelFileContents(val).then((text: string) => {
-                //     this.$store.commit("openConvertFileModal", {
-                //         ext: ext,
-                //         type: this["id"],
-                //         file: text,
-                //     });
-                // });
                 return;
             } else if (acceptableExt.indexOf(ext) === -1) {
                 // It is not one of the acceptable extensions that can be

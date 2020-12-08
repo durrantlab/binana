@@ -74,41 +74,6 @@ export function setup(): void {
                     });
                 }
             },
-
-            /**
-             * Determine whether the running tab is disabled.
-             * @returns boolean  True if it is disabled, false otherwise.
-            //  */
-            // TODO: Cruft?
-            // "runningTabDisabled"(): boolean {
-            //     return this.$store.state["runningTabDisabled"];
-            // },
-
-            /**
-             * Determine whether the output tab is disabled.
-             * @returns boolean  True if it is disabled, false otherwise.
-             */
-            // TODO: Cruft?
-            // "outputTabDisabled"(): boolean {
-            //     return this.$store.state["outputTabDisabled"];
-            // },
-
-            /**
-             * Determine whether the existing binana output tab is disabled.
-             * @returns boolean  True if it is disabled, false otherwise.
-             */
-            // TODO: Cruft?
-            // "existingVinaOutputTabDisabled"(): boolean {
-            //     return this.$store.state["existingVinaOutputTabDisabled"];
-            // },
-
-            /**
-             * Determine whether the start over tab is disabled.
-             * @returns boolean  True if it is disabled, false otherwise.
-             */
-            // "startOverTabDisabled"(): boolean {
-            //     return this.$store.state["startOverTabDisabled"];
-            // }
         },
 
         "methods": {},
