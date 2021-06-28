@@ -23,13 +23,14 @@ module.exports = merge(common, {
         ],
     },
     plugins: [
-        new CleanWebpackPlugin(), // Clean dist
+        // new CleanWebpackPlugin(), // Clean dist
         new HtmlWebpackPlugin({
             title: 'Webina',
             template: path.join(__dirname, '../../src/index.html'),
             favicon: path.join(__dirname, '../../src/styles/favicon.ico'),
             minify: true,
-            excludeAssets: [/vrmlWebWorker.*.js/]
+            // excludeAssets: [/BINANA.worker.js/]
+            excludeAssets: [/binanaWebWorker.*.js/]
         }),
         // new HtmlWebpackExcludeAssetsPlugin(),
         new webpack.ProvidePlugin({
@@ -83,10 +84,10 @@ module.exports = merge(common, {
                 from: 'node_modules/vuex/dist/vuex.min.js',
                 to: 'vuex.min.js'
             },
-            {
-                from: 'src/Webina/dist',
-                to: 'Webina'
-            },
+            // {
+            //     from: 'src/Webina/dist',
+            //     to: 'Webina'
+            // },
             {
                 from: 'src/minimal_example.html',
                 to: 'minimal_example.html'
@@ -95,14 +96,14 @@ module.exports = merge(common, {
             //     from: 'src/babel_convert.html',
             //     to: 'babel_convert.html'
             // },
-            {
-                from: 'src/pdbqt_convert',
-                to: 'pdbqt_convert'
-            },
-            {
-                from: 'src/mol_editor',
-                to: 'mol_editor'
-            }
+            // {
+            //     from: 'src/pdbqt_convert',
+            //     to: 'pdbqt_convert'
+            // },
+            // {
+            //     from: 'src/mol_editor',
+            //     to: 'mol_editor'
+            // }
         ]),
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output

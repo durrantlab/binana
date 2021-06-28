@@ -33,6 +33,29 @@ export function setup(view: any, recep: any, lig: any) {
  * @returns void
  */
 export function start(pdbtxt: string, ligtxt: string): void {
+    let binanaParams = Store.store.state["binanaParams"];
+
+    jQuery("body").addClass("waiting");
+
+    setTimeout(() => {
+        var myWorker = new Worker('binanaWebWorker.js', { type: "module" });
+        myWorker.postMessage([pdbtxt, ligtxt, binanaParams]);
+
+        myWorker.onmessage = function(e) {
+            binanaData = e.data;
+
+            // Update the store too.
+            Store.store.commit("setVar", {
+                name: "jsonOutput",
+                val: JSON.stringify(binanaData, undefined, 1)
+            });
+
+            jQuery("body").removeClass("waiting");
+        }
+    }, 250);
+
+    return;
+
     let binana = window["binanaModule"];
 
     // Save to the fake file system
@@ -41,7 +64,6 @@ export function start(pdbtxt: string, ligtxt: string): void {
 
     let params = ["-receptor", "receptor.pdb", "-ligand", "ligand.pdb"];
 
-    let binanaParams = Store.store.state["binanaParams"];
     const binanaParamNames = Object.keys(binanaParams);
     const binanaParamNamesLen = binanaParamNames.length;
     for (let i = 0; i < binanaParamNamesLen; i++) {

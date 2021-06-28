@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const merge = require('webpack-merge');
 const webworker = require('./webpack.webworker.js');
 const notWebworker = require('./webpack.not-webworker.js');
@@ -14,11 +15,12 @@ let forDev = {
     },
     plugins: [
         new webpackDashboard(),
+        new webpack.optimize.ModuleConcatenationPlugin()
     ]
 };
 
-// let webworkerFinal = merge(webworker, forDev);
+let webworkerFinal = merge(webworker, forDev);
 let nonWebworkerFinal = merge(notWebworker, forDev);
 
-// module.exports = [webworkerFinal, nonWebworkerFinal];
-module.exports = [nonWebworkerFinal];
+module.exports = [webworkerFinal, nonWebworkerFinal];
+// module.exports = [nonWebworkerFinal];

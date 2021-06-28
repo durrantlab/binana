@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-// const webworker = require('./webpack.webworker.js');
+const webworker = require('./webpack.webworker.js');
 const notWebworker = require('./webpack.not-webworker.js');
 const path = require('path');
 const ClosurePlugin = require('closure-webpack-plugin');
@@ -16,18 +16,18 @@ let forProd = {
         // concatenateModules: false,
         minimizer: [
             new OptimizeCSSAssetsPlugin({}),
-            new ClosurePlugin({
-                mode: 'STANDARD', // 'AGGRESSIVE_BUNDLE', // 'STANDARD',
-                platform: "java"
-            }, {
-                // debug: true,
-                // renaming: false
-                externs: [
-                    path.resolve(__dirname, '../closure/custom_extern.js')
-                ],
-                compilation_level: 'ADVANCED',
-                // formatting: 'PRETTY_PRINT',
-            })
+            // new ClosurePlugin({
+            //     mode: 'STANDARD', // 'AGGRESSIVE_BUNDLE', // 'STANDARD',
+            //     platform: "java"
+            // }, {
+            //     // debug: true,
+            //     // renaming: false
+            //     externs: [
+            //         path.resolve(__dirname, '../closure/custom_extern.js')
+            //     ],
+            //     compilation_level: 'ADVANCED',
+            //     // formatting: 'PRETTY_PRINT',
+            // })
         ],
         splitChunks: {
             chunks: 'async',
@@ -76,8 +76,10 @@ let forProd = {
     }
 }
 
-// let webworkerFinal = merge(webworker, forProd);
+let webworkerFinal = merge(webworker, forProd);
 let nonWebworkerFinal = merge(notWebworker, forProd);
 
-// module.exports = [webworkerFinal, nonWebworkerFinal];
-module.exports = [nonWebworkerFinal];
+module.exports = [webworkerFinal, nonWebworkerFinal];
+
+// module.exports = [webworkerFinal];
+// module.exports = [nonWebworkerFinal];

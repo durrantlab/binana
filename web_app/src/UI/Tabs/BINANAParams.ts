@@ -40,6 +40,17 @@ let computedFunctions = {
             return "<span style='text-decoration: line-through;'>Interactions</span>";
         }
     },
+
+    "showKeepProteinOnlyLink"(): boolean {
+        let ligLines = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
+
+        let allResidues = ligLines.split("\n").map(l => l.substr(17,3).trim());
+        let residues = allResidues.filter(function(item, pos) {
+            return allResidues.indexOf(item) == pos;
+        }).filter(r => r !== "").sort();
+        this["nonProteinResidues"] = ": " + residues.join(", ");
+        return ligLines.length > 0;
+    }
 }
 
 /** An object containing the vue-component methods functions. */
@@ -222,6 +233,54 @@ let methodsFunctions = {
 
         return pass;
     },
+
+    /**
+     * Removes residues from protein model that are not protein amino acids.
+     * @param  {any} e  The click event.
+     * @returns void
+     */
+     "onShowKeepProteinOnlyClick"(e: any): void {
+        let proteinLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"]);
+        let ligandLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
+
+        // Get new ligand filename
+        let receptorExt = Utils.getExt(this.$store.state["receptorFileName"]);
+        let newLigFilename = Utils.replaceExt(
+            this.$store.state["receptorFileName"],
+            "ligand." + receptorExt
+        );
+
+        // Update receptor contents.
+        this.$store.commit("setVar", {
+            name: "receptorContents",
+            val: proteinLinesToKeep
+        });
+
+        // Update receptor filename
+        this.$store.commit("updateFileName", {
+            type: "receptor",
+            filename: Utils.replaceExt(
+                this.$store.state["receptorFileName"],
+                "protein." + receptorExt
+            )
+        });
+
+        // Update ligand contents
+        this.$store.commit("setVar", {
+            name: "ligandContents",
+            val: ligandLinesToKeep
+        });
+
+        this.$store.commit("updateFileName", {
+            type: "ligand",
+            filename: newLigFilename
+        });
+
+        this["forceLigandFileName"] = newLigFilename;
+
+        e.preventDefault();
+        e.stopPropagation();
+    },
 }
 
 /**
@@ -386,11 +445,18 @@ export function setup(): void {
                     <file-input
                         label="Receptor"
                         id="receptor"
-
-                        description="Formats: PDB, PDBQT. Be sure to add polar hydrogen atoms if necessary."
+                        description="Formats: PDB, PDBQT. Be sure to (1) add polar hydrogen atoms if necessary and (2) remove any ligands from the file."
                         accept=".pdb, .pdbqt"
                     >
-                        <template v-slot:extraDescription></template>
+                        <template v-slot:extraDescription>
+                            <span v-if="showKeepProteinOnlyLink">
+                                <span style="color:red;">Your receptor file includes non-protein residue(s){{nonProteinResidues}}</span>
+                                <a href='' @click="onShowKeepProteinOnlyClick($event);">Treat these as the ligand instead?</a>
+                            </span>
+                            <!-- <span v-else>
+                                <b>(Removed all non-protein atoms!)</b>
+                            </span> -->
+                        </template>
                     </file-input>
 
                     <file-input
@@ -398,6 +464,7 @@ export function setup(): void {
                         id="ligand"
                         description="Formats: PDB, PDBQT, SDF. Be sure to add polar hydrogen atoms if necessary."
                         accept=".pdb, .pdbqt, .sdf"
+                        :forceFileName="forceLigandFileName"
                     >
                     </file-input>
 
@@ -485,7 +552,11 @@ export function setup(): void {
             return {
                 "showFileInputs": true,
                 "webAssemblyAvaialble": true,
-                lastInteractionNameUsed: undefined
+                lastInteractionNameUsed: undefined,
+                "forceLigandFileName": null,
+                "nonProteinResidues": ""
+                // "forcedLigandFile": null
+                // "showKeepProteinOnlyLink": true
             }
         },
         "methods": methodsFunctions,

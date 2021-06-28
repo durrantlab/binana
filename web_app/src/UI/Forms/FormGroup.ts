@@ -64,10 +64,10 @@ export function setup(): void {
                             class="form-text text-muted" style="display:inline;"
                             v-html="description">
                         </small>
+                        <small class="form-text text-muted" style="display:inline;">
+                            <slot name="extraDescription"></slot>
+                        </small>
                     </div>
-                    <small class="form-text text-muted" style="display:inline;">
-                        <slot name="extraDescription"></slot>
-                    </small>
                 </b-form-group>
                 <div v-else>
                     <slot></slot>

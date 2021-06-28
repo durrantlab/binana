@@ -97,7 +97,7 @@ export const store = new Vuex.Store({
     "mutations": {
         /**
          * Set one of the VueX store variables.
-         * @param  {any}              state    The VueX state.
+         * @param  {*}                state    The VueX state.
          * @param  {IVueXStoreSetVar} payload  An object containing
          *                                     information about which
          *                                     variable to set.
@@ -109,7 +109,7 @@ export const store = new Vuex.Store({
 
         /**
          * Set one of the binana parameters.
-         * @param  {any}        state    The VueX state.
+         * @param  {*}          state    The VueX state.
          * @param  {iVueXParam} payload  An object with information about
          *                               which binana parameter to set.
          * @returns void
@@ -126,7 +126,7 @@ export const store = new Vuex.Store({
 
         /**
          * Set a validation parameter (either validates or doesn't).
-         * @param  {any}        state    The VueX state.
+         * @param  {*}          state    The VueX state.
          * @param  {iVueXParam} payload  An object containing information
          *                               about what to set.
          * @returns void
@@ -156,7 +156,7 @@ export const store = new Vuex.Store({
 
         /**
          * Update the filenames of the receptor and ligand input files.
-         * @param  {any}             state    The VueX state.
+         * @param  {*}               state    The VueX state.
          * @param  {IInputFileNames} payload  An object describing the
          *                                    filename change.
          * @returns void

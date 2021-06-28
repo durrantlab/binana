@@ -85,14 +85,19 @@ let computedFunctions = {
 let methodsFunctions = {
     /**
      * Runs when a new model has been added.
-     * @param  {number} duration  How long to wait before adding that
-     *                            model to 3dmol.js widget.
+     * @param  {number} duration           How long to wait before adding that
+     *                                     model to 3dmol.js widget.
+     * @param  {string} componentToUpdate  "receptor" or "ligand"
      * @returns void
      */
-    modelAdded(duration: number): void {
+    modelAdded(duration: number, componentToUpdate: string): void {
+
+        console.log(componentToUpdate);
+
         // Put app into waiting state.
         jQuery("body").addClass("waiting");
         this["msg"] = "Loading...";
+
 
         setTimeout(() => {
             // Initialize the viewer if necessary.
@@ -127,7 +132,10 @@ let methodsFunctions = {
                     });
                 }
 
-                if (modelContent !== "") {
+                if (modelContent !== "") {  // something to load.
+                    // debugger;
+                    console.time("1");  // This part is fast
+
                     if (this[typeStr + "Mol"] !== undefined) {
                         viewer["removeModel"](this[typeStr + "Mol"]);
                         viewer["resize"]();
@@ -157,17 +165,18 @@ let methodsFunctions = {
                             val: firstFrame[1]
                         });
 
-                        if(firstFrame[2] > 1) {
+                        if (firstFrame[2] > 1) {
                             // Had more than one frame...
                             this.$store.commit("openModal", {
                                 title: "Multiple Models!",
                                 body: `<p>The selected input file contains ${firstFrame[2].toString()} molecular models. Keeping only the first one.</p>`
                             });
-
                         }
                     }
 
                     this.msgIfNoHydrogens(this[typeStr + "Mol"]);
+
+                    console.timeEnd("1");
 
                     return this[typeStr + "Mol"];
                 } else if (origModelContent !== "") {
@@ -184,47 +193,69 @@ let methodsFunctions = {
             viewer["removeAllSurfaces"]();
             this["surfaceObj"] = undefined;
 
-            let receptorModel = loadModelTxt("receptor");
-            if (receptorModel !== undefined) {
-                this.$store.commit("setVar", {
-                    name: "receptorMol", val: receptorModel
-                });
-                this.receptorAdded(receptorModel);
+            switch (componentToUpdate) {
+                case "receptor":
+                    /// Remove previous receptor.
+                    // viewer["removeModel"](this.$store.state["receptorMol"]);
+
+                    let receptorModel = loadModelTxt("receptor");
+
+                    if (receptorModel !== undefined) {
+                        this.$store.commit("setVar", {
+                            name: "receptorMol",
+                            val: receptorModel
+                        });
+                        this.receptorAdded(receptorModel);
+                    }
+                    break;
+                case "ligand":
+                    // viewer["removeModel"](this.$store.state["ligandMol"]);
+
+                    let ligandModel = loadModelTxt("ligand");
+                    if (ligandModel !== undefined) {
+                        this.ligandAdded(ligandModel);
+                        this.$store.commit("setVar", {
+                            name: "ligandMol",
+                            val: ligandModel
+                        });
+                    }
+                    break;
             }
 
-            let ligandModel = loadModelTxt("ligand");
-            if (ligandModel !== undefined) {
-                this.ligandAdded(ligandModel);
-                this.$store.commit("setVar", {
-                    name: "ligandMol",
-                    val: ligandModel
-                });
-            }
-
+            // Always zoom
             // viewer.resize();  // To make sure. Had some problems in testing.
             viewer["render"]();
+            let modelForZooming = this.$store.state["ligandMol"] !== undefined ? this.$store.state["ligandMol"] : this.$store.state["receptorMol"];
+            duration= 0;
             viewer["zoomTo"](
                 {
-                    "model": this.$store.state["ligandMol"] !== undefined ? this.$store.state["ligandMol"] : this.$store.state["receptorMol"]
+                    "model": modelForZooming
                 },
                 duration
             );
-            viewer["zoom"](0.8, duration);
+            // viewer["zoom"](0.8, duration);
+            // debugger;
 
-            if ((this.$store.state["ligandMol"] !== undefined) && (this.$store.state["receptorMol"] !== undefined)) {
-                // Good to strategically delay running BINANA in case the app
-                // reconverts some of the files to PDB format.
-                if (runBINANATimeout !== undefined) {
-                    clearTimeout(runBINANATimeout);
+            setTimeout(() => {
+                // Now that zoom is done, start BINANA if appropriate.
+
+                if ((this.$store.state["ligandMol"] !== undefined) && (this.$store.state["receptorMol"] !== undefined)) {
+                    // Both ligand and receptor are defined, so start running
+                    // BINANA automatically...
+
+                    // Good to strategically delay running BINANA in case the app
+                    // reconverts some of the files to PDB format.
+                    if (runBINANATimeout !== undefined) {
+                        clearTimeout(runBINANATimeout);
+                    }
+                    runBINANATimeout = setTimeout(() => {
+                        BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
+                        BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
+                    }, 250);
                 }
-                runBINANATimeout = setTimeout(() => {
-                    BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
-                    BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
-                }, 250);
-            }
-
-            // Stop waiting state.
-            jQuery("body").removeClass("waiting");
+                // Stop waiting state.
+                jQuery("body").removeClass("waiting");
+            }, 5000);
         }, 50);
     },
 
@@ -369,11 +400,15 @@ let methodsFunctions = {
                 body: `<p>
                     One of your files has no hydrogen atoms. BINANA may not be
                     able to identify some interactions (e.g., hydrogen bonds).
-                    Consider using <a href="http://server.poissonboltzmann.org/"
-                    target="_blank">PDB2PQR</a> to add hydrogen atoms to your
-                    receptor, and/or <a href="http://durrantlab.com/gypsum-dl/"
-                    target="_blank">Gypsum-DL</a> to add hydrogen atoms to your
-                    ligand.
+                    To add hydrogen atoms to your receptor, consider using
+                    <a href="http://molprobity.biochem.duke.edu/"
+                    target="_blank">MolProbity</a> or
+                    <a href="http://server.poissonboltzmann.org/"
+                    target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
+                    ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+                    target="_blank">Gypsum-DL</a> or <a
+                    href="https://avogadro.cc/docs/menus/build-menu/"
+                    target="_blank">Avogadro</a>.
                 </p>
                 <p>
                     You may also get this error if one or more of your files is
@@ -388,29 +423,41 @@ let methodsFunctions = {
 let watchFunctions = {
     /**
      * Watch when the receptorContents computed property.
-     * @param  {string} oldReceptorContents  The old value of the property.
      * @param  {string} newReceptorContents  The new value of the property.
+     * @param  {string} oldReceptorContents  The old value of the property.
      * @returns void
      */
-    "receptorContents": function (oldReceptorContents: string, newReceptorContents: string): void {
+    "receptorContents": function (newReceptorContents: string, oldReceptorContents: string): void {
         // The purpose of this is to react when new receptorContents
         // are added.
 
+        if (newReceptorContents === oldReceptorContents) {
+            // Nothing's changed
+            return;
+        }
+
         let duration: number = (newReceptorContents === "") ? 0 : 500;
-        this.modelAdded(duration);
+
+        this.modelAdded(duration, "receptor");
     },
 
     /**
      * Watch when the ligandContents computed property.
-     * @param  {string} oldLigandContents  The old value of the property.
      * @param  {string} newLigandContents  The new value of the property.
+     * @param  {string} oldLigandContents  The old value of the property.
      * @returns void
      */
-    "ligandContents": function (oldLigandContents: string, newLigandContents: string): void {
+    "ligandContents": function (newLigandContents: string, oldLigandContents: string): void {
         // The purpose of this is to react when new ligandContents are
         // added.
+
+        if (newLigandContents === oldLigandContents) {
+            // Nothing's changed
+            return;
+        }
+
         let duration: number = (newLigandContents === "") ? 0 : 500;
-        this.modelAdded(duration);
+        this.modelAdded(duration, "ligand");
     },
 }
 
@@ -420,6 +467,11 @@ let watchFunctions = {
  */
 function mountedFunction(): void {
     this["renderProteinSurface"] = this["proteinSurface"];
+
+    // Start checking for models to zoom to.
+    setInterval(() => {
+        zoomToModels
+    }, 500);
 }
 
 /**
@@ -438,6 +490,7 @@ export function setup(): void {
                 "receptorPdbOfLoaded": "",  // To prevent from loading twice.
                 "ligandPdbOfLoaded": "",  // To prevent from loading twice.
                 "renderProteinSurface": undefined,
+                zoomToModels: []  // To make sure zooms happen sequentially.
             }
         },
         "computed": computedFunctions,
@@ -474,9 +527,9 @@ export function setup(): void {
                 <div v-if="type!=='ligand'" style="margin-top:-34px; padding-right:9px;" class="mr-1">
                     <form-button :variant="surfBtnVariant" @click.native="toggleSurface" :small="true">Surface</form-button>
                     <form-button :variant="allAtmBtnVariant" @click.native="toggleSticks" :small="true">All Atoms</form-button>
-                    </div>
-                    </div>
-                    `,
+                </div>
+            </div>
+            `,
         "watch": watchFunctions,
         "props": {
             "type": String, // receptor, ligand, or docked. Used only to
@@ -540,6 +593,7 @@ export function pdbqtToPDB(pdbqtTxt: string, store?: any): string {
     });
 
     pdbqtTxt = lines.join("\n");
+
     return pdbqtTxt;
 }
 

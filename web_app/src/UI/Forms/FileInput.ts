@@ -2,6 +2,8 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
+import { Any } from "@tensorflow/tfjs";
+
 declare var Vue;
 
 /** An object containing the vue-component computed functions. */
@@ -139,7 +141,53 @@ let methodsFunctions = {
             fr.readAsArrayBuffer(fileObj);
         });
     },
+
+    "getDisplayFileNames"(files: any[], filesTraversed: any[], names: string[]): string[] {
+        if (names !== undefined) {
+            return names.map(n => this.$store.state[this["id"] + "FileName"]);
+        }
+        return [""];
+    }
 };
+
+/** An object containing the vue-component watch functions. */
+let watchFunctions = {
+    /**
+     * Watch when the receptorContents computed property.
+     * @param  {string} newForceFileName  The new value of the property.
+     * @param  {string} oldForceFileName  The old value of the property.
+     * @returns void
+     */
+    "forceFileName": function (newForceFileName: string, oldForceFileName: string): void {
+        if (newForceFileName !== null) {
+            // this["placeholder"] = newForceFileName;
+            this.$store.state[this["id"] + "ForceValidate"] = true;
+            this["file"] = null;
+        }
+    }
+
+//     /**
+//      * Watch when the receptorContents computed property.
+//      * @param  {*} newFile  The new value of the property.
+//      * @param  {*} oldFile  The old value of the property.
+//      * @returns void
+//      */
+//     "forcedFile": function (newFile: Blob, oldFile: Blob): void {
+//         if (newFile !== null) {
+//             this["file"] = newFile;
+
+//             // Read from blob (for debugging)
+//             // var fr = new FileReader();
+//             // fr.onload = () => {
+//             //     // @ts-ignore: Not sure why this causes Typescript problems.
+//             //     var data = new Uint8Array(fr.result);
+//             //     let ggg =  new TextDecoder("utf-8").decode(data);
+//             //     debugger;
+//             // };
+//             // fr.readAsArrayBuffer(newFile);
+//         }
+//     }
+}
 
 /**
  * The vue-component mounted function.
@@ -180,7 +228,7 @@ export function setup(): void {
         "data"(): any {
             return {
                 file: false,
-                placeholder: "Choose a file or drop it here...",
+                "placeholder": "Choose a file or drop it here...",
             };
         },
         "methods": methodsFunctions,
@@ -199,15 +247,17 @@ export function setup(): void {
                     :state="Boolean(file)"
                     :placeholder="placeholder"
                     drop-placeholder="Drop file here..."
-                    :class="id" :accept="allAcceptableFiles"
+                    :class="id"
+                    :accept="allAcceptableFiles"
                     :required="required"
+                    :file-name-formatter="getDisplayFileNames"
                 ></b-form-file>
                 <small v-if="(!isValid) && (required === true)" alert tabindex="-1" class="text-danger form-text">{{invalidMsg}}</small>
             </form-group>
         `,
         "props": {
             "label": String,
-            "id": String,
+            "id": String,  // "receptor" or "ligand"
             "description": String,
             "invalidMsg": {
                 "type": String,
@@ -225,6 +275,18 @@ export function setup(): void {
                 "type": String,
                 "default": "",
             },
+
+            // If you want to update filename externally
+            "forceFileName": {
+                "type": String,
+                "default": null
+            }
+
+            // // If you want to impose a file externally.
+            // "forcedFile": {
+            //     "type": Object,
+            //     "default": null
+            // }
         },
         "computed": computedFunctions,
 
@@ -233,5 +295,7 @@ export function setup(): void {
          * @returns void
          */
         "mounted": mountedFunction,
+
+        "watch": watchFunctions
     });
 }
