@@ -91,172 +91,151 @@ let methodsFunctions = {
      * @returns void
      */
     modelAdded(duration: number, componentToUpdate: string): void {
-
-        console.log(componentToUpdate);
-
         // Put app into waiting state.
         jQuery("body").addClass("waiting");
         this["msg"] = "Loading...";
 
+        // Initialize the viewer if necessary.
+        if (viewer === undefined) {
+            let element = jQuery("#" + this["type"] + "-3dmol");
+            let config = {
+                backgroundColor: "white"
+            };
+            viewer = $3Dmol["createViewer"](element, config);
+            viewer["enableFog"](true);
+        }
 
-        setTimeout(() => {
-            // Initialize the viewer if necessary.
-            if (viewer === undefined) {
-                let element = jQuery("#" + this["type"] + "-3dmol");
-                let config = {
-                    backgroundColor: "white"
-                };
-                viewer = $3Dmol["createViewer"](element, config);
-                viewer["enableFog"](true);
+        BINANAInterface.clearInteraction();
+
+        let loadModelTxt = (typeStr: string): any => {
+            let origModelContent = this[typeStr + "Contents"];
+
+            let filename = this.$store.state[typeStr + "FileName"];
+            let ext = filename.split(".").slice(filename.split(".").length - 1)[0].toLowerCase()
+
+            let modelContent = origModelContent;
+            if (ext === "pdbqt") {
+                modelContent = pdbqtToPDB(origModelContent, this.$store);
+                ext = "pdb"
+                this.$store.commit("setVar", {
+                    name: typeStr + "Contents",
+                    val: modelContent
+                });
+                this.$store.commit("setVar", {
+                    name: typeStr + "FileName",
+                    val: filename + ".pdb"
+                });
             }
 
-            BINANAInterface.clearInteraction();
+            if (modelContent !== "") {  // something to load.
+                if (this[typeStr + "Mol"] !== undefined) {
+                    viewer["removeModel"](this[typeStr + "Mol"]);
+                    viewer["resize"]();
+                    viewer["render"]();
+                }
 
-            let loadModelTxt = (typeStr: string): any => {
-                let origModelContent = this[typeStr + "Contents"];
-
-                let filename = this.$store.state[typeStr + "FileName"];
-                let ext = filename.split(".").slice(filename.split(".").length - 1)[0].toLowerCase()
-
-                let modelContent = origModelContent;
-                if (ext === "pdbqt") {
-                    modelContent = pdbqtToPDB(origModelContent, this.$store);
-                    ext = "pdb"
+                this[typeStr + "Mol"] = viewer["addModel"](modelContent, ext, {"keepH": true});
+                if (ext !== "pdb") {
+                    // Some other format that 3dmol can read directly,
+                    // that needs to be converted to pdb for binana.
+                    modelContent = mol3DToPDB(this[typeStr + "Mol"]);
                     this.$store.commit("setVar", {
                         name: typeStr + "Contents",
                         val: modelContent
                     });
                     this.$store.commit("setVar", {
                         name: typeStr + "FileName",
-                        val: "myfile.pdb"
+                        val: filename + ".pdb"
                     });
                 }
 
-                if (modelContent !== "") {  // something to load.
-                    // debugger;
-                    console.time("1");  // This part is fast
+                let firstFrame = keepOnlyFirstFrame(modelContent);
+                if (firstFrame[0]) {
+                    // So it changed.
+                    this.$store.commit("setVar", {
+                        name: typeStr + "Contents",
+                        val: firstFrame[1]
+                    });
 
-                    if (this[typeStr + "Mol"] !== undefined) {
-                        viewer["removeModel"](this[typeStr + "Mol"]);
-                        viewer["resize"]();
-                        viewer["render"]();
-                    }
-
-                    this[typeStr + "Mol"] = viewer["addModel"](modelContent, ext, {"keepH": true});
-                    if (ext !== "pdb") {
-                        // Some other format that 3dmol can read directly,
-                        // that needs to be converted to pdb for binana.
-                        modelContent = mol3DToPDB(this[typeStr + "Mol"]);
-                        this.$store.commit("setVar", {
-                            name: typeStr + "Contents",
-                            val: modelContent
-                        });
-                        this.$store.commit("setVar", {
-                            name: typeStr + "FileName",
-                            val: "myfile.pdb"
+                    if (firstFrame[2] > 1) {
+                        // Had more than one frame...
+                        this.$store.commit("openModal", {
+                            title: "Multiple Models!",
+                            body: `<p>The selected input file contains ${firstFrame[2].toString()} molecular models. Keeping only the first one.</p>`
                         });
                     }
+                }
 
-                    let firstFrame = keepOnlyFirstFrame(modelContent);
-                    if (firstFrame[0]) {
-                        // So it changed.
-                        this.$store.commit("setVar", {
-                            name: typeStr + "Contents",
-                            val: firstFrame[1]
-                        });
+                this.msgIfNoHydrogens(this[typeStr + "Mol"]);
 
-                        if (firstFrame[2] > 1) {
-                            // Had more than one frame...
-                            this.$store.commit("openModal", {
-                                title: "Multiple Models!",
-                                body: `<p>The selected input file contains ${firstFrame[2].toString()} molecular models. Keeping only the first one.</p>`
-                            });
-                        }
-                    }
+                return this[typeStr + "Mol"];
+            } else if (origModelContent !== "") {
+                // It's empty, but shouldn't be. Probably not
+                // properly formed.
 
-                    this.msgIfNoHydrogens(this[typeStr + "Mol"]);
+                this.$store.commit("openModal", {
+                    title: "Invalid Input File!",
+                    body: "<p>The selected input file is not properly formatted. The molecular viewer has not been updated. Please select a properly formatted PDBQT or PDB file, as appropriate.</p>"
+                });
+            }
+        }
 
-                    console.timeEnd("1");
+        viewer["removeAllSurfaces"]();
+        this["surfaceObj"] = undefined;
 
-                    return this[typeStr + "Mol"];
-                } else if (origModelContent !== "") {
-                    // It's empty, but shouldn't be. Probably not
-                    // properly formed.
+        switch (componentToUpdate) {
+            case "receptor":
+                
+                /// Remove previous receptor.
+                // viewer["removeModel"](this.$store.state["receptorMol"]);
+                
+                let receptorModel = loadModelTxt("receptor");
+                
+                if (receptorModel !== undefined) {
+                    this.$store.commit("setVar", {
+                        name: "receptorMol",
+                        val: receptorModel
+                    });
+                    this.receptorAdded(receptorModel);
+                }
+                this.zoomTo(duration);
+                break;
+            case "ligand":
+                // viewer["removeModel"](this.$store.state["ligandMol"]);
 
-                    this.$store.commit("openModal", {
-                        title: "Invalid Input File!",
-                        body: "<p>The selected input file is not properly formatted. The molecular viewer has not been updated. Please select a properly formatted PDBQT or PDB file, as appropriate.</p>"
+                let ligandModel = loadModelTxt("ligand");
+                if (ligandModel !== undefined) {
+                    this.ligandAdded(ligandModel);
+                    this.$store.commit("setVar", {
+                        name: "ligandMol",
+                        val: ligandModel
                     });
                 }
+                this.zoomTo(duration);
+                break;
+        }
+        
+        // Start BINANA if appropriate.
+        if ((this.$store.state["ligandMol"] !== undefined) && (this.$store.state["receptorMol"] !== undefined)) {
+            // Both ligand and receptor are defined, so start running
+            // BINANA automatically...
+
+            // Good to strategically delay running BINANA in case the app
+            // reconverts some of the files to PDB format.
+            if (runBINANATimeout !== undefined) {
+                clearTimeout(runBINANATimeout);
             }
-
-            viewer["removeAllSurfaces"]();
-            this["surfaceObj"] = undefined;
-
-            switch (componentToUpdate) {
-                case "receptor":
-                    /// Remove previous receptor.
-                    // viewer["removeModel"](this.$store.state["receptorMol"]);
-
-                    let receptorModel = loadModelTxt("receptor");
-
-                    if (receptorModel !== undefined) {
-                        this.$store.commit("setVar", {
-                            name: "receptorMol",
-                            val: receptorModel
-                        });
-                        this.receptorAdded(receptorModel);
-                    }
-                    break;
-                case "ligand":
-                    // viewer["removeModel"](this.$store.state["ligandMol"]);
-
-                    let ligandModel = loadModelTxt("ligand");
-                    if (ligandModel !== undefined) {
-                        this.ligandAdded(ligandModel);
-                        this.$store.commit("setVar", {
-                            name: "ligandMol",
-                            val: ligandModel
-                        });
-                    }
-                    break;
-            }
-
-            // Always zoom
-            // viewer.resize();  // To make sure. Had some problems in testing.
-            viewer["render"]();
-            let modelForZooming = this.$store.state["ligandMol"] !== undefined ? this.$store.state["ligandMol"] : this.$store.state["receptorMol"];
-            duration= 0;
-            viewer["zoomTo"](
-                {
-                    "model": modelForZooming
-                },
-                duration
-            );
-            // viewer["zoom"](0.8, duration);
-            // debugger;
-
-            setTimeout(() => {
-                // Now that zoom is done, start BINANA if appropriate.
-
-                if ((this.$store.state["ligandMol"] !== undefined) && (this.$store.state["receptorMol"] !== undefined)) {
-                    // Both ligand and receptor are defined, so start running
-                    // BINANA automatically...
-
-                    // Good to strategically delay running BINANA in case the app
-                    // reconverts some of the files to PDB format.
-                    if (runBINANATimeout !== undefined) {
-                        clearTimeout(runBINANATimeout);
-                    }
-                    runBINANATimeout = setTimeout(() => {
-                        BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
-                        BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
-                    }, 250);
-                }
+            runBINANATimeout = setTimeout(() => {
+                BINANAInterface.setup(viewer, this.$store.state["receptorMol"], this.$store.state["ligandMol"]);
+                BINANAInterface.start(this["receptorContents"], this["ligandContents"]);
+ 
                 // Stop waiting state.
                 jQuery("body").removeClass("waiting");
-            }, 5000);
-        }, 50);
+            }, 250);
+        } else {
+            // Stop waiting state.
+            jQuery("body").removeClass("waiting");
+        }
     },
 
     /**
@@ -267,7 +246,7 @@ let methodsFunctions = {
     receptorAdded(mol: any): void {
         // Make the atoms of the protein clickable if it is receptor.
         this.makeAtomsHoverable(mol);
-
+        
         this.showSurfaceAsAppropriate();
         showSticksAsAppropriate();
     },
@@ -297,21 +276,16 @@ let methodsFunctions = {
         if (len <= 5000) {
             // If there are a lot of atoms, this becomes slow. So only if <
             // 5000 atoms.
-            for (var i = 0; i < len; i++) {
-                // let atom = atoms[i];
-
-                mol["setHoverable"]({}, true, (atom: any) => {
-                    // debugger;
-                    let lbl = atom["resn"].trim() + atom["resi"].toString() + ":" + atom["atom"].trim();
-                    atom["chain"] = atom["chain"].trim();
-                    if (atom["chain"] !== "") {
-                        lbl += ":" + atom["chain"];
-                    }
-                    viewer["addLabel"](lbl, {"position": atom, "backgroundOpacity": 0.8});
-                }, (atom: any) => {
-                    viewer["removeAllLabels"]();
-                })
-            }
+            mol["setHoverable"]({}, true, (atom: any) => {
+                let lbl = atom["resn"].trim() + atom["resi"].toString() + ":" + atom["atom"].trim();
+                atom["chain"] = atom["chain"].trim();
+                if (atom["chain"] !== "") {
+                    lbl += ":" + atom["chain"];
+                }
+                viewer["addLabel"](lbl, {"position": atom, "backgroundOpacity": 0.8});
+            }, (atom: any) => {
+                viewer["removeAllLabels"]();
+            })
         } else {
             console.log("No labels on atoms because too many: " + len.toString() + " > 5000")
         }
@@ -416,6 +390,21 @@ let methodsFunctions = {
                 </p>`
             });
         }
+    },
+
+
+    zoomTo(duration: number): void {
+        let modelForZooming = this.$store.state["ligandMol"] !== undefined ? this.$store.state["ligandMol"] : this.$store.state["receptorMol"];
+        this.zoomToModels.push([modelForZooming, duration]);
+
+
+        // // Always zoom
+        // // viewer.resize();  // To make sure. Had some problems in testing.
+        // viewer["render"]();
+        // viewer["zoomTo"](
+        //     { "model": modelForZooming },
+        //     duration
+        // );
     }
 }
 
@@ -467,11 +456,46 @@ let watchFunctions = {
  */
 function mountedFunction(): void {
     this["renderProteinSurface"] = this["proteinSurface"];
+    let zoomToFunc = () => {
+        if (this.zoomToModels.length > 0) {
+            // There's a model to zoom to.
+            let modelForZoomingInf = this.zoomToModels.shift();
+            let modelForZooming = modelForZoomingInf[0];
+            let duration = modelForZoomingInf[1];
+
+            // Always zoom
+            // viewer.resize();  // To make sure. Had some problems in testing.
+            viewer["render"]();
+            viewer["zoomTo"](
+                { "model": modelForZooming },
+                duration,
+                true
+            );
+
+            setTimeout(
+                () => {
+                    // Make sure zoom has finished
+                    // viewer["zoomTo"]( { "model": modelForZooming }, 0 );
+        
+                    // Zoom to next one.
+                    zoomToFunc();
+                }, 
+                duration + 250
+            );
+        } else {
+            // There's no model to zoom to. Check back in a bit.
+            setTimeout(
+                () => {
+                    // Zoom to next one.
+                    zoomToFunc();
+                }, 
+                1000  // Every second
+            );
+        }
+    }
 
     // Start checking for models to zoom to.
-    setInterval(() => {
-        zoomToModels
-    }, 500);
+    zoomToFunc();
 }
 
 /**

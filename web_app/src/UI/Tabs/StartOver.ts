@@ -5,7 +5,11 @@
 declare var Vue;
 
 /** An object containing the vue-component methods functions. */
-let methodsFunctions = {}
+let methodsFunctions = {
+    onSubmitClick(): void {
+        location.reload();
+    }
+}
 
 /**
  * Setup the start-over Vue commponent.

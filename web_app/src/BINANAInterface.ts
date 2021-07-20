@@ -53,43 +53,6 @@ export function start(pdbtxt: string, ligtxt: string): void {
             jQuery("body").removeClass("waiting");
         }
     }, 250);
-
-    return;
-
-    let binana = window["binanaModule"];
-
-    // Save to the fake file system
-    binana["save_to_fake_fs"]("receptor.pdb", pdbtxt);
-    binana["save_to_fake_fs"]("ligand.pdb", ligtxt);
-
-    let params = ["-receptor", "receptor.pdb", "-ligand", "ligand.pdb"];
-
-    const binanaParamNames = Object.keys(binanaParams);
-    const binanaParamNamesLen = binanaParamNames.length;
-    for (let i = 0; i < binanaParamNamesLen; i++) {
-        const binanaParamName = binanaParamNames[i];
-        const paramVal = binanaParams[binanaParamName];
-        params.push("-" + binanaParamName);
-        params.push(paramVal);
-    }
-
-    // Run binana
-    jQuery("body").addClass("waiting");
-    setTimeout(() => {
-        binana["run"](params);
-        jQuery("body").removeClass("waiting");
-
-        // Get the json output.
-        let json = binana["load_from_fake_fs"]("./ligand_receptor_output.json");
-
-        binanaData = json;
-
-        // Update the store too.
-        Store.store.commit("setVar", {
-            name: "jsonOutput",
-            val: JSON.stringify(binanaData, undefined, 1)
-        });
-    }, 250);
 }
 
 /**
@@ -377,7 +340,7 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
             continue;
         }
         idxOfAtomsSeen.add(atomInf["atomIndex"]);
-        let atom = atomInfTo3DMolAtom(mol, atomInf)
+        let atom = atomInfTo3DMolAtom(mol, atomInf);
         let radius = vdwRadii[atom["elem"]];
         radius = radius === undefined ? 1.5 : radius;
 

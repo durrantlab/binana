@@ -2,8 +2,10 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-
 // For functions that don't really need to be within the Vue framework.
+
+// ignored in some ways
+export const waterResidues = ["HOH", "WAT", "TIP", "TIP3"];  
 
 /**
  * Creates a new object with a property updated.
@@ -81,14 +83,19 @@ export function curPath(): string {
             continue;
         }
 
+        const resname = lines[i].substr(17,3);
+
         if (invert === false) {
             // Keep only receptor atoms.
-            if (proteinResidues.indexOf(lines[i].substr(17,3)) !== -1) {
+            if (proteinResidues.indexOf(resname) !== -1) {
                 linesToKeep += lines[i] + "\n";
             }
         } else {
-            // Keep only ligand atoms.
-            if (proteinResidues.indexOf(lines[i].substr(17,3)) === -1) {
+            // Keep only ligand atoms. (But not waters).
+            if (
+                (proteinResidues.indexOf(resname) === -1) && 
+                (waterResidues.indexOf(resname) === -1)
+            ) {
                 linesToKeep += lines[i] + "\n";
             }
         }

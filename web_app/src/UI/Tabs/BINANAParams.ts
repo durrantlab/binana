@@ -41,6 +41,11 @@ let computedFunctions = {
         }
     },
 
+    /**
+     * Whether to show a link allowing the user to separate a ligand from the
+     * protein structure.
+     * @returns boolean  True if it should be shown. False otherwise.
+     */
     "showKeepProteinOnlyLink"(): boolean {
         let ligLines = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
 
@@ -48,6 +53,10 @@ let computedFunctions = {
         let residues = allResidues.filter(function(item, pos) {
             return allResidues.indexOf(item) == pos;
         }).filter(r => r !== "").sort();
+
+        // Don't include waters.
+        residues = residues.filter(r => Utils.waterResidues.indexOf(r) === -1);
+
         this["nonProteinResidues"] = ": " + residues.join(", ");
         return ligLines.length > 0;
     }
@@ -450,7 +459,7 @@ export function setup(): void {
                     >
                         <template v-slot:extraDescription>
                             <span v-if="showKeepProteinOnlyLink">
-                                <span style="color:red;">Your receptor file includes non-protein residue(s){{nonProteinResidues}}</span>
+                                <span style="color:red;">Your receptor file includes non-protein residue(s){{nonProteinResidues}}</span>.
                                 <a href='' @click="onShowKeepProteinOnlyClick($event);">Treat these as the ligand instead?</a>
                             </span>
                             <!-- <span v-else>
@@ -487,7 +496,7 @@ export function setup(): void {
                     </form-group>
 
                     <b-container
-                        v-if="$store.state.receptorContents != '' && $store.state.ligandContents != ''"
+                        v-if="$store.state.receptorContents != '' && $store.state.ligandContents != '' && $store.state.jsonOutput != '{}'"
                     >
                         <b-row no-gutters>
                             <b-col no-gutters>
@@ -499,8 +508,8 @@ export function setup(): void {
                             </b-col>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Contacts" block>
-                                    <b-dropdown-item @click="highlight('contactsWithin2.5A');">Close</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('contactsWithin4.0A');">Closest</b-dropdown-item>
+                                    <b-dropdown-item @click="highlight('contactsWithin4.0A');">Close</b-dropdown-item>
+                                    <b-dropdown-item @click="highlight('contactsWithin2.5A');">Closest</b-dropdown-item>
                                 </b-dropdown>
                             </b-col>
                             <b-col no-gutters>
