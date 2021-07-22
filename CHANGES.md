@@ -1,6 +1,14 @@
 Changes
 =======
 
+
+1.4
+---
+
+Major refactor
+
+Before, in calculating close contacts, those less than 2.5 not included in list of less than 4 (no redundancies). Now listed again (so redundancies).
+
 1.3
 ---
 

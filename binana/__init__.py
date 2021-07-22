@@ -10,22 +10,19 @@ r_just = shim.r_just
 
 
 from binana import point
-
 Point = point.Point
 
 from binana import math_functions as mathfuncs
 
 from binana import mol
-
 Mol = mol.Mol
 
-from binana import command_line_parameters as cmd_params
+from binana.cli_params import command_line_parameters as cmd_params
 
 from binana import atom
-
 Atom = atom.Atom
 
-from binana import Output
+from binana import output
 from binana import start
 
 

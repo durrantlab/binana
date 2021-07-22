@@ -1,2 +1,2 @@
-from binana.Output.Dir import pdbs
-from binana.Output.Dir import vmd_state
+from binana.output.dir import pdbs
+from binana.output.dir import vmd_state

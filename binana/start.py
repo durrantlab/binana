@@ -6,6 +6,23 @@
 # ligand-binding characterization." J Mol Graph Model 29(6): 888-893.
 
 import __future__
+from binana.interactions.pi_cat import calculate_pi_cat
+from binana.output.main import write_all_output
+from binana.interactions.salt_bridges import calculate_salt_bridges
+from binana.interactions.pi_pi import calculate_pi_pi
+from binana.interactions.ligand_atom_types import calculate_ligand_atom_types
+from binana.interactions.hydrogen_bonds import calculate_hydrogen_bonds
+from binana.interactions.hydrophobic import calculate_hydrophobics
+from binana.interactions.flexibility import calculate_flexibility
+from binana.interactions.electrostatic_energies import calculate_electrostatic_energies
+from binana.interactions.close import calculate_close
+from binana.interactions.closest import calculate_closest
+from binana.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.load import (
+    get_ligand_receptor_aromatic_dists,
+    get_ligand_receptor_dists,
+    load_ligand_and_receptor,
+)
 
 import math
 import binana
@@ -37,758 +54,89 @@ Class Binana
 
 class Binana:
 
-    # supporting functions
-    def list_alphebetize_and_combine(self, list_obj):
-        list_obj.sort()
-        return "_".join(list_obj)
-
-    def hashtable_entry_add_one(self, hashtable, key, toadd=1):
-        # note that dictionaries (hashtables) are passed by reference in
-        # python
-        if key in hashtable:
-            hashtable[key] = hashtable[key] + toadd
-        else:
-            hashtable[key] = toadd
-
     # The meat of the class
     def __init__(self, ligand_pdbqt_filename, receptor_pdbqt_filename, parameters):
-        # JY- giving Binana filename attributes so json_file() can name the output file
-        self.ligfi = ligand_pdbqt_filename
-        self.recfi = receptor_pdbqt_filename
-
-        # JY
-        ligand = binana.Mol()
-        ligand.load_PDB(ligand_pdbqt_filename)
-
-        receptor = binana.Mol()
-        receptor.load_PDB(receptor_pdbqt_filename)
-        receptor.assign_secondary_structure()
+        ligand, receptor = load_ligand_and_receptor(
+            ligand_pdbqt_filename, receptor_pdbqt_filename
+        )
 
         # Get distance measurements between protein and ligand atom types, as
         # well as some other measurements
+        closest = calculate_closest(
+            ligand, receptor, parameters.params["close_contacts_dist1_cutoff"]
+        )
+        close = calculate_close(
+            ligand, receptor, parameters.params["close_contacts_dist2_cutoff"]
+        )
+        electrostatic_energies = calculate_electrostatic_energies(
+            ligand, receptor, parameters.params["electrostatic_dist_cutoff"]
+        )
+        flexibility = calculate_flexibility(
+            ligand, receptor, parameters.params["active_site_flexibility_dist_cutoff"]
+        )
+        hydrophobics = calculate_hydrophobics(
+            ligand, receptor, parameters.params["hydrophobic_dist_cutoff"]
+        )
+        hydrogen_bonds = calculate_hydrogen_bonds(
+            ligand,
+            receptor,
+            parameters.params["hydrogen_bond_dist_cutoff"],
+            parameters.params["hydrogen_bond_angle_cutoff"],
+        )
 
-        ligand_receptor_atom_type_pairs_less_than_two_half = {}
-        ligand_receptor_atom_type_pairs_less_than_four = {}
-        ligand_receptor_atom_type_pairs_electrostatic = {}
-        active_site_flexibility = {}
-        hbonds = {}
-        hydrophobics = {}
-
-        pdb_close_contacts = binana.Mol()
-        pdb_contacts = binana.Mol()
-        pdb_contacts_alpha_helix = binana.Mol()
-        pdb_contacts_beta_sheet = binana.Mol()
-        pdb_contacts_other_2nd_structure = binana.Mol()
-        pdb_side_chain = binana.Mol()
-        pdb_back_bone = binana.Mol()
-        pdb_hydrophobic = binana.Mol()
-        pdb_hbonds = binana.Mol()
-
-        close_contacts_labels = []
-        contacts_labels = []
-        hydrophobic_labels = []
-        hbonds_labels = []
-
-        for ligand_atom_index in ligand.all_atoms.keys():
-            for receptor_atom_index in receptor.all_atoms.keys():
-                ligand_atom = ligand.all_atoms[ligand_atom_index]
-                receptor_atom = receptor.all_atoms[receptor_atom_index]
-
-                dist = ligand_atom.coordinates.dist_to(receptor_atom.coordinates)
-                if dist < parameters.params["close_contacts_dist1_cutoff"]:
-                    # less than 2.5 A
-                    list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
-                    self.hashtable_entry_add_one(
-                        ligand_receptor_atom_type_pairs_less_than_two_half,
-                        self.list_alphebetize_and_combine(list_ligand_atom),
-                    )
-                    pdb_close_contacts.add_new_atom(ligand_atom.copy_of())
-                    pdb_close_contacts.add_new_atom(receptor_atom.copy_of())
-
-                    close_contacts_labels.append(
-                        (ligand_atom.string_id(), receptor_atom.string_id())
-                    )
-
-                elif dist < parameters.params["close_contacts_dist2_cutoff"]:
-                    # less than 4 A
-                    list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
-                    self.hashtable_entry_add_one(
-                        ligand_receptor_atom_type_pairs_less_than_four,
-                        self.list_alphebetize_and_combine(list_ligand_atom),
-                    )
-                    pdb_contacts.add_new_atom(ligand_atom.copy_of())
-                    pdb_contacts.add_new_atom(receptor_atom.copy_of())
-
-                    contacts_labels.append(
-                        (ligand_atom.string_id(), receptor_atom.string_id())
-                    )
-
-                if dist < parameters.params["electrostatic_dist_cutoff"]:
-                    # calculate electrostatic energies for all less than 4 A
-                    ligand_charge = ligand_atom.charge
-                    receptor_charge = receptor_atom.charge
-                    coulomb_energy = (
-                        ligand_charge * receptor_charge / dist
-                    ) * 138.94238460104697e4  # to convert into J/mol # might be nice to double check this
-                    list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
-                    self.hashtable_entry_add_one(
-                        ligand_receptor_atom_type_pairs_electrostatic,
-                        self.list_alphebetize_and_combine(list_ligand_atom),
-                        coulomb_energy,
-                    )
-
-                if dist < parameters.params["active_site_flexibility_dist_cutoff"]:
-                    # Now get statistics to judge active-site flexibility
-                    flexibility_key = (
-                        receptor_atom.side_chain_or_backbone()
-                        + "_"
-                        + receptor_atom.structure
-                    )  # first can be sidechain or backbone, second back be alpha, beta, or other, so six catagories
-                    if receptor_atom.structure == "ALPHA":
-                        pdb_contacts_alpha_helix.add_new_atom(receptor_atom.copy_of())
-                    elif receptor_atom.structure == "BETA":
-                        pdb_contacts_beta_sheet.add_new_atom(receptor_atom.copy_of())
-                    elif receptor_atom.structure == "OTHER":
-                        pdb_contacts_other_2nd_structure.add_new_atom(
-                            receptor_atom.copy_of()
-                        )
-
-                    if receptor_atom.side_chain_or_backbone() == "BACKBONE":
-                        pdb_back_bone.add_new_atom(receptor_atom.copy_of())
-                    elif receptor_atom.side_chain_or_backbone() == "SIDECHAIN":
-                        pdb_side_chain.add_new_atom(receptor_atom.copy_of())
-
-                    self.hashtable_entry_add_one(
-                        active_site_flexibility, flexibility_key
-                    )
-
-                if dist < parameters.params["hydrophobic_dist_cutoff"]:
-                    # Now see if there's hydrophobic contacts (C-C contacts)
-                    if ligand_atom.element == "C" and receptor_atom.element == "C":
-                        hydrophobic_key = (
-                            receptor_atom.side_chain_or_backbone()
-                            + "_"
-                            + receptor_atom.structure
-                        )
-                        pdb_hydrophobic.add_new_atom(ligand_atom.copy_of())
-                        pdb_hydrophobic.add_new_atom(receptor_atom.copy_of())
-
-                        self.hashtable_entry_add_one(hydrophobics, hydrophobic_key)
-
-                        hydrophobic_labels.append(
-                            (ligand_atom.string_id(), receptor_atom.string_id())
-                        )
-
-                if dist < parameters.params["hydrogen_bond_dist_cutoff"]:
-                    # Now see if there's some sort of hydrogen bond between
-                    # these two atoms. distance cutoff = 4, angle cutoff = 40.
-                    # Note that this is liberal.
-                    if (ligand_atom.element == "O" or ligand_atom.element == "N") and (
-                        receptor_atom.element == "O" or receptor_atom.element == "N"
-                    ):
-
-                        # now build a list of all the hydrogens close to these
-                        # atoms
-                        hydrogens = []
-
-                        for atm_index in ligand.all_atoms.keys():
-                            if ligand.all_atoms[atm_index].element == "H":
-                                # so it's a hydrogen
-                                if (
-                                    ligand.all_atoms[atm_index].coordinates.dist_to(
-                                        ligand_atom.coordinates
-                                    )
-                                    < 1.3
-                                ):
-                                    # O-H distance is 0.96 A, N-H is 1.01 A.
-                                    # See
-                                    # http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
-                                    ligand.all_atoms[atm_index].comment = "LIGAND"
-                                    hydrogens.append(ligand.all_atoms[atm_index])
-
-                        for atm_index in receptor.all_atoms.keys():
-                            if receptor.all_atoms[atm_index].element == "H":
-                                # so it's a hydrogen
-                                if (
-                                    receptor.all_atoms[atm_index].coordinates.dist_to(
-                                        receptor_atom.coordinates
-                                    )
-                                    < 1.3
-                                ):
-                                    # O-H distance is 0.96 A, N-H is 1.01 A.
-                                    # See
-                                    # http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
-                                    receptor.all_atoms[atm_index].comment = "RECEPTOR"
-                                    hydrogens.append(receptor.all_atoms[atm_index])
-
-                        # now we need to check the angles
-                        for hydrogen in hydrogens:
-                            if (
-                                fabs(
-                                    180
-                                    - binana.mathfuncs.angle_between_three_points(
-                                        ligand_atom.coordinates,
-                                        hydrogen.coordinates,
-                                        receptor_atom.coordinates,
-                                    )
-                                    * 180.0
-                                    / math.pi
-                                )
-                                <= parameters.params["hydrogen_bond_angle_cutoff"]
-                            ):
-                                hbonds_key = (
-                                    "HDONOR_"
-                                    + hydrogen.comment
-                                    + "_"
-                                    + receptor_atom.side_chain_or_backbone()
-                                    + "_"
-                                    + receptor_atom.structure
-                                )
-                                pdb_hbonds.add_new_atom(ligand_atom.copy_of())
-                                pdb_hbonds.add_new_atom(hydrogen.copy_of())
-                                pdb_hbonds.add_new_atom(receptor_atom.copy_of())
-                                self.hashtable_entry_add_one(hbonds, hbonds_key)
-
-                                hbonds_labels.append(
-                                    (
-                                        ligand_atom.string_id(),
-                                        hydrogen.string_id(),
-                                        receptor_atom.string_id(),
-                                        hydrogen.comment,
-                                    )
-                                )
-
-        # Get the total number of each atom type in the ligand
-        ligand_atom_types = {}
-        for ligand_atom_index in ligand.all_atoms.keys():
-            ligand_atom = ligand.all_atoms[ligand_atom_index]
-            self.hashtable_entry_add_one(ligand_atom_types, ligand_atom.atom_type)
+        ligand_atom_types = calculate_ligand_atom_types(ligand)
 
         # This is perhaps controversial. I noticed that often a pi-cation
-        # interaction or other pi interaction was only slightly off, but
-        # looking at the structure, it was clearly supposed to be a pi-cation
+        # interaction or other pi interaction was only slightly off, but looking
+        # at the structure, it was clearly supposed to be a pi-cation
         # interaction. I've decided then to artificially expand the radius of
         # each pi ring. Think of this as adding in a VDW radius, or accounting
-        # for poor crystal-structure resolution, or whatever you want to
-        # justify it.
+        # for poor crystal-structure resolution, or whatever you want to justify
+        # it.
         pi_padding = parameters.params["pi_padding_dist"]
 
         # Count pi-pi stacking and pi-T stacking interactions
-        PI_interactions = {}
-        pdb_pistack = binana.Mol()
-        pdb_pi_T = binana.Mol()
-        pi_stacking_labels = []
-        T_stacking_labels = []
-
-        # "PI-Stacking Interactions ALIVE AND WELL IN PROTEINS" says distance
-        # of 7.5 A is good cutoff. This seems really big to me, except that
-        # pi-pi interactions (parallel) are actuall usually off centered.
-        # Interesting paper. Note that adenine and tryptophan count as two
-        # aromatic rings. So, for example, an interaction between these two,
-        # if positioned correctly, could count for 4 pi-pi interactions.
-        for aromatic1 in ligand.aromatic_rings:
-            for aromatic2 in receptor.aromatic_rings:
-                dist = aromatic1.center.dist_to(aromatic2.center)
-                if dist < parameters.params["pi_pi_interacting_dist_cutoff"]:
-                    # so there could be some pi-pi interactions. first, let's
-                    # check for stacking interactions. Are the two pi's
-                    # roughly parallel?
-                    aromatic1_norm_vector = binana.Point(
-                        aromatic1.plane_coeff[0],
-                        aromatic1.plane_coeff[1],
-                        aromatic1.plane_coeff[2],
-                    )
-
-                    aromatic2_norm_vector = binana.Point(
-                        aromatic2.plane_coeff[0],
-                        aromatic2.plane_coeff[1],
-                        aromatic2.plane_coeff[2],
-                    )
-
-                    angle_between_planes = (
-                        binana.mathfuncs.angle_between_points(
-                            aromatic1_norm_vector, aromatic2_norm_vector
-                        )
-                        * 180.0
-                        / math.pi
-                    )
-
-                    if (
-                        fabs(angle_between_planes - 0)
-                        < parameters.params["pi_stacking_angle_tolerance"]
-                        or fabs(angle_between_planes - 180)
-                        < parameters.params["pi_stacking_angle_tolerance"]
-                    ):
-                        # so they're more or less parallel, it's probably
-                        # pi-pi stackingoutput_dir now, pi-pi are not usually
-                        # right on top of each other. They're often staggared.
-                        # So I don't want to just look at the centers of the
-                        # rings and compare. Let's look at each of the atoms.
-                        # do atom of the atoms of one ring, when projected
-                        # onto the plane of the other, fall within that other
-                        # ring?
-
-                        # start by assuming it's not a pi-pi stacking interaction
-                        pi_pi = False
-
-                        for ligand_ring_index in aromatic1.indices:
-                            # project the ligand atom onto the plane of the
-                            # receptor ring
-                            pt_on_receptor_plane = binana.mathfuncs.project_point_onto_plane(
-                                ligand.all_atoms[ligand_ring_index].coordinates,
-                                aromatic2.plane_coeff,
-                            )
-                            if (
-                                pt_on_receptor_plane.dist_to(aromatic2.center)
-                                <= aromatic2.radius + pi_padding
-                            ):
-                                pi_pi = True
-                                break
-
-                        if pi_pi == False:
-                            # if you've already determined it's a pi-pi
-                            # stacking interaction, no need to keep trying
-                            for receptor_ring_index in aromatic2.indices:
-                                # project the ligand atom onto the plane of the receptor ring
-                                pt_on_ligand_plane = binana.mathfuncs.project_point_onto_plane(
-                                    receptor.all_atoms[receptor_ring_index].coordinates,
-                                    aromatic1.plane_coeff,
-                                )
-                                if (
-                                    pt_on_ligand_plane.dist_to(aromatic1.center)
-                                    <= aromatic1.radius + pi_padding
-                                ):
-                                    pi_pi = True
-                                    break
-
-                        if pi_pi == True:
-                            structure = receptor.all_atoms[
-                                aromatic2.indices[0]
-                            ].structure
-                            if structure == "":
-                                # since it could be interacting with a
-                                # cofactor or something
-                                structure = "OTHER"
-                            key = "STACKING_" + structure
-
-                            for index in aromatic1.indices:
-                                pdb_pistack.add_new_atom(
-                                    ligand.all_atoms[index].copy_of()
-                                )
-                            for index in aromatic2.indices:
-                                pdb_pistack.add_new_atom(
-                                    receptor.all_atoms[index].copy_of()
-                                )
-
-                            self.hashtable_entry_add_one(PI_interactions, key)
-
-                            pi_stacking_labels.append(
-                                (
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            ligand.all_atoms[index].string_id()
-                                            for index in aromatic1.indices
-                                        ]
-                                    )
-                                    + "]",
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            receptor.all_atoms[index].string_id()
-                                            for index in aromatic2.indices
-                                        ]
-                                    )
-                                    + "]",
-                                )
-                            )
-
-                    elif (
-                        fabs(angle_between_planes - 90)
-                        < parameters.params["T_stacking_angle_tolerance"]
-                        or fabs(angle_between_planes - 270)
-                        < parameters.params["T_stacking_angle_tolerance"]
-                    ):
-                        # so they're more or less perpendicular, it's probably
-                        # a pi-edge interaction
-
-                        # having looked at many structures, I noticed the
-                        # algorithm was identifying T-pi reactions when the
-                        # two rings were in fact quite distant, often with
-                        # other atoms in between. Eye-balling it, requiring
-                        # that at their closest they be at least 5 A apart
-                        # seems to separate the good T's from the bad
-                        min_dist = 100.0
-                        for ligand_ind in aromatic1.indices:
-                            ligand_at = ligand.all_atoms[ligand_ind]
-                            for receptor_ind in aromatic2.indices:
-                                receptor_at = receptor.all_atoms[receptor_ind]
-                                dist = ligand_at.coordinates.dist_to(
-                                    receptor_at.coordinates
-                                )
-                                if dist < min_dist:
-                                    min_dist = dist
-
-                        if (
-                            min_dist
-                            <= parameters.params["T_stacking_closest_dist_cutoff"]
-                        ):
-                            # so at their closest points, the two rings come
-                            # within 5 A of each other.
-
-                            # okay, is the ligand pi pointing into the
-                            # receptor pi, or the other way around? first,
-                            # project the center of the ligand pi onto the
-                            # plane of the receptor pi, and vs. versa
-
-                            # This could be directional somehow, like a
-                            # hydrogen bond.
-
-                            pt_on_receptor_plane = binana.mathfuncs.project_point_onto_plane(
-                                aromatic1.center, aromatic2.plane_coeff
-                            )
-                            pt_on_lignad_plane = binana.mathfuncs.project_point_onto_plane(
-                                aromatic2.center, aromatic1.plane_coeff
-                            )
-
-                            # now, if it's a true pi-T interaction, this
-                            # projected point should fall within the ring
-                            # whose plane it's been projected into.
-                            if (
-                                pt_on_receptor_plane.dist_to(aromatic2.center)
-                                <= aromatic2.radius + pi_padding
-                            ) or (
-                                pt_on_lignad_plane.dist_to(aromatic1.center)
-                                <= aromatic1.radius + pi_padding
-                            ):
-                                # so it is in the ring on the projected plane.
-                                structure = receptor.all_atoms[
-                                    aromatic2.indices[0]
-                                ].structure
-                                if structure == "":
-                                    # since it could be interacting with a
-                                    # cofactor or something
-                                    structure = "OTHER"
-
-                                key = "T-SHAPED_" + structure
-
-                                for index in aromatic1.indices:
-                                    pdb_pi_T.add_new_atom(
-                                        ligand.all_atoms[index].copy_of()
-                                    )
-                                for index in aromatic2.indices:
-                                    pdb_pi_T.add_new_atom(
-                                        receptor.all_atoms[index].copy_of()
-                                    )
-
-                                self.hashtable_entry_add_one(PI_interactions, key)
-
-                                T_stacking_labels.append(
-                                    (
-                                        "["
-                                        + " / ".join(
-                                            [
-                                                ligand.all_atoms[index].string_id()
-                                                for index in aromatic1.indices
-                                            ]
-                                        )
-                                        + "]",
-                                        "["
-                                        + " / ".join(
-                                            [
-                                                receptor.all_atoms[index].string_id()
-                                                for index in aromatic2.indices
-                                            ]
-                                        )
-                                        + "]",
-                                    )
-                                )
+        pi_pi = calculate_pi_pi(
+            ligand,
+            receptor,
+            parameters.params["pi_pi_interacting_dist_cutoff"],
+            parameters.params["pi_stacking_angle_tolerance"],
+            parameters.params["T_stacking_angle_tolerance"],
+            parameters.params["T_stacking_closest_dist_cutoff"],
+            pi_padding,
+        )
 
         # Now identify pi-cation interactions
-        pdb_pi_cat = binana.Mol()
-        pi_cat_labels = []
+        pi_cat = calculate_pi_cat(
+            ligand, receptor, parameters.params["cation_pi_dist_cutoff"], pi_padding
+        )
 
-        for aromatic in receptor.aromatic_rings:
-            for charged in ligand.charges:
-                if charged.positive == True:
-                    # so only consider positive charges
-                    if (
-                        charged.coordinates.dist_to(aromatic.center)
-                        < parameters.params["cation_pi_dist_cutoff"]
-                    ):
-                        # distance cutoff based on "Cation-pi interactions in
-                        # structural biology." project the charged onto the
-                        # plane of the aromatic
-                        charge_projected = binana.mathfuncs.project_point_onto_plane(
-                            charged.coordinates, aromatic.plane_coeff
-                        )
-
-                        if (
-                            charge_projected.dist_to(aromatic.center)
-                            < aromatic.radius + pi_padding
-                        ):
-                            structure = receptor.all_atoms[
-                                aromatic.indices[0]
-                            ].structure
-                            if structure == "":
-                                # since it could be interacting with a
-                                # cofactor or something
-                                structure = "OTHER"
-
-                            key = "PI-CATION_LIGAND-CHARGED_" + structure
-
-                            for index in aromatic.indices:
-                                pdb_pi_cat.add_new_atom(
-                                    receptor.all_atoms[index].copy_of()
-                                )
-                            for index in charged.indices:
-                                pdb_pi_cat.add_new_atom(
-                                    ligand.all_atoms[index].copy_of()
-                                )
-
-                            self.hashtable_entry_add_one(PI_interactions, key)
-
-                            pi_cat_labels.append(
-                                (
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            ligand.all_atoms[index].string_id()
-                                            for index in charged.indices
-                                        ]
-                                    )
-                                    + "]",
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            receptor.all_atoms[index].string_id()
-                                            for index in aromatic.indices
-                                        ]
-                                    )
-                                    + "]",
-                                )
-                            )
-
-        for aromatic in ligand.aromatic_rings:
-            # now it's the ligand that has the aromatic group
-            for charged in receptor.charges:
-                if charged.positive == True:
-                    # so only consider positive charges
-                    if (
-                        charged.coordinates.dist_to(aromatic.center)
-                        < parameters.params["cation_pi_dist_cutoff"]
-                    ):
-                        # distance cutoff based on "Cation-pi interactions in
-                        # structural biology." project the charged onto the
-                        # plane of the aromatic
-                        charge_projected = binana.mathfuncs.project_point_onto_plane(
-                            charged.coordinates, aromatic.plane_coeff
-                        )
-
-                        if (
-                            charge_projected.dist_to(aromatic.center)
-                            < aromatic.radius + pi_padding
-                        ):
-                            structure = receptor.all_atoms[charged.indices[0]].structure
-                            if structure == "":
-                                # since it could be interacting with a
-                                # cofactor or something
-                                structure = "OTHER"
-
-                            key = "PI-CATION_RECEPTOR-CHARGED_" + structure
-
-                            for index in aromatic.indices:
-                                pdb_pi_cat.add_new_atom(
-                                    ligand.all_atoms[index].copy_of()
-                                )
-                            for index in charged.indices:
-                                pdb_pi_cat.add_new_atom(
-                                    receptor.all_atoms[index].copy_of()
-                                )
-
-                            self.hashtable_entry_add_one(PI_interactions, key)
-
-                            pi_cat_labels.append(
-                                (
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            ligand.all_atoms[index].string_id()
-                                            for index in aromatic.indices
-                                        ]
-                                    )
-                                    + "]",
-                                    "["
-                                    + " / ".join(
-                                        [
-                                            receptor.all_atoms[index].string_id()
-                                            for index in charged.indices
-                                        ]
-                                    )
-                                    + "]",
-                                )
-                            )
+        # The original implementation merged all pi-related interactions into
+        # one. Do that here too for backwards compatibility.
+        for key in pi_cat["counts"].keys():
+            pi_pi["counts"][key] = pi_cat["counts"][key]
 
         # now count the number of salt bridges
-        pdb_salt_bridges = binana.Mol()
-        salt_bridges = {}
-        salt_bridge_labels = []
-        for receptor_charge in receptor.charges:
-            for ligand_charge in ligand.charges:
-                if ligand_charge.positive != receptor_charge.positive:
-                    # so they have oppositve charges
-                    if (
-                        ligand_charge.coordinates.dist_to(receptor_charge.coordinates)
-                        < parameters.params["salt_bridge_dist_cutoff"]
-                    ):
-                        # 4  is good cutoff for salt bridges according to
-                        # "Close-Range Electrostatic Interactions in
-                        # Proteins", but looking at complexes, I decided to go
-                        # with 5.5 A
-                        structure = receptor.all_atoms[
-                            receptor_charge.indices[0]
-                        ].structure
-                        if structure == "":
-                            # since it could be interacting with a cofactor or
-                            # something
-                            structure = "OTHER"
-
-                        key = "SALT-BRIDGE_" + structure
-
-                        for index in receptor_charge.indices:
-                            pdb_salt_bridges.add_new_atom(
-                                receptor.all_atoms[index].copy_of()
-                            )
-                        for index in ligand_charge.indices:
-                            pdb_salt_bridges.add_new_atom(
-                                ligand.all_atoms[index].copy_of()
-                            )
-
-                        self.hashtable_entry_add_one(salt_bridges, key)
-
-                        salt_bridge_labels.append(
-                            (
-                                "["
-                                + " / ".join(
-                                    [
-                                        ligand.all_atoms[index].string_id()
-                                        for index in ligand_charge.indices
-                                    ]
-                                )
-                                + "]",
-                                "["
-                                + " / ".join(
-                                    [
-                                        receptor.all_atoms[index].string_id()
-                                        for index in receptor_charge.indices
-                                    ]
-                                )
-                                + "]",
-                            )
-                        )
+        salt_bridges = calculate_salt_bridges(
+            ligand, receptor, parameters.params["salt_bridge_dist_cutoff"]
+        )
 
         # Now save the files
-        # if an output directory is specified, and it doesn't exist, create it
-        if parameters.params["output_dir"] != "":
-            if not os.path.exists(parameters.params["output_dir"]):
-                os.mkdir(parameters.params["output_dir"])
-
-        # call json_file
-        # have it return the dictionary and dump to a json file
-        json_output = binana.Output.json_out.json_file(
-            close_contacts_labels,
-            contacts_labels,
-            hbonds_labels,
-            hydrophobic_labels,
-            pi_stacking_labels,
-            T_stacking_labels,
-            pi_cat_labels,
-            salt_bridge_labels,
-            self.ligfi,
-            self.recfi,
-        )
-
-        print("json output:")
-        print(json_output)
-
-        output = binana.Output.log.make_log(
+        write_all_output(
             parameters,
             ligand,
-            ligand_atom_types,
-            ligand_receptor_atom_type_pairs_less_than_two_half,
-            close_contacts_labels,
-            ligand_receptor_atom_type_pairs_less_than_four,
-            contacts_labels,
-            ligand_receptor_atom_type_pairs_electrostatic,
-            active_site_flexibility,
-            hbonds,
-            hbonds_labels,
+            receptor,
+            closest,
+            close,
+            hydrogen_bonds,
             hydrophobics,
-            hydrophobic_labels,
-            PI_interactions,
-            pi_stacking_labels,
-            T_stacking_labels,
-            pi_cat_labels,
+            pi_pi,
             salt_bridges,
-            salt_bridge_labels,
+            ligand_atom_types,
+            electrostatic_energies,
+            flexibility,
+            pi_cat,
         )
-
-        pdb_close_contacts.set_resname("CCN")
-        pdb_contacts.set_resname("CON")
-        pdb_contacts_alpha_helix.set_resname("ALP")
-        pdb_contacts_beta_sheet.set_resname("BET")
-        pdb_contacts_other_2nd_structure.set_resname("OTH")
-        pdb_back_bone.set_resname("BAC")
-        pdb_side_chain.set_resname("SID")
-        pdb_hydrophobic.set_resname("HYD")
-        pdb_hbonds.set_resname("HBN")
-        pdb_pistack.set_resname("PIS")
-        pdb_pi_T.set_resname("PIT")
-        pdb_pi_cat.set_resname("PIC")
-        pdb_salt_bridges.set_resname("SAL")
-        ligand.set_resname("LIG")
-
-        if parameters.params["output_dir"] != "":
-            binana.Output.Dir.pdbs.output_dir_pdbs(
-                pdb_close_contacts,
-                parameters,
-                pdb_contacts,
-                pdb_contacts_alpha_helix,
-                pdb_contacts_beta_sheet,
-                pdb_contacts_other_2nd_structure,
-                pdb_back_bone,
-                pdb_side_chain,
-                pdb_hydrophobic,
-                pdb_hbonds,
-                pdb_pistack,
-                pdb_pi_T,
-                pdb_pi_cat,
-                pdb_salt_bridges,
-                ligand,
-                receptor,
-            )
-            binana.Output.Dir.vmd_state.vmd_state_file(parameters)
-
-        if parameters.params["output_file"] != "":
-            binana.Output.single_file.make_single_file(
-                parameters,
-                receptor,
-                ligand,
-                pdb_close_contacts,
-                pdb_contacts,
-                pdb_contacts_alpha_helix,
-                pdb_contacts_beta_sheet,
-                pdb_contacts_other_2nd_structure,
-                pdb_back_bone,
-                pdb_side_chain,
-                pdb_hydrophobic,
-                pdb_hbonds,
-                pdb_pistack,
-                pdb_pi_T,
-                pdb_pi_cat,
-                pdb_salt_bridges,
-                output,
-            )
 
 
 def save_to_fake_fs(filename, text):

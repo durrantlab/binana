@@ -23,8 +23,8 @@ def make_single_file(
     parameters,
     receptor,
     ligand,
+    pdb_closest_contacts,
     pdb_close_contacts,
-    pdb_contacts,
     pdb_contacts_alpha_helix,
     pdb_contacts_beta_sheet,
     pdb_contacts_other_2nd_structure,
@@ -60,52 +60,52 @@ def make_single_file(
 
     output = (
         output
-        + receptor.save_PDB_String()
+        + receptor.save_pdb_string()
         + "TER\n"
-        + ligand.save_PDB_String()
+        + ligand.save_pdb_string()
         + "TER\n"
-        + pdb_close_contacts.save_PDB_String()
-        + "TER\n"
-    )
-    output = (
-        output
-        + pdb_contacts.save_PDB_String()
-        + "TER\n"
-        + pdb_contacts_alpha_helix.save_PDB_String()
-        + "TER\n"
-        + pdb_contacts_beta_sheet.save_PDB_String()
+        + pdb_closest_contacts.save_pdb_string()
         + "TER\n"
     )
     output = (
         output
-        + pdb_contacts_other_2nd_structure.save_PDB_String()
+        + pdb_close_contacts.save_pdb_string()
         + "TER\n"
-        + pdb_back_bone.save_PDB_String()
+        + pdb_contacts_alpha_helix.save_pdb_string()
         + "TER\n"
-        + pdb_side_chain.save_PDB_String()
-        + "TER\n"
-    )
-    output = (
-        output
-        + pdb_hydrophobic.save_PDB_String()
-        + "TER\n"
-        + pdb_hbonds.save_PDB_String()
-        + "TER\n"
-        + pdb_pistack.save_PDB_String()
-        + "TER\n"
-        + pdb_pi_T.save_PDB_String()
+        + pdb_contacts_beta_sheet.save_pdb_string()
         + "TER\n"
     )
     output = (
         output
-        + pdb_pi_cat.save_PDB_String()
+        + pdb_contacts_other_2nd_structure.save_pdb_string()
         + "TER\n"
-        + pdb_salt_bridges.save_PDB_String()
+        + pdb_back_bone.save_pdb_string()
+        + "TER\n"
+        + pdb_side_chain.save_pdb_string()
+        + "TER\n"
+    )
+    output = (
+        output
+        + pdb_hydrophobic.save_pdb_string()
+        + "TER\n"
+        + pdb_hbonds.save_pdb_string()
+        + "TER\n"
+        + pdb_pistack.save_pdb_string()
+        + "TER\n"
+        + pdb_pi_T.save_pdb_string()
+        + "TER\n"
+    )
+    output = (
+        output
+        + pdb_pi_cat.save_pdb_string()
+        + "TER\n"
+        + pdb_salt_bridges.save_pdb_string()
         + "TER\n"
     )
     """# call json_file
     # have it return the dictionary and dump to a json file
-    json_output = self.json_file(close_contacts_labels, contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
+    json_output = self.json_file(closest_contacts_labels, close_contacts_labels, hbonds_labels, hydrophobic_labels, pi_stacking_labels, T_stacking_labels, pi_cat_labels, salt_bridge_labels)
     print(json_output)"""
 
     f = openFile(parameters.params["output_file"], "w")

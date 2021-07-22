@@ -1,5 +1,5 @@
 # Clean up old files.
-ls | grep -v "copy.sh" | awk '{print "rm " $1}' | bash
+ls | grep -v "compile_and_copy_here.sh" | awk '{print "rm " $1}' | bash
 
 # Compile the python to javascript. Assumes transcrypt installed.
 cd ../../../javascript/

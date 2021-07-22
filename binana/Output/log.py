@@ -46,8 +46,8 @@ def get_parameters(parameters, output):
 
 def get_close_contacts_dist1_cutoff(
     parameters,
-    ligand_receptor_atom_type_pairs_less_than_two_half,
-    close_contacts_labels,
+    ligand_receptor_atom_type_pairs_closest,
+    closest_contacts_labels,
     output,
 ):
     output = output + preface + "" + "\n"
@@ -61,8 +61,45 @@ def get_close_contacts_dist1_cutoff(
     )
     output = output + preface + "    Atom Type | Atom Type | Count" + "\n"
     output = output + preface + "   -----------|-----------|-------" + "\n"
-    for key in ligand_receptor_atom_type_pairs_less_than_two_half.keys():
-        value = ligand_receptor_atom_type_pairs_less_than_two_half[key]
+    for key in ligand_receptor_atom_type_pairs_closest.keys():
+        value = ligand_receptor_atom_type_pairs_closest[key]
+        key = key.split("_")
+        output = (
+            output
+            + preface
+            + "   "
+            + center(key[0], 11)
+            + "|"
+            + center(key[1], 11)
+            + "|"
+            + center(str(value), 7)
+            + "\n"
+        )
+
+    output = output + preface + "\n" + preface + "Raw data:\n"
+    for atom_pairs in closest_contacts_labels:
+        output = (
+            output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
+        )
+    return output
+
+
+def get_close_contacts_dist2_cutoff(
+    parameters, ligand_receptor_atom_type_pairs_close, close_contacts_labels, output
+):
+    output = output + preface + "\n\n"
+    output = (
+        output
+        + preface
+        + "Atom-type pair counts within "
+        + str(parameters.params["close_contacts_dist2_cutoff"])
+        + " angstroms:"
+        + "\n"
+    )
+    output = output + preface + "    Atom Type | Atom Type | Count" + "\n"
+    output = output + preface + "   -----------|-----------|-------" + "\n"
+    for key in ligand_receptor_atom_type_pairs_close.keys():
+        value = ligand_receptor_atom_type_pairs_close[key]
         key = key.split("_")
         output = (
             output
@@ -78,43 +115,6 @@ def get_close_contacts_dist1_cutoff(
 
     output = output + preface + "\n" + preface + "Raw data:\n"
     for atom_pairs in close_contacts_labels:
-        output = (
-            output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
-        )
-    return output
-
-
-def get_close_contacts_dist2_cutoff(
-    parameters, ligand_receptor_atom_type_pairs_less_than_four, contacts_labels, output
-):
-    output = output + preface + "\n\n"
-    output = (
-        output
-        + preface
-        + "Atom-type pair counts within "
-        + str(parameters.params["close_contacts_dist2_cutoff"])
-        + " angstroms:"
-        + "\n"
-    )
-    output = output + preface + "    Atom Type | Atom Type | Count" + "\n"
-    output = output + preface + "   -----------|-----------|-------" + "\n"
-    for key in ligand_receptor_atom_type_pairs_less_than_four.keys():
-        value = ligand_receptor_atom_type_pairs_less_than_four[key]
-        key = key.split("_")
-        output = (
-            output
-            + preface
-            + "   "
-            + center(key[0], 11)
-            + "|"
-            + center(key[1], 11)
-            + "|"
-            + center(str(value), 7)
-            + "\n"
-        )
-
-    output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in contacts_labels:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
@@ -433,19 +433,19 @@ def make_log(
     parameters,
     ligand,
     ligand_atom_types,
-    ligand_receptor_atom_type_pairs_less_than_two_half,
+    ligand_receptor_atom_type_pairs_closest,
+    closest_contacts_labels,
+    ligand_receptor_atom_type_pairs_close,
     close_contacts_labels,
-    ligand_receptor_atom_type_pairs_less_than_four,
-    contacts_labels,
     ligand_receptor_atom_type_pairs_electrostatic,
     active_site_flexibility,
     hbonds,
     hbonds_labels,
     hydrophobics,
     hydrophobic_labels,
-    PI_interactions,
+    pi_interactions,
     pi_stacking_labels,
-    T_stacking_labels,
+    t_stacking_labels,
     pi_cat_labels,
     salt_bridges,
     salt_bridge_labels,
@@ -453,8 +453,8 @@ def make_log(
     """'# old output format, for reference
 
     output = ""
-    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist1_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_less_than_two_half) + "\n"
-    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist2_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_less_than_four) + "\n"
+    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist1_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_closest) + "\n"
+    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist2_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_close) + "\n"
     output = output + "Ligand atom types: " + str(ligand_atom_types) + "\n"
     output = output + "Electrostatic energy by atom-type pair, in J/mol: " + str(ligand_receptor_atom_type_pairs_electrostatic) + "\n"
     output = output + "Number of rotatable bonds in ligand: " + str(ligand.rotateable_bonds_count) + "\n"
@@ -473,14 +473,14 @@ def make_log(
     # a description of the analysis
     output = get_close_contacts_dist1_cutoff(
         parameters,
-        ligand_receptor_atom_type_pairs_less_than_two_half,
-        close_contacts_labels,
+        ligand_receptor_atom_type_pairs_closest,
+        closest_contacts_labels,
         output,
     )
     output = get_close_contacts_dist2_cutoff(
         parameters,
-        ligand_receptor_atom_type_pairs_less_than_four,
-        contacts_labels,
+        ligand_receptor_atom_type_pairs_close,
+        close_contacts_labels,
         output,
     )
     output = get_ligand_atom_types(
@@ -491,10 +491,10 @@ def make_log(
     output = get_hbonds(hbonds, hbonds_labels, output)
     output = get_hydrophobics(hydrophobics, hydrophobic_labels, output)
 
-    get_pi_stacking(PI_interactions, pi_stacking_labels, output)
-    get_T_stacking(PI_interactions, T_stacking_labels, output)
-    get_pi_cation(PI_interactions, pi_cat_labels, output)
-    get_salt_bridges(salt_bridges, salt_bridge_labels, output)
+    output = get_pi_stacking(pi_interactions, pi_stacking_labels, output)
+    output = get_T_stacking(pi_interactions, t_stacking_labels, output)
+    output = get_pi_cation(pi_interactions, pi_cat_labels, output)
+    output = get_salt_bridges(salt_bridges, salt_bridge_labels, output)
 
     # Output some files/to the screen.
     if parameters.params["output_dir"] != "":

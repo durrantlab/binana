@@ -8,6 +8,7 @@ import math
 # Python
 import textwrap
 from math import fabs
+
 openFile = open
 
 # __pragma__ ('noskip')
@@ -81,9 +82,9 @@ class Mol:
     # Param max_y (float): maximum y coordinate
     # Param min_z (float): minimum z coordinate
     # Param max_z (float): maximum z coordinate
-    def load_PDB(
+    def load_pdb(
         self,
-        file_name,
+        filename,
         min_x=-9999.99,
         max_x=9999.99,
         min_y=-9999.99,
@@ -96,8 +97,10 @@ class Mol:
 
         self.__init__()
 
+        self.filename = filename
+
         # Now load the file into a list
-        file = openFile(file_name, "r")
+        file = openFile(filename, "r")
         lines = file.readlines()
         file.close()
 
@@ -111,7 +114,7 @@ class Mol:
             if line[:3] == "END" and line[:7] != "ENDROOT" and line[:9] != "ENDBRANCH":
                 t = textwrap.wrap(
                     "WARNING: END or ENDMDL term found in "
-                    + file_name
+                    + filename
                     + ". Everything after the first instance of this term will be ignored. \
                     If any of your PDBQT files have multiple frames/poses, please partition them \
                     into separate files using vina_split and feed each of the the single-frame files into Binana separately.",
@@ -124,78 +127,77 @@ class Mol:
             if "between atoms" in line and " A " in line:
                 self.rotateable_bonds_count = self.rotateable_bonds_count + 1
 
-            if len(line) >= 7:
-                if line[0:4] == "ATOM" or line[0:6] == "HETATM":
-                    # Load atom data (coordinates, etc.)
-                    TempAtom = binana.Atom()
-                    TempAtom.read_PDB_line(line)
+            if len(line) >= 7 and (line[0:4] == "ATOM" or line[0:6] == "HETATM"):
+                # Load atom data (coordinates, etc.)
+                temp_atom = binana.Atom()
+                temp_atom.read_PDB_line(line)
+
+                if (
+                    temp_atom.coordinates.x > min_x
+                    and temp_atom.coordinates.x < max_x
+                    and temp_atom.coordinates.y > min_y
+                    and temp_atom.coordinates.y < max_y
+                    and temp_atom.coordinates.z > min_z
+                    and temp_atom.coordinates.z < max_z
+                ):
+
+                    if self.max_x < temp_atom.coordinates.x:
+                        self.max_x = temp_atom.coordinates.x
+                    if self.max_y < temp_atom.coordinates.y:
+                        self.max_y = temp_atom.coordinates.y
+                    if self.max_z < temp_atom.coordinates.z:
+                        self.max_z = temp_atom.coordinates.z
+
+                    if self.min_x > temp_atom.coordinates.x:
+                        self.min_x = temp_atom.coordinates.x
+                    if self.min_y > temp_atom.coordinates.y:
+                        self.min_y = temp_atom.coordinates.y
+                    if self.min_z > temp_atom.coordinates.z:
+                        self.min_z = temp_atom.coordinates.z
+
+                    # this string uniquely identifies each atom
+                    key = (
+                        temp_atom.atom_name.strip()
+                        + "_"
+                        + str(temp_atom.resid)
+                        + "_"
+                        + temp_atom.residue.strip()
+                        + "_"
+                        + temp_atom.chain.strip()
+                    )
 
                     if (
-                        TempAtom.coordinates.x > min_x
-                        and TempAtom.coordinates.x < max_x
-                        and TempAtom.coordinates.y > min_y
-                        and TempAtom.coordinates.y < max_y
-                        and TempAtom.coordinates.z > min_z
-                        and TempAtom.coordinates.z < max_z
+                        key in atom_already_loaded
+                        and temp_atom.residue.strip() in self.protein_resnames
                     ):
-
-                        if self.max_x < TempAtom.coordinates.x:
-                            self.max_x = TempAtom.coordinates.x
-                        if self.max_y < TempAtom.coordinates.y:
-                            self.max_y = TempAtom.coordinates.y
-                        if self.max_z < TempAtom.coordinates.z:
-                            self.max_z = TempAtom.coordinates.z
-
-                        if self.min_x > TempAtom.coordinates.x:
-                            self.min_x = TempAtom.coordinates.x
-                        if self.min_y > TempAtom.coordinates.y:
-                            self.min_y = TempAtom.coordinates.y
-                        if self.min_z > TempAtom.coordinates.z:
-                            self.min_z = TempAtom.coordinates.z
-
-                        # this string uniquely identifies each atom
-                        key = (
-                            TempAtom.atom_name.strip()
-                            + "_"
-                            + str(TempAtom.resid)
-                            + "_"
-                            + TempAtom.residue.strip()
-                            + "_"
-                            + TempAtom.chain.strip()
+                        # so this is a protein atom that has already been
+                        # loaded once
+                        self.printout(
+                            'Warning: Duplicate protein atom detected: "'
+                            + temp_atom.line.strip()
+                            + '". Not loading this duplicate.'
                         )
+                        print("")
 
-                        if (
-                            key in atom_already_loaded
-                            and TempAtom.residue.strip() in self.protein_resnames
-                        ):
-                            # so this is a protein atom that has already been
-                            # loaded once
-                            self.printout(
-                                'Warning: Duplicate protein atom detected: "'
-                                + TempAtom.line.strip()
-                                + '". Not loading this duplicate.'
-                            )
-                            print("")
+                    if (
+                        key not in atom_already_loaded
+                        or not temp_atom.residue.strip() in self.protein_resnames
+                    ):
+                        # So either the atom hasn't been loaded, or else
+                        # it's a non-protein atom So note that non-protein
+                        # atoms can have redundant names, but protein
+                        # atoms cannot. This is because protein residues
+                        # often contain rotamers
+                        atom_already_loaded.append(
+                            key
+                        )  # So each atom can only be loaded once. No rotamers.
+                        self.all_atoms[
+                            autoindex
+                        ] = temp_atom  # So you're actually reindexing everything here.
+                        if temp_atom.residue[-3:] not in self.protein_resnames:
+                            self.non_protein_atoms[autoindex] = temp_atom
 
-                        if (
-                            key not in atom_already_loaded
-                            or not TempAtom.residue.strip() in self.protein_resnames
-                        ):
-                            # So either the atom hasn't been loaded, or else
-                            # it's a non-protein atom So note that non-protein
-                            # atoms can have redundant names, but protein
-                            # atoms cannot. This is because protein residues
-                            # often contain rotamers
-                            atom_already_loaded.append(
-                                key
-                            )  # So each atom can only be loaded once. No rotamers.
-                            self.all_atoms[
-                                autoindex
-                            ] = TempAtom  # So you're actually reindexing everything here.
-                            if TempAtom.residue[-3:] not in self.protein_resnames:
-                                self.non_protein_atoms[autoindex] = TempAtom
-
-                            autoindex = autoindex + 1
+                        autoindex = autoindex + 1
 
         self.check_protein_format()
 
@@ -217,9 +219,9 @@ class Mol:
     # Write and save PDB line to a file
     # Param self (Mol)
     # Param file_name (string)
-    def save_PDB(self, file_name):
+    def save_pdb(self, file_name):
         f = openFile(file_name, "w")
-        towrite = self.save_PDB_String()
+        towrite = self.save_pdb_string()
         if towrite.strip() == "":
             # So no PDB is empty, VMD will load them all
             towrite = "ATOM      1  X   XXX             0.000   0.000   0.000                       X"
@@ -228,7 +230,7 @@ class Mol:
 
     # Returns a new PDB line
     # Param self (Mol)
-    def save_PDB_String(self):
+    def save_pdb_string(self):
         to_output = ""
 
         # Write coordinates of all atoms
