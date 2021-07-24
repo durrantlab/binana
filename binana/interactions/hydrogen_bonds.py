@@ -1,10 +1,10 @@
-from binana.cli_params.defaults import (
+from binana._cli_params.defaults import (
     HYDROGEN_BOND_ANGLE_CUTOFF,
     HYDROGEN_BOND_DIST_CUTOFF,
 )
 import binana
-from binana.load import get_ligand_receptor_dists
-from binana.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.load_ligand_receptor import _get_ligand_receptor_dists
+from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
 
 import __future__
 
@@ -22,24 +22,54 @@ from math import fabs
 """?
 # Transcrypt
 os = binana.os
-textwrap = binana.shim
+textwrap = binana._utils.shim
 sys = binana.sys
-from binana.shim import fabs
+from binana._utils.shim import fabs
 ?"""
 
 
-def calculate_hydrogen_bonds(
+def get_hydrogen_bonds(
     ligand,
     receptor,
     dist_cutoff=HYDROGEN_BOND_DIST_CUTOFF,
     angle_cutoff=HYDROGEN_BOND_ANGLE_CUTOFF,
 ):
+    """Identifies and counts the number of hydrogen bonds between the protein 
+    and ligand. Output is formatted like this::
+
+        {
+            'counts': {
+                'HDONOR_RECEPTOR_SIDECHAIN_OTHER': 1, 
+                'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
+            }, 
+            'labels': [
+                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'), 
+                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'), 
+                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
+            ], 
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
+        }
+
+    Args:
+        ligand (binana.Mol): The ligand molecule to analyze.
+        receptor (binana.Mol): The receptor molecule to analyze.
+        dist_cutoff (float, optional): The distance cutoff. Defaults to 
+            HYDROGEN_BOND_DIST_CUTOFF.
+        angle_cutoff (float, optional): The angle cutoff. Defaults to 
+            HYDROGEN_BOND_ANGLE_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), a binana.Mol object with
+        the participating atoms ("mol"), and the labels to use in the log file
+        ("labels").
+    """
+
     hbonds = {}
     pdb_hbonds = binana.Mol()
     hbonds_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
 
     # Now see if there's some sort of hydrogen bond between
     # these two atoms. distance cutoff = 4, angle cutoff = 40.

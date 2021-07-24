@@ -1,9 +1,9 @@
-from binana.cli_params.defaults import CATION_PI_DIST_CUTOFF, PI_PADDING_DIST
+from binana._cli_params.defaults import CATION_PI_DIST_CUTOFF, PI_PADDING_DIST
 import binana
-from binana.utils import hashtable_entry_add_one
+from binana._utils.utils import hashtable_entry_add_one
 
 
-def detect_pi_cat(
+def _detect_pi_cat(
     mol_with_aromatic,
     mol_with_pos_charge,
     cutoff,
@@ -92,14 +92,45 @@ def detect_pi_cat(
     return pi_cat, pdb_pi_cat, pi_cat_labels
 
 
-def calculate_pi_cat(
+def get_pi_cation(
     ligand, receptor, cutoff=CATION_PI_DIST_CUTOFF, pi_padding=PI_PADDING_DIST
 ):
+    """Identifies and counts the number of pi-cation interactions between the
+    protein and ligand. Output is formatted like this::
+
+        {
+            'counts': {
+                'PI-CATION_LIGAND-CHARGED_BETA': 2, 
+                'PI-CATION_LIGAND-CHARGED_OTHER': 2, 
+                'PI-CATION_RECEPTOR-CHARGED_OTHER': 1
+            }, 
+            'labels': [
+                ('[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]', '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]'),
+                ('[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]', '[A:TRP(43):CE2(32) / A:TRP(43):CD2(30) / A:TRP(43):CE3(33) / A:TRP(43):CZ3(35) / A:TRP(43):CH2(36) / A:TRP(43):CZ2(34)]')
+            ], 
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20488128>
+        }
+
+    Args:
+        ligand (binana.Mol): The ligand molecule to analyze.
+        receptor (binana.Mol): The receptor molecule to analyze.
+        cutoff (float, optional): The distance cutoff. Defaults to
+            CATION_PI_DIST_CUTOFF.
+        pi_padding (float, optional): The amount by which the radius of each pi
+            ring should be artificially expanded, to be sure to catch the 
+            interactions. Defaults to PI_PADDING_DIST.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), the binana.Mol object with
+        the participating atoms ("mol"), and the labels to use in the log file
+        ("labels").
+    """
+
     pi_cat = {}
     pdb_pi_cat = binana.Mol()
     pi_cat_labels = []
 
-    pi_cat, pdb_pi_cat, pi_cat_labels = detect_pi_cat(
+    pi_cat, pdb_pi_cat, pi_cat_labels = _detect_pi_cat(
         receptor,
         ligand,
         cutoff,
@@ -109,7 +140,7 @@ def calculate_pi_cat(
         pi_cat_labels,
         "LIGAND",
     )
-    pi_cat, pdb_pi_cat, pi_cat_labels = detect_pi_cat(
+    pi_cat, pdb_pi_cat, pi_cat_labels = _detect_pi_cat(
         ligand,
         receptor,
         cutoff,

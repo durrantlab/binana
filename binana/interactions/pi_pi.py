@@ -1,7 +1,16 @@
-from binana.cli_params.defaults import PI_PADDING_DIST, PI_PI_INTERACTING_DIST_CUTOFF, PI_STACKING_ANGLE_TOLERANCE, T_STACKING_ANGLE_TOLERANCE, T_STACKING_CLOSEST_DIST_CUTOFF
+from binana._cli_params.defaults import (
+    PI_PADDING_DIST,
+    PI_PI_INTERACTING_DIST_CUTOFF,
+    PI_STACKING_ANGLE_TOLERANCE,
+    T_STACKING_ANGLE_TOLERANCE,
+    T_STACKING_CLOSEST_DIST_CUTOFF,
+)
 import binana
-from binana.load import get_ligand_receptor_aromatic_dists, get_ligand_receptor_dists
-from binana.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.load_ligand_receptor import (
+    _get_ligand_receptor_aromatic_dists,
+    _get_ligand_receptor_dists,
+)
+from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
 
 # __pragma__ ('skip')
 # Python
@@ -15,13 +24,13 @@ from math import fabs
 """?
 # Transcrypt
 os = binana.os
-textwrap = binana.shim
+textwrap = binana._utils.shim
 sys = binana.sys
-from binana.shim import fabs
+from binana._utils.shim import fabs
 ?"""
 
 
-def t_stacking(
+def _t_stacking(
     ligand,
     receptor,
     ligand_aromatic,
@@ -97,14 +106,15 @@ def t_stacking(
                 hashtable_entry_add_one(pi_pi_interactions, key)
 
                 t_stacking_labels.append(
-                    make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_aromatic)
+                    _make_pi_pi_interaction_label(
+                        ligand, ligand_aromatic, receptor, receptor_aromatic
+                    )
                 )
-
 
     return pi_pi_interactions, pdb_pi_t, t_stacking_labels
 
 
-def make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_aromatic):
+def _make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_aromatic):
     return (
         "["
         + " / ".join(
@@ -122,7 +132,7 @@ def make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_aro
     )
 
 
-def pi_pi_detect_by_projecting_all_ring_atoms(
+def _pi_pi_detect_by_projecting_all_ring_atoms(
     mol1, mol1_aromatic, mol2_aromatic, pi_padding
 ):
     for mol1_ring_index in mol1_aromatic.indices:
@@ -142,7 +152,7 @@ def pi_pi_detect_by_projecting_all_ring_atoms(
     return False
 
 
-def pi_stacking(
+def _pi_stacking(
     ligand,
     receptor,
     ligand_aromatic,
@@ -166,7 +176,7 @@ def pi_stacking(
         # other, fall within that other ring?
 
         # Check the ligand atoms projected onto the receptor ring.
-        pi_pi = pi_pi_detect_by_projecting_all_ring_atoms(
+        pi_pi = _pi_pi_detect_by_projecting_all_ring_atoms(
             ligand, ligand_aromatic, receptor_aromatic, pi_padding
         )
 
@@ -174,7 +184,7 @@ def pi_stacking(
         # need to keep trying.
         if not pi_pi:
             # Check the receptor atoms projected onto the ligand ring.
-            pi_pi = pi_pi_detect_by_projecting_all_ring_atoms(
+            pi_pi = _pi_pi_detect_by_projecting_all_ring_atoms(
                 receptor, receptor_aromatic, ligand_aromatic, pi_padding
             )
 
@@ -194,7 +204,7 @@ def pi_stacking(
             hashtable_entry_add_one(pi_pi_interactions, key)
 
             pi_stacking_labels.append(
-                make_pi_pi_interaction_label(
+                _make_pi_pi_interaction_label(
                     ligand, ligand_aromatic, receptor, receptor_aromatic
                 )
             )
@@ -204,7 +214,7 @@ def pi_stacking(
     return pi_pi_interactions, pdb_pistack, pi_stacking_labels, pi_stacking_detected
 
 
-def calculate_pi_pi(
+def get_pi_pi(
     ligand,
     receptor,
     pi_pi_general_dist_cutoff=PI_PI_INTERACTING_DIST_CUTOFF,
@@ -213,20 +223,65 @@ def calculate_pi_pi(
     t_stacking_closest_dist_cutoff=T_STACKING_CLOSEST_DIST_CUTOFF,
     pi_padding=PI_PADDING_DIST,
 ):
+    """Identifies and counts the number of pi-pi stacking and T-shaped
+    interactions between the protein and ligand. Output is formatted like
+    this::
+
+        {
+            'labels': {
+                'T_stacking': [
+                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:PHE(233):CG(657) / A:PHE(233):CD1(658) / A:PHE(233):CE1(660) / A:PHE(233):CZ(662) / A:PHE(233):CE2(661) / A:PHE(233):CD2(659)]'),
+                    ('[A:CHT(1):C2(17) / A:CHT(1):O1(18) / A:CHT(1):C5(19) / A:CHT(1):C4(20) / A:CHT(1):C3(21)]', '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]')
+                ],
+                'pi_stacking': [
+                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:TRP(90):CG(100) / A:TRP(90):CD1(101) / A:TRP(90):NE1(103) / A:TRP(90):CE2(104) / A:TRP(90):CD2(102)]'),
+                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:TRP(90):CE2(104) / A:TRP(90):CD2(102) / A:TRP(90):CE3(105) / A:TRP(90):CZ3(107) / A:TRP(90):CH2(108) / A:TRP(90):CZ2(106)]')
+                ]
+            },
+            'counts': {
+                'STACKING_BETA': 2,
+                'T-SHAPED_OTHER': 3
+            },
+            'mols': {
+                'T_stacking': <binana._structure.mol.Mol instance at 0x7feb20478fc8>,
+                'pi_stacking': <binana._structure.mol.Mol instance at 0x7feb20478f80>
+            }
+        }
+
+    Args:
+        ligand (binana.Mol): The ligand molecule to analyze.
+        receptor (binana.Mol): The receptor molecule to analyze.
+        pi_pi_general_dist_cutoff (float, optional): The distance cutoff used
+            for all pi-pi interactions (stacking and T-shaped). Defaults to
+            PI_PI_INTERACTING_DIST_CUTOFF.
+        pi_stacking_angle_tol (float, optional): The angle tolerance for the
+            pi-pi stacking interactions. Defaults to
+            PI_STACKING_ANGLE_TOLERANCE.
+        t_stacking_angle_tol (float, optional): The angle tolerance for the
+            T-shaped interactions. Defaults to T_STACKING_ANGLE_TOLERANCE.
+        t_stacking_closest_dist_cutoff (float, optional): The distance cutoff
+            for T-shaped interactions specifically. Defaults to
+            T_STACKING_CLOSEST_DIST_CUTOFF.
+        pi_padding (float, optional): The amount by which the radius of each pi
+            ring should be artificially expanded, to be sure to catch the
+            interactions. Defaults to PI_PADDING_DIST.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), the binana.Mol objects with
+        the participating atoms ("mols"), and the labels to use in the log file
+        ("labels").
+    """
+
     # Calculate the distances.
-    ligand_receptor_aromatic_dists = get_ligand_receptor_aromatic_dists(
+    ligand_receptor_aromatic_dists = _get_ligand_receptor_aromatic_dists(
         ligand, receptor, pi_pi_general_dist_cutoff
     )
 
     pi_interactions = {}
-    print("pi_interactions also used in other functions. Need to find way to unify. I think you should keep them seprate in each of these functions, but then merge them all in start.py.")
-    # import time; time.sleep(5)
-
     pdb_pistack = binana.Mol()
     pdb_pi_t = binana.Mol()
     pi_stacking_labels = []
     t_stacking_labels = []
-
 
     # "PI-Stacking Interactions ALIVE AND WELL IN PROTEINS" says distance of 7.5
     # A is good cutoff. This seems really big to me, except that pi-pi
@@ -245,7 +300,7 @@ def calculate_pi_pi(
             pdb_pistack,
             pi_stacking_labels,
             pi_stacking_detected,
-        ) = pi_stacking(
+        ) = _pi_stacking(
             ligand,
             receptor,
             ligand_aromatic,
@@ -259,7 +314,7 @@ def calculate_pi_pi(
         )
 
         if not pi_stacking_detected:
-            pi_interactions, pdb_pi_t, t_stacking_labels = t_stacking(
+            pi_interactions, pdb_pi_t, t_stacking_labels = _t_stacking(
                 ligand,
                 receptor,
                 ligand_aromatic,

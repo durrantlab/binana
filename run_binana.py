@@ -1,7 +1,7 @@
 import binana
 
 def start():
-    binana.start.main()
+    binana.run()
 
 # __pragma__ ('skip')
 # Python

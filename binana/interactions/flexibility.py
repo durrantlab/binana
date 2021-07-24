@@ -1,10 +1,44 @@
-from binana.cli_params.defaults import ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF
+from binana._cli_params.defaults import ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF
 import binana
-from binana.load import get_ligand_receptor_dists
-from binana.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.load_ligand_receptor import _get_ligand_receptor_dists
+from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
 
 
-def calculate_flexibility(ligand, receptor, cutoff=ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF):
+def get_flexibility(ligand, receptor, cutoff=ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF):
+    """Categorizes ligand-adjacent receptor atoms as belonging to a sidechain
+    or backbone, as well as an alpha helix, beta sheet, or other secondary
+    structure. Output is formatted like this::
+
+        {
+            
+            'counts': {
+                'SIDECHAIN_OTHER': 136, 
+                'SIDECHAIN_BETA': 72, 
+                'BACKBONE_OTHER': 7, 
+                'BACKBONE_BETA': 3, 
+                'SIDECHAIN_ALPHA': 18
+            }, 
+            'mols': {
+                'alpha_helix': <binana._structure.mol.Mol instance at 0x7feb20438170>, 
+                'beta_sheet': <binana._structure.mol.Mol instance at 0x7feb204381b8>, 
+                'side_chain': <binana._structure.mol.Mol instance at 0x7feb20438368>, 
+                'other_2nd_structure': <binana._structure.mol.Mol instance at 0x7feb20438248>, 
+                'back_bone': <binana._structure.mol.Mol instance at 0x7feb20438320>
+            }
+        }
+
+    Args:
+        ligand (binana.Mol): The ligand molecule to analyze.
+        receptor (binana.Mol): The receptor molecule to analyze.
+        cutoff (float, optional): The distance cutoff. Defaults to 
+            ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), as well as a list of 
+        binana.Mol objects ("mols"), each with the participating atoms that 
+        belong to alpha helixes, beta sheets, and other, respectively.
+    """
+
     active_site_flexibility = {}
     pdb_contacts_alpha_helix = binana.Mol()
     pdb_contacts_beta_sheet = binana.Mol()
@@ -15,7 +49,7 @@ def calculate_flexibility(ligand, receptor, cutoff=ACTIVE_SITE_FLEXIBILITY_DIST_
     # close_contacts_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
 
     # Now get statistics to judge active-site flexibility
     for ligand_atom, receptor_atom, dist in ligand_receptor_dists:

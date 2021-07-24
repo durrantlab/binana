@@ -3,15 +3,19 @@ preface = "REMARK "
 # __pragma__ ('skip')
 # Python, just alias open
 openFile = open
+import json
 # __pragma__ ('noskip')
 
 """?
 # Transcrypt
 import binana
-openFile = binana.shim.OpenFile
+from binana._utils.shim import OpenFile
+import binana._utils.shim as json
+openFile = OpenFile
 ?"""
 
-def center(string, length):
+
+def _center(string, length):
     while len(string) < length:
         string = " " + string
         if len(string) < length:
@@ -19,7 +23,7 @@ def center(string, length):
     return string
 
 
-def get_parameters(parameters, output):
+def _get_parameters(parameters, output):
     # restate the parameters
     output = output + preface + "Command-line parameters used:" + "\n"
     output = (
@@ -35,22 +39,27 @@ def get_parameters(parameters, output):
         + "\n"
     )
 
-    for key in list(parameters.params.keys()):
+    for key in sorted(list(parameters.params.keys())):
         value = str(parameters.params[key])
         output = (
-            output + preface + "   " + center(key, 37) + "| " + center(value, 27) + "\n"
+            output
+            + preface
+            + "   "
+            + _center(key, 37)
+            + "| "
+            + _center(value, 27)
+            + "\n"
         )
 
     return output
 
 
-def get_close_contacts_dist1_cutoff(
+def _get_close_contacts_dist1_cutoff(
     parameters,
-    ligand_receptor_atom_type_pairs_closest,
-    closest_contacts_labels,
+    closest,
     output,
 ):
-    output = output + preface + "" + "\n"
+    output = output + preface + "\n"
     output = (
         output
         + preface
@@ -61,33 +70,32 @@ def get_close_contacts_dist1_cutoff(
     )
     output = output + preface + "    Atom Type | Atom Type | Count" + "\n"
     output = output + preface + "   -----------|-----------|-------" + "\n"
-    for key in ligand_receptor_atom_type_pairs_closest.keys():
-        value = ligand_receptor_atom_type_pairs_closest[key]
+    for key in sorted(closest["counts"].keys()):
+        value = closest["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[0], 11)
+            + _center(key[0], 11)
             + "|"
-            + center(key[1], 11)
+            + _center(key[1], 11)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in closest_contacts_labels:
+    for atom_pairs in closest["labels"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
     return output
 
 
-def get_close_contacts_dist2_cutoff(
-    parameters, ligand_receptor_atom_type_pairs_close, close_contacts_labels, output
-):
-    output = output + preface + "\n\n"
+def _get_close_contacts_dist2_cutoff(parameters, close, output):
+    output = output + preface + "\n"
+    # output = output + preface + "\n"
     output = (
         output
         + preface
@@ -98,23 +106,23 @@ def get_close_contacts_dist2_cutoff(
     )
     output = output + preface + "    Atom Type | Atom Type | Count" + "\n"
     output = output + preface + "   -----------|-----------|-------" + "\n"
-    for key in ligand_receptor_atom_type_pairs_close.keys():
-        value = ligand_receptor_atom_type_pairs_close[key]
+    for key in sorted(close["counts"].keys()):
+        value = close["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[0], 11)
+            + _center(key[0], 11)
             + "|"
-            + center(key[1], 11)
+            + _center(key[1], 11)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in close_contacts_labels:
+    for atom_pairs in close["labels"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
@@ -122,15 +130,13 @@ def get_close_contacts_dist2_cutoff(
     return output
 
 
-def get_ligand_atom_types(
-    ligand_atom_types, ligand_receptor_atom_type_pairs_electrostatic, output
-):
+def _get_ligand_atom_types(ligand_atom_types, electrostatic_energies, output):
     output = output + preface + "" + "\n"
     output = output + preface + "Ligand atom types:" + "\n"
     output = output + preface + "    Atom Type " + "\n"
     output = output + preface + "   -----------" + "\n"
-    for key in ligand_atom_types.keys():
-        output = output + preface + "   " + center(key, 11) + "\n"
+    for key in sorted(ligand_atom_types.keys()):
+        output = output + preface + "   " + _center(key, 11) + "\n"
 
     output = output + preface + "" + "\n"
     output = (
@@ -141,24 +147,30 @@ def get_ligand_atom_types(
     )
     output = output + preface + "    Atom Type | Atom Type | Energy (J/mol)" + "\n"
     output = output + preface + "   -----------|-----------|----------------" + "\n"
-    for key in ligand_receptor_atom_type_pairs_electrostatic.keys():
-        value = ligand_receptor_atom_type_pairs_electrostatic[key]
+    for key in sorted(electrostatic_energies["counts"].keys()):
+        value = electrostatic_energies["counts"][key]
         key = key.split("_")
+
+        value2 = str(value)[:13] if value > 0 else str(value)[:14]
+        num_decimals = len(value2.split(".")[1])
+        value3 = round(value, num_decimals)
+        value4 = str(value3)[:13] if value3 > 0 else str(value3)[:14]
+
         output = (
             output
             + preface
             + "   "
-            + center(key[0], 11)
+            + _center(key[0], 11)
             + "|"
-            + center(key[1], 11)
+            + _center(key[1], 11)
             + "|"
-            + center(str(value), 16)
+            + _center(value4, 16)
             + "\n"
         )
     return output
 
 
-def get_rotateable_bonds_count(ligand, output):
+def _get_rotateable_bonds_count(ligand, output):
     output = output + preface + "" + "\n"
     output = (
         output
@@ -170,7 +182,7 @@ def get_rotateable_bonds_count(ligand, output):
     return output
 
 
-def get_active_site_flexibility(active_site_flexibility, output):
+def _get_active_site_flexibility(flexibility, output):
     output = output + preface + "" + "\n"
     output = output + preface + "Active-site flexibility:" + "\n"
     output = (
@@ -185,25 +197,25 @@ def get_active_site_flexibility(active_site_flexibility, output):
         + "   --------------------|---------------------|-------"
         + "\n"
     )
-    for key in active_site_flexibility.keys():
-        value = active_site_flexibility[key]
+    for key in sorted(flexibility["counts"].keys()):
+        value = flexibility["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[0], 20)
+            + _center(key[0], 20)
             + "|"
-            + center(key[1], 21)
+            + _center(key[1], 21)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     return output
 
 
-def get_hbonds(hbonds, hbonds_labels, output):
+def _get_hbonds(hydrogen_bonds, output):
     output = output + preface + "" + "\n"
     output = output + preface + "Hydrogen bonds:" + "\n"
     output = (
@@ -218,25 +230,25 @@ def get_hbonds(hbonds, hbonds_labels, output):
         + "   -------------------|--------------------|---------------------|-------"
         + "\n"
     )
-    for key in hbonds.keys():
-        value = hbonds[key]
+    for key in sorted(hydrogen_bonds["counts"].keys()):
+        value = hydrogen_bonds["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[1], 19)
+            + _center(key[1], 19)
             + "|"
-            + center(key[2], 20)
+            + _center(key[2], 20)
             + "|"
-            + center(key[3], 21)
+            + _center(key[3], 21)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in hbonds_labels:
+    for atom_pairs in hydrogen_bonds["labels"]:
         output = (
             output
             + preface
@@ -251,7 +263,7 @@ def get_hbonds(hbonds, hbonds_labels, output):
     return output
 
 
-def get_hydrophobics(hydrophobics, hydrophobic_labels, output):
+def _get_hydrophobics(hydrophobics, output):
     output = output + preface + "" + "\n"
     output = output + preface + "Hydrophobic contacts (C-C):" + "\n"
     output = (
@@ -266,33 +278,33 @@ def get_hydrophobics(hydrophobics, hydrophobic_labels, output):
         + "   --------------------|---------------------|-------"
         + "\n"
     )
-    for key in hydrophobics.keys():
-        value = hydrophobics[key]
+    for key in sorted(hydrophobics["counts"].keys()):
+        value = hydrophobics["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[0], 20)
+            + _center(key[0], 20)
             + "|"
-            + center(key[1], 21)
+            + _center(key[1], 21)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in hydrophobic_labels:
+    for atom_pairs in hydrophobics["labels"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
     return output
 
 
-def get_pi_stacking(PI_interactions, pi_stacking_labels, output):
+def _get_pi_stacking(pi_pi, output):
     stacking = []
-    for key in PI_interactions.keys():
-        value = PI_interactions[key]
+    for key in sorted(pi_pi["counts"].keys()):
+        value = pi_pi["counts"][key]
         together = key + "_" + str(value)
         if "STACKING" in together:
             stacking.append(together)
@@ -307,14 +319,14 @@ def get_pi_stacking(PI_interactions, pi_stacking_labels, output):
             output
             + preface
             + "   "
-            + center(item[1], 21)
+            + _center(item[1], 21)
             + "|"
-            + center(item[2], 7)
+            + _center(item[2], 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in pi_stacking_labels:
+    for atom_pairs in pi_pi["labels"]["pi_stacking"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
@@ -322,10 +334,10 @@ def get_pi_stacking(PI_interactions, pi_stacking_labels, output):
     return output
 
 
-def get_T_stacking(PI_interactions, T_stacking_labels, output):
+def _get_t_stacking(pi_pi, output):
     t_shaped = []
-    for key in PI_interactions.keys():
-        value = PI_interactions[key]
+    for key in sorted(pi_pi["counts"].keys()):
+        value = pi_pi["counts"][key]
         together = key + "_" + str(value)
         if "SHAPED" in together:
             t_shaped.append(together)
@@ -341,14 +353,14 @@ def get_T_stacking(PI_interactions, T_stacking_labels, output):
             output
             + preface
             + "   "
-            + center(item[1], 21)
+            + _center(item[1], 21)
             + "|"
-            + center(item[2], 7)
+            + _center(item[2], 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in T_stacking_labels:
+    for atom_pairs in pi_pi["labels"]["T_stacking"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
@@ -356,10 +368,10 @@ def get_T_stacking(PI_interactions, T_stacking_labels, output):
     return output
 
 
-def get_pi_cation(PI_interactions, pi_cat_labels, output):
+def _get_pi_cation(pi_pi, pi_cat, output):
     pi_cation = []
-    for key in PI_interactions.keys():
-        value = PI_interactions[key]
+    for key in sorted(pi_pi["counts"].keys()):
+        value = pi_pi["counts"][key]
         together = key + "_" + str(value)
         if "CATION" in together:
             pi_cation.append(together)
@@ -386,16 +398,16 @@ def get_pi_cation(PI_interactions, pi_cat_labels, output):
             output
             + preface
             + "   "
-            + center(item2[0], 27)
+            + _center(item2[0], 27)
             + "|"
-            + center(item[2], 21)
+            + _center(item[2], 21)
             + "|"
-            + center(item[3], 7)
+            + _center(item[3], 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in pi_cat_labels:
+    for atom_pairs in pi_cat["labels"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
@@ -403,99 +415,125 @@ def get_pi_cation(PI_interactions, pi_cat_labels, output):
     return output
 
 
-def get_salt_bridges(salt_bridges, salt_bridge_labels, output):
+def _get_salt_bridges(salt_bridges, output):
     output = output + preface + "" + "\n"
     output = output + preface + "Salt Bridges:" + "\n"
     output = output + preface + "    Secondary Structure | Count " + "\n"
     output = output + preface + "   ---------------------|-------" + "\n"
-    for key in salt_bridges.keys():
-        value = salt_bridges[key]
+    for key in sorted(salt_bridges["counts"].keys()):
+        value = salt_bridges["counts"][key]
         key = key.split("_")
         output = (
             output
             + preface
             + "   "
-            + center(key[1], 21)
+            + _center(key[1], 21)
             + "|"
-            + center(str(value), 7)
+            + _center(str(value), 7)
             + "\n"
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in salt_bridge_labels:
+    for atom_pairs in salt_bridges["labels"]:
         output = (
             output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
     return output
 
 
-def make_log(
+def collect(
     parameters,
     ligand,
-    ligand_atom_types,
-    ligand_receptor_atom_type_pairs_closest,
-    closest_contacts_labels,
-    ligand_receptor_atom_type_pairs_close,
-    close_contacts_labels,
-    ligand_receptor_atom_type_pairs_electrostatic,
-    active_site_flexibility,
-    hbonds,
-    hbonds_labels,
+    closest,
+    close,
     hydrophobics,
-    hydrophobic_labels,
-    pi_interactions,
-    pi_stacking_labels,
-    t_stacking_labels,
-    pi_cat_labels,
+    hydrogen_bonds,
     salt_bridges,
-    salt_bridge_labels,
+    pi_pi,
+    pi_cat,
+    electrostatic_energies,
+    flexibility,
+    ligand_atom_types,
+    json_output,
 ):
-    """'# old output format, for reference
+    """Collects all the characterized interactions between the protein and
+    ligand (as well as a few other metrics) into a single string (text block).
+
+    Args:
+        parameters (binana._cli_params.get_params.CommandLineParameters): An
+            object containing the user-specified parameters. See
+            :py:func:`~binana.run`.
+        ligand (binana._structure.mol.Mol): The ligand object. Used for
+            counting the number of rotatable bonds (if PDBQT formatted).
+        closest (dict): A dictionary containing information about the closest
+            protein/ligand interactions.
+        close (dict): A dictionary containing information about the close
+            protein/ligand interactions.
+        hydrophobics (dict): A dictionary containing information about the
+            hydrophobic protein/ligand interactions.
+        hydrogen_bonds (dict): A dictionary containing information about the
+            hydrogen bonds between the protein and ligand.
+        salt_bridges (dict): A dictionary containing information about the
+            salt-bridges protein/ligand interactions.
+        pi_pi (dict): A dictionary containing information about the pi-pi
+            (stacking and T-shaped) protein/ligand interactions.
+        pi_cat (dict): A dictionary containing information about the pi-cation
+            protein/ligand interactions.
+        electrostatic_energies (dict): A dictionary containing information
+            about the electrostatic energies between protein and ligand atoms.
+        flexibility (dict): A dictionary containing information about the
+            flexibility of ligand-adjacent protein atoms.
+        ligand_atom_types (dict): A dictionary containing information about
+            the ligand atom types.
+        json_output (dict): A dictionary describing the interactions, from
+            :py:func:`~binana.output.dictionary.collect`
+
+    Returns:
+        str: The contents of the entire log.
+    """
 
     output = ""
-    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist1_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_closest) + "\n"
-    output = output + "Atom-type pair counts within " + str(parameters.params['close_contacts_dist2_cutoff']) + " : " + str(ligand_receptor_atom_type_pairs_close) + "\n"
-    output = output + "Ligand atom types: " + str(ligand_atom_types) + "\n"
-    output = output + "Electrostatic energy by atom-type pair, in J/mol: " + str(ligand_receptor_atom_type_pairs_electrostatic) + "\n"
-    output = output + "Number of rotatable bonds in ligand: " + str(ligand.rotateable_bonds_count) + "\n"
-    output = output + "Active-site flexibility: " + str(active_site_flexibility) + "\n"
-    output = output + "HBonds: " + str(hbonds) + "\n"
-    output = output + "Hydrophobic contacts (C-C): " + str(hydrophobics) + "\n"
-    output = output + "pi interactions: " + str(PI_interactions) + "\n"
-    output = output + "Salt bridges: " + str(salt_bridges) + "\n"
 
-    print output"""
-
-    output = ""
-
-    output = get_parameters(parameters, output)
+    output = _get_parameters(parameters, output)
 
     # a description of the analysis
-    output = get_close_contacts_dist1_cutoff(
+    output = _get_close_contacts_dist1_cutoff(
         parameters,
-        ligand_receptor_atom_type_pairs_closest,
-        closest_contacts_labels,
+        closest,
         output,
     )
-    output = get_close_contacts_dist2_cutoff(
+    output = _get_close_contacts_dist2_cutoff(
         parameters,
-        ligand_receptor_atom_type_pairs_close,
-        close_contacts_labels,
+        close,
         output,
     )
-    output = get_ligand_atom_types(
-        ligand_atom_types, ligand_receptor_atom_type_pairs_electrostatic, output
+    output = _get_ligand_atom_types(
+        ligand_atom_types["counts"], electrostatic_energies, output
     )
-    output = get_rotateable_bonds_count(ligand, output)
-    output = get_active_site_flexibility(active_site_flexibility, output)
-    output = get_hbonds(hbonds, hbonds_labels, output)
-    output = get_hydrophobics(hydrophobics, hydrophobic_labels, output)
+    output = _get_rotateable_bonds_count(ligand, output)
+    output = _get_active_site_flexibility(flexibility, output)
+    output = _get_hbonds(hydrogen_bonds, output)
+    output = _get_hydrophobics(hydrophobics, output)
 
-    output = get_pi_stacking(pi_interactions, pi_stacking_labels, output)
-    output = get_T_stacking(pi_interactions, t_stacking_labels, output)
-    output = get_pi_cation(pi_interactions, pi_cat_labels, output)
-    output = get_salt_bridges(salt_bridges, salt_bridge_labels, output)
+    output = _get_pi_stacking(pi_pi, output)
+    output = _get_t_stacking(pi_pi, output)
+    output = _get_pi_cation(pi_pi, pi_cat, output)
+    output = _get_salt_bridges(salt_bridges, output)
 
+    # Append the JSON file to the end of the log as well (always).
+    output = output + preface + "\n"
+    output = output + preface + "JSON Output:\n"
+    output = output + preface + "\n"
+    output = output + preface + "\n"
+    output = (
+        output
+        + preface
+        + json.dumps(
+            json_output, indent=2, sort_keys=True, separators=(",", ": ")
+        ).replace("\n", "\n" + preface)
+        + "\n"
+    )
+    
     # Output some files/to the screen.
     if parameters.params["output_dir"] != "":
         f = openFile(parameters.params["output_dir"] + "log.txt", "w")
@@ -503,7 +541,9 @@ def make_log(
         f.close()
 
     if parameters.params["output_file"] == "" and parameters.params["output_dir"] == "":
-        # so you're not outputing to either a file or a directory
-        print((output.replace("REMARK ", "")))
+        # so you're not outputing to either a file or a directory. Output to the
+        # screen.
+        to_print = output.replace("REMARK ", "")
+        print(to_print.split("JSON Output:")[0].strip())
 
     return output

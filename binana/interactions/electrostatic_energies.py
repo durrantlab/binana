@@ -1,16 +1,38 @@
-from binana.cli_params.defaults import ELECTROSTATIC_DIST_CUTOFF
+from binana._cli_params.defaults import ELECTROSTATIC_DIST_CUTOFF
 import binana
-from binana.load import get_ligand_receptor_dists
-from binana.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.load_ligand_receptor import _get_ligand_receptor_dists
+from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
 
 
-def calculate_electrostatic_energies(ligand, receptor, cutoff=ELECTROSTATIC_DIST_CUTOFF):
+def get_electrostatic_energies(ligand, receptor, cutoff=ELECTROSTATIC_DIST_CUTOFF):
+    """Calculates and tallies the electrostatic energies between receptor and 
+    ligand atoms that come within a given distance of each other. Output is 
+    formatted like this::
+
+        {
+            'counts': {
+                'C_C': 49372.61585423234, 
+                'A_OA': -311243.9243779809
+            }
+        }
+
+    Args:
+        ligand (binana.Mol): The ligand molecule to analyze.
+        receptor (binana.Mol): The receptor molecule to analyze.
+        cutoff (float, optional): The distance cutoff. Defaults to 
+            ELECTROSTATIC_DIST_CUTOFF.
+
+    Returns:
+        dict: Contains the tallies ("counts") of the energies by atom-type 
+        pair.
+    """
+    
     ligand_receptor_atom_type_pairs_electrostatic = {}
     # pdb_close_contacts = binana.Mol()
     # close_contacts_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
 
     # calculate electrostatic energies for all less than 4 A
     for ligand_atom, receptor_atom, dist in ligand_receptor_dists:
@@ -31,6 +53,4 @@ def calculate_electrostatic_energies(ligand, receptor, cutoff=ELECTROSTATIC_DIST
 
     return {
         "counts": ligand_receptor_atom_type_pairs_electrostatic,
-        # "mol": pdb_close_contacts,
-        # "labels": close_contacts_labels,
     }
