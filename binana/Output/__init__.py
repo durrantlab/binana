@@ -10,6 +10,7 @@ import binana
 # Python, just alias open
 _openFile = open
 import json
+
 # __pragma__ ('noskip')
 
 """?
@@ -18,6 +19,7 @@ import binana._utils.shim as json
 from binana._utils.shim import OpenFile
 _openFile = OpenFile
 ?"""
+
 
 def write(
     parameters,
@@ -34,11 +36,11 @@ def write(
     flexibility,
     ligand_atom_types,
 ):
-    """The main function for writing BINANA output to the disk (or the 
+    """The main function for writing BINANA output to the disk (or the
     in-memory "fake" file system if using the JavaScript library). Output
     depends on the values in the ``parameters`` object (see
     :py:func:`~binana.run`).
-    
+
     To write output files to a directory (and to create the VMD state file and
     supporting files required for VMD visualization)::
 
@@ -47,9 +49,9 @@ def write(
     To write to a single PDB file::
 
         -output_file test.pdb
-    
+
     To save data to a JSON file::
-        
+
         -output_json test.json
 
     Args:
@@ -148,7 +150,9 @@ def write(
 
     if parameters.params["output_json"] != "":
         f = _openFile(parameters.params["output_json"], "w")
-        f.write(json.dumps(json_output, indent=2))
+        f.write(
+            json.dumps(json_output, indent=2, sort_keys=True, separators=(",", ": "))
+        )
         f.close()
 
     if parameters.params["output_dir"] != "":

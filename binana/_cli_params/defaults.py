@@ -17,3 +17,4 @@ LIGAND = ""
 OUTPUT_DIR = ""
 OUTPUT_FILE = ""
 OUTPUT_JSON = ""
+TEST = False

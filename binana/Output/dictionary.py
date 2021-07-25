@@ -396,9 +396,9 @@ def collect(
     )
 
     # Important not to use 'as f' fopr transcrypt
-    jfile = _openFile(output_file_name, "w")
-    json.dump(json_output, jfile)
-    jfile.close()
+    # jfile = _openFile(output_file_name, "w")
+    # json.dump(json_output, jfile)
+    # jfile.close()
 
     # return json object
     return json_output

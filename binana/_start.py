@@ -42,19 +42,17 @@ from binana._utils.shim import fabs
 VERSION = "1.3"
 
 
-def _get_all_interactions(ligand_pdbqt_filename, receptor_pdbqt_filename, parameters):
+def _get_all_interactions(parameters):
     """Gets all the interactions between the specified ligand and receptor
     files.
 
     Args:
-        ligand_pdbqt_filename (str): The ligand file name to load.
-        receptor_pdbqt_filename (str): The receptor file name to load.
         parameters (binana._cli_params.get_params.CommandLineParameters):
             The BINANA parameters to use.
     """
 
     ligand, receptor = from_files(
-        ligand_pdbqt_filename, receptor_pdbqt_filename
+        parameters.params["ligand"], parameters.params["receptor"]
     )
 
     # Get distance measurements between protein and ligand atom types, as

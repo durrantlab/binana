@@ -1,3 +1,4 @@
+from binana.test import _run_test
 import binana  # Leave this for javascript conversion.
 from binana import _utils  # Leave
 from binana import fs  # Leave
@@ -41,20 +42,20 @@ def run(args=None):
         [
             "-receptor", "receptor.pdb", 
             "-ligand", "ligand.pdb", 
-            "-close_contacts_dist1_cutoff", 2.5, 
-            "-close_contacts_dist2_cutoff", 4, 
-            "-electrostatic_dist_cutoff", 4, 
-            "-active_site_flexibility_dist_cutoff", 4, 
-            "-hydrophobic_dist_cutoff", 4, 
-            "-hydrogen_bond_dist_cutoff", 4, 
-            "-hydrogen_bond_angle_cutoff", 40, 
-            "-pi_padding_dist", 0.75, 
-            "-pi_pi_interacting_dist_cutoff", 7.5, 
-            "-pi_stacking_angle_tolerance", 30, 
-            "-T_stacking_angle_tolerance", 30, 
-            "-T_stacking_closest_dist_cutoff", 5, 
-            "-cation_pi_dist_cutoff", 6, 
-            "-salt_bridge_dist_cutoff", 5.5
+            "-close_contacts_dist1_cutoff", "2.5", 
+            "-close_contacts_dist2_cutoff", "4", 
+            "-electrostatic_dist_cutoff", "4", 
+            "-active_site_flexibility_dist_cutoff", "4", 
+            "-hydrophobic_dist_cutoff", "4", 
+            "-hydrogen_bond_dist_cutoff", "4", 
+            "-hydrogen_bond_angle_cutoff", "40", 
+            "-pi_padding_dist", "0.75", 
+            "-pi_pi_interacting_dist_cutoff", "7.5", 
+            "-pi_stacking_angle_tolerance", "30", 
+            "-T_stacking_angle_tolerance", "30", 
+            "-T_stacking_closest_dist_cutoff", "5", 
+            "-cation_pi_dist_cutoff", "6", 
+            "-salt_bridge_dist_cutoff", "5.5"
         ]
 
     If any of the parameters above are omitted, default values will be used.
@@ -70,10 +71,18 @@ def run(args=None):
     if args is None:
         # If no args provided to function, assume command-line use.
         args = sys.argv[:]
+    else:
+        # Args provided. Make sure values are all strings (to standardize).
+        for i, a in enumerate(args):
+            args[i] = str(a)
 
     cmd_params = binana.cmd_params.CommandLineParameters(args)
 
-    if cmd_params.okay_to_proceed() == False:
+    if cmd_params.params["test"]:
+        # Run the tests, because `-test true` from command line.
+        _run_test(cmd_params)
+        return
+    elif cmd_params.okay_to_proceed() == False:
         print(
             "Error: You need to specify the ligand and receptor PDBQT files to analyze using\nthe -receptor and -ligand tags from the command line.\n"
         )
@@ -83,8 +92,5 @@ def run(args=None):
     if cmd_params.error != "":
         print("Warning: The following command-line parameters were not recognized:")
         print(("   " + cmd_params.error + "\n"))
-
-    lig = cmd_params.params["ligand"]
-    rec = cmd_params.params["receptor"]
     
-    _start._get_all_interactions(lig, rec, cmd_params)
+    _start._get_all_interactions(cmd_params)

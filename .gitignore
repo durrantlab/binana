@@ -16,3 +16,7 @@ testing_openbabel
 TODO.md
 rsync.sh
 *.prj
+_rst
+tmp.md
+_build
+docs/docs

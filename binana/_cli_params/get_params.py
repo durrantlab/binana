@@ -21,6 +21,7 @@ from binana._cli_params.defaults import (
     SALT_BRIDGE_DIST_CUTOFF,
     T_STACKING_ANGLE_TOLERANCE,
     T_STACKING_CLOSEST_DIST_CUTOFF,
+    TEST
 )
 
 # __pragma__ ('skip')
@@ -74,6 +75,7 @@ class CommandLineParameters:
         self.params["output_dir"] = OUTPUT_DIR
         self.params["output_file"] = OUTPUT_FILE
         self.params["output_json"] = OUTPUT_JSON
+        self.params["test"] = TEST
 
         # now get user inputed values
 
