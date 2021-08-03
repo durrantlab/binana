@@ -1,13 +1,12 @@
 *.pyc
 node_modules
 *.zip
-dist
+web_app/dist
 __pycache__
 old
 .DS_Store
 technical_docs
 tmp
-old
 *.old
 old_delme
 .DS_Store
