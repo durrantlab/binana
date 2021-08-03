@@ -16,4 +16,4 @@ mv ../__target__/ ./lib
 # Copy the example html file for testing.
 cp ./src_aux/example.html ./lib/
 
-cp $(realpath src_aux/Example.ipynb*) ./lib/
+cp src_aux/Example.ipynb* ./lib/

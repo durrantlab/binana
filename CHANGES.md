@@ -2,14 +2,16 @@ Changes
 =======
 
 
-1.4
----
+1.4 WIP
+-------
 
 Major refactor
 
 Before, in calculating close contacts, those less than 2.5 not included in list of less than 4 (no redundancies). Now listed again (so redundancies).
 
 Added output_json option.
+
+Created BINANA.js library, and made web app.
 
 1.3
 ---
