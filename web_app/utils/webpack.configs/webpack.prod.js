@@ -25,7 +25,9 @@ let forProd = {
             //     externs: [
             //         path.resolve(__dirname, '../closure/custom_extern.js')
             //     ],
-            //     compilation_level: 'ADVANCED',
+            //     compilation_level: 'WHITESPACE_ONLY',
+            //     // compilation_level: 'SIMPLE',
+            //     // compilation_level: 'ADVANCED',
             //     // formatting: 'PRETTY_PRINT',
             // })
         ],

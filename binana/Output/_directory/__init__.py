@@ -5,6 +5,7 @@ import binana
 # __pragma__ ('skip')
 # Python
 import os
+
 # __pragma__ ('noskip')
 
 """?
@@ -12,15 +13,16 @@ import os
 os = binana.os
 ?"""
 
+
 def make_directory_output(
     parameters,
     closest,
     close,
-    flexibility,
+    active_site_flexibility,
     hydrophobics,
     hydrogen_bonds,
     pi_pi,
-    pi_cat,
+    cat_pi,
     salt_bridges,
     ligand,
     receptor,
@@ -35,16 +37,16 @@ def make_directory_output(
         closest["mol"],
         parameters,
         close["mol"],
-        flexibility["mols"]["alpha_helix"],
-        flexibility["mols"]["beta_sheet"],
-        flexibility["mols"]["other_2nd_structure"],
-        flexibility["mols"]["back_bone"],
-        flexibility["mols"]["side_chain"],
+        active_site_flexibility["mols"]["alpha_helix"],
+        active_site_flexibility["mols"]["beta_sheet"],
+        active_site_flexibility["mols"]["other_2nd_structure"],
+        active_site_flexibility["mols"]["back_bone"],
+        active_site_flexibility["mols"]["side_chain"],
         hydrophobics["mol"],
         hydrogen_bonds["mol"],
         pi_pi["mols"]["pi_stacking"],
         pi_pi["mols"]["T_stacking"],
-        pi_cat["mol"],
+        cat_pi["mol"],
         salt_bridges["mol"],
         ligand,
         receptor,

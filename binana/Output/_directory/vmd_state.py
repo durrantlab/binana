@@ -10,6 +10,7 @@ from binana._utils.shim import OpenFile
 _openFile = OpenFile
 ?"""
 
+
 def vmd_state_file(parameters):
     vmd = []
     vmd.append("set viewplist {}")

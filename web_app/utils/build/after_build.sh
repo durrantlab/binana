@@ -16,7 +16,7 @@ cd -
 # compatibility.
 echo "Check for errors above. Enter to start compiling vendor js and other js files..."
 cd dist
-# ls vendors*js runtime*js styles*js | awk '{print "echo Compiling " $1 ";node ../node_modules/google-closure-compiler/cli.js " $1 " > t; mv t " $1}' | bash
+ls app*js vendors*js runtime*js styles*js | awk '{print "echo Compiling " $1 ";node ../node_modules/google-closure-compiler/cli.js " $1 " > t; mv t " $1}' | bash
 cd -
 
 # If there is a .min.js file, delete any associated .js file.

@@ -310,38 +310,49 @@ def _collect_salt_bridge(salt_bridge_interactions, json_output):
 
 # json output
 def collect(
-    ligand_filename,
-    receptor_filename,
-    closest_labels=None,
-    close_labels=None,
-    hydrophobics_labels=None,
-    hydrogen_bonds_labels=None,
-    salt_bridge_labels=None,
-    pi_pi_labels=None,
-    pi_cat_labels=None,
+    closest=None,
+    close=None,
+    hydrophobics=None,
+    hydrogen_bonds=None,
+    salt_bridges=None,
+    pi_pi=None,
+    cat_pi=None,
+    electrostatic_energies=None,
+    active_site_flexibility=None,
+    ligand_atom_types=None,
+    ligand_rotatable_bonds=None,
 ):
-    """Collects all the characterized interactions between the protein and 
+    """Collects all the characterized interactions between the protein and
     ligand into one dict object, suitable for conversion to JSON.
 
     Args:
-        ligand_filename (str): The filename of the ligand.
-        receptor_filename (str): The filename of the receptor.
-        closest_labels (list, optional): A list of the corresponding iteraction
-            labels. Defaults to None.
-        close_labels (list, optional): A list of the corresponding iteraction
-            labels. Defaults to None.
-        hydrophobics_labels (list, optional): A list of the corresponding
-            iteraction labels. Defaults to None.
-        hydrogen_bonds_labels (list, optional): A list of the corresponding
-            iteraction labels. Defaults to None.
-        salt_bridge_labels (list, optional): A list of the corresponding
-            iteraction labels. Defaults to None.
-        pi_pi_labels (dict, optional): A dictionary containing the pi-pi
-            iteraction labels. Key "pi_stacking" contains the labels for the
-            pi-pi stacking interactions, and key "T_stacking" contains the
-            labels for T-shaped interactions. Defaults to None.
-        pi_cat_labels (list, optional): A list of the corresponding iteraction
-            labels. Defaults to None.
+        closest (dict, optional): A dictionary containing information about the
+            closest protein/ligand interactions. Defaults to None.
+        close (dict, optional): A dictionary containing information about the
+            close protein/ligand interactions. Defaults to None.
+        hydrophobics (dict, optional): A dictionary containing information
+            about the hydrophobic protein/ligand interactions. Defaults to
+            None.
+        hydrogen_bonds (dict, optional): A dictionary containing information
+            about the hydrogen bonds between the protein and ligand. Defaults
+            to None.
+        salt_bridges (dict, optional): A dictionary containing information
+            about the salt-bridges protein/ligand interactions. Defaults to
+            None.
+        pi_pi (dict, optional): A dictionary containing information about the
+            pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
+            to None.
+        cat_pi (dict, optional): A dictionary containing information about the
+            pi-cation protein/ligand interactions. Defaults to None.
+        electrostatic_energies (dict, optional): A dictionary containing
+            information about the electrostatic energies between protein and
+            ligand atoms. Defaults to None.
+        active_site_flexibility (dict, optional): A dictionary containing
+            information about the flexibility of ligand-adjacent protein atoms. Defaults to None.
+        ligand_atom_types (dict, optional): A dictionary containing information
+            about the ligand atom types. Defaults to None.
+        ligand_rotatable_bonds (int, optional): The number of ligand rotatable
+            bonds. Defaults to None.
 
     Returns:
         dict: A dictionary describing all the detected interactions, suitable
@@ -350,55 +361,73 @@ def collect(
 
     json_output = {}
 
-    # first level keys
-    json_output["hydrogenBonds"] = []
-    json_output["piPiStackingInteractions"] = []
-    json_output["tStackingInteractions"] = []
-    json_output["cationPiInteractions"] = []
-    json_output["saltBridges"] = []
-
     # populate the lists of proximity metrics. use helper function to populate
     # lists for pairwise interactions
-    if closest_labels is not None:
-        json_output["contactsWithin2.5A"] = _get_close_atom_list(closest_labels)
-    if close_labels is not None:
-        json_output["contactsWithin4.0A"] = _get_close_atom_list(close_labels)
-    if hydrophobics_labels is not None:
-        json_output["hydrophobicContacts"] = _get_close_atom_list(hydrophobics_labels)
+    if closest is not None:
+        json_output["closestContacts"] = _get_close_atom_list(closest["labels"])
+    if close is not None:
+        json_output["closeContacts"] = _get_close_atom_list(close["labels"])
+    if hydrophobics is not None:
+        json_output["hydrophobicContacts"] = _get_close_atom_list(
+            hydrophobics["labels"]
+        )
 
     # Add in the other metrics that are more difficult to calculate.
-    if hydrogen_bonds_labels is not None:
-        _collect_hydrogen_bonds(hydrogen_bonds_labels, json_output)
-    if pi_pi_labels is not None:
-        _collect_pi_pi(pi_pi_labels["pi_stacking"], json_output)
-        _collect_t_stacking(pi_pi_labels["T_stacking"], json_output)
-    if pi_cat_labels is not None:
-        _collect_cat_pi(pi_cat_labels, json_output)
-    if salt_bridge_labels is not None:
-        _collect_salt_bridge(salt_bridge_labels, json_output)
+    if hydrogen_bonds is not None:
+        json_output["hydrogenBonds"] = []
+        _collect_hydrogen_bonds(hydrogen_bonds["labels"], json_output)
+    if pi_pi is not None:
+        json_output["piPiStackingInteractions"] = []
+        _collect_pi_pi(pi_pi["labels"]["pi_stacking"], json_output)
+        json_output["tStackingInteractions"] = []
+        _collect_t_stacking(pi_pi["labels"]["T_stacking"], json_output)
+    if cat_pi is not None:
+        json_output["cationPiInteractions"] = []
+        _collect_cat_pi(cat_pi["labels"], json_output)
+    if salt_bridges is not None:
+        json_output["saltBridges"] = []
+        _collect_salt_bridge(salt_bridges["labels"], json_output)
 
-    # dump to json file
-    dname = dirname(ligand_filename) if dirname(ligand_filename) != "" else "."
-    bname_ligand_filename = basename(ligand_filename)
-    bname_receptor_filename = basename(receptor_filename)
-    bname_ligand_filename_no_ext = ".".join(bname_ligand_filename.split(".")[:-1])
-    bname_receptor_filename_no_ext = ".".join(bname_receptor_filename.split(".")[:-1])
+    # For flexibility and electrostatics, just return the counts
+    if active_site_flexibility is not None:
+        json_output["activeSiteFlexibility"] = active_site_flexibility["counts"]
+    if electrostatic_energies is not None:
+        json_output["electrostaticEnergies"] = electrostatic_energies["counts"]
+    if ligand_atom_types is not None:
+        json_output["ligandAtomTypes"] = ligand_atom_types["counts"]
 
-    output_file_name = (
-        dname
-        + sep
-        + (
-            bname_ligand_filename_no_ext
-            + "_"
-            + bname_receptor_filename_no_ext
-            + "_output.json"
-        )
-    )
+    if ligand_rotatable_bonds is not None:
+        json_output["ligandRotatableBonds"] = ligand_rotatable_bonds
 
-    # Important not to use 'as f' fopr transcrypt
-    # jfile = _openFile(output_file_name, "w")
-    # json.dump(json_output, jfile)
-    # jfile.close()
-
-    # return json object
     return json_output
+
+
+def collect_all(all_interactions):
+    """Collects all the characterized interactions between the protein and
+    ligand into one dict object, suitable for conversion to JSON. This function
+    simply unpacks the contents of `all_interactions` and passes them to
+    :py:func:`~binana.output.dictionary.collect`.
+
+    Args:
+        all_interactions (dict): A single dictionary containing information
+            about all the protein/ligand interactions. The output of
+            :py:func:`~binana.interactions.get_all_interactions`
+
+    Returns:
+        dict: A dictionary describing all the detected interactions, suitable
+        for conversion to JSON.
+    """
+
+    return collect(
+        closest=all_interactions["closest"],
+        close=all_interactions["close"],
+        hydrophobics=all_interactions["hydrophobics"],
+        hydrogen_bonds=all_interactions["hydrogen_bonds"],
+        salt_bridges=all_interactions["salt_bridges"],
+        pi_pi=all_interactions["pi_pi"],
+        cat_pi=all_interactions["cat_pi"],
+        electrostatic_energies=all_interactions["electrostatic_energies"],
+        active_site_flexibility=all_interactions["active_site_flexibility"],
+        ligand_atom_types=all_interactions["ligand_atom_types"],
+        ligand_rotatable_bonds=all_interactions["ligand_rotatable_bonds"],
+    )

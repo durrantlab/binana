@@ -20,3 +20,4 @@ _rst
 tmp.md
 _build
 docs/docs
+.ipynb_checkpoints

@@ -9,4 +9,4 @@ cd ../../../javascript/
 cd -
 
 # Copy over compiled files.
-cp ../../../javascript/js_output/* ./
+cp ../../../javascript/dist/* ./

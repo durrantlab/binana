@@ -2,6 +2,8 @@
 # for binana.py
 import math
 import binana
+from binana._utils.shim import r_just, round_to_thousandths_to_str
+
 
 class Point:
     x = 99999.0
@@ -55,11 +57,11 @@ class Point:
     # Returns a PDB line for the point
     # Param self (Point)
     # Param index (integer): index of the point
-    def create_PDB_line(self, index):
+    def create_pdb_line(self, index):
         output = "ATOM "
-        output = output + binana.r_just(str(index), 6) + binana.r_just("X", 5) + binana.r_just("XXX", 4)
-        output = output + binana.r_just("%.3f" % self.x, 18)
-        output = output + binana.r_just("%.3f" % self.y, 8)
-        output = output + binana.r_just("%.3f" % self.z, 8)
-        output = output + binana.r_just("X", 24)
+        output = output + r_just(str(index), 6) + r_just("X", 5) + r_just("XXX", 4)
+        output = output + r_just(round_to_thousandths_to_str(self.x), 18)
+        output = output + r_just(round_to_thousandths_to_str(self.y), 8)
+        output = output + r_just(round_to_thousandths_to_str(self.z), 8)
+        output = output + r_just("X", 24)
         return output

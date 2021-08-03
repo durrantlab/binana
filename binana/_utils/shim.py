@@ -1,7 +1,6 @@
 # A number of python libraries aren't compatible with transcript. This file
 # provides alternate functions.
 
-
 fake_fs = {}
 
 # sys.argv dosn't make sense in this context.
@@ -50,11 +49,14 @@ def dump(data, open_file):
     open_file.write(data, True)
 
 
-def dumps(data, indent=2):
+def dumps(data, indent=None):
+    indent = _set_default(indent, 2)
+
     # __pragma__ ('js', "let data_str = JSON.stringify(data, null, indent);")
 
     # __pragma__ ('skip')
     import json
+
     data_str = json.dumps(data, indent=indent, sort_keys=True, separators=(",", ": "))
     # __pragma__ ('noskip')
 
@@ -66,6 +68,23 @@ def r_just(s, c):
     while len(s) < c:
         s = " " + s
     return s
+
+# because key arguments don't seem to work in transcrypt.
+def _set_default(val, default):
+    if val is None:
+        val = default
+    return val
+
+def round_to_thousandths_to_str(val):
+    val = round(val, 3)
+    val_str = str(val)
+    if not "." in val_str:
+        val_str = val_str + ".0"
+    prts = val_str.split(".")
+    prts[1] = prts[1][:3]
+    while len(prts[1]) < 3:
+        prts[1] = prts[1] + "0"
+    return ".".join(prts)
 
 
 # os functions need replacements
@@ -85,14 +104,17 @@ sep = "/"
 
 # opening, reading, and writing to files doesn't make sense in browser.
 class OpenFile:
-    def __init__(self, flnm, mode="r"):
+    def __init__(self, flnm, mode=None):
+        mode = _set_default(mode, "r")
         self.flnm = flnm
         self.mode = mode
 
         if mode == "w":
             fake_fs[flnm] = ""
 
-    def write(self, s, js=False):
+    def write(self, s, js=None):
+        js = _set_default(js, False)
+
         if js:
             # Note that real-python open.write does not have the js option.
             # It's used by the javascript version to write data (not

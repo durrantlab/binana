@@ -6,18 +6,8 @@
 # ligand-binding characterization." J Mol Graph Model 29(6): 888-893.
 
 import __future__
-from binana.interactions.pi_cat import get_pi_cation
-from binana.output import write
-from binana.interactions.salt_bridges import get_salt_bridges
-from binana.interactions.pi_pi import get_pi_pi
-from binana.interactions.ligand_atom_types import get_ligand_atom_types
-from binana.interactions.hydrogen_bonds import get_hydrogen_bonds
-from binana.interactions.hydrophobics import get_hydrophobics
-from binana.interactions.flexibility import get_flexibility
-from binana.interactions.electrostatic_energies import get_electrostatic_energies
-from binana.interactions.close import get_close
-from binana.interactions.closest import get_closest
-from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+from binana.output import _write_main
+from binana.interactions import get_all_interactions
 from binana.load_ligand_receptor import from_files
 
 import math
@@ -55,32 +45,6 @@ def _get_all_interactions(parameters):
         parameters.params["ligand"], parameters.params["receptor"]
     )
 
-    # Get distance measurements between protein and ligand atom types, as
-    # well as some other measurements
-    closest = get_closest(
-        ligand, receptor, parameters.params["close_contacts_dist1_cutoff"]
-    )
-    close = get_close(
-        ligand, receptor, parameters.params["close_contacts_dist2_cutoff"]
-    )
-    electrostatic_energies = get_electrostatic_energies(
-        ligand, receptor, parameters.params["electrostatic_dist_cutoff"]
-    )
-    flexibility = get_flexibility(
-        ligand, receptor, parameters.params["active_site_flexibility_dist_cutoff"]
-    )
-    hydrophobics = get_hydrophobics(
-        ligand, receptor, parameters.params["hydrophobic_dist_cutoff"]
-    )
-    hydrogen_bonds = get_hydrogen_bonds(
-        ligand,
-        receptor,
-        parameters.params["hydrogen_bond_dist_cutoff"],
-        parameters.params["hydrogen_bond_angle_cutoff"],
-    )
-
-    ligand_atom_types = get_ligand_atom_types(ligand)
-
     # This is perhaps controversial. I noticed that often a pi-cation
     # interaction or other pi interaction was only slightly off, but looking
     # at the structure, it was clearly supposed to be a pi-cation
@@ -90,52 +54,51 @@ def _get_all_interactions(parameters):
     # it.
     pi_padding = parameters.params["pi_padding_dist"]
 
-    # Count pi-pi stacking and pi-T stacking interactions
-    pi_pi = get_pi_pi(
+    all_interacts = get_all_interactions(
         ligand,
         receptor,
+        parameters.params["close_contacts_dist1_cutoff"],
+        parameters.params["close_contacts_dist2_cutoff"],
+        parameters.params["electrostatic_dist_cutoff"],
+        parameters.params["active_site_flexibility_dist_cutoff"],
+        parameters.params["hydrophobic_dist_cutoff"],
+        parameters.params["hydrogen_bond_dist_cutoff"],
+        parameters.params["hydrogen_bond_angle_cutoff"],
         parameters.params["pi_pi_interacting_dist_cutoff"],
         parameters.params["pi_stacking_angle_tolerance"],
         parameters.params["T_stacking_angle_tolerance"],
         parameters.params["T_stacking_closest_dist_cutoff"],
+        parameters.params["cation_pi_dist_cutoff"],
+        parameters.params["salt_bridge_dist_cutoff"],
         pi_padding,
-    )
-
-    # Now identify pi-cation interactions
-    pi_cat = get_pi_cation(
-        ligand, receptor, parameters.params["cation_pi_dist_cutoff"], pi_padding
     )
 
     # The original implementation merged all pi-related interactions into
     # one. Do that here too for backwards compatibility.
-    for key in pi_cat["counts"].keys():
-        pi_pi["counts"][key] = pi_cat["counts"][key]
-
-    # now count the number of salt bridges
-    salt_bridges = get_salt_bridges(
-        ligand, receptor, parameters.params["salt_bridge_dist_cutoff"]
-    )
+    for key in all_interacts["cat_pi"]["counts"].keys():
+        all_interacts["pi_pi"]["counts"][key] = all_interacts["cat_pi"]["counts"][key]
 
     # Now save the files
-    write(
+    _write_main(
         parameters,
         ligand,
         receptor,
-        closest,
-        close,
-        hydrophobics,
-        hydrogen_bonds,
-        salt_bridges,
-        pi_pi,
-        pi_cat,
-        electrostatic_energies,
-        flexibility,
-        ligand_atom_types,
+        all_interacts["closest"],
+        all_interacts["close"],
+        all_interacts["hydrophobics"],
+        all_interacts["hydrogen_bonds"],
+        all_interacts["salt_bridges"],
+        all_interacts["pi_pi"],
+        all_interacts["cat_pi"],
+        all_interacts["electrostatic_energies"],
+        all_interacts["active_site_flexibility"],
+        all_interacts["ligand_atom_types"],
     )
 
 
 def _intro():
-    # TODO: Be sure to update README.md with this file too!
+    # TODO: If you ever change below, be sure to update README.md with this file
+    # too!
 
     version = "1.2.1"
     citation = "BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD, McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi: 10.1016/j.jmgm.2011.01.004"
@@ -148,8 +111,8 @@ def _intro():
         "",
         citation,
         "",
-        "Introduction",
-        "============",
+        "Introduction, Examples of Use",
+        "=============================",
         "",
         "BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing ligand binding. The program identifies key binding characteristics like hydrogen bonds, salt bridges, and pi interactions. As input, BINANA accepts receptor and ligand files in the PDBQT format. PDBQT files can be generated from the more common PDB file format using the free converter provided with AutoDockTools, available at http://mgltools.scripps.edu/downloads",
         "",

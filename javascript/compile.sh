@@ -2,16 +2,18 @@
 # pip install transcrypt
 
 # Clean previous version.
-rm -rf ../__target__/ ./js_output/
+rm -rf ../__target__/ ./dist/
 
 # Compile the python file.
 cd ../
 # --nomin
-transcrypt --build --ecom --verbose binana.py
+transcrypt --nomin --build --ecom --verbose binana.py
 cd -
 
-# Move the javascript library to the js_output directory.
-mv ../__target__/ ./js_output
+# Move the javascript library to the dist directory.
+mv ../__target__/ ./dist
 
 # Copy the example html file for testing.
-cp test.html.src ./js_output/test.html
+cp ./src_aux/test.html.src ./dist/test.html
+
+cp $(realpath src_aux/Example.ipynb*) ./dist/

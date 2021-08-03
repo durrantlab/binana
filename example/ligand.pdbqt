@@ -1,73 +1,52 @@
-REMARK  11 active torsions:
+REMARK  8 active torsions:
 REMARK  status: ('A' for Active; 'I' for Inactive)
-REMARK    1  A    between atoms: PG_2  and  O3B_5 
-REMARK    2  A    between atoms: O3B_5  and  PB_6 
-REMARK    3  A    between atoms: PB_6  and  O3A_9 
-REMARK    4  A    between atoms: O3A_9  and  PA_10 
-REMARK    5  A    between atoms: PA_10  and  O59_13 
-REMARK    6  A    between atoms: O59_13  and  C59_14 
-REMARK    7  A    between atoms: C59_14  and  C49_15 
-REMARK    8  A    between atoms: C39_17  and  O39_18 
-REMARK    9  A    between atoms: C29_20  and  O29_21 
-REMARK   10  A    between atoms: C19_23  and  N9_24 
-REMARK   11  A    between atoms: C6_32  and  N6_33 
+REMARK    1  A    between atoms: C4_1  and  C5_2 
+REMARK    2  A    between atoms: C4_1  and  N1_7 
+REMARK    3  A    between atoms: C4_1  and  O6_5 
+REMARK    4  A    between atoms: C5_2  and  N1_6 
+REMARK    5  A    between atoms: C7_4  and  N1_6 
+REMARK    6  A    between atoms: C7_4  and  C1_8 
+REMARK    7  A    between atoms: N1_6  and  C6_14 
+REMARK    8  A    between atoms: N1_7  and  C2_9 
 ROOT
-HETATM    1  C49 ATP     1      41.034  18.978  14.030  1.00 20.00     0.177 C 
-HETATM    2  O49 ATP     1      41.042  20.083  13.138  1.00 20.00    -0.331 OA
-HETATM    3  C39 ATP     1      40.382  19.568  15.268  1.00 20.00     0.172 C 
-HETATM    4  C29 ATP     1      40.973  20.967  15.342  1.00 20.00     0.190 C 
-HETATM    5  C19 ATP     1      41.343  21.265  13.892  1.00 20.00     0.237 C 
+HETATM    1  C5  CHT A   1      16.376   2.063   7.151  1.00  6.35     0.308 C 
 ENDROOT
-BRANCH   1   6
-HETATM    6  C59 ATP     1      40.228  17.831  13.474  1.00 20.00     0.187 C 
-BRANCH   6   7
-HETATM    7  O59 ATP     1      40.761  17.421  12.230  1.00 20.00    -0.268 OA
-BRANCH   7   8
-HETATM    8  PA  ATP     1      41.441  16.004  12.024  1.00 20.00     0.418 P 
-HETATM    9  O2A ATP     1      40.573  14.911  12.597  1.00 20.00    -0.624 OA
-HETATM   10  O1A ATP     1      41.868  15.977  10.607  1.00 20.00    -0.624 OA
-BRANCH   8  11
-HETATM   11  O3A ATP     1      42.720  16.073  13.004  1.00 20.00    -0.180 OA
-BRANCH  11  12
-HETATM   12  PB  ATP     1      44.166  16.669  12.640  1.00 20.00     0.428 P 
-HETATM   13  O2B ATP     1      44.015  18.092  12.214  1.00 20.00    -0.624 OA
-HETATM   14  O1B ATP     1      44.846  15.767  11.696  1.00 20.00    -0.624 OA
-BRANCH  12  15
-HETATM   15  O3B ATP     1      44.807  16.562  14.092  1.00 20.00    -0.173 OA
-BRANCH  15  16
-HETATM   16  PG  ATP     1      46.034  17.442  14.649  1.00 20.00     0.431 P 
-HETATM   17  O3G ATP     1      45.415  18.289  15.759  1.00 20.00    -0.616 OA
-HETATM   18  O2G ATP     1      47.012  16.440  15.214  1.00 20.00    -0.616 OA
-HETATM   19  O1G ATP     1      46.554  18.251  13.486  1.00 20.00    -0.616 OA
-ENDBRANCH  15  16
-ENDBRANCH  12  15
-ENDBRANCH  11  12
-ENDBRANCH   8  11
-ENDBRANCH   7   8
-ENDBRANCH   6   7
-ENDBRANCH   1   6
-BRANCH   3  20
-HETATM   20  O39 ATP     1      40.575  18.803  16.426  1.00 20.00    -0.380 OA
-HETATM   21  H8L ATP     1      41.554  18.713  16.607  1.00 20.00     0.211 HD
-ENDBRANCH   3  20
-BRANCH   5  22
-HETATM   22  N9  ATP     1      40.602  22.354  13.240  1.00 20.00    -0.270 N 
-HETATM   23  C4  ATP     1      39.267  22.569  13.244  1.00 20.00     0.169 A 
-HETATM   24  N3  ATP     1      38.297  21.903  13.909  1.00 20.00    -0.205 NA
-HETATM   25  C5  ATP     1      39.058  23.679  12.418  1.00 20.00     0.150 A 
-HETATM   26  C2  ATP     1      37.057  22.401  13.740  1.00 20.00     0.202 A 
-HETATM   27  N1  ATP     1      36.760  23.458  12.935  1.00 20.00    -0.206 NA
-HETATM   28  C6  ATP     1      37.744  24.121  12.264  1.00 20.00     0.156 A 
-HETATM   29  N7  ATP     1      40.249  24.145  11.942  1.00 20.00    -0.219 NA
-HETATM   30  C8  ATP     1      41.171  23.310  12.442  1.00 20.00     0.182 A 
-BRANCH  28  31
-HETATM   31  N6  ATP     1      37.382  25.103  11.430  1.00 20.00    -0.382 N 
-HETATM   32  H61 ATP     1      38.079  25.610  10.922  1.00 20.00     0.157 HD
-HETATM   33  H62 ATP     1      36.415  25.330  11.315  1.00 20.00     0.157 HD
-ENDBRANCH  28  31
-ENDBRANCH   5  22
-BRANCH   4  34
-HETATM   34  O29 ATP     1      42.117  20.993  16.172  1.00 20.00    -0.378 OA
-HETATM   35  H8M ATP     1      42.791  20.336  15.833  1.00 20.00     0.211 HD
-ENDBRANCH   4  34
-TORSDOF 11
+BRANCH   1   2
+HETATM    2  N1  CHT A   1      15.723   3.326   7.619  1.00  6.17    -0.006 N 
+HETATM    3  C6  CHT A   1      15.386   3.121   9.043  1.00  5.88     0.283 C 
+BRANCH   2   4
+HETATM    4  C6  CHT A   1      14.451   3.555   6.881  1.00  0.00     0.248 A 
+HETATM    5  C7  CHT A   1      14.179   3.052   5.671  1.00  0.00     0.066 A 
+HETATM    6  C8  CHT A   1      12.835   3.506   5.294  1.00  0.00     0.029 A 
+HETATM    7  C9  CHT A   1      12.365   4.258   6.295  1.00  0.00     0.144 A 
+HETATM    8  O2  CHT A   1      13.332   4.389   7.437  1.00  0.00    -0.300 OA
+ENDBRANCH   2   4
+BRANCH   2   9
+HETATM    9  C7  CHT A   1      16.663   4.518   7.461  1.00  4.71     0.358 C 
+BRANCH   9  10
+HETATM   10  C1  CHT A   1      17.243   5.230   8.677  1.00  0.00     0.200 C 
+HETATM   11  O4  CHT A   1      16.818   5.027   9.728  1.00  0.00    -0.647 OA
+HETATM   12  O3  CHT A   1      18.046   6.106   8.908  1.00  0.00    -0.647 OA
+ENDBRANCH   9  10
+ENDBRANCH   2   9
+ENDBRANCH   1   2
+BRANCH   1  13
+HETATM   13  C4  CHT A   1      17.023   2.039   5.749  1.00  7.51     0.354 C 
+BRANCH  13  14
+HETATM   14  N1  CHT A   1      17.117   0.715   5.182  1.00  0.00     0.004 N 
+HETATM   15  H2  CHT A   1      16.240   0.227   5.182  1.00  0.00     0.289 HD
+HETATM   16  H1  CHT A   1      17.432   0.801   4.195  1.00  0.00     0.289 HD
+BRANCH  14  17
+HETATM   17  C2  CHT A   1      18.204  -0.049   5.920  1.00  0.00     0.247 A 
+HETATM   18  O1  CHT A   1      19.656   0.045   5.545  1.00  0.00    -0.300 OA
+HETATM   19  C5  CHT A   1      20.217  -0.885   6.582  1.00  0.00     0.144 A 
+HETATM   20  C4  CHT A   1      19.280  -1.403   7.384  1.00  0.00     0.029 A 
+HETATM   21  C3  CHT A   1      17.983  -0.864   6.957  1.00  0.00     0.066 A 
+ENDBRANCH  14  17
+ENDBRANCH  13  14
+BRANCH  13  22
+HETATM   22  O6  CHT A   1      18.398   2.270   5.897  1.00  8.52    -0.368 OA
+HETATM   23  HO6 CHT A   1      18.813   2.276   5.007  1.00  0.00     0.212 HD
+ENDBRANCH  13  22
+ENDBRANCH   1  13
+TORSDOF 8

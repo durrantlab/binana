@@ -3,6 +3,16 @@
 
 import binana
 import math
+from binana._structure.point import Point
+from binana._structure.atom import Atom
+from binana._utils._math_functions import (
+    distance,
+    angle_between_three_points,
+    vector_subtraction,
+    cross_product,
+    dihedral,
+)
+from binana._utils.shim import _set_default
 
 # __pragma__ ('skip')
 # Python
@@ -10,12 +20,13 @@ import textwrap
 from math import fabs
 
 openFile = open
-
 # __pragma__ ('noskip')
 
 """?
 # Transcrypt
-textwrap = binana._utils.shim
+import binana._utils
+from binana._utils import shim
+textwrap = shim
 from binana._utils.shim import fabs
 from binana._utils.shim import OpenFile as openFile
 ?"""
@@ -38,7 +49,7 @@ class Mol:
         self.min_y = 9999.99
         self.max_z = -9999.99
         self.min_z = 9999.99
-        self.rotateable_bonds_count = 0
+        self.rotatable_bonds_count = -1  # To indicate not set.
         self.protein_resnames = [
             "ALA",
             "ARG",
@@ -77,15 +88,28 @@ class Mol:
     def load_pdb_from_text(
         self,
         text_content,
-        filename_to_use="NO_FILE",
-        min_x=-9999.99,
-        max_x=9999.99,
-        min_y=-9999.99,
-        max_y=9999.99,
-        min_z=-9999.99,
-        max_z=9999.99,
+        filename_to_use=None,
+        min_x=None,
+        max_x=None,
+        min_y=None,
+        max_y=None,
+        min_z=None,
+        max_z=None,
     ):
+
+        filename_to_use = _set_default(filename_to_use, "NO_FILE")
+        min_x = _set_default(min_x, -9999.99)
+        max_x = _set_default(max_x, 9999.99)
+        min_y = _set_default(min_y, -9999.99)
+        max_y = _set_default(max_y, 9999.99)
+        min_z = _set_default(min_z, -9999.99)
+        max_z = _set_default(max_z, 9999.99)
+
+        # __pragma__ ('js', 'let lines = text_content.split("\\n");')
+
+        # __pragma__ ('skip')
         lines = text_content.split("\n")
+        # __pragma__ ('noskip')
 
         autoindex = 1
 
@@ -114,12 +138,16 @@ class Mol:
                 break
 
             if "between atoms" in line and " A " in line:
-                self.rotateable_bonds_count = self.rotateable_bonds_count + 1
+                if self.rotatable_bonds_count == -1:
+                    # Rotatable bonds are available, to reset counter.
+                    self.rotatable_bonds_count = 0
+
+                self.rotatable_bonds_count = self.rotatable_bonds_count + 1
 
             if len(line) >= 7 and (line[0:4] == "ATOM" or line[0:6] == "HETATM"):
                 # Load atom data (coordinates, etc.)
-                temp_atom = binana.Atom()
-                temp_atom.read_PDB_line(line)
+                temp_atom = Atom()
+                temp_atom.read_pdb_line(line)
 
                 if (
                     temp_atom.coordinates.x > min_x
@@ -208,13 +236,20 @@ class Mol:
     def load_pdb_file(
         self,
         filename,
-        min_x=-9999.99,
-        max_x=9999.99,
-        min_y=-9999.99,
-        max_y=9999.99,
-        min_z=-9999.99,
-        max_z=9999.99,
+        min_x=None,
+        max_x=None,
+        min_y=None,
+        max_y=None,
+        min_z=None,
+        max_z=None,
     ):
+
+        min_x = _set_default(min_x, -9999.99)
+        max_x = _set_default(max_x, 9999.99)
+        min_y = _set_default(min_y, -9999.99)
+        max_y = _set_default(max_y, 9999.99)
+        min_z = _set_default(min_z, -9999.99)
+        max_z = _set_default(max_z, 9999.99)
 
         # Now load the file into a list
         file = openFile(filename, "r")
@@ -261,7 +296,7 @@ class Mol:
         for atom_index in self.all_atoms.keys():
             to_output = (
                 to_output
-                + self.all_atoms[atom_index].create_PDB_line(atom_index)
+                + self.all_atoms[atom_index].create_pdb_line(atom_index)
                 + "\n"
             )
 
@@ -269,7 +304,7 @@ class Mol:
 
     # Adds a new atom to this Mol
     # Param self (Mol)
-    # Param atom (binana.Atom): new atom being added
+    # Param atom (binana._structure.atom.Atom): new atom being added
     def add_new_atom(self, atom):
         # first get available index
         t = 1
@@ -653,25 +688,23 @@ class Mol:
     # Define bonds between atoms using distance on the grid
     # Param self (Mol)
     def create_bonds_by_distance(self):
-        for AtomIndex1 in self.non_protein_atoms.keys():
-            atom1 = self.non_protein_atoms[AtomIndex1]
+        for atom_index1 in self.non_protein_atoms.keys():
+            atom1 = self.non_protein_atoms[atom_index1]
             if atom1.residue[-3:] not in self.protein_resnames:
                 # so it's not a protein residue
-                for AtomIndex2 in self.non_protein_atoms.keys():
-                    if AtomIndex1 != AtomIndex2:
-                        atom2 = self.non_protein_atoms[AtomIndex2]
+                for atom_index2 in self.non_protein_atoms.keys():
+                    if atom_index1 != atom_index2:
+                        atom2 = self.non_protein_atoms[atom_index2]
                         if not atom2.residue[-3:] in self.protein_resnames:
                             # so it's not a protein residue
-                            dist = binana.mathfuncs.distance(
-                                atom1.coordinates, atom2.coordinates
-                            )
+                            dist = distance(atom1.coordinates, atom2.coordinates)
 
                             if (
                                 dist
                                 < self.bond_length(atom1.element, atom2.element) * 1.2
                             ):
-                                atom1.add_neighbor_atom_index(AtomIndex2)
-                                atom2.add_neighbor_atom_index(AtomIndex1)
+                                atom1.add_neighbor_atom_index(atom_index2)
+                                atom2.add_neighbor_atom_index(atom_index1)
 
     # Retuns bond length between two elements
     # Param self (Mol)
@@ -891,21 +924,21 @@ class Mol:
                     atom2 = self.all_atoms[atom.indecies_of_atoms_connecting[1]]
                     atom3 = self.all_atoms[atom.indecies_of_atoms_connecting[2]]
                     angle1 = (
-                        binana.mathfuncs.angle_between_three_points(
+                        angle_between_three_points(
                             atom1.coordinates, nitrogen.coordinates, atom2.coordinates
                         )
                         * 180.0
                         / math.pi
                     )
                     angle2 = (
-                        binana.mathfuncs.angle_between_three_points(
+                        angle_between_three_points(
                             atom1.coordinates, nitrogen.coordinates, atom3.coordinates
                         )
                         * 180.0
                         / math.pi
                     )
                     angle3 = (
-                        binana.mathfuncs.angle_between_three_points(
+                        angle_between_three_points(
                             atom2.coordinates, nitrogen.coordinates, atom3.coordinates
                         )
                         * 180.0
@@ -1136,7 +1169,7 @@ class Mol:
                     break
 
         if real_resname == "ARG":
-            charge_pt = binana.Point(0.0, 0.0, 0.0)
+            charge_pt = Point(0.0, 0.0, 0.0)
             count = 0.0
             indices = []
             for index in residue:
@@ -1178,7 +1211,7 @@ class Mol:
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized. But let's not consider HIS when doing salt
             # bridges.
-            charge_pt = binana.Point(0.0, 0.0, 0.0)
+            charge_pt = Point(0.0, 0.0, 0.0)
             count = 0.0
             indices = []
             for index in residue:
@@ -1218,7 +1251,7 @@ class Mol:
             # regardless of protonation state, assume it's charged. This based
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized.
-            charge_pt = binana.Point(0.0, 0.0, 0.0)
+            charge_pt = Point(0.0, 0.0, 0.0)
             count = 0.0
             indices = []
             for index in residue:
@@ -1254,7 +1287,7 @@ class Mol:
             # regardless of protonation state, assume it's charged. This based
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized.
-            charge_pt = binana.Point(0.0, 0.0, 0.0)
+            charge_pt = Point(0.0, 0.0, 0.0)
             count = 0.0
             indices = []
             for index in residue:
@@ -1293,7 +1326,7 @@ class Mol:
     class Charged:
         # Initialize charge
         # Param self (Charged)
-        # Param coordinates (binana.Point): point on grid
+        # Param coordinates (Point): point on grid
         # Param indecies (list): indecies of atom
         # Param positive (boolean): True if atom is positively charged
         def __init__(self, coordinates, indices, positive):
@@ -1325,7 +1358,7 @@ class Mol:
         if total == 0:
             return  # to prevent errors in some cases
 
-        center = binana.Point(x_sum / total, y_sum / total, z_sum / total)
+        center = Point(x_sum / total, y_sum / total, z_sum / total)
 
         # now get the radius of the aromatic ring
         radius = 0.0
@@ -1353,9 +1386,9 @@ class Mol:
             B = self.all_atoms[indicies_of_ring[2]].coordinates
             C = self.all_atoms[indicies_of_ring[4]].coordinates
 
-        AB = binana.mathfuncs.vector_subtraction(B, A)
-        AC = binana.mathfuncs.vector_subtraction(C, A)
-        ABXAC = binana.mathfuncs.cross_product(AB, AC)
+        AB = vector_subtraction(B, A)
+        AC = vector_subtraction(C, A)
+        ABXAC = cross_product(AB, AC)
 
         # formula for plane will be ax + by + cz = d
         x1 = self.all_atoms[indicies_of_ring[0]].coordinates.x
@@ -1431,7 +1464,7 @@ class Mol:
 
                 # now check the dihedral between the ring atoms to see if it's
                 # flat
-                angle = binana.mathfuncs.dihedral(pt1, pt2, pt3, pt4) * 180 / math.pi
+                angle = dihedral(pt1, pt2, pt3, pt4) * 180 / math.pi
                 if (angle > -165 and angle < -15) or (angle > 15 and angle < 165):
                     # 15 degress is the cutoff #, ring[t], ring[t+1],
                     # ring[t+2], ring[t+3] # range of this function is -pi to
@@ -1442,9 +1475,7 @@ class Mol:
                 # now check the dihedral between the ring atoms and an atom connected to the current atom to see if that's flat too.
                 for substituent_atom_index in cur_atom.indecies_of_atoms_connecting:
                     pt_sub = self.non_protein_atoms[substituent_atom_index].coordinates
-                    angle = (
-                        binana.mathfuncs.dihedral(pt2, pt3, pt4, pt_sub) * 180 / math.pi
-                    )
+                    angle = dihedral(pt2, pt3, pt4, pt_sub) * 180 / math.pi
                     if (angle > -165 and angle < -15) or (
                         angle > 15 and angle < 165
                     ):  # 15 degress is the cutoff #, ring[t], ring[t+1], ring[t+2], ring[t+3] # range of this function is -pi to pi
@@ -1762,7 +1793,7 @@ class Mol:
 
                         # Now compute the phi and psi dihedral angles
                         phi = (
-                            binana.mathfuncs.dihedral(
+                            dihedral(
                                 first_C.coordinates,
                                 second_N.coordinates,
                                 second_CA.coordinates,
@@ -1772,7 +1803,7 @@ class Mol:
                             / math.pi
                         )
                         psi = (
-                            binana.mathfuncs.dihedral(
+                            dihedral(
                                 first_N.coordinates,
                                 first_CA.coordinates,
                                 first_C.coordinates,

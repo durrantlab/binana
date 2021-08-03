@@ -2,6 +2,8 @@
 # for binana.py
 
 import binana
+from binana._structure.point import Point
+from binana._utils.shim import r_just, round_to_thousandths_to_str
 
 """
 Class Atom defines an atom
@@ -13,9 +15,9 @@ class Atom:
     def __init__(self):
         self.atom_name = ""
         self.residue = ""
-        self.coordinates = binana.Point(99999, 99999, 99999)
+        self.coordinates = Point(99999, 99999, 99999)
         self.element = ""
-        self.PDB_index = ""
+        self.pdb_index = ""
         self.line = ""
         self.atom_type = ""
         self.indecies_of_atoms_connecting = []
@@ -33,7 +35,7 @@ class Atom:
         theatom.residue = self.residue
         theatom.coordinates = self.coordinates.copy_of()
         theatom.element = self.element
-        theatom.PDB_index = self.PDB_index
+        theatom.pdb_index = self.pdb_index
         theatom.line = self.line
         theatom.atom_type = self.atom_type
         theatom.indecies_of_atoms_connecting = self.indecies_of_atoms_connecting[:]
@@ -59,7 +61,7 @@ class Atom:
             + "):"
             + self.atom_name.strip()
             + "("
-            + str(self.PDB_index)
+            + str(self.pdb_index)
             + ")"
         )
         return to_return
@@ -67,18 +69,19 @@ class Atom:
     # Returns a PDB line for the atom
     # Param self (Atom)
     # Param index (integer): index of the point
-    def create_PDB_line(self, index):
+    def create_pdb_line(self, index):
         output = "ATOM "
         output = (
             output
-            + binana.r_just(str(index), 6)
-            + binana.r_just(self.atom_name, 5)
-            + binana.r_just(self.residue, 4)
+            + r_just(str(index), 6)
+            + r_just(self.atom_name, 5)
+            + r_just(self.residue, 4)
         )
-        output = output + binana.r_just("%.3f" % self.coordinates.x, 18)
-        output = output + binana.r_just("%.3f" % self.coordinates.y, 8)
-        output = output + binana.r_just("%.3f" % self.coordinates.z, 8)
-        output = output + binana.r_just(self.element, 24)
+
+        output = output + r_just(round_to_thousandths_to_str(self.coordinates.x), 18)
+        output = output + r_just(round_to_thousandths_to_str(self.coordinates.y), 8)
+        output = output + r_just(round_to_thousandths_to_str(self.coordinates.z), 8)
+        output = output + r_just(self.element, 24)
         return output
 
     # Returns the number of an atom's nearest neighbors
@@ -110,7 +113,7 @@ class Atom:
     # Reads name of atom in from a PDB line
     # Param self (Atom)
     # Param line (string): PDB line
-    def read_PDB_line(self, line):
+    def read_pdb_line(self, line):
         self.line = line
         self.atom_name = line[11:16].strip()
         # Read atom name
@@ -123,7 +126,7 @@ class Atom:
             # the PDB would have this line commented out
             self.atom_name = self.atom_name + " "
 
-        self.coordinates = binana.Point(
+        self.coordinates = Point(
             float(line[30:38]), float(line[38:46]), float(line[46:54])
         )
 
@@ -181,7 +184,7 @@ class Atom:
 
                 self.element = self.element[0:1].strip().upper()
 
-        self.PDB_index = line[6:12].strip()
+        self.pdb_index = line[6:12].strip()
         self.residue = line[16:20]
         # This only uses the rightmost three characters, essentially removing
         # unique rotamer identification

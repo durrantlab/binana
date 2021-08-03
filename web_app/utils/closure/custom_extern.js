@@ -700,7 +700,7 @@ var BootstrapVue;
 var Webina;
 Webina.start = function(a) {}
 
-var WebAssembly;
+// var WebAssembly;
 
 WebAssembly.instantiate;
 

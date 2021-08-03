@@ -508,14 +508,14 @@ export function setup(): void {
                             </b-col>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Contacts" block>
-                                    <b-dropdown-item @click="highlight('contactsWithin4.0A');">Close</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('contactsWithin2.5A');">Closest</b-dropdown-item>
+                                    <b-dropdown-item @click="highlight('closeContacts');">Close</b-dropdown-item>
+                                    <b-dropdown-item @click="highlight('closestContacts');">Closest</b-dropdown-item>
                                 </b-dropdown>
                             </b-col>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Aromatic" block>
                                     <b-dropdown-item @click="highlight('piPiStackingInteractions');">π-π Stacking</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('tStackingInteractions');">T Stacking</b-dropdown-item>
+                                    <b-dropdown-item @click="highlight('tStackingInteractions');">T Shaped</b-dropdown-item>
                                     <b-dropdown-item @click="highlight('cationPiInteractions');">Cation-π</b-dropdown-item>
                                 </b-dropdown>
                             </b-col>

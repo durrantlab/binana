@@ -5,6 +5,8 @@
 import * as ThreeDMol from "./UI/ThreeDMol";
 import * as Store from "./Vue/Store";
 
+declare var jQuery;
+
 let viewer;
 let receptorMol;
 let ligandMol;

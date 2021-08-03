@@ -1,0 +1,7819 @@
+{
+  "activeSiteFlexibility": {
+    "BACKBONE_BETA": 3,
+    "BACKBONE_OTHER": 7,
+    "SIDECHAIN_ALPHA": 18,
+    "SIDECHAIN_BETA": 72,
+    "SIDECHAIN_OTHER": 136
+  },
+  "cationPiInteractions": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 31,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 471,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 473,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 475,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    }
+  ],
+  "closeContacts": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 110,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 110,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 53,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 54,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 55,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 110,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 471,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 478,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 102,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 104,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 657,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 658,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 659,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 660,
+          "atomName": "CE1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 662,
+          "atomName": "CZ",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 464,
+          "atomName": "CA",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 488,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 206,
+          "resName": "GLU"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 471,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 473,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 478,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 255,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 27,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 31,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 255,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 354,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 356,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 357,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 358,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 475,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 27,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 31,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 54,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 354,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 356,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 357,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 358,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 471,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 478,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 27,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 31,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 38,
+          "atomName": "HE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 253,
+          "atomName": "CG1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 254,
+          "atomName": "CG2",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 255,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 350,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 353,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 354,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 356,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 357,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 358,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 475,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 109,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 95,
+          "atomName": "N",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 96,
+          "atomName": "CA",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 102,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 109,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 135,
+          "atomName": "HG1",
+          "chain": "A",
+          "resID": 93,
+          "resName": "THR"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 132,
+          "atomName": "OG1",
+          "chain": "A",
+          "resID": 93,
+          "resName": "THR"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 135,
+          "atomName": "HG1",
+          "chain": "A",
+          "resID": 93,
+          "resName": "THR"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 282,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 93,
+          "atomName": "O",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 109,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 274,
+          "atomName": "ND2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 286,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 93,
+          "atomName": "O",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 92,
+          "atomName": "C",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 93,
+          "atomName": "O",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 92,
+          "atomName": "C",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 93,
+          "atomName": "O",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 109,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 144,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 146,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 147,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 272,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 273,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 274,
+          "atomName": "ND2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 277,
+          "atomName": "1HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 286,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 272,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 273,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 274,
+          "atomName": "ND2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 277,
+          "atomName": "1HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 278,
+          "atomName": "N",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 286,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 291,
+          "atomName": "H",
+          "chain": "A",
+          "resID": 158,
+          "resName": "GLY"
+        }
+      ]
+    }
+  ],
+  "closestContacts": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 357,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 356,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 358,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 148,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    }
+  ],
+  "electrostaticEnergies": {
+    "A_A": 29425.528944332138,
+    "A_C": 177671.42425936312,
+    "A_HD": 263381.84145385964,
+    "A_N": -58930.181126636075,
+    "A_OA": -311243.9243779809,
+    "C_C": 49372.61585423234,
+    "C_HD": 386263.6000818405,
+    "C_N": -163910.6902626202,
+    "C_OA": -586108.6311273004,
+    "HD_HD": 134903.77477802205,
+    "HD_N": -108257.02594380458,
+    "HD_NA": -33454.480043628464,
+    "HD_OA": -1648364.5113510806,
+    "N_N": 796.8226384968042,
+    "N_OA": 488848.33092751016,
+    "OA_OA": 591382.5385213972
+  },
+  "hydrogenBonds": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 274,
+          "atomName": "ND2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        },
+        {
+          "atomIndex": 276,
+          "atomName": "2HD2",
+          "chain": "A",
+          "resID": 156,
+          "resName": "ASN"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 22,
+          "atomName": "O6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 23,
+          "atomName": "HO6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    }
+  ],
+  "hydrophobicContacts": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 53,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 102,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 104,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 657,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 658,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 659,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 660,
+          "atomName": "CE1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 662,
+          "atomName": "CZ",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 464,
+          "atomName": "CA",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 467,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 468,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 469,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 470,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 255,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 27,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 255,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 152,
+          "resName": "ILE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 472,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 474,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 475,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 476,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 205,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 99,
+          "atomName": "CB",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 92,
+          "atomName": "C",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 92,
+          "atomName": "C",
+          "chain": "A",
+          "resID": 88,
+          "resName": "GLY"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 143,
+          "atomName": "CE",
+          "chain": "A",
+          "resID": 94,
+          "resName": "LYS"
+        }
+      ]
+    }
+  ],
+  "ligandAtomTypes": {
+    "A": 8,
+    "C": 5,
+    "HD": 3,
+    "N": 2,
+    "OA": 5
+  },
+  "ligandRotatableBonds": 8,
+  "piPiStackingInteractions": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 100,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 101,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 103,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 104,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 102,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 104,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 102,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 105,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 107,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 108,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 106,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 90,
+          "resName": "TRP"
+        }
+      ]
+    }
+  ],
+  "saltBridges": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 2,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 1,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 3,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 9,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 53,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        },
+        {
+          "atomIndex": 54,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        },
+        {
+          "atomIndex": 55,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 45,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 14,
+          "atomName": "N1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 13,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 15,
+          "atomName": "H2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 16,
+          "atomName": "H1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 283,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        },
+        {
+          "atomIndex": 284,
+          "atomName": "OD1",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        },
+        {
+          "atomIndex": 285,
+          "atomName": "OD2",
+          "chain": "A",
+          "resID": 157,
+          "resName": "ASP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 11,
+          "atomName": "O4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 10,
+          "atomName": "C1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 12,
+          "atomName": "O3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 354,
+          "atomName": "NZ",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 356,
+          "atomName": "HZ1",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 357,
+          "atomName": "HZ2",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        },
+        {
+          "atomIndex": 358,
+          "atomName": "HZ3",
+          "chain": "A",
+          "resID": 183,
+          "resName": "LYS"
+        }
+      ]
+    }
+  ],
+  "tStackingInteractions": [
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 4,
+          "atomName": "C6",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 5,
+          "atomName": "C7",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 6,
+          "atomName": "C8",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 7,
+          "atomName": "C9",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 8,
+          "atomName": "O2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 657,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        },
+        {
+          "atomIndex": 658,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        },
+        {
+          "atomIndex": 660,
+          "atomName": "CE1",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        },
+        {
+          "atomIndex": 662,
+          "atomName": "CZ",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        },
+        {
+          "atomIndex": 661,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        },
+        {
+          "atomIndex": 659,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 233,
+          "resName": "PHE"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 28,
+          "atomName": "CG",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 29,
+          "atomName": "CD1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 31,
+          "atomName": "NE1",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    },
+    {
+      "ligandAtoms": [
+        {
+          "atomIndex": 17,
+          "atomName": "C2",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 18,
+          "atomName": "O1",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 19,
+          "atomName": "C5",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 20,
+          "atomName": "C4",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        },
+        {
+          "atomIndex": 21,
+          "atomName": "C3",
+          "chain": "A",
+          "resID": 1,
+          "resName": "CHT"
+        }
+      ],
+      "receptorAtoms": [
+        {
+          "atomIndex": 32,
+          "atomName": "CE2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 30,
+          "atomName": "CD2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 33,
+          "atomName": "CE3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 35,
+          "atomName": "CZ3",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 36,
+          "atomName": "CH2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        },
+        {
+          "atomIndex": 34,
+          "atomName": "CZ2",
+          "chain": "A",
+          "resID": 43,
+          "resName": "TRP"
+        }
+      ]
+    }
+  ]
+}

@@ -40,8 +40,8 @@ BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD,
 McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi:
 10.1016/j.jmgm.2011.01.004
 
-Introduction
-============
+Introduction, Examples of Use
+=============================
 
 BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing ligand
 binding. The program identifies key binding characteristics like hydrogen bonds,
