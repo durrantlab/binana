@@ -21,3 +21,4 @@ tmp.md
 _build
 docs/docs
 .ipynb_checkpoints
+make.bat
