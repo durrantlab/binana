@@ -6,7 +6,7 @@ To run the BINANA command-line example, type the following into the Unix command
 line, from the current directory:
 
 ```
-python ../binana.py -receptor ./receptor.pdbqt -ligand ./ligand.pdbqt -output_dir ./output_for_vmd/ > output.txt
+python ../run_binana.py -receptor ./receptor.pdbqt -ligand ./ligand.pdbqt -output_dir ./cli_example_output/ > output.txt
 ```
 
 A similar command should work from the Windows command line.
