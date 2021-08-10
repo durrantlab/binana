@@ -1,3 +1,7 @@
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
+
 import binana
 from binana.load_ligand_receptor import _get_ligand_receptor_dists
 from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine

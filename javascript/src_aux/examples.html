@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--
+        This file is part of BINANA, released under the Apache 2.0 License. See
+        LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+        details. Copyright 2020 Jacob D. Durrant.
+    -->
+
+    <title>BINANA.js Demo</title>
+    <script type="module">
+      // Load the BINANA module
+      import * as bnana from "./binana.js";
+      window.binana = bnana;
+    </script>
+    <script>
+      // Define a JavaScript function to output formatted results
+      var output = function (title, txt) {
+        let outputDiv = document.getElementById("output");
+
+        let txtArea = document.createElement("textarea");
+        // txtArea.style.fontSize = "80%";
+        txtArea.style.width = "100%";
+        txtArea.style.height = "80px";
+        txtArea.style.marginBottom = "25px";
+        txtArea.value = txt;
+
+        let h3 = document.createElement("H3");
+        h3.style.marginBottom = "5px";
+        h3.innerHTML = title;
+
+        // let hr = document.createElement("HR");
+        // hr.style.marginTop = "30px";
+
+        outputDiv.append(h3);
+        outputDiv.append(txtArea);
+        // outputDiv.append(hr);
+      };
+
+      // A functon to wait for BINANA to load. (Because loading as a
+      // module.)
+      let waitForBINANA = function () {
+        return new Promise((resolve) => {
+          let check = function () {
+            if (window.binana === undefined) {
+              // Not loaded yet. Check back in half a second.
+              setTimeout(check, 500);
+            } else {
+              // It is loaded.
+              resolve(window.binana);
+            }
+          };
+          check();
+        });
+      };
+
+      // Load the ligand and receptor pdbqt files.
+      var loadPDBQT = function (path) {
+        return fetch(path)
+          .then((response) => response.text())
+          .then((data) => Promise.resolve(data));
+      };
+      Promise.all([
+        loadPDBQT("./ligand.pdbqt"),
+        loadPDBQT("./receptor.pdbqt"),
+        waitForBINANA(),
+      ]).then((vals) => {
+        // Define ligand PDBQT text
+        let ligPDBTxt = vals[0];
+
+        // Define protein PDBQT text
+        let recepPDBTxt = vals[1];
+
+        // Load the PDB texts into models
+        let models = binana.load_ligand_receptor.from_texts(
+          ligPDBTxt,
+          recepPDBTxt
+        );
+        let ligand = models[0];
+        let receptor = models[1];
+
+        // Get information about the hydrogen bonds (example)
+        let hbondInf = binana.interactions.get_hydrogen_bonds(ligand, receptor);
+
+        // Counting/characterizing the acceptors and donors (counts)
+        output(
+          "Hydrogen-bond counts",
+          JSON.stringify(hbondInf["counts"], null, 2)
+        );
+
+        // List the atoms involved in each hydrogen bond
+        let toShow = "";
+        for (let hbondLabel of hbondInf["labels"]) {
+          toShow += JSON.stringify(hbondLabel, null, 2) + "\n";
+        }
+        output("Hydrogen-bond information", toShow);
+
+        // Get information about the cation-pi interactions (example)
+        cationPiInf = binana.interactions.get_cation_pi(ligand, receptor);
+
+        // Counting/characterizing the acceptors and donors (counts)
+        output(
+          "Cation-pi counts",
+          JSON.stringify(cationPiInf["counts"], null, 2)
+        );
+
+        // List the atoms involved in each cation-pi interaction
+        toShow = "";
+        for (let cationPiLabel of cationPiInf["labels"]) {
+          toShow += JSON.stringify(cationPiLabel, null, 2) + "\n";
+        }
+        output("Cation-pi information", toShow);
+
+        // Other interactions are also available
+        toShow = "";
+        toShow += "Available functions for detecting interactions:\n";
+        let funcNames = Object.keys(binana.interactions).filter((n) =>
+          n.startsWith("get_")
+        );
+        toShow += funcNames.join("\n");
+        output("Available functions", toShow);
+
+        // Get PDB-formatted text
+        pdbTxt = binana.output.pdb_file.write(
+          ligand,
+          receptor,
+          null, // closest
+          null, // close
+          null, // hydrophobics
+          hbondInf, // hydrogen bonds
+          null, // salt_bridges
+          null, // pi_pi
+          cationPiInf, // cat_pi
+          null, // active_site_flexibility
+          null, // log_output
+          true // as_str
+        );
+
+        let pdbRemarkLines = pdbTxt
+          .split("\n")
+          .filter((l) => l.startsWith("REMARK") && l !== "REMARK");
+        let pdbRemarkTxt = pdbRemarkLines
+          .join(",")
+          .replace(/REMARK {0,1}/g, "")
+          .replace(".,", ".");
+        output("PDB remarks", pdbRemarkTxt);
+
+        output("Full PDB text", pdbTxt);
+
+        // Get the interactions as a dictionary for easier big-data
+        // analysis
+
+        let data = binana.output.dictionary.collect(
+          null, // closest
+          null, // close
+          null, // hydrophobics
+          hbondInf, // hydrogen bonds
+          null, // salt_bridges
+          null, // pi_pi
+          cationPiInf, // cat_pi
+          null, // active_site_flexibility
+          null, // ligand_atom_types
+          true // ligand_rotatable_bonds
+        );
+
+        toShow = "KEYS: ";
+        toShow += Object.keys(data).join(", ") + ". ";
+        toShow += "\n\nHYDROGEN-BOND DATA (EXAMPLE):\n\n";
+        toShow += JSON.stringify(data["hydrogenBonds"], null, 2);
+
+        output("Interactions as a dictionary", toShow);
+
+        // Get all the interactions at once
+        allInf = binana.interactions.get_all_interactions(ligand, receptor);
+
+        output(
+          "All available interactions",
+          JSON.stringify(Object.keys(allInf), null, 2)
+        );
+
+        // Get and display PDB-formatted text
+        pdbTxt = binana.output.pdb_file.write_all(
+          ligand,
+          receptor,
+          allInf,
+          null, // log_output
+          true // as_str
+        );
+        output("PDB-formatted text including interacting atoms", pdbTxt);
+      });
+    </script>
+  </head>
+  <body>
+      <p>This demo is meant to mimic the Jupyter notebook at
+      <code>./Examples.ipynb</code>. It shows how to run the same commands using
+      HTML-embedded JavaScript.</p>
+    <div id="output"></div>
+  </body>
+</html>

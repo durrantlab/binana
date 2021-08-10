@@ -1,3 +1,7 @@
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
+
 import binana  # Leave this for javascript conversion.
 from binana import fs  # Leave
 from binana import load_ligand_receptor  # Leave

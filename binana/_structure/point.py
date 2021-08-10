@@ -1,5 +1,9 @@
-# this file contains the Point class
-# for binana.py
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
+
+# this file contains the Point class for binana.py
+
 import math
 import binana
 from binana._utils.shim import r_just, round_to_thousandths_to_str

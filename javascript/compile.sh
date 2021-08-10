@@ -13,7 +13,12 @@ cd -
 # Move the javascript library to the lib directory.
 mv ../__target__/ ./lib
 
-# Copy the example html file for testing.
-cp ./src_aux/example.html ./lib/
+# Copy aux files.
+cp ./src_aux/* ./lib/
 
-cp src_aux/Example.ipynb* ./lib/
+# Modify all js files to include license notice.
+ls lib/binana*.js | awk '{print "cat src_aux/license_info.txt > t; cat " $1 " >> t; mv t " $1}' | bash
+
+# For debugging
+# rm ./lib/*.ipynb
+# ln -s $(realpath ./src_aux/*.ipynb) ./lib/

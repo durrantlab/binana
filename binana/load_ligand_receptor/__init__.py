@@ -1,3 +1,7 @@
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
+
 """This module contains functions for loading ligands and receptors. Note that
 while BINANA can process PDB files, the PDB format lacks some information
 required for a full BINANA analysis. PDBQT recommended."""

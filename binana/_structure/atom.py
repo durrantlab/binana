@@ -1,5 +1,8 @@
-# this file contains the Atom class
-# for binana.py
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
+
+# this file contains the Atom class for binana.py
 
 import binana
 from binana._structure.point import Point

@@ -1,9 +1,6 @@
-# BINANA is released under the GNU General Public License (see
-# http://www.gnu.org/licenses/gpl.html). If you have any questions, comments,
-# or suggestions, please don't hesitate to contact me, Jacob Durrant, at
-# jdurrant [at] ucsd [dot] edu. If you use BINANA in your work, please cite
-# Durrant, J. D. and J. A. McCammon (2011). "BINANA: A novel algorithm for
-# ligand-binding characterization." J Mol Graph Model 29(6): 888-893.
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2020 Jacob D. Durrant.
 
 import __future__
 from binana.output import _write_main
