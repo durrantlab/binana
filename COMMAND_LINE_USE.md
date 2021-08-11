@@ -29,8 +29,8 @@
                        ]{};:'"/|\         []{};:'"
                                 \<>,-_=+.|
 
-BINANA 1.2.1
-============
+BINANA 2.0
+==========
 
 BINANA is released under the GNU General Public License (see
 http://www.gnu.org/licenses/gpl.html). If you use BINANA in your work, please

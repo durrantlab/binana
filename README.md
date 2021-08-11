@@ -1,6 +1,7 @@
-# BINANA 2.0
+# Git Repository Contents (Select Directories and Files)
 
-## Git Repository Contents
+The BINANA Git repository is hosted at
+[http://git.durrantlab.com/jdurrant/binana](http://git.durrantlab.com/jdurrant/binana).
 
 | Directory/File                    | Description
 |-----------------------------------|------------------------------------------
@@ -13,30 +14,29 @@
 | `./javascript/lib/examples.html`  | HTML file, JavaScript-library demo
 | `./web_app/`                      | Web app
 | `./web_app/src/`                  | Web-app source code
-| `./web_app/binana.zip`            | Compiled web-app
 
+# Using BINANA
+## Command-Line Use
 
-## Using BINANA
-### Command-Line Use
-
-See `./COMMAND_LINE_USE.md` for detailed instructions describing how to use BINANA
-from the command line. Here is a simple example:
+See `./COMMAND_LINE_USE.md` in the Git repository for detailed instructions.
+Here is a simple example:
 
 ```bash
+cd python
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/
 ```
 
-### Python Library
+## Python Library
 
-The following files describe how to use BINANA as a Python library that can be
-accessed from other Python scripts:
+The following files in the Git repository describe how to use BINANA as a Python
+library that can be accessed from other Python scripts:
 
-- `./example/Examples.ipynb`: A Jupyter notebook demonstrating use.
-- `./example/Examples.ipynb.pdf`: A PDF version of the notebook, for those who
-  don't use Jupyter.
-- `./example/Examples.md`: A Markdown version of the notebook. 
+- `./python/example/Examples.ipynb`: A Jupyter notebook demonstrating use.
+- `./python/example/Examples.ipynb.pdf`: A PDF version of the notebook, for
+  those who don't use Jupyter.
+- `./python/example/Examples.md`: A Markdown version of the notebook. 
 
-### JavaScript Library
+## JavaScript Library
 
 These files describe how to use BINANA as a JavaScript library that can be
 accessed from the web browser (e.g., from web apps).

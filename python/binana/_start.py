@@ -26,7 +26,7 @@ textwrap = shim
 from binana._utils.shim import fabs
 ?"""
 
-VERSION = "1.3"
+VERSION = "2.0"
 
 
 def _get_all_interactions(parameters):
@@ -97,7 +97,7 @@ def _intro():
     # TODO: If you ever change below, be sure to update COMMAND_LINE_USE.md with
     # this file too!
 
-    version = "1.2.1"
+    version = "2.0"
     citation = "BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD, McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi: 10.1016/j.jmgm.2011.01.004"
     lines = [
         "",

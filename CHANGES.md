@@ -2,7 +2,7 @@ Changes
 =======
 
 
-1.4 WIP
+2.0 WIP
 -------
 
 Major refactor
