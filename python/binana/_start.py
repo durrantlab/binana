@@ -94,8 +94,8 @@ def _get_all_interactions(parameters):
 
 
 def _intro():
-    # TODO: If you ever change below, be sure to update README.md with this file
-    # too!
+    # TODO: If you ever change below, be sure to update COMMAND-LINE-USE.md with
+    # this file too!
 
     version = "1.2.1"
     citation = "BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD, McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi: 10.1016/j.jmgm.2011.01.004"
@@ -116,31 +116,31 @@ def _intro():
         "As output, BINANA describes ligand binding. Here's a simple example of how to run the program:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt",
         "```",
         "",
         "To create a single PDB file showing the different binding characteristics with those characteristics described in the PDB header:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb",
         "```",
         "",
         "Note that in the above example, errors and warnings are not written to the output file. To save these to a file, try:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb > errors.txt",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb > errors.txt",
         "```",
         "",
         "To additionally output a JSON file with all the characterized interactions between the protein and ligand:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_json /path/to/output.json",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_json /path/to/output.json",
         "```",
         "",
         "You can also send the program output to a directory, which will be created if it does not already exist. If a directory is specified, the program automatically separates the output PDB file into separate files for each interaction analyzed, and a description of the interactions is written to a file called `log.txt`. Additionally, a VMD state file is created so the results can be easily visualized in VMD, a free program available for download at http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD Again, to save warnings and errors, append something like `> errors.txt` to the end of your command:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/ > errors.txt",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/ > errors.txt",
         "```",
         "",
         "Though we recommend using program defaults, the following command-line tags can also be specified: `-close_contacts_dist1_cutoff` `-close_contacts_dist2_cutoff` `-electrostatic_dist_cutoff` `-active_site_flexibility_dist_cutoff` `-hydrophobic_dist_cutoff` `-hydrogen_bond_dist_cutoff` `-hydrogen_bond_angle_cutoff` `-pi_padding_dist` `-pi_pi_interacting_dist_cutoff` `-pi_stacking_angle_tolerance` `-T_stacking_angle_tolerance` `-T_stacking_closest_dist_cutoff` `-cation_pi_dist_cutoff` `-salt_bridge_dist_cutoff`",
@@ -148,7 +148,7 @@ def _intro():
         "For example, if you want to tell BINANA to detect only hydrogen bonds where the donor and acceptor are less than 3.0 angstroms distant, run:",
         "",
         "```bash",
-        "python binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_bond_dist_cutoff 3.0",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_bond_dist_cutoff 3.0",
         "```",
         "",
         "What follows is a detailed description of the BINANA algorithm and a further explaination of the optional parameters described above. Parameter names are enclosed in braces.",
@@ -222,7 +222,7 @@ def _intro():
     for line in lines:
         if line == "":
             wrapped.append("")
-        elif "python binana.py" in line:
+        elif "python3 run_binana.py" in line:
             wrapped.append(line)
         else:
             wrapped.extend(textwrap.wrap(line, 80))

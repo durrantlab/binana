@@ -367,8 +367,3 @@ print(all_data["hydrogenBonds"])
     
     [{'ligandAtoms': [{'chain': 'A', 'resID': 1, 'resName': 'LIG', 'atomName': 'N1', 'atomIndex': 14}, {'chain': 'A', 'resID': 1, 'resName': 'LIG', 'atomName': 'H1', 'atomIndex': 16}], 'receptorAtoms': [{'chain': 'A', 'resID': 157, 'resName': 'ASP', 'atomName': 'OD2', 'atomIndex': 285}]}, {'ligandAtoms': [{'chain': 'A', 'resID': 1, 'resName': 'LIG', 'atomName': 'O6', 'atomIndex': 22}], 'receptorAtoms': [{'chain': 'A', 'resID': 156, 'resName': 'ASN', 'atomName': 'ND2', 'atomIndex': 274}, {'chain': 'A', 'resID': 156, 'resName': 'ASN', 'atomName': '2HD2', 'atomIndex': 276}]}, {'ligandAtoms': [{'chain': 'A', 'resID': 1, 'resName': 'LIG', 'atomName': 'O6', 'atomIndex': 22}, {'chain': 'A', 'resID': 1, 'resName': 'LIG', 'atomName': 'HO6', 'atomIndex': 23}], 'receptorAtoms': [{'chain': 'A', 'resID': 157, 'resName': 'ASP', 'atomName': 'OD1', 'atomIndex': 284}]}]
 
-
-
-```python
-
-```
