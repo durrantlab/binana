@@ -94,7 +94,7 @@ def _get_all_interactions(parameters):
 
 
 def _intro():
-    # TODO: If you ever change below, be sure to update COMMAND-LINE-USE.md with
+    # TODO: If you ever change below, be sure to update COMMAND_LINE_USE.md with
     # this file too!
 
     version = "1.2.1"

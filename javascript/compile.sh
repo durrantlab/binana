@@ -2,16 +2,16 @@
 # pip install transcrypt
 
 # Clean previous version.
-rm -rf ../__target__/ ./lib/
+rm -rf ../python/__target__/ ./lib/
 
 # Compile the python file.
-cd ../
+cd ../python/
 # --nomin
 transcrypt --build --ecom --verbose binana.py
 cd -
 
 # Move the javascript library to the lib directory.
-mv ../__target__/ ./lib
+mv ../python/__target__/ ./lib
 
 # Copy aux files.
 cp ./src_aux/* ./lib/

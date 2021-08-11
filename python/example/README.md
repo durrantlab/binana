@@ -6,12 +6,12 @@ To run the BINANA command-line example, type the following into the Unix command
 line, from the current directory:
 
 ```
-python ../run_binana.py -receptor ./receptor.pdbqt -ligand ./ligand.pdbqt -output_dir ./cli_example_output/ > output.txt
+python3 ../run_binana.py -receptor ./receptor.pdbqt -ligand ./ligand.pdbqt -output_dir ./cli_example_output/ > output.txt
 ```
 
 A similar command should work from the Windows command line.
 
-See `../README.md` for more details.
+See `../COMMAND_LINE_USE.md` for more details.
 
 ## Jupyter Notebook
 

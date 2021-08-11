@@ -2,12 +2,9 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-import * as binana from "./binana/binana";
+import * as binana from "./binanajs/binana";
 
 self.onmessage = function(e) {
-
-    // import * as binana from './binana/binana.js';
-
     let pdbtxt = e.data[0];
     let ligtxt = e.data[1];
     let binanaParams = e.data[2];

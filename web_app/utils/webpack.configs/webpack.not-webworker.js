@@ -84,6 +84,10 @@ module.exports = merge(common, {
                 from: 'node_modules/vuex/dist/vuex.min.js',
                 to: 'vuex.min.js'
             },
+            {
+                from: 'node_modules/jquery/dist/jquery.min.js',
+                to: 'jquery.min.js'
+            },
             // {
             //     from: 'src/Webina/dist',
             //     to: 'Webina'

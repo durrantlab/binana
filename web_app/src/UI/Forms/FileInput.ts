@@ -5,6 +5,7 @@
 import { Any } from "@tensorflow/tfjs";
 
 declare var Vue;
+declare var jQuery;
 
 /** An object containing the vue-component computed functions. */
 let computedFunctions = {

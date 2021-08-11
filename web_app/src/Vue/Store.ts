@@ -15,6 +15,7 @@ import ExampleLigandPDBQT from "../example/ATP.pdbqt";
 import ExampleOutputPDBQT from "../example/binana_out.pdbqt";
 
 declare var Vuex;
+declare var jQuery;
 
 interface IVueXStoreSetVar {
     name: string;

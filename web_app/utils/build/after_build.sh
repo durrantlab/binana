@@ -46,11 +46,9 @@ cd -
 
 # Also create a ZIP file of the dist directory, for convenient distribution.
 mv dist binana
+rm binana.zip
 zip -r binana.zip binana
 mv binana dist
-
-# Build the docs while you're at it.
-# . utils/build/make_docs.sh
 
 # Let the user know that compilation is finished. Works only on macOS.
 say "Beep"
