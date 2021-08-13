@@ -16,6 +16,7 @@ The BINANA Git repository is hosted at
 | `./web_app/src/`                  | Web-app source code
 
 # Using BINANA
+
 ## Command-Line Use
 
 See `./COMMAND_LINE_USE.md` in the Git repository for detailed instructions.
@@ -34,7 +35,7 @@ library that can be accessed from other Python scripts:
 - `./python/example/Examples.ipynb`: A Jupyter notebook demonstrating use.
 - `./python/example/Examples.ipynb.pdf`: A PDF version of the notebook, for
   those who don't use Jupyter.
-- `./python/example/Examples.md`: A Markdown version of the notebook. 
+- `./python/example/Examples.md`: A Markdown version of the notebook.
 
 ## JavaScript Library
 
@@ -44,4 +45,4 @@ accessed from the web browser (e.g., from web apps).
 - `./javascript/lib/Examples.ipynb`: A Jupyter notebook demonstrating use.
 - `./javascript/lib/Examples.ipynb.pdf`: A PDF version of the notebook, for
   those who don't use Jupyter.
-
+- `./javascript/lib/examples.html`: An HTML file demonstrating use.
