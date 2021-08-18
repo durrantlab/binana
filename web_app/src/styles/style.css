@@ -240,3 +240,7 @@ div.better-btn-spacing {
 .btn-group-toggle.d-inline-block, .btn-group-toggle.d-inline-block label {
     width: 100%;
 }
+
+.jumbotron h1 {
+  font-size: 4em;
+}

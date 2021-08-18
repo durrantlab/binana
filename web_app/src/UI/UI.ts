@@ -28,7 +28,12 @@ export function setup(): void {
                     </b-jumbotron>
                 </div> -->
 
-                <b-jumbotron class="jumbo" style="background-image:url(${Utils.curPath()}binana_logo.jpg);" header="BINANA ${VERSION}" lead="BINding ANAlyzer: Identify and visualize ligand/receptor interactions">
+                <b-jumbotron 
+                    class="jumbo"
+                    style="background-image:url(${Utils.curPath()}binana_logo.jpg); padding-right:32px;"
+                    header="BINANA ${VERSION}"
+                    lead="BINding ANAlyzer: Identify and visualize ligand/receptor interactions"
+                >
                     <p>Brought to you by the <a target="_blank" href="http://durrantlab.com">Durrant Lab</a> and <a target="_blank" href="https://reporter.nih.gov/project-details/10189658">NIH 5R01GM132353</a>.</p>
                     <b-button variant="primary" target="_blank" href="http://durrantlab.com">More Info</b-button>
                 </b-jumbotron>
