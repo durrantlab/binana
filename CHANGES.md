@@ -1,7 +1,6 @@
 Changes
 =======
 
-
 2.0 WIP
 -------
 
@@ -12,6 +11,8 @@ Before, in calculating close contacts, those less than 2.5 not included in list 
 Added output_json option.
 
 Created BINANA.js library, and made web app.
+
+Changed name of development branch to `main`.
 
 1.3
 ---

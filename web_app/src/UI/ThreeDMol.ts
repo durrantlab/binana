@@ -35,15 +35,24 @@ export function showSticksAsAppropriate(): void {
         );
         viewer["render"]();
     } else {
-        // Set up the style.
-        store.state["receptorMol"].setStyle({}, {});  // This is better. Clear first.
-        viewer["render"]();
-        store.state["receptorMol"].setStyle(
-            {},
-            { "cartoon": { "color": 'spectrum' } }
-        );
-        viewer["render"]();
+        showProteinRibbon();
     }
+}
+
+export function showProteinRibbon(add=false): void {
+    // Set up the style.
+
+    if (!add) {
+        store.state["receptorMol"].setStyle({}, {});  // This is better. Clear first.
+    }
+    
+    viewer["render"]();
+    store.state["receptorMol"].setStyle(
+        {},
+        { "cartoon": { "color": 'spectrum' } },
+        add
+    );
+    viewer["render"]();
 }
 
 /** An object containing the vue-component computed functions. */

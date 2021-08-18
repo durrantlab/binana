@@ -186,8 +186,15 @@ td {
 }
 
 @media (min-width: 600px) {
-  #no-mobile {
+  /* #no-mobile {
     display: none;
+  } */
+  /* Fix tab-title width on mobile. */
+}
+
+@media (max-width: 400px) {
+  .tabs .col-auto {
+    width: 100%;
   }
 }
 

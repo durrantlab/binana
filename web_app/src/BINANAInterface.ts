@@ -139,6 +139,7 @@ export function highlight(interactionName: string): void {
 
     // Render sticks of protein model too.
     ThreeDMol.showSticksAsAppropriate();
+
     receptorMol["setStyle"](
         {
             "index": recAtomInfs.map(
@@ -149,8 +150,13 @@ export function highlight(interactionName: string): void {
         {
             "stick": { "radius": 0.1 },  // 0.15
             "cartoon": { "color": 'spectrum' },
-        }
+        },
+        true  // add
     );
+
+    // Show protein ribbon again (otherwise sometimes parts of ribbon
+    // disappear).
+    ThreeDMol.showProteinRibbon(true);
 
     viewer["render"]();
 }

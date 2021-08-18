@@ -17,16 +17,16 @@ export function setup(): void {
     new Vue({
         "el": '#app',
         "store": Store.store,
-        "template": `
+        "template": /*html*/ `
             <div class="container-fluid">
                 <open-modal></open-modal>
                 <convert-file-modal></convert-file-modal>
                 <draw-smiles-modal></draw-smiles-modal>
-                <div id="no-mobile">
+                <!-- <div id="no-mobile">
                     <b-jumbotron class="jumbo" header="BINANA ${VERSION}" lead="BINding ANAlyzer: Identify and visualize ligand/receptor interactions">
                         <p>BINANA ${VERSION} is not designed to work on mobile phones. Please use a device with a larger screen.</p>
                     </b-jumbotron>
-                </div>
+                </div> -->
 
                 <b-jumbotron class="jumbo" style="background-image:url(${Utils.curPath()}binana_logo.jpg);" header="BINANA ${VERSION}" lead="BINding ANAlyzer: Identify and visualize ligand/receptor interactions">
                     <p>Brought to you by the <a target="_blank" href="http://durrantlab.com">Durrant Lab</a> and <a target="_blank" href="https://reporter.nih.gov/project-details/10189658">NIH 5R01GM132353</a>.</p>

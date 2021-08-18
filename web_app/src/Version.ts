@@ -2,4 +2,5 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-export let VERSION = "1.0.0";
+// Good to match BINANA version here.
+export let VERSION = "2.0";
