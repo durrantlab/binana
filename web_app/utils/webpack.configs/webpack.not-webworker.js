@@ -65,8 +65,8 @@ module.exports = merge(common, {
             },
 
             {
-                from: 'src/binana',
-                to: 'binana'
+                from: 'src/binanajs',
+                to: 'binanajs'
             },
             // {
             //     from: 'src/styles/favicon.ico',
@@ -92,10 +92,10 @@ module.exports = merge(common, {
             //     from: 'src/Webina/dist',
             //     to: 'Webina'
             // },
-            {
-                from: 'src/minimal_example.html',
-                to: 'minimal_example.html'
-            },
+            // {
+            //     from: 'src/minimal_example.html',
+            //     to: 'minimal_example.html'
+            // },
             // {
             //     from: 'src/babel_convert.html',
             //     to: 'babel_convert.html'

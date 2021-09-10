@@ -23,4 +23,7 @@ docs/docs
 make.bat
 docs
 binana.zip
+binana_web_app.zip
 .vscode
+make_zip_files_for_releases.sh
+releases

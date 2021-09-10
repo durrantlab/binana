@@ -2,8 +2,6 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-import { Any } from "@tensorflow/tfjs";
-
 declare var Vue;
 declare var jQuery;
 
