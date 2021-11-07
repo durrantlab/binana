@@ -20,8 +20,8 @@ export function setup(): void {
         "template": /*html*/ `
             <div class="container-fluid">
                 <open-modal></open-modal>
-                <convert-file-modal></convert-file-modal>
-                <draw-smiles-modal></draw-smiles-modal>
+                <!-- <convert-file-modal></convert-file-modal> -->
+                <!-- <draw-smiles-modal></draw-smiles-modal> -->
                 <!-- <div id="no-mobile">
                     <b-jumbotron class="jumbo" header="BINANA ${VERSION}" lead="BINding ANAlyzer: Identify and visualize ligand/receptor interactions">
                         <p>BINANA ${VERSION} is not designed to work on mobile phones. Please use a device with a larger screen.</p>

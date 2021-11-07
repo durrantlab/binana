@@ -17,6 +17,14 @@ import ExampleOutputPDBQT from "../example/binana_out.pdbqt";
 declare var Vuex;
 declare var jQuery;
 
+export let defaultInteractionVisibilityStatus = JSON.stringify({
+    "hydrogenBonds": true,
+    "halogenBonds": true,
+    "saltBridges": true,
+    "piPiStackingInteractions": true,
+    "tStackingInteractions": true,
+    "cationPiInteractions": true,
+});
 interface IVueXStoreSetVar {
     name: string;
     val: any;
@@ -51,7 +59,9 @@ export const enum InteractionColoring {
     NONE = 3
 }
 
-export var defaultColorMsg = "No atoms selected.";
+// DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this commented in
+// case you want to bring it back.
+// export var defaultColorMsg = "No atoms selected.";
 
 export const store = new Vuex.Store({
     "state": {
@@ -62,8 +72,8 @@ export const store = new Vuex.Store({
             "electrostatic_dist_cutoff" : 4.0,
             "active_site_flexibility_dist_cutoff" : 4.0,
             "hydrophobic_dist_cutoff" : 4.0,
-            "hydrogen_bond_dist_cutoff" : 4.0,
-            "hydrogen_bond_angle_cutoff" : 40.0,
+            "hydrogen_halogen_bond_dist_cutoff" : 4.0,
+            "hydrogen_halogen_bond_angle_cutoff" : 40.0,
             "pi_padding_dist" : 0.75,
             "pi_pi_interacting_dist_cutoff" : 7.5,
             "pi_stacking_angle_tolerance" : 30.0,
@@ -91,9 +101,16 @@ export const store = new Vuex.Store({
         "ligandMol": undefined,
         "renderProteinSticks": false,
         "colorByInteraction": InteractionColoring.MOLECULE,
-        "bondVisible": false,
-        "colorMessage": defaultColorMsg,
-        "jsonOutput": "{}"
+        "bondVisible": true,
+
+        // DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this commented in
+        // case you want to bring it back.
+        // "colorMessage": defaultColorMsg,
+        
+        // "jsonOutput": "{}",
+        "interactionVisibilityStatus": defaultInteractionVisibilityStatus,
+        "filesToSave": {},
+        "legendItems": []
     },
     "mutations": {
         /**

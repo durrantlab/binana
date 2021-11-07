@@ -32,6 +32,7 @@ def _write_main(
     close,
     hydrophobics,
     hydrogen_bonds,
+    halogen_bonds,
     salt_bridges,
     pi_pi,
     cat_pi,
@@ -71,6 +72,8 @@ def _write_main(
             hydrophobic protein/ligand interactions.
         hydrogen_bonds (dict): A dictionary containing information about the
             hydrogen bonds between the protein and ligand.
+        halogen_bonds (dict): A dictionary containing information about the
+            halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
         pi_pi (dict): A dictionary containing information about the pi-pi
@@ -93,6 +96,7 @@ def _write_main(
         close,
         hydrophobics,
         hydrogen_bonds,
+        halogen_bonds,
         salt_bridges,
         pi_pi,
         cat_pi,
@@ -111,6 +115,7 @@ def _write_main(
         close,
         hydrophobics,
         hydrogen_bonds,
+        halogen_bonds,
         salt_bridges,
         pi_pi,
         cat_pi,
@@ -138,6 +143,7 @@ def _write_main(
             close,
             hydrophobics,
             hydrogen_bonds,
+            halogen_bonds,
             salt_bridges,
             pi_pi,
             cat_pi,
@@ -155,6 +161,7 @@ def _write_main(
             active_site_flexibility,
             hydrophobics,
             hydrogen_bonds,
+            halogen_bonds,
             pi_pi,
             cat_pi,
             salt_bridges,

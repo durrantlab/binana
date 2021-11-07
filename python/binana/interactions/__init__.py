@@ -15,8 +15,8 @@ from binana.interactions.default_params import (
     CLOSE_CONTACTS_DIST1_CUTOFF,
     CLOSE_CONTACTS_DIST2_CUTOFF,
     ELECTROSTATIC_DIST_CUTOFF,
-    HYDROGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
     HYDROPHOBIC_DIST_CUTOFF,
     PI_PADDING_DIST,
     PI_PI_INTERACTING_DIST_CUTOFF,
@@ -32,7 +32,7 @@ from binana.interactions import _cat_pi
 from binana.interactions import _salt_bridges
 from binana.interactions import _pi_pi
 from binana.interactions import _ligand_atom_types
-from binana.interactions import _hydrogen_bonds
+from binana.interactions import _hydrogen_halogen_bonds
 from binana.interactions import _hydrophobics
 from binana.interactions import _flexibility
 from binana.interactions import _electrostatic_energies
@@ -214,11 +214,12 @@ def get_ligand_atom_types(ligand):
     return _ligand_atom_types.get_ligand_atom_types(ligand)
 
 
-def get_hydrogen_bonds(
+def get_hydrogen_or_halogen_bonds(
     ligand,
     receptor,
     dist_cutoff=None,
     angle_cutoff=None,
+    hydrogen_bond=True
 ):
     """Identifies and counts the number of hydrogen bonds between the protein
     and ligand. Output is formatted like this::
@@ -240,9 +241,11 @@ def get_hydrogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
-            HYDROGEN_BOND_ANGLE_CUTOFF.
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+        hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds. 
+            Otherwise, calculates halogen bonds. Defaults to True.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -250,14 +253,15 @@ def get_hydrogen_bonds(
         the log file ("labels").
     """
 
-    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_BOND_DIST_CUTOFF)
-    angle_cutoff = _set_default(angle_cutoff, HYDROGEN_BOND_ANGLE_CUTOFF)
+    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF)
+    angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
 
-    return _hydrogen_bonds.get_hydrogen_bonds(
+    return _hydrogen_halogen_bonds.get_hydrogen_or_halogen_bonds(
         ligand,
         receptor,
         dist_cutoff,
         angle_cutoff,
+        hydrogen_bond
     )
 
 
@@ -441,8 +445,8 @@ def get_all_interactions(
     electrostatic_dist_cutoff=None,
     active_site_flexibility_dist_cutoff=None,
     hydrophobic_dist_cutoff=None,
-    hydrogen_bond_dist_cutoff=None,
-    hydrogen_bond_angle_cutoff=None,
+    hydrogen_halogen_bond_dist_cutoff=None,
+    hydrogen_halogen_bond_angle_cutoff=None,
     pi_pi_general_dist_cutoff=None,
     pi_stacking_angle_tol=None,
     t_stacking_angle_tol=None,
@@ -461,6 +465,7 @@ def get_all_interactions(
             "active_site_flexibility": ...,
             "hydrophobics": ...,
             "hydrogen_bonds": ...,
+            "halogen_bonds": ...,
             "ligand_atom_types": ...,
             "pi_pi": ...,
             "cat_pi": ...,
@@ -484,10 +489,12 @@ def get_all_interactions(
             ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF.
         hydrophobic_dist_cutoff (float, optional): The hydrophobic distance
             cutoff. Defaults to HYDROPHOBIC_DIST_CUTOFF.
-        hydrogen_bond_dist_cutoff (float, optional): The hydrogen-bond
-            distance cutoff. Defaults to HYDROGEN_BOND_DIST_CUTOFF.
-        hydrogen_bond_angle_cutoff (float, optional): The hydrogen-bond angle
-            cutoff. Defaults to HYDROGEN_BOND_ANGLE_CUTOFF.
+        hydrogen_halogen_bond_dist_cutoff (float, optional): The hydrogen- and 
+            halogen-bond distance cutoff. Defaults to
+            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
+        hydrogen_halogen_bond_angle_cutoff (float, optional): The hydrogen- and 
+            halogen-bond angle cutoff. Defaults to
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
         pi_pi_general_dist_cutoff (float, optional): The distance cutoff used
             for all pi-pi interactions (stacking and T-shaped). Defaults to
             PI_PI_INTERACTING_DIST_CUTOFF.
@@ -524,11 +531,11 @@ def get_all_interactions(
     hydrophobic_dist_cutoff = _set_default(
         hydrophobic_dist_cutoff, HYDROPHOBIC_DIST_CUTOFF
     )
-    hydrogen_bond_dist_cutoff = _set_default(
-        hydrogen_bond_dist_cutoff, HYDROGEN_BOND_DIST_CUTOFF
+    hydrogen_halogen_bond_dist_cutoff = _set_default(
+        hydrogen_halogen_bond_dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF
     )
-    hydrogen_bond_angle_cutoff = _set_default(
-        hydrogen_bond_angle_cutoff, HYDROGEN_BOND_ANGLE_CUTOFF
+    hydrogen_halogen_bond_angle_cutoff = _set_default(
+        hydrogen_halogen_bond_angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF
     )
     pi_pi_general_dist_cutoff = _set_default(
         pi_pi_general_dist_cutoff, PI_PI_INTERACTING_DIST_CUTOFF
@@ -557,11 +564,21 @@ def get_all_interactions(
         ligand, receptor, active_site_flexibility_dist_cutoff
     )
     hydrophobics = get_hydrophobics(ligand, receptor, hydrophobic_dist_cutoff)
-    hydrogen_bonds = get_hydrogen_bonds(
+
+    hydrogen_bonds = get_hydrogen_or_halogen_bonds(
         ligand,
         receptor,
-        hydrogen_bond_dist_cutoff,
-        hydrogen_bond_angle_cutoff,
+        hydrogen_halogen_bond_dist_cutoff,
+        hydrogen_halogen_bond_angle_cutoff,
+        True
+    )
+
+    halogen_bonds = get_hydrogen_or_halogen_bonds(
+        ligand,
+        receptor,
+        hydrogen_halogen_bond_dist_cutoff,
+        hydrogen_halogen_bond_angle_cutoff,
+        False
     )
 
     ligand_atom_types = get_ligand_atom_types(ligand)
@@ -593,6 +610,7 @@ def get_all_interactions(
         "active_site_flexibility": active_site_flexibility,
         "hydrophobics": hydrophobics,
         "hydrogen_bonds": hydrogen_bonds,
+        "halogen_bonds": halogen_bonds,
         "ligand_atom_types": ligand_atom_types,
         "pi_pi": pi_pi,
         "cat_pi": cat_pi,

@@ -7,6 +7,7 @@ to save and load files. These functions save and read files to a fake in-memory
 file system for use in the browser."""
 
 import binana  # Leave this for javascript conversion.
+from binana import _utils
 from binana._utils import shim
 from binana._utils.shim import OpenFile
 
@@ -28,7 +29,7 @@ def save_file(filename, text):
 def ls():
     """List all files in the fake (in-memory) file system. For transcrypt."""
 
-    print(binana._utils.shim.fake_fs.keys())
+    print(shim.fake_fs.keys())
 
 
 def load_file(filename):

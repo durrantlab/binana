@@ -297,11 +297,7 @@ class Mol:
 
         # Write coordinates of all atoms
         for atom_index in self.all_atoms.keys():
-            to_output = (
-                to_output
-                + self.all_atoms[atom_index].create_pdb_line(atom_index)
-                + "\n"
-            )
+            to_output += self.all_atoms[atom_index].create_pdb_line(atom_index) + "\n"
 
         return to_output
 
@@ -311,8 +307,14 @@ class Mol:
     def add_new_atom(self, atom):
         # first get available index
         t = 1
-        while t in list(self.all_atoms.keys()):
-            t = t + 1
+        all_atom_keys = list(self.all_atoms.keys())
+        
+        """?
+        all_atom_keys = [int(k) for k in all_atom_keys]
+        ?"""
+        
+        while t in all_atom_keys:
+            t += 1
 
         # now add atom
         self.all_atoms[t] = atom
@@ -362,7 +364,7 @@ class Mol:
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
 
-            if first is True:
+            if first:
                 curr_res = key
                 first = False
 
@@ -885,6 +887,23 @@ class Mol:
 
     # Functions to identify positive charges
     # ======================================
+    def regardless_of_hydrogens(self):
+        # Charged groups that can be assigned regardless of whether the
+        # molecules includes hydrogen atoms.
+        for atom_index in self.non_protein_atoms.keys():
+            atom = self.non_protein_atoms[atom_index]
+            if atom.element in ["MG", "MN", "RH", "ZN", "FE", "BI", "AS", "AG"]:
+                chrg = self.Charged(atom.coordinates, [atom_index], True)
+                self.charges.append(chrg)
+            if atom.element == "N" and atom.number_of_neighbors() == 4:
+                # a quartinary amine, so it's easy
+                indexes = [atom_index]
+                indexes.extend(atom.indecies_of_atoms_connecting)
+
+                # so the indicies stored is just the index of the nitrogen
+                # and any attached atoms
+                chrg = self.Charged(atom.coordinates, indexes, True)
+                self.charges.append(chrg)
 
     # Assign Charges to atoms in protein
     # Param self (Mol)
@@ -892,104 +911,71 @@ class Mol:
         # Get all the quartinary amines on non-protein residues (these are the
         # only non-protein groups that will be identified as positively
         # charged)
-        all_charged = []
         for atom_index in self.non_protein_atoms.keys():
             atom = self.non_protein_atoms[atom_index]
-            if (
-                atom.element == "MG"
-                or atom.element == "MN"
-                or atom.element == "RH"
-                or atom.element == "ZN"
-                or atom.element == "FE"
-                or atom.element == "BI"
-                or atom.element == "AS"
-                or atom.element == "AG"
-            ):
-                chrg = self.Charged(atom.coordinates, [atom_index], True)
-                self.charges.append(chrg)
 
-            if atom.element == "N":
-                if atom.number_of_neighbors() == 4:
-                    # a quartinary amine, so it's easy
+            if atom.element == "N" and atom.number_of_neighbors() == 3:
+                # maybe you only have two hydrogen's added, by they're sp3
+                # hybridized. Just count this as a quartinary amine, since
+                # I think the positive charge would be stabalized.
+                nitrogen = atom
+                atom1 = self.all_atoms[atom.indecies_of_atoms_connecting[0]]
+                atom2 = self.all_atoms[atom.indecies_of_atoms_connecting[1]]
+                atom3 = self.all_atoms[atom.indecies_of_atoms_connecting[2]]
+                angle1 = (
+                    angle_between_three_points(
+                        atom1.coordinates, nitrogen.coordinates, atom2.coordinates
+                    )
+                    * 180.0
+                    / math.pi
+                )
+                angle2 = (
+                    angle_between_three_points(
+                        atom1.coordinates, nitrogen.coordinates, atom3.coordinates
+                    )
+                    * 180.0
+                    / math.pi
+                )
+                angle3 = (
+                    angle_between_three_points(
+                        atom2.coordinates, nitrogen.coordinates, atom3.coordinates
+                    )
+                    * 180.0
+                    / math.pi
+                )
+                average_angle = (angle1 + angle2 + angle3) / 3
+                if fabs(average_angle - 109.0) < 5.0:
                     indexes = [atom_index]
                     indexes.extend(atom.indecies_of_atoms_connecting)
-
-                    # so the indicies stored is just the index of the nitrogen
-                    # and any attached atoms
-                    chrg = self.Charged(atom.coordinates, indexes, True)
+                    # so indexes added are the nitrogen and any attached
+                    # atoms.
+                    chrg = self.Charged(nitrogen.coordinates, indexes, True)
                     self.charges.append(chrg)
-                elif atom.number_of_neighbors() == 3:
-                    # maybe you only have two hydrogen's added, by they're sp3
-                    # hybridized. Just count this as a quartinary amine, since
-                    # I think the positive charge would be stabalized.
-                    nitrogen = atom
-                    atom1 = self.all_atoms[atom.indecies_of_atoms_connecting[0]]
-                    atom2 = self.all_atoms[atom.indecies_of_atoms_connecting[1]]
-                    atom3 = self.all_atoms[atom.indecies_of_atoms_connecting[2]]
-                    angle1 = (
-                        angle_between_three_points(
-                            atom1.coordinates, nitrogen.coordinates, atom2.coordinates
-                        )
-                        * 180.0
-                        / math.pi
-                    )
-                    angle2 = (
-                        angle_between_three_points(
-                            atom1.coordinates, nitrogen.coordinates, atom3.coordinates
-                        )
-                        * 180.0
-                        / math.pi
-                    )
-                    angle3 = (
-                        angle_between_three_points(
-                            atom2.coordinates, nitrogen.coordinates, atom3.coordinates
-                        )
-                        * 180.0
-                        / math.pi
-                    )
-                    average_angle = (angle1 + angle2 + angle3) / 3
-                    if fabs(average_angle - 109.0) < 5.0:
-                        indexes = [atom_index]
-                        indexes.extend(atom.indecies_of_atoms_connecting)
-                        # so indexes added are the nitrogen and any attached
-                        # atoms.
-                        chrg = self.Charged(nitrogen.coordinates, indexes, True)
-                        self.charges.append(chrg)
 
-            if atom.element == "C":
-                # let's check for guanidino-like groups (actually H2N-C-NH2,
-                # where not CN3.)
-                if atom.number_of_neighbors() == 3:
-                    # the carbon has only three atoms connected to it
-                    nitrogens = self.connected_atoms_of_given_element(atom_index, "N")
-                    if len(nitrogens) >= 2:
-                        # so carbon is connected to at least two nitrogens.
-                        # now we need to count the number of nitrogens that
-                        # are only connected to one heavy atom (the carbon).
-                        nitrogens_to_use = []
-                        all_connected = atom.indecies_of_atoms_connecting[:]
-                        not_isolated = -1
+            if atom.element == "C" and atom.number_of_neighbors() == 3:
+                # the carbon has only three atoms connected to it
+                nitrogens = self.connected_atoms_of_given_element(atom_index, "N")
+                if len(nitrogens) >= 2:
+                    # so carbon is connected to at least two nitrogens.
+                    # now we need to count the number of nitrogens that
+                    # are only connected to one heavy atom (the carbon).
+                    nitrogens_to_use = []
+                    all_connected = atom.indecies_of_atoms_connecting[:]
+                    for atmindex in nitrogens:
+                        if len(self.connected_heavy_atoms(atmindex)) == 1:
+                            nitrogens_to_use.append(atmindex)
+                            all_connected.remove(atmindex)
 
-                        for atmindex in nitrogens:
-                            if len(self.connected_heavy_atoms(atmindex)) == 1:
-                                nitrogens_to_use.append(atmindex)
-                                all_connected.remove(atmindex)
+                    not_isolated = all_connected[0] if len(all_connected) > 0 else -1
+                    if len(nitrogens_to_use) == 2 and not_isolated != -1:
+                        # so there are at two nitrogens that are only
+                        # connected to the carbon (and probably some
+                        # hydrogens)
 
-                        if len(all_connected) > 0:
-                            # get the atom that connects this charged group to
-                            # the rest of the molecule, ultimately to make
-                            # sure it's sp3 hybridized
-                            not_isolated = all_connected[0]
-
-                        if len(nitrogens_to_use) == 2 and not_isolated != -1:
-                            # so there are at two nitrogens that are only
-                            # connected to the carbon (and probably some
-                            # hydrogens)
-
-                            # now you need to make sure not_isolated atom is
-                            # sp3 hybridized
-                            not_isolated_atom = self.all_atoms[not_isolated]
-                            if (
+                        # now you need to make sure not_isolated atom is
+                        # sp3 hybridized
+                        not_isolated_atom = self.all_atoms[not_isolated]
+                        if (
                                 (
                                     not_isolated_atom.element == "C"
                                     and not_isolated_atom.number_of_neighbors() == 4
@@ -1003,70 +989,62 @@ class Mol:
                                 or not_isolated_atom.element == "P"
                             ):
 
-                                pt = self.all_atoms[
-                                    nitrogens_to_use[0]
-                                ].coordinates.copy_of()
-                                pt.x = (
-                                    pt.x
-                                    + self.all_atoms[nitrogens_to_use[1]].coordinates.x
-                                )
-                                pt.y = (
-                                    pt.y
-                                    + self.all_atoms[nitrogens_to_use[1]].coordinates.y
-                                )
-                                pt.z = (
-                                    pt.z
-                                    + self.all_atoms[nitrogens_to_use[1]].coordinates.z
-                                )
-                                pt.x = pt.x / 2.0
-                                pt.y = pt.y / 2.0
-                                pt.z = pt.z / 2.0
-
-                                indexes = [atom_index]
-                                indexes.extend(nitrogens_to_use)
-                                indexes.extend(
-                                    self.connected_atoms_of_given_element(
-                                        nitrogens_to_use[0], "H"
-                                    )
-                                )
-                                indexes.extend(
-                                    self.connected_atoms_of_given_element(
-                                        nitrogens_to_use[1], "H"
-                                    )
-                                )
-
-                                chrg = self.Charged(
-                                    pt, indexes, True  # True because it's positive
-                                )
-                                self.charges.append(chrg)
-
-            if atom.element == "C":
-                # let's check for a carboxylate
-                if atom.number_of_neighbors() == 3:
-                    # a carboxylate carbon will have three items connected to
-                    # it.
-                    oxygens = self.connected_atoms_of_given_element(atom_index, "O")
-                    if len(oxygens) == 2:
-                        # a carboxylate will have two oxygens connected to it.
-                        # now, each of the oxygens should be connected to only
-                        # one heavy atom (so if it's connected to a hydrogen,
-                        # that's okay)
-                        if (
-                            len(self.connected_heavy_atoms(oxygens[0])) == 1
-                            and len(self.connected_heavy_atoms(oxygens[1])) == 1
-                        ):
-                            # so it's a carboxylate! Add a negative charge.
-                            pt = self.all_atoms[oxygens[0]].coordinates.copy_of()
-                            pt.x = pt.x + self.all_atoms[oxygens[1]].coordinates.x
-                            pt.y = pt.y + self.all_atoms[oxygens[1]].coordinates.y
-                            pt.z = pt.z + self.all_atoms[oxygens[1]].coordinates.z
+                            pt = self.all_atoms[
+                                nitrogens_to_use[0]
+                            ].coordinates.copy_of()
+                            pt.x = (
+                                pt.x
+                                + self.all_atoms[nitrogens_to_use[1]].coordinates.x
+                            )
+                            pt.y = (
+                                pt.y
+                                + self.all_atoms[nitrogens_to_use[1]].coordinates.y
+                            )
+                            pt.z = (
+                                pt.z
+                                + self.all_atoms[nitrogens_to_use[1]].coordinates.z
+                            )
                             pt.x = pt.x / 2.0
                             pt.y = pt.y / 2.0
                             pt.z = pt.z / 2.0
+
+                            indexes = [atom_index, *nitrogens_to_use]
+                            indexes.extend(
+                                self.connected_atoms_of_given_element(
+                                    nitrogens_to_use[0], "H"
+                                )
+                            )
+                            indexes.extend(
+                                self.connected_atoms_of_given_element(
+                                    nitrogens_to_use[1], "H"
+                                )
+                            )
+
                             chrg = self.Charged(
-                                pt, [oxygens[0], atom_index, oxygens[1]], False
+                                pt, indexes, True  # True because it's positive
                             )
                             self.charges.append(chrg)
+
+            if atom.element == "C" and atom.number_of_neighbors() == 3:
+                # a carboxylate carbon will have three items connected to
+                # it.
+                oxygens = self.connected_atoms_of_given_element(atom_index, "O")
+                if len(oxygens) == 2 and (
+                    len(self.connected_heavy_atoms(oxygens[0])) == 1
+                    and len(self.connected_heavy_atoms(oxygens[1])) == 1
+                ):
+                    # so it's a carboxylate! Add a negative charge.
+                    pt = self.all_atoms[oxygens[0]].coordinates.copy_of()
+                    pt.x = pt.x + self.all_atoms[oxygens[1]].coordinates.x
+                    pt.y = pt.y + self.all_atoms[oxygens[1]].coordinates.y
+                    pt.z = pt.z + self.all_atoms[oxygens[1]].coordinates.z
+                    pt.x = pt.x / 2.0
+                    pt.y = pt.y / 2.0
+                    pt.z = pt.z / 2.0
+                    chrg = self.Charged(
+                        pt, [oxygens[0], atom_index, oxygens[1]], False
+                    )
+                    self.charges.append(chrg)
 
             if atom.element == "P":
                 # let's check for a phosphate or anything where a phosphorus
@@ -1078,10 +1056,11 @@ class Mol:
                     # the phosphorus is bound to at least two oxygens now
                     # count the number of oxygens that are only bound to the
                     # phosphorus
-                    count = 0
-                    for oxygen_index in oxygens:
-                        if len(self.connected_heavy_atoms(oxygen_index)) == 1:
-                            count = count + 1
+                    count = sum(
+                        len(self.connected_heavy_atoms(oxygen_index)) == 1
+                        for oxygen_index in oxygens
+                    )
+
                     if count >= 2:
                         # so there are at least two oxygens that are only
                         # bound to the phosphorus
@@ -1098,10 +1077,11 @@ class Mol:
                 if len(oxygens) >= 3:
                     # the sulfur is bound to at least three oxygens. now count
                     # the number of oxygens that are only bound to the sulfur
-                    count = 0
-                    for oxygen_index in oxygens:
-                        if len(self.connected_heavy_atoms(oxygen_index)) == 1:
-                            count = count + 1
+                    count = sum(
+                        len(self.connected_heavy_atoms(oxygen_index)) == 1
+                        for oxygen_index in oxygens
+                    )
+
                     if count >= 3:
                         # so there are at least three oxygens that are only
                         # bound to the sulfur
@@ -1122,7 +1102,7 @@ class Mol:
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
 
-            if first == True:
+            if first:
                 curr_res = key
                 first = False
 
@@ -1146,8 +1126,8 @@ class Mol:
         temp = last_key.strip().split("_")
         resname = temp[0]
         real_resname = resname[-3:]
-        resid = temp[1]
-        chain = temp[2]
+        # resid = temp[1]
+        # chain = temp[2]
 
         if real_resname == "LYS" or real_resname == "LYN":
             # regardless of protonation state, assume it's charged.

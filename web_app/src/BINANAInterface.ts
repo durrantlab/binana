@@ -3,6 +3,7 @@
 // details. Copyright 2020 Jacob D. Durrant.
 
 import * as ThreeDMol from "./UI/ThreeDMol";
+import { firstLetterCapital } from "./Utils";
 import * as Store from "./Vue/Store";
 
 declare var jQuery;
@@ -11,10 +12,111 @@ let viewer;
 let receptorMol;
 let ligandMol;
 let binanaData;
+let binanaFiles;
 
 // A single atom may participate in multiple interactions with other atoms.
 // Make sure each atom is rendered in the viewer only once.
 let idxOfAtomsSeen;
+
+interface ILegendItem {
+    name: string;
+    color: string;
+    colorHex: string;
+    representation: string;
+    link: string
+}
+
+// See https://en.wikipedia.org/wiki/Web_colors
+let interactionsInfo: {[key: string]: ILegendItem } = {
+    "hydrogenBonds": {
+        name: "Hydrogen bond",
+        color: "BLACK",
+        representation: "solid COLOR arrow from donor to acceptor",
+        colorHex: "#000000",  // black
+        link: "https://en.wikipedia.org/wiki/Hydrogen_bond"
+    },
+    "halogenBonds": {
+        name: "Halogen bond",
+        color: "GREEN",
+        representation: "solid COLOR arrow from donor to acceptor",
+        colorHex: "#00FF00",  // green
+        link: "https://en.wikipedia.org/wiki/Halogen_bond"
+    },
+    "hydrophobicContacts": {
+        name: "Hydrophobics",
+        color: "GRAY",
+        representation: "COLOR spheres",
+        colorHex: "#808080",  // gray
+        link: "https://en.wikipedia.org/wiki/Entropic_force#Hydrophobic_force"
+    },
+    "saltBridges": {
+        name: "Salt bridge",
+        color: "RED",
+        representation: "COLOR dashed line",
+        colorHex: "#FF0000",  //red
+        link: "https://en.wikipedia.org/wiki/Salt_bridge_(protein_and_supramolecular)"
+    },
+    "closeContacts": {
+        name: "Close contact",
+        color: "PURPLE",
+        representation: "COLOR spheres",
+        colorHex: "#800080",  // purple
+        link: "https://en.wikipedia.org/wiki/Steric_effects"
+    },
+    "closestContacts": {
+        name: "Closest contact",
+        color: "FUSCHA",
+        representation: "COLOR spheres",
+        colorHex: "#FF00FF",  // fuscha
+        link: "https://en.wikipedia.org/wiki/Steric_effects"
+    },
+    "piPiStackingInteractions": {
+        name: "π-π stacking",
+        color: "BLUE",
+        representation: "COLOR dashed line",
+        colorHex: "#0000FF",  // blue
+        link: "https://en.wikipedia.org/wiki/Pi-Stacking_(chemistry)"
+    },
+    "tStackingInteractions": {
+        name: "T-stacking",
+        color: "AQUA",
+        representation: "COLOR dashed line",
+        colorHex: "#00FFFF", // aqua
+        link: "https://en.wikipedia.org/wiki/Pi-Stacking_(chemistry)"
+    },
+    "cationPiInteractions": {
+        name: "Cation-π",
+        color: "NAVY",
+        representation: "COLOR dashed line",
+        colorHex: "#000080",  // navy
+        link: "https://en.wikipedia.org/wiki/Cation%E2%80%93pi_interaction"
+    },
+}
+
+let sphereOnlyReps = ["hydrophobicContacts", "closeContacts", "closestContacts"];
+
+// Certain representations must be represented after others. For example,
+// closestContacts should be rendered after closeContacts so both with be
+// visible. 
+let renderOrder = [
+    "hydrophobicContacts",
+    "closeContacts",
+    "closestContacts",
+
+    // For below, order less important.
+    "hydrogenBonds",
+    "halogenBonds",
+    "saltBridges",
+    "piPiStackingInteractions",
+    "tStackingInteractions",
+    "cationPiInteractions",
+]
+interface IHighlightInfo {
+    ligAtomInfs: any;
+    recAtomInfs: any;
+    interactionType: any[];
+    interactionName: string;
+}
 
 /**
  * Sets up the interface, brining several variables into the module's scope.
@@ -44,107 +146,55 @@ export function start(pdbtxt: string, ligtxt: string): void {
         myWorker.postMessage([pdbtxt, ligtxt, binanaParams]);
 
         myWorker.onmessage = function(e) {
-            binanaData = e.data;
+            binanaFiles = e.data;
+            binanaData = JSON.parse(binanaFiles["output.json"]);
 
             // Update the store too.
+            // Store.store.commit("setVar", {
+            //     name: "jsonOutput",
+            //     val: binanaFiles["output.json"]  // JSON.stringify(binanaData, undefined, 1)
+            // });
+            
             Store.store.commit("setVar", {
-                name: "jsonOutput",
-                val: JSON.stringify(binanaData, undefined, 1)
+                name: "filesToSave",
+                val: binanaFiles
             });
 
+            highlightAll();
+            
             jQuery("body").removeClass("waiting");
         }
     }, 250);
 }
 
-/**
- * Highlights the specified interaction in the viewer. Sets the atoms involved
- * in the interaction to a different color.
- * @param  {string} interactionName  The name of the interaction.
- * @returns void
- */
-export function highlight(interactionName: string): void {
-    clearInteraction();
-
-    // make an array for the interactions
-    let interactionType = binanaData[interactionName];
-
-    // A single atom may participate in multiple interactions with other
-    // atoms. Make sure each atom is rendered in the viewer only once.
-    idxOfAtomsSeen = new Set([]);
-    let ligAtomInfs = [];
-    let recAtomInfs = [];
-
-    let colorMsg = Store.defaultColorMsg;
-
-    // loop through the interactions
-    for (let i = 0; i < interactionType.length; i++) {
-        let ligandAtomInfs = interactionType[i]["ligandAtoms"];
-        let receptorAtomInfs = interactionType[i]["receptorAtoms"];
-
-        // Start by assuming color by molecule.
-        let ligColor = "yellow";
-        let recepColor = "red";
-        colorMsg = "Ligand atoms are highlighted in yellow, and receptor atoms are highlighted in red.";
-
-        if (Store.store["state"]["colorByInteraction"] === Store.InteractionColoring.INTERACTION) {
-            // Instead color by interaction.
-            switch (interactionName) {
-                case "hydrogenBonds":
-                    if (ligandAtomInfs.length == 2) {
-                        ligColor = "yellow";
-                        recepColor = "red";
-                    } else {
-                        ligColor = "red";
-                        recepColor = "yellow";
-                    }
-                    colorMsg = "Hydrogen-bond donors are highlighted in yellow, and hydrogen-bond acceptors are highlighted in red.";
-                    break;
-                case "saltBridges":
-                    if (["LYS", "ARG", "HIS", "ARN", "HIP"].indexOf(receptorAtomInfs[0]["resName"]) !== -1) {
-                        // Protein residue is positive.
-                        recepColor = "blue";
-                        ligColor = "red";
-                    } else {
-                        // Protein residue is negative.
-                        recepColor = "red";
-                        ligColor = "blue";
-                    }
-                    colorMsg = "Positively charged groups are highlighted in blue, and negatively charged groups are highlighted in red.";
-                    break;
-            }
-        }
-
-        Store.store.commit("setVar", {
-            name: "colorMessage",
-            val: colorMsg
-        });
-
-        ligAtomInfs = ligAtomInfs.concat(
-            getAtomObjRadiusColor(ligandMol, ligandAtomInfs, ligColor)
-        );
-        recAtomInfs = recAtomInfs.concat(
-            getAtomObjRadiusColor(receptorMol, receptorAtomInfs, recepColor)
-        );
-    }
-
-    // Add spheres
-    if (Store.store["state"]["colorByInteraction"] !== Store.InteractionColoring.NONE) {
-        drawSpheres(ligAtomInfs.concat(recAtomInfs));
-    }
-
-    if (Store.store["state"]["bondVisible"]) {
-        drawCylinders(interactionType, interactionName);
-    }
-
-    // Render sticks of protein model too.
+export function highlight(highlightInfos: IHighlightInfo[]) {
+    // Render sticks of protein model too. Clears (resets) the protein
+    // rendering.
     ThreeDMol.showSticksAsAppropriate();
 
+    let residues = [];
+
+    for (let highlightInfo of highlightInfos) {
+        // Add spheres
+        if (Store.store["state"]["colorByInteraction"] !== Store.InteractionColoring.NONE) {
+            drawSpheres(highlightInfo.ligAtomInfs.concat(highlightInfo.recAtomInfs), highlightInfo.interactionName);
+        }
+    
+        if (Store.store["state"]["bondVisible"]) {
+            drawCylinders(highlightInfo.interactionType, highlightInfo.interactionName);
+        }
+
+        residues.push(...highlightInfo.recAtomInfs.map(
+            i => i[0]["index"]
+        ));
+    }
+
+    // console.log(residues);
+
+    // Regardless, make sure residues participating in interactions appear.
     receptorMol["setStyle"](
         {
-            "index": recAtomInfs.map(
-                i => i[0]["index"]
-            ),
+            "index": residues,
             "byres": true
         },
         {
@@ -162,19 +212,105 @@ export function highlight(interactionName: string): void {
 }
 
 /**
+ * Highlights the specified interaction in the viewer. Sets the atoms involved
+ * in the interaction to a different color.
+ * @param  {string} interactionName  The name of the interaction.
+ * @returns *  Information about this interaction, that will ultimately be used
+ *             to highlight the atoms.
+ */
+export function getInfoForHighlight(interactionName: string): IHighlightInfo {
+    // make an array for the interactions
+    let interactionType = binanaData[interactionName];
+
+    // A single atom may participate in multiple interactions with other
+    // atoms. Make sure each atom is rendered in the viewer only once.
+    idxOfAtomsSeen = new Set([]);
+    let ligAtomInfs = [];
+    let recAtomInfs = [];
+
+    // DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this commented in
+    // case you want to bring it back.
+    // let colorMsg = Store.defaultColorMsg;
+
+    // loop through the interactions
+    for (let i = 0; i < interactionType.length; i++) {
+        let ligandAtomInfs = interactionType[i]["ligandAtoms"];
+        let receptorAtomInfs = interactionType[i]["receptorAtoms"];
+
+        // Start by assuming color by molecule.
+        let ligColor = "yellow";
+        let recepColor = "red";
+        // colorMsg = "Ligand atoms are highlighted in yellow, and receptor atoms are highlighted in red.";
+
+        if (Store.store["state"]["colorByInteraction"] === Store.InteractionColoring.INTERACTION) {
+            // Instead color by interaction.
+            switch (interactionName) {
+                case "hydrogenBonds":
+                    if (ligandAtomInfs.length == 2) {
+                        ligColor = "yellow";
+                        recepColor = "red";
+                    } else {
+                        ligColor = "red";
+                        recepColor = "yellow";
+                    }
+                    // colorMsg = "Hydrogen-bond donors are highlighted in yellow, and hydrogen-bond acceptors are highlighted in red.";
+                    break;
+                case "saltBridges":
+                    if (["LYS", "ARG", "HIS", "ARN", "HIP"].indexOf(receptorAtomInfs[0]["resName"]) !== -1) {
+                        // Protein residue is positive.
+                        recepColor = "blue";
+                        ligColor = "red";
+                    } else {
+                        // Protein residue is negative.
+                        recepColor = "red";
+                        ligColor = "blue";
+                    }
+                    // colorMsg = "Positively charged groups are highlighted in blue, and negatively charged groups are highlighted in red.";
+                    break;
+            }
+        }
+
+        // Store.store.commit("setVar", {
+        //     name: "colorMessage",
+        //     val: colorMsg
+        // });
+
+        ligAtomInfs = ligAtomInfs.concat(
+            getAtomObjRadiusColor(ligandMol, ligandAtomInfs, ligColor)
+        );
+        recAtomInfs = recAtomInfs.concat(
+            getAtomObjRadiusColor(receptorMol, receptorAtomInfs, recepColor)
+        );
+    }
+
+    return {
+        ligAtomInfs,
+        recAtomInfs,
+        interactionType,
+        interactionName,
+    }
+}
+
+/**
  * Draws interaction spheres in the 3Dmoljs viewer.
  * @param  {*} atomInfs  Information about the atoms.
+ * @param  {string} interactionName  The name of the interaction.
  * @returns void
  */
-function drawSpheres(atomInfs: any[]): void {
+function drawSpheres(atomInfs: any[], interactionName: string): void {
+    // Certain interactionNames aren't associated with spheres.
+    if (sphereOnlyReps.indexOf(interactionName) === -1) {
+        return;
+    }
+
     const coorsLen = atomInfs.length;
     for (let i = 0; i < coorsLen; i++) {
         const atomInf = atomInfs[i];
         const atom = atomInf[0];
         viewer["addSphere"]({
             "center": {"x": atom["x"], "y": atom["y"], "z": atom["z"]},
-            "radius": 0.6 * atomInf[1],   // scale down vdw radius a bit.
-            "color": atomInf[2],
+            "radius": 0.6 * atomInf[1],   // scale down vdw radius a bit. Was 0.6.
+            "color": interactionsInfo[interactionName].colorHex,  // atomInf[2],
             "opacity": 0.65
         });
     }
@@ -188,68 +324,71 @@ function drawSpheres(atomInfs: any[]): void {
  * @returns void
  */
 function drawCylinders(interactionType: any[], interactionName: string): void {
+    // Certain interactionNames aren't associated with cylinder bonds.
+    if (sphereOnlyReps.indexOf(interactionName) !== -1) {
+        return;
+    }
+
+
     // Get atoms.
     let interactionTypeAtoms = interactionType.map(i => [
         i["ligandAtoms"].map(l => atomInfTo3DMolAtom(ligandMol, l)),
         i["receptorAtoms"].map(r => atomInfTo3DMolAtom(receptorMol, r))
     ]);
 
-    switch (interactionName) {
-        case "hydrogenBonds":
-            let hBondHeavyAtomPairs = interactionTypeAtoms.map(i => [
-                [2 - i[0].length, i[0].filter(a => a["elem"] !== "H")[0]],
-                [2 - i[1].length, i[1].filter(a => a["elem"] !== "H")[0]]
-            ]);
-            hBondHeavyAtomPairs = hBondHeavyAtomPairs.map(i => i.sort().map(i2 => i2[1]));
-
-            for (let i = 0; i < hBondHeavyAtomPairs.length; i++){
-                // viewer["addCylinder"]({
-                viewer["addArrow"]({
-                    "dashed": true,
-                    "start": {"x": hBondHeavyAtomPairs[i][0]["x"], "y": hBondHeavyAtomPairs[i][0]["y"], "z": hBondHeavyAtomPairs[i][0]["z"]},
-                    "end": {"x": hBondHeavyAtomPairs[i][1]["x"], "y": hBondHeavyAtomPairs[i][1]["y"], "z": hBondHeavyAtomPairs[i][1]["z"]},
-                    "radius": 0.1,
-                    "radiusRatio": 3.0,
-                    "mid": 0.7,
-                    "fromCap": 2,
-                    "toCap": 2,
-                    "color": 'black'
-                });
-            }
-            break;
-        default:
-            // If not hydrogen bond, just line between geometric centers.
-            let centerPoints = interactionTypeAtoms.map(i => [
-                [i[0].length, i[0].map(a => [a["x"], a["y"], a["z"]]).reduce(
-                    (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
-                )],
-                [i[1].length, i[1].map(a => [a["x"], a["y"], a["z"]]).reduce(
-                    (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
-                )],
-            ]);
-            centerPoints = centerPoints.map(i => [
-                i[0][1].map(v => v / i[0][0]),
-                i[1][1].map(v => v / i[1][0]),
-            ]);
-
-            for (let i = 0; i < centerPoints.length; i++) {
-                let start = {"x": centerPoints[i][0][0], "y": centerPoints[i][0][1], "z": centerPoints[i][0][2]};
-                let end = {"x": centerPoints[i][1][0], "y": centerPoints[i][1][1], "z": centerPoints[i][1][2]};
-
-                viewer["addCylinder"]({
-                // viewer["addArrow"]({
-                    "dashed": true,
-                    "start": start,
-                    "end": end,
-                    "radius": 0.1,
-                    // "radiusRatio": 3.0,
-                    // "mid": 0.7,
-                    "fromCap": 2,
-                    "toCap": 2,
-                    "color": 'black'
-                });
-            }
-            break;
+    if (["hydrogenBonds", "halogenBonds"].indexOf(interactionName) !== -1) {
+        let hBondHeavyAtomPairs = interactionTypeAtoms.map(i => [
+            [2 - i[0].length, i[0].filter(a => a["elem"] !== "H")[0]],
+            [2 - i[1].length, i[1].filter(a => a["elem"] !== "H")[0]]
+        ]);
+        hBondHeavyAtomPairs = hBondHeavyAtomPairs.map(i => i.sort().map(i2 => i2[1]));
+    
+        for (let i = 0; i < hBondHeavyAtomPairs.length; i++){
+            // viewer["addCylinder"]({
+            viewer["addArrow"]({
+                "dashed": true,
+                "start": {"x": hBondHeavyAtomPairs[i][0]["x"], "y": hBondHeavyAtomPairs[i][0]["y"], "z": hBondHeavyAtomPairs[i][0]["z"]},
+                "end": {"x": hBondHeavyAtomPairs[i][1]["x"], "y": hBondHeavyAtomPairs[i][1]["y"], "z": hBondHeavyAtomPairs[i][1]["z"]},
+                "radius": 0.125, // 0.1,
+                "radiusRatio": 3.0,
+                "mid": 0.7,
+                "fromCap": 2,
+                "toCap": 2,
+                "color": interactionsInfo[interactionName].colorHex // 'black'
+            });
+        }
+    } else {
+        // If not hydrogen bond, just line between geometric centers.
+        let centerPoints = interactionTypeAtoms.map(i => [
+            [i[0].length, i[0].map(a => [a["x"], a["y"], a["z"]]).reduce(
+                (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
+            )],
+            [i[1].length, i[1].map(a => [a["x"], a["y"], a["z"]]).reduce(
+                (c1, c2) => [(c1[0] + c2[0]), (c1[1] + c2[1]), (c1[2] + c2[2])]
+            )],
+        ]);
+        centerPoints = centerPoints.map(i => [
+            i[0][1].map(v => v / i[0][0]),
+            i[1][1].map(v => v / i[1][0]),
+        ]);
+    
+        for (let i = 0; i < centerPoints.length; i++) {
+            let start = {"x": centerPoints[i][0][0], "y": centerPoints[i][0][1], "z": centerPoints[i][0][2]};
+            let end = {"x": centerPoints[i][1][0], "y": centerPoints[i][1][1], "z": centerPoints[i][1][2]};
+    
+            viewer["addCylinder"]({
+            // viewer["addArrow"]({
+                "dashed": true,
+                "start": start,
+                "end": end,
+                "radius": 0.125,  // 0.1,
+                // "radiusRatio": 3.0,
+                // "mid": 0.7,
+                "fromCap": 2,
+                "toCap": 2,
+                "color": interactionsInfo[interactionName].colorHex  // 'black'
+            });
+        }
     }
 }
 
@@ -363,10 +502,10 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
  * @returns void
  */
 export function clearInteraction(): void {
-    Store.store.commit("setVar", {
-        name: "colorMessage",
-        val: Store.defaultColorMsg
-    });
+    // Store.store.commit("setVar", {
+    //     name: "colorMessage",
+    //     val: Store.defaultColorMsg
+    // });
 
     if (viewer === undefined) {
         return;
@@ -376,4 +515,45 @@ export function clearInteraction(): void {
 
     viewer["removeAllShapes"]();
     viewer["render"]();
+}
+
+export function highlightAll(): void {
+    let interactionVisibilityStatus = JSON.parse(Store.store.state["interactionVisibilityStatus"]);
+
+    // if (interactionName !== undefined) {
+    clearInteraction();
+
+    let highlightInfos = [];
+    let tableData = [];
+    for (let interactionName of renderOrder) {
+    // for (let interactionName in interactionVisibilityStatus) {
+        if (interactionVisibilityStatus[interactionName]) {
+            highlightInfos.push(
+                getInfoForHighlight(interactionName)
+            );
+
+            let interactionInfo = interactionsInfo[interactionName];
+            let linewidth = "50";
+            let linkIcon = `<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="612px" height="792px" viewBox="0 0 612 792" xml:space="preserve"> <path fill="#FFFFFF" stroke="#000000" stroke-width="${linewidth}" d="M30.6,304.2h367.2v367.2H30.6V304.2z"/> <path fill="#FFFFFF" stroke="#000000" stroke-width="${linewidth}" d="M275.4,181.8v-61.2h306v306h-61.2L459,365.4L275.4,549L153,426.6 L336.6,243L275.4,181.8z"/></svg>`;
+            let linkEncoded = "data:image/svg+xml;base64," + btoa(linkIcon);
+
+            tableData.push({
+                "Name": `${interactionInfo.name} <a target="_blank" href="${interactionInfo.link}"><img style="width:15px; height:15px; position:relative; top:-2px; margin-left:3px;" src="${linkEncoded}"></a>`,
+                "Representation": firstLetterCapital(
+                    interactionInfo.representation
+                        .replace(/COLOR/g, `<span style="font-weight:bold; color:${interactionInfo.colorHex}; text-shadow: 1px 1px 2px #555555;">${interactionInfo.color}</span>`)
+                ) + ".",
+                // "Link": interactionInfo.link
+            });
+        }
+    }
+
+    Store.store.commit("setVar", {
+        name: "legendItems",
+        val: tableData
+    })
+
+    highlight(highlightInfos);
+
+    // }
 }

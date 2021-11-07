@@ -38,7 +38,7 @@ ligand, receptor
 
 
 ```python
-hbond_inf = binana.interactions.get_hydrogen_bonds(ligand, receptor)
+hbond_inf = binana.interactions.get_hydrogen_or_halogen_bonds(ligand, receptor)
 ```
 
 
@@ -119,7 +119,7 @@ for f in dir(binana.interactions):
         get_close
         get_closest
         get_electrostatic_energies
-        get_hydrogen_bonds
+        get_hydrogen_or_halogen_bonds
         get_hydrophobics
         get_ligand_atom_types
         get_pi_pi

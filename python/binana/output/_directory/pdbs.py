@@ -9,6 +9,7 @@ def output_dir_pdbs(
     pdb_side_chain,
     pdb_hydrophobic,
     pdb_hbonds,
+    pdb_halbonds,
     pdb_pistack,
     pdb_pi_T,
     pdb_pi_cat,
@@ -37,6 +38,7 @@ def output_dir_pdbs(
     pdb_side_chain.save_pdb(parameters.params["output_dir"] + "/side_chain.pdb")
     pdb_hydrophobic.save_pdb(parameters.params["output_dir"] + "/hydrophobic.pdb")
     pdb_hbonds.save_pdb(parameters.params["output_dir"] + "/hydrogen_bonds.pdb")
+    pdb_halbonds.save_pdb(parameters.params["output_dir"] + "/halogen_bonds.pdb")
     pdb_pistack.save_pdb(parameters.params["output_dir"] + "/pi_pi_stacking.pdb")
     pdb_pi_T.save_pdb(parameters.params["output_dir"] + "/T_stacking.pdb")
     pdb_pi_cat.save_pdb(parameters.params["output_dir"] + "/cat_pi.pdb")

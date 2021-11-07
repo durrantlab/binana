@@ -220,9 +220,12 @@ def _get_active_site_flexibility(active_site_flexibility, output):
     return output
 
 
-def _get_hbonds(hydrogen_bonds, output):
+def _get_hbonds(hbonds, output, hydrogen_bond = True):
+
+    name = "Hydrogen" if hydrogen_bond else "Halogen"
+
     output = output + preface + "" + "\n"
-    output = output + preface + "Hydrogen bonds:" + "\n"
+    output = output + preface + name + " bonds:" + "\n"
     output = (
         output
         + preface
@@ -235,8 +238,8 @@ def _get_hbonds(hydrogen_bonds, output):
         + "   -------------------|--------------------|---------------------|-------"
         + "\n"
     )
-    for key in sorted(hydrogen_bonds["counts"].keys()):
-        value = hydrogen_bonds["counts"][key]
+    for key in sorted(hbonds["counts"].keys()):
+        value = hbonds["counts"][key]
         key = key.split("_")
         output = (
             output
@@ -253,7 +256,7 @@ def _get_hbonds(hydrogen_bonds, output):
         )
 
     output = output + preface + "\n" + preface + "Raw data:\n"
-    for atom_pairs in hydrogen_bonds["labels"]:
+    for atom_pairs in hbonds["labels"]:
         output = (
             output
             + preface
@@ -453,6 +456,7 @@ def collect(
     close,
     hydrophobics,
     hydrogen_bonds,
+    halogen_bonds,
     salt_bridges,
     pi_pi,
     cat_pi,
@@ -478,6 +482,8 @@ def collect(
             hydrophobic protein/ligand interactions.
         hydrogen_bonds (dict): A dictionary containing information about the
             hydrogen bonds between the protein and ligand.
+        halogen_bonds (dict): A dictionary containing information about the
+            halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
         pi_pi (dict): A dictionary containing information about the pi-pi
@@ -517,7 +523,10 @@ def collect(
     )
     output = _get_rotateable_bonds_count(ligand, output)
     output = _get_active_site_flexibility(active_site_flexibility, output)
-    output = _get_hbonds(hydrogen_bonds, output)
+
+    output = _get_hbonds(hydrogen_bonds, output, True)   # hydrogen bonds
+    output = _get_hbonds(hydrogen_bonds, output, False)  # halogen bonds
+
     output = _get_hydrophobics(hydrophobics, output)
 
     output = _get_pi_stacking(pi_pi, output)

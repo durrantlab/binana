@@ -1,6 +1,26 @@
 Changes
 =======
 
+WIP
+---
+
+1. Can select multiple interactions at once.
+2. PNG file included in download from "Save" button. Also, log.txt file, for those not comfortable with JSON.
+3. Bonds now color coded.
+4. Certain interactions turned on by default.
+5. Clear button changed to "Reset" because resets to default value.
+6. No more coloring by molecule, interaction, etc. Too confusing.
+7. JSZip now dynamic import.
+8. zip download now includes vmd state directory.
+9. Vmd state file centers on ligand automatically.
+10. changed hydrogen_bond_dist_cutoff and hydrogen_bond_angle_cutoff parameter names to hydrogen_halogen_bond_dist_cutoff
+hydrogen_halogen_bond_angle_cutoff
+11. Removed ability to toggle on and off cylinder interactions, to simplify UI. Always on for those interaction where appropriate.
+12. Some interactions are shown as spheres, others as bonds. Keeps it simplier.
+
+Halogen bonds mention in all documentation?
+Halogen bonds counted twice? Good to check. In the chart in log file.
+
 2.0
 ---
 

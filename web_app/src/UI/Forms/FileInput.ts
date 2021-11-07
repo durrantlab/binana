@@ -11,6 +11,9 @@ let computedFunctions = {
      * and opens the convert modal if necessary. */
     "val": {
         get(): any {
+            if (this["file"] === false) {
+                return [];
+            }
             return this["file"];
         },
 

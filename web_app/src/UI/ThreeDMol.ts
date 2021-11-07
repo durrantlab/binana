@@ -406,7 +406,6 @@ let methodsFunctions = {
         let modelForZooming = this.$store.state["ligandMol"] !== undefined ? this.$store.state["ligandMol"] : this.$store.state["receptorMol"];
         this.zoomToModels.push([modelForZooming, duration]);
 
-
         // // Always zoom
         // // viewer.resize();  // To make sure. Had some problems in testing.
         // viewer["render"]();

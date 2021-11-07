@@ -2,11 +2,10 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-
 import * as Utils from "../../Utils";
 import * as BINANAInterface from "../../BINANAInterface";
-import * as JSZip from "../../../node_modules/jszip/lib/index";
 import * as Store from "../../Vue/Store";
+import { viewer } from "../ThreeDMol";
 
 var FileSaver = require('file-saver');
 
@@ -16,18 +15,20 @@ declare var Vue;
 let computedFunctions = {
     /**
      * Gets text describing the current interaction coloring scheme.
+     * DEPRECIATED, but leave commented out in case you bring it back in the
+     * future.
      * @returns string  The text.
      */
-    "colorByInteractionBtnTxt"(): string {
-        switch (this.$store.state["colorByInteraction"]) {
-            case Store.InteractionColoring.MOLECULE:
-                return "By Molecule";
-            case Store.InteractionColoring.INTERACTION:
-                return "By Interaction";
-            case Store.InteractionColoring.NONE:
-                return "None";
-        }
-    },
+    // "colorByInteractionBtnTxt"(): string {
+    //     switch (this.$store.state["colorByInteraction"]) {
+    //         case Store.InteractionColoring.MOLECULE:
+    //             return "By Molecule";
+    //         case Store.InteractionColoring.INTERACTION:
+    //             return "By Interaction";
+    //         case Store.InteractionColoring.NONE:
+    //             return "None";
+    //     }
+    // },
 
     /**
      * Gets the text too use on the bond-visible buttton.
@@ -59,7 +60,20 @@ let computedFunctions = {
 
         this["nonProteinResidues"] = ": " + residues.join(", ");
         return ligLines.length > 0;
+    },
+
+    interactionVisibilityStatus: {
+        get(): string {
+            return this.$store.state["interactionVisibilityStatus"];
+        },
+        set(val: string): void {
+            this.$store.commit("setVar", {
+                name: "interactionVisibilityStatus",
+                val: val
+            })
+        }
     }
+
 }
 
 /** An object containing the vue-component methods functions. */
@@ -107,16 +121,28 @@ let methodsFunctions = {
      *                                   highlight.
      * @returns void
      */
-    "highlight"(interactionName: string): void {
+    "updateHighlight"(interactionName: string): void {
         if (interactionName === undefined) {
             interactionName = this.lastInteractionNameUsed;
         } else {
             this.lastInteractionNameUsed = interactionName;
         }
 
-        if (interactionName !== undefined) {
-            BINANAInterface.highlight(interactionName);
+        if (interactionName === undefined) {
+            // Apparently, this.lastInteractionNameUsed not set either (For
+            // example, happens when click on interactions between any specific
+            // kind of interaction).
+            return;
         }
+
+        // update interactionVisibilityStatus
+        let interactionVisibilityStatus = JSON.parse(this.interactionVisibilityStatus);
+        interactionVisibilityStatus[interactionName] =
+            (interactionVisibilityStatus[interactionName] === undefined)
+            ? true : !interactionVisibilityStatus[interactionName];
+        this.interactionVisibilityStatus = JSON.stringify(interactionVisibilityStatus);
+
+        BINANAInterface.highlightAll();
     },
 
     /**
@@ -124,7 +150,8 @@ let methodsFunctions = {
      * @returns void
      */
     "clearInteraction"(): void {
-        BINANAInterface.clearInteraction();
+        this.interactionVisibilityStatus = Store.defaultInteractionVisibilityStatus;
+        BINANAInterface.highlightAll();
     },
 
     /**
@@ -158,43 +185,115 @@ let methodsFunctions = {
             val: newVal
         });
 
-        this["highlight"]();
+        this["updateHighlight"]();
     },
 
     /**
-     * Runs when the bond-visibility button is pressed.
+     * Runs when the bond-visibility button is pressed. DEPRECIATED, but
+     * keep commented out in case you bring it back in the future.
      * @returns void
      */
-    "onBondVisChange"(): void {
-        this.$store.commit("setVar", {
-            name: "bondVisible",
-            val: !this.$store.state["bondVisible"]
-        });
+    // "onBondVisChange"(): void {
+    //     this.$store.commit("setVar", {
+    //         name: "bondVisible",
+    //         val: !this.$store.state["bondVisible"]
+    //     });
 
-        this["highlight"]();
-    },
+    //     this["updateHighlight"]();
+    // },
 
     /**
      * Runs when the save button is pressed.
      * @returns void
      */
     "onSaveFiles"(): void {
-        var zip = new JSZip();
-        zip["folder"]("binana_output")["file"]
-            ("receptor.txt",
-            this.$store.state["receptorContents"]
-        )["file"](
-            "ligand.txt",
-            this.$store.state["ligandContents"]
-        )["file"](
-            "binana.json",
-            this.$store.state["jsonOutput"]
+        let getJSZip = import(
+            /* webpackChunkName: "JSZip" */ 
+            /* webpackMode: "lazy" */
+            '../../../node_modules/jszip/lib/index'
+        ).then((mod) => {
+            // @ts-ignore
+            return Promise.resolve(mod.default);
+        });
+
+        let getBinana = import(
+            /* webpackChunkName: "binana" */ 
+            /* webpackMode: "lazy" */
+            '../../binanajs/binana'
         );
-        zip["generateAsync"]({["type"]:"blob"}).then(
-            function (blob) {
-                FileSaver["saveAs"](blob, "binana_output.zip");
+
+        Promise.all([getJSZip, getBinana]).then((mods) => {
+            let JSZip;
+            let binana;
+            [JSZip, binana] = mods;
+
+            var zip = new JSZip();
+            let dataURI = viewer.pngURI();
+            let pngBlob = Utils.dataURIToBlob(dataURI);
+    
+            zip["folder"]("binana_output")["file"]
+                // TODO: was receptor.txt. Why?
+                ("receptor.pdb", this.$store.state["receptorContents"]
+            );
+    
+            zip["folder"]("binana_output")["file"](
+                // TODO: was ligand.txt. Why?
+                "ligand.pdb", this.$store.state["ligandContents"]
+            );
+    
+            zip["folder"]("binana_output")["file"](
+                "binana.json", this.$store.state["filesToSave"]["output.json"]
+            );
+    
+            zip["folder"]("binana_output")["file"](
+                "log.txt", this.$store.state["filesToSave"]["log.txt"]
+            );
+    
+            // let ligTxt = Store.store.state.ligandContents;
+            // let recepTxt = Store.store.state.receptorContents;
+            // let models = binana.load_ligand_receptor.from_texts(ligTxt, recepTxt)
+            // let ligand, receptor;
+            // [ligand, receptor] = models;
+
+            // let data = JSON.parse(Store.store.state["filesToSave"]["output.json"]);
+            // console.log(data)
+
+            // let hbondInf = binana.interactions.get_hydrogen_or_halogen_bonds(ligand, receptor);
+            // console.log(hbondInf);
+            // console.log(data["hydrogenBonds"]);
+
+            // ["closestContacts",
+            // "closeContacts",
+            // "hydrophobicContacts",
+            // "hydrogenBonds",
+            // "piPiStackingInteractions",
+            // "tStackingInteractions",
+            // "cationPiInteractions",
+            // "saltBridges",
+            // "activeSiteFlexibility",
+            // "electrostaticEnergies",
+            // "ligandAtomTypes"]
+
+            // let pdbTxt = binana.output.pdb_file.write(ligand, receptor, null, null, null, data["hydrogenBonds"], null, null, null, null, null, true);
+            
+            // debugger;
+    
+            for (let flnm in this.$store.state["filesToSave"]) {
+                zip["folder"]("binana_output")["file"](
+                    "vmd/" + flnm, this.$store.state["filesToSave"][flnm]
+                );
             }
-        );
+    
+            zip["folder"]("binana_output")["file"](
+                "image.png", pngBlob
+            );
+            zip["generateAsync"]({["type"]:"blob"}).then(
+                function (blob) {
+                    FileSaver["saveAs"](blob, "binana_output.zip");
+                }
+            );
+        });
+
     },
 
     /**
@@ -290,6 +389,14 @@ let methodsFunctions = {
         e.preventDefault();
         e.stopPropagation();
     },
+
+    "getInteractionVisibility"(interactionID: string): boolean {
+        let interactionVisibilityStatus = JSON.parse(this.interactionVisibilityStatus);
+        if (interactionVisibilityStatus[interactionID] === undefined) {
+            return false;
+        }
+        return interactionVisibilityStatus[interactionID];
+    }
 }
 
 /**
@@ -306,7 +413,7 @@ function mountedFunction(): void {
  */
 export function setup(): void {
     Vue.component('binana-params', {
-        "template": `
+        "template": /* html */ `
             <div>
                 <!-- <b-card
                     class="mb-2 text-center"
@@ -358,17 +465,17 @@ export function setup(): void {
                                         <b-card-text>Parameters used to identify hydrogen bonds.</b-card-text>
                                         <numeric-input
                                             label="Hydrogen Bond Dist Cutoff"
-                                            id="hydrogen_bond_dist_cutoff"
+                                            id="hydrogen_halogen_bond_dist_cutoff"
                                             description="A hydrogen bond is identified if the hydrogen-bond
                                             donor comes within this number of angstroms of the hydrogen-bond
-                                            acceptor." placeholder="$store.state.hydrogen_bond_dist_cutoff"
+                                            acceptor." placeholder="$store.state.hydrogen_halogen_bond_dist_cutoff"
                                         ></numeric-input>
                                         <numeric-input
                                             label="Hydrogen Bond Angle Cutoff"
-                                            id="hydrogen_bond_angle_cutoff"
+                                            id="hydrogen_halogen_bond_angle_cutoff"
                                             description="A hydrogen bond is identified if the angle formed
                                             between the donor, the hydrogen atom, and the acceptor is no
-                                            greater than this number of degrees." placeholder="$store.state.hydrogen_bond_angle_cutoff"
+                                            greater than this number of degrees." placeholder="$store.state.hydrogen_halogen_bond_angle_cutoff"
                                         ></numeric-input>
                                     </b-card>
 
@@ -496,59 +603,136 @@ export function setup(): void {
                     </form-group>
 
                     <b-container
-                        v-if="$store.state.receptorContents != '' && $store.state.ligandContents != '' && $store.state.jsonOutput != '{}'"
+                        v-if="$store.state.receptorContents != '' && $store.state.ligandContents != '' && $store.state.filesToSave != '{}'"
                     >
                         <b-row no-gutters>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Common" block>
-                                    <b-dropdown-item @click="highlight('hydrogenBonds');">Hydrogen Bonds</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('hydrophobicContacts');">Hydrophobic</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('saltBridges');">Salt Bridge</b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('hydrogenBonds');">
+                                        <check-mark :value="getInteractionVisibility('hydrogenBonds')">
+                                            <div class="centerMenuItem" style="width:115px;">
+                                                Hydrogen Bonds
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('halogenBonds');">
+                                        <check-mark :value="getInteractionVisibility('halogenBonds')">
+                                            <div class="centerMenuItem" style="width:115px;">
+                                                Halogen Bonds
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('hydrophobicContacts');">
+                                        <check-mark :value="getInteractionVisibility('hydrophobicContacts')">
+                                            <div class="centerMenuItem" style="width:115px;">
+                                                Hydrophobic
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('saltBridges');">
+                                        <check-mark :value="getInteractionVisibility('saltBridges')">
+                                            <div class="centerMenuItem" style="width:115px;">
+                                                Salt Bridge
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
                                 </b-dropdown>
                             </b-col>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Contacts" block>
-                                    <b-dropdown-item @click="highlight('closeContacts');">Close</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('closestContacts');">Closest</b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('closeContacts');">
+                                        <check-mark :value="getInteractionVisibility('closeContacts')">
+                                            <div class="centerMenuItem" style="width:55px;">
+                                                Close
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('closestContacts');">
+                                        <check-mark :value="getInteractionVisibility('closestContacts')">
+                                            <div class="centerMenuItem" style="width:55px;">
+                                                Closest
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
                                 </b-dropdown>
                             </b-col>
                             <b-col no-gutters>
                                 <b-dropdown variant="primary" text="Aromatic" block>
-                                    <b-dropdown-item @click="highlight('piPiStackingInteractions');">π-π Stacking</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('tStackingInteractions');">T Shaped</b-dropdown-item>
-                                    <b-dropdown-item @click="highlight('cationPiInteractions');">Cation-π</b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('piPiStackingInteractions');">
+                                        <check-mark :value="getInteractionVisibility('piPiStackingInteractions')">
+                                            <div class="centerMenuItem" style="width:95px;">
+                                                π-π Stacking
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('tStackingInteractions');">
+                                        <check-mark :value="getInteractionVisibility('tStackingInteractions')">
+                                            <div class="centerMenuItem" style="width:95px;">
+                                                T Shaped
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
+                                    <b-dropdown-item @click="updateHighlight('cationPiInteractions');">
+                                        <check-mark :value="getInteractionVisibility('cationPiInteractions')">
+                                            <div class="centerMenuItem" style="width:95px;">
+                                                Cation-π
+                                            </div>
+                                        </check-mark>
+                                    </b-dropdown-item>
                                 </b-dropdown>
                             </b-col>
                             <b-col no-gutters>
-                                <b-button variant="primary" @click="clearInteraction();" block>Clear</b-button>
+                                <b-button variant="primary" @click="clearInteraction();" block>Reset</b-button>
                             </b-col>
                         </b-row>
                         <b-row no-gutters>
-                            <b-col no-gutters @click="highlight();">
+                            <!-- 
+                            DEPRECIATED, but leave commented out in case you
+                            bring it back in the future.
+                            <b-col no-gutters @click="updateHighlight();">
                                 <b-button @click="onChangeColor();" block>
                                     {{colorByInteractionBtnTxt}}
                                 </b-button>
                             </b-col>
+                            -->
+                            <!--
+                            DEPRECIATED, but leave comented out in case you
+                            bring it back in the future.
                             <b-col no-gutters>
                                 <b-button @click="onBondVisChange();" block v-html="bondVisBtnTxt">
                                 </b-button>
                             </b-col>
+                            -->
                             <b-col no-gutters>
                                 <b-button @click="onSaveFiles();" block>
                                     Save
                                 </b-button>
                             </b-col>
                         </b-row>
+                        
+                        <b-table striped small :items="$store.state.legendItems">
+                            <template #cell(Representation)="data">
+                                <span v-html="data.value"></span>
+                            </template>
+                            <template #cell(Name)="data">
+                                <span v-html="data.value"></span>
+                            </template>
+                        </b-table>
+
+                        <!--
+                        DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this 
+                        commented in case you want to bring it back.
                         <b-row v-if="this.$store.state.colorMessage !== ''" no-gutters>
                             <b-col no-gutters>
                                 <p style="text-align:center;">({{this.$store.state.colorMessage}})</p>
                             </b-col>
                         </b-row>
+                        -->
                     </b-container>
                 </sub-section>
 
                 <span style="display:none;">{{validate(false)}}</span>  <!-- Hackish. Just to make reactive. -->
-            </b-form>
+            </div>
         `,
         "props": {},
         "computed": computedFunctions,
@@ -564,6 +748,7 @@ export function setup(): void {
                 lastInteractionNameUsed: undefined,
                 "forceLigandFileName": null,
                 "nonProteinResidues": ""
+
                 // "forcedLigandFile": null
                 // "showKeepProteinOnlyLink": true
             }

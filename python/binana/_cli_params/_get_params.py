@@ -11,8 +11,8 @@ from binana.interactions.default_params import (
     CLOSE_CONTACTS_DIST1_CUTOFF,
     CLOSE_CONTACTS_DIST2_CUTOFF,
     ELECTROSTATIC_DIST_CUTOFF,
-    HYDROGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
     HYDROPHOBIC_DIST_CUTOFF,
     LIGAND,
     OUTPUT_DIR,
@@ -30,14 +30,13 @@ from binana.interactions.default_params import (
 
 # __pragma__ ('skip')
 # Python
-import os
-
+from os import sep
 # __pragma__ ('noskip')
 
 """?
 # Transcrypt
 import binana
-os = binana.os
+sep = "/"
 ?"""
 
 """
@@ -65,8 +64,8 @@ class CommandLineParameters:
             "active_site_flexibility_dist_cutoff"
         ] = ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF
         self.params["hydrophobic_dist_cutoff"] = HYDROPHOBIC_DIST_CUTOFF
-        self.params["hydrogen_bond_dist_cutoff"] = HYDROGEN_BOND_DIST_CUTOFF
-        self.params["hydrogen_bond_angle_cutoff"] = HYDROGEN_BOND_ANGLE_CUTOFF
+        self.params["hydrogen_halogen_bond_dist_cutoff"] = HYDROGEN_HALOGEN_BOND_DIST_CUTOFF
+        self.params["hydrogen_halogen_bond_angle_cutoff"] = HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF
         self.params["pi_padding_dist"] = PI_PADDING_DIST
         self.params["pi_pi_interacting_dist_cutoff"] = PI_PI_INTERACTING_DIST_CUTOFF
         self.params["pi_stacking_angle_tolerance"] = PI_STACKING_ANGLE_TOLERANCE
@@ -102,8 +101,8 @@ class CommandLineParameters:
                 self.error = self.error + item + " "
 
         # Make sure the output directory, if specified, ends in a /
-        if self.params["output_dir"] != "" and self.params["output_dir"][-1:] != os.sep:
-            self.params["output_dir"] = self.params["output_dir"] + os.sep
+        if self.params["output_dir"] != "" and self.params["output_dir"][-1:] != sep:
+            self.params["output_dir"] = self.params["output_dir"] + sep
 
         # If an output directory is specified but a log file isn't, set a
         # default logfile

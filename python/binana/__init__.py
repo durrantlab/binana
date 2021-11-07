@@ -14,7 +14,6 @@ from binana._cli_params import _get_params
 # Python
 from binana._test import _run_test
 import sys as _sys
-
 # __pragma__ ('noskip')
 
 """?
@@ -35,8 +34,8 @@ def run(args=None):
             "-electrostatic_dist_cutoff", "4",
             "-active_site_flexibility_dist_cutoff", "4",
             "-hydrophobic_dist_cutoff", "4",
-            "-hydrogen_bond_dist_cutoff", "4",
-            "-hydrogen_bond_angle_cutoff", "40",
+            "-hydrogen_halogen_bond_dist_cutoff", "4",
+            "-hydrogen_halogen_bond_angle_cutoff", "40",
             "-pi_padding_dist", "0.75",
             "-pi_pi_interacting_dist_cutoff", "7.5",
             "-pi_stacking_angle_tolerance", "30",

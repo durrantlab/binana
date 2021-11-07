@@ -3,3 +3,4 @@
 
 python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_file test.pdb
 python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_dir ./cli_example_output/
+python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_json ligand_receptor_output.json

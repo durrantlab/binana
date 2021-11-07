@@ -36,6 +36,7 @@ def write(
     close=None,
     hydrophobics=None,
     hydrogen_bonds=None,
+    halogen_bonds=None,
     salt_bridges=None,
     pi_pi=None,
     cat_pi=None,
@@ -59,6 +60,9 @@ def write(
             None.
         hydrogen_bonds (dict, optional): A dictionary containing information
             about the hydrogen bonds between the protein and ligand. Defaults
+            to None.
+        halogen_bonds (dict, optional): A dictionary containing information
+            about the halogen bonds between the protein and ligand. Defaults
             to None.
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
@@ -98,7 +102,7 @@ def write(
         + '"ALP", "BET", and "OTH" indicate receptor contacts whose respective protein residues have the alpha-helix, beta-sheet, or "other" secondary structure. '
         + '"BAC" and "SID" indicate receptor contacts that are part of the protein backbone and sidechain, respectively. '
         + '"HYD" indicates hydrophobic contacts between the protein and ligand. '
-        + '"HBN" indicates hydrogen bonds. "SAL" indicates salt bridges. '
+        + '"HBN" indicates hydrogen bonds. "HAL" indicates halogen bonds. "SAL" indicates salt bridges. '
         + '"PIS" indicates pi-pi stacking interactions, "PIT" indicates T-stacking interactions, and "PIC" indicates cation-pi interactions. '
         + 'Protein residue names are unchanged, but the ligand residue is now named "LIG".'
     )
@@ -164,6 +168,10 @@ def write(
     if hydrogen_bonds is not None:
         hydrogen_bonds["mol"].set_resname("HBN")
         log_output = log_output + hydrogen_bonds["mol"].save_pdb_string() + "TER\n"
+    
+    if halogen_bonds is not None:
+        halogen_bonds["mol"].set_resname("HAL")
+        log_output = log_output + halogen_bonds["mol"].save_pdb_string() + "TER\n"
 
     if pi_pi is not None:
         pi_pi["mols"]["pi_stacking"].set_resname("PIS")

@@ -16,7 +16,8 @@ self.onmessage = function(e) {
 
     let params = [
         "-receptor", "receptor.pdb", "-ligand", "ligand.pdb",
-        "-output_json", "ligand_receptor_output.json"
+        "-output_dir", "/vmd/"
+        // "-output_json", "ligand_receptor_output.json"
     ];
 
     const binanaParamNames = Object.keys(binanaParams);
@@ -30,11 +31,18 @@ self.onmessage = function(e) {
 
     binana["run"](params);
 
-    // Get the json output.
-    let json = JSON.parse(
-        binana["fs"]["load_file"]("ligand_receptor_output.json")
-    );
+    // Get the output.
+    let fakeFS = binana["fs"]["shim"]["fake_fs"];
+    let newFS = {};
+    for (let flnm of Object.keys(fakeFS)) {
+        // if (["/vmd/output.json", "/vmd/log.txt"].indexOf(flnm) !== -1) {
+        if (flnm.startsWith("/vmd/")) {
+            let content = fakeFS[flnm];
+            flnm = flnm.slice(5);
+            newFS[flnm] = content;
+        }
+    }
 
     // @ts-ignore
-    postMessage(json);
+    postMessage(newFS);
 }

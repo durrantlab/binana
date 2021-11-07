@@ -110,6 +110,10 @@ sep = "/"
 class OpenFile:
     def __init__(self, flnm, mode=None):
         mode = _set_default(mode, "r")
+
+        while "//" in flnm:
+            flnm = flnm.replace("//", "/")
+
         self.flnm = flnm
         self.mode = mode
 

@@ -8,8 +8,8 @@ REMARK            cation_pi_dist_cutoff        |             6.0
 REMARK         close_contacts_dist1_cutoff     |             2.5            
 REMARK         close_contacts_dist2_cutoff     |             4.0            
 REMARK          electrostatic_dist_cutoff      |             4.0            
-REMARK          hydrogen_bond_angle_cutoff     |             40.0           
-REMARK          hydrogen_bond_dist_cutoff      |             4.0            
+REMARK          hydrogen_halogen_bond_angle_cutoff     |             40.0           
+REMARK          hydrogen_halogen_bond_dist_cutoff      |             4.0            
 REMARK           hydrophobic_dist_cutoff       |             4.0            
 REMARK                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/input/ligand.pdbqt
 REMARK                  output_dir             | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/output/

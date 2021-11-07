@@ -131,3 +131,20 @@ export function curPath(): string {
     }
     return "";
 }
+
+export function dataURIToBlob(dataURI): Blob {
+    // See https://stackoverflow.com/questions/12168909/blob-from-dataurl
+    var byteString = atob(dataURI.split(',')[1]);
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+    var ab = new ArrayBuffer(byteString.length);
+    var ia = new Uint8Array(ab);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
+}
+
+export function firstLetterCapital(sent: string): string {
+    return sent.substring(0, 1).toUpperCase() + sent.substring(1)
+}

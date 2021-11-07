@@ -20,12 +20,12 @@ beta sheet vs. other."""
 HYDROPHOBIC_DIST_CUTOFF = 4.0
 """float: Carbon-carbon distance cutoff for hydrophobics interactions."""
 
-HYDROGEN_BOND_DIST_CUTOFF = 4.0
-"""float: Donor/acceptor distance cutoff for hydrogen bonds."""
+HYDROGEN_HALOGEN_BOND_DIST_CUTOFF = 4.0
+"""float: Donor/acceptor distance cutoff for hydrogen and halogen bonds."""
 
-HYDROGEN_BOND_ANGLE_CUTOFF = 40.0
-"""float: Donor-hydrogen-acceptor angle cutoff, in degrees, for hydrogen
-bonds."""
+HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF = 40.0
+"""float: Donor-hydrogen-acceptor or donor-halogen-acceptor angle cutoff, in
+degrees, for hydrogen and halogen bonds."""
 
 PI_PADDING_DIST = 0.75
 """float: Aromatic-ring padding. For the purpose of detecting interactions, this

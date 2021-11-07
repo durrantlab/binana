@@ -7,7 +7,7 @@ rm -rf ../python/__target__/ ./lib/
 # Compile the python file.
 cd ../python/
 # --nomin
-transcrypt --build --ecom --verbose binana.py
+transcrypt --build --nomin --ecom --verbose binana.py
 cd -
 
 # Move the javascript library to the lib directory.

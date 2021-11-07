@@ -79,13 +79,15 @@ def _get_close_atom_list(interaction_labels):
     return interaction_list
 
 
-def _collect_hydrogen_bonds(hydrogen_bonds, json_output):
+def _collect_hydrogen_halogen_bonds(hydrogen_bonds, json_output, hydrogen_bond=True):
+    dict_key = "hydrogenBonds" if hydrogen_bond else "halogenBonds"
+
     # reset counter for interaction
     i = 0
     # hydrogen bonds
     for atom_pairs in hydrogen_bonds:
         # add new dictionary to hydrogen_bonds list
-        json_output["hydrogenBonds"].append({})
+        json_output[dict_key].append({})
         # parse atom_trios
         ligand_and_receptor = [
             re.split(r"[():]", atom_pairs[0]),  # Ligand
@@ -118,13 +120,13 @@ def _collect_hydrogen_bonds(hydrogen_bonds, json_output):
                     atom.remove(detail)
         # add each detail to the appropriate key in ligand_atoms and receptor_atoms
         # add "ligandAtoms" and "receptorAtoms" keys to dictionary
-        json_output["hydrogenBonds"][i] = {"ligandAtoms": [], "receptorAtoms": []}
+        json_output[dict_key][i] = {"ligandAtoms": [], "receptorAtoms": []}
         for detail in ligand_atom_details:
-            json_output["hydrogenBonds"][i]["ligandAtoms"].append(
+            json_output[dict_key][i]["ligandAtoms"].append(
                 _atom_details_to_dict(detail)
             )
         for detail in receptor_atom_details:
-            json_output["hydrogenBonds"][i]["receptorAtoms"].append(
+            json_output[dict_key][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
         # increment counter
@@ -318,6 +320,7 @@ def collect(
     close=None,
     hydrophobics=None,
     hydrogen_bonds=None,
+    halogen_bonds=None,
     salt_bridges=None,
     pi_pi=None,
     cat_pi=None,
@@ -339,6 +342,9 @@ def collect(
             None.
         hydrogen_bonds (dict, optional): A dictionary containing information
             about the hydrogen bonds between the protein and ligand. Defaults
+            to None.
+        halogen_bonds (dict, optional): A dictionary containing information
+            about the halogen bonds between the protein and ligand. Defaults
             to None.
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
@@ -379,7 +385,10 @@ def collect(
     # Add in the other metrics that are more difficult to calculate.
     if hydrogen_bonds is not None:
         json_output["hydrogenBonds"] = []
-        _collect_hydrogen_bonds(hydrogen_bonds["labels"], json_output)
+        _collect_hydrogen_halogen_bonds(hydrogen_bonds["labels"], json_output, True)
+    if halogen_bonds is not None:
+        json_output["halogenBonds"] = []
+        _collect_hydrogen_halogen_bonds(halogen_bonds["labels"], json_output, False)
     if pi_pi is not None:
         json_output["piPiStackingInteractions"] = []
         _collect_pi_pi(pi_pi["labels"]["pi_stacking"], json_output)

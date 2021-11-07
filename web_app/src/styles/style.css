@@ -244,3 +244,15 @@ div.better-btn-spacing {
 .jumbotron h1 {
   font-size: 4em;
 }
+
+.spacer25px {
+  display:inline-block; width:25px;
+}
+
+.centerMenuItem {
+  text-align:center; display:inline-block;
+}
+
+td {
+  cursor: inherit;
+}

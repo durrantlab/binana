@@ -4,8 +4,8 @@
 
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import (
-    HYDROGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
+    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
 )
 import binana
 from binana.load_ligand_receptor import _get_ligand_receptor_dists
@@ -31,12 +31,21 @@ from binana._utils.shim import fabs
 # Be sure to update the corresponding function in
 # binana.interactions.__init__.py as well!
 
+# O-H distance is 0.96 A, N-H is 1.01 A. See
+# http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
+max_donor_X_dist = {
+    "H": 1.3,
+    "I": 2.04 * 1.4,  # O-I: 2.04 per avogadro
+    "BR": 1.86 * 1.4,  # O-Br: 1.86
+    "Br": 1.86 * 1.4,
+    "CL": 1.71 * 1.4,  # O-Cl: 1.71
+    "Cl": 1.71 * 1.4,
+    "F": 1.33 * 1.4,  # O-F: 1.33
+}
 
-def get_hydrogen_bonds(
-    ligand,
-    receptor,
-    dist_cutoff=None,
-    angle_cutoff=None,
+
+def get_hydrogen_or_halogen_bonds(
+    ligand, receptor, dist_cutoff=None, angle_cutoff=None, hydrogen_bond=True
 ):
     """Identifies and counts the number of hydrogen bonds between the protein
     and ligand. Output is formatted like this::
@@ -58,9 +67,11 @@ def get_hydrogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
-            HYDROGEN_BOND_ANGLE_CUTOFF.
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+        hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds.
+            Otherwise, calculates halogen bonds. Defaults to True.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -68,8 +79,10 @@ def get_hydrogen_bonds(
         the log file ("labels").
     """
 
-    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_BOND_DIST_CUTOFF)
-    angle_cutoff = _set_default(angle_cutoff, HYDROGEN_BOND_ANGLE_CUTOFF)
+    central_atoms = ["H"] if hydrogen_bond else ["I", "BR", "Br", "CL", "Cl", "F"]
+
+    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF)
+    angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
 
     hbonds = {}
     pdb_hbonds = Mol()
@@ -78,46 +91,40 @@ def get_hydrogen_bonds(
     # Calculate the distances.
     ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
 
-    # Now see if there's some sort of hydrogen bond between
-    # these two atoms. distance cutoff = 4, angle cutoff = 40.
-    # Note that this is liberal.
+    # Now see if there's some sort of hydrogen (or halogen) bond between these
+    # two atoms. distance cutoff = 4, angle cutoff = 40. Note that these cutoffs
+    # are generous.
     for ligand_atom, receptor_atom, dist in ligand_receptor_dists:
         if (
             dist < dist_cutoff
-            and (ligand_atom.element == "O" or ligand_atom.element == "N")
-            and (receptor_atom.element == "O" or receptor_atom.element == "N")
+            and ligand_atom.element in ["O", "N"]
+            and receptor_atom.element in ["O", "N"]
         ):
-            # now build a list of all the hydrogens close to these
+            # now build a list of all the hydrogens (or halogens) close to these
             # atoms
             hydrogens = []
 
             for atm_index in ligand.all_atoms.keys():
-                if ligand.all_atoms[atm_index].element == "H" and (
-                    ligand.all_atoms[atm_index].coordinates.dist_to(
+                element = ligand.all_atoms[atm_index].element
+                if element in central_atoms:
+                    dist = ligand.all_atoms[atm_index].coordinates.dist_to(
                         ligand_atom.coordinates
                     )
-                    < 1.3
-                ):
-                    # so it's a hydrogen
-                    # O-H distance is 0.96 A, N-H is 1.01 A.
-                    # See
-                    # http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
-                    ligand.all_atoms[atm_index].comment = "LIGAND"
-                    hydrogens.append(ligand.all_atoms[atm_index])
+                    if dist < max_donor_X_dist[element]:  # 1.3 for H
+                        # so it's a hydrogen (or halogen)
+                        ligand.all_atoms[atm_index].comment = "LIGAND"
+                        hydrogens.append(ligand.all_atoms[atm_index])
 
             for atm_index in receptor.all_atoms.keys():
-                if receptor.all_atoms[atm_index].element == "H" and (
-                    receptor.all_atoms[atm_index].coordinates.dist_to(
+                element = receptor.all_atoms[atm_index].element
+                if element in central_atoms:
+                    dist = receptor.all_atoms[atm_index].coordinates.dist_to(
                         receptor_atom.coordinates
                     )
-                    < 1.3
-                ):
-                    # so it's a hydrogen
-                    # O-H distance is 0.96 A, N-H is 1.01 A.
-                    # See
-                    # http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
-                    receptor.all_atoms[atm_index].comment = "RECEPTOR"
-                    hydrogens.append(receptor.all_atoms[atm_index])
+                    if dist < max_donor_X_dist[element]:  # 1.3 for H
+                        # so it's a hydrogen (or halogen)
+                        receptor.all_atoms[atm_index].comment = "RECEPTOR"
+                        hydrogens.append(receptor.all_atoms[atm_index])
 
             # now we need to check the angles
             for hydrogen in hydrogens:
@@ -155,6 +162,7 @@ def get_hydrogen_bonds(
                             hydrogen.comment,
                         )
                     )
+
     return {
         "counts": hbonds,
         "mol": pdb_hbonds,

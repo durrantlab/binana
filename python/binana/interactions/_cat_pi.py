@@ -64,24 +64,20 @@ def _detect_pi_cat(
                     charged_mol_lbls = (
                         "["
                         + " / ".join(
-                            [
-                                mol_with_pos_charge.all_atoms[index].string_id()
-                                for index in charged.indices
-                            ]
+                            mol_with_pos_charge.all_atoms[index].string_id()
+                            for index in charged.indices
                         )
-                        + "]"
-                    )
+                    ) + "]"
+
 
                     aromatic_mol_lbls = (
                         "["
                         + " / ".join(
-                            [
-                                mol_with_aromatic.all_atoms[index].string_id()
-                                for index in aromatic.indices
-                            ]
+                            mol_with_aromatic.all_atoms[index].string_id()
+                            for index in aromatic.indices
                         )
-                        + "]"
-                    )
+                    ) + "]"
+
 
                     if name_of_charged == "LIGAND":
                         cat_pi_labels.append(

@@ -8,8 +8,8 @@ Command-line parameters used:
         close_contacts_dist1_cutoff     |             2.5            
         close_contacts_dist2_cutoff     |             4.0            
          electrostatic_dist_cutoff      |             4.0            
-         hydrogen_bond_angle_cutoff     |             40.0           
-         hydrogen_bond_dist_cutoff      |             4.0            
+         hydrogen_halogen_bond_angle_cutoff     |             40.0           
+         hydrogen_halogen_bond_dist_cutoff      |             4.0            
           hydrophobic_dist_cutoff       |             4.0            
                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/input/ligand.pdbqt
                  output_dir             | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/output/

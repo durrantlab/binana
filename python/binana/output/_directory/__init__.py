@@ -10,7 +10,8 @@ import os
 
 """?
 # Transcrypt
-os = binana.os
+from binana._utils import shim
+os = shim
 ?"""
 
 
@@ -21,6 +22,7 @@ def make_directory_output(
     active_site_flexibility,
     hydrophobics,
     hydrogen_bonds,
+    halogen_bonds,
     pi_pi,
     cat_pi,
     salt_bridges,
@@ -44,6 +46,7 @@ def make_directory_output(
         active_site_flexibility["mols"]["side_chain"],
         hydrophobics["mol"],
         hydrogen_bonds["mol"],
+        halogen_bonds["mol"],
         pi_pi["mols"]["pi_stacking"],
         pi_pi["mols"]["T_stacking"],
         cat_pi["mol"],
