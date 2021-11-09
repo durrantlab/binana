@@ -2,13 +2,21 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-05 16:24:09
+// Transcrypt'ed from Python, 2021-11-09 00:25:33
 var binana = {};
+var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
+import {fabs} from './binana._utils.shim.js';
+import * as shim from './binana._utils.shim.js';
+import * as __module_binana__utils__ from './binana._utils.js';
+__nest__ (binana, '_utils', __module_binana__utils__);
+import {angle_between_three_points} from './binana._utils._math_functions.js';
 import {r_just, round_to_thousandths_to_str} from './binana._utils.shim.js';
 import {Point} from './binana._structure.point.js';
 import * as __module_binana__ from './binana.js';
 __nest__ (binana, '', __module_binana__);
+import * as __module_math__ from './math.js';
+__nest__ (math, '', __module_math__);
 var __name__ = 'binana._structure.atom';
 export var Atom =  __class__ ('Atom', [object], {
 	__module__: __name__,
@@ -55,22 +63,22 @@ export var Atom =  __class__ ('Atom', [object], {
 	get create_pdb_line () {return __get__ (this, function (self, index) {
 		var output = 'ATOM ';
 		var output = ((output + r_just (str (index), 6)) + r_just (self.atom_name, 5)) + r_just (self.residue, 4);
-		var output = output + r_just (round_to_thousandths_to_str (self.coordinates.x), 18);
-		var output = output + r_just (round_to_thousandths_to_str (self.coordinates.y), 8);
-		var output = output + r_just (round_to_thousandths_to_str (self.coordinates.z), 8);
-		var output = output + r_just (self.element, 24);
+		output += r_just (round_to_thousandths_to_str (self.coordinates.x), 18);
+		output += r_just (round_to_thousandths_to_str (self.coordinates.y), 8);
+		output += r_just (round_to_thousandths_to_str (self.coordinates.z), 8);
+		output += r_just (self.element, 24);
 		return output;
 	});},
 	get number_of_neighbors () {return __get__ (this, function (self) {
 		return len (self.indecies_of_atoms_connecting);
 	});},
 	get add_neighbor_atom_index () {return __get__ (this, function (self, index) {
-		if (!(__in__ (index, self.indecies_of_atoms_connecting))) {
+		if (!__in__ (index, self.indecies_of_atoms_connecting)) {
 			self.indecies_of_atoms_connecting.append (index);
 		}
 	});},
 	get side_chain_or_backbone () {return __get__ (this, function (self) {
-		if (self.atom_name.strip () == 'CA' || self.atom_name.strip () == 'C' || self.atom_name.strip () == 'O' || self.atom_name.strip () == 'N') {
+		if (__in__ (self.atom_name.strip (), ['CA', 'C', 'O', 'N'])) {
 			return 'BACKBONE';
 		}
 		else {
@@ -164,6 +172,29 @@ export var Atom =  __class__ ('Atom', [object], {
 		if (self.residue.strip () == '') {
 			self.residue = ' MOL';
 		}
+	});},
+	get has_sp3_geometry () {return __get__ (this, function (self, parent_mol) {
+		var ncrs = (function () {
+			var __accu0__ = [];
+			for (var i of self.indecies_of_atoms_connecting) {
+				__accu0__.append (parent_mol.all_atoms [i].coordinates);
+			}
+			return __accu0__;
+		}) ();
+		var ccr = self.coordinates;
+		var to_deg = 180.0 / math.pi;
+		var angles = [angle_between_three_points (ncrs [0], ccr, ncrs [1]) * to_deg];
+		if (len (ncrs) > 2) {
+			angles.append (angle_between_three_points (ncrs [0], ccr, ncrs [2]) * to_deg);
+			angles.append (angle_between_three_points (ncrs [1], ccr, ncrs [2]) * to_deg);
+		}
+		if (len (ncrs) > 3) {
+			angles.append (angle_between_three_points (ncrs [0], ccr, ncrs [3]) * to_deg);
+			angles.append (angle_between_three_points (ncrs [1], ccr, ncrs [3]) * to_deg);
+			angles.append (angle_between_three_points (ncrs [2], ccr, ncrs [3]) * to_deg);
+		}
+		var average_angle = sum (angles) / float (len (angles));
+		return fabs (average_angle - 109.0) < 5.0;
 	});}
 });
 

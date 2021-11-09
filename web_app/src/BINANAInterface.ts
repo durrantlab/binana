@@ -329,7 +329,6 @@ function drawCylinders(interactionType: any[], interactionName: string): void {
         return;
     }
 
-
     // Get atoms.
     let interactionTypeAtoms = interactionType.map(i => [
         i["ligandAtoms"].map(l => atomInfTo3DMolAtom(ligandMol, l)),

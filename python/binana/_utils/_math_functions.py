@@ -137,8 +137,7 @@ def dihedral(point1, point2, point3, point4):  # never tested
     b1Xb2 = cross_product(b1, b2)
 
     b1XMagb2 = vector_scalar_multiply(b1, b2.magnitude())
-    radians = math.atan2(dot_product(b1XMagb2, b2Xb3), dot_product(b1Xb2, b2Xb3))
-    return radians
+    return math.atan2(dot_product(b1XMagb2, b2Xb3), dot_product(b1Xb2, b2Xb3))
 
 
 def angle_between_three_points(point1, point2, point3):  # As in three connected atoms
@@ -151,10 +150,8 @@ def angle_between_points(point1, point2):
     new_point1 = return_normalized_vector(point1)
     new_point2 = return_normalized_vector(point2)
     dot_prod = dot_product(new_point1, new_point2)
-    if dot_prod > 1.0:
-        dot_prod = 1.0  # to prevent errors that can rarely occur
-    if dot_prod < -1.0:
-        dot_prod = -1.0
+    dot_prod = min(dot_prod, 1.0)
+    dot_prod = max(dot_prod, -1.0)
     return math.acos(dot_prod)
 
 

@@ -10,7 +10,6 @@ from binana._structure.point import Point
 from binana._structure.atom import Atom
 from binana._utils._math_functions import (
     distance,
-    angle_between_three_points,
     vector_subtraction,
     cross_product,
     dihedral,
@@ -38,6 +37,18 @@ from binana._utils.shim import OpenFile as openFile
 """
 Class Mol handles PDB filing
 """
+
+# O-H distance is 0.96 A, N-H is 1.01 A. See
+# http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
+_max_donor_X_dist = {
+    "H": 1.3,
+    "I": 2.04 * 1.4,  # O-I: 2.04 per avogadro
+    "BR": 1.86 * 1.4,  # O-Br: 1.86
+    "Br": 1.86 * 1.4,
+    "CL": 1.71 * 1.4,  # O-Cl: 1.71
+    "Cl": 1.71 * 1.4,
+    "F": 1.33 * 1.4,  # O-F: 1.33
+}
 
 
 class Mol:
@@ -87,6 +98,7 @@ class Mol:
         ]
         self.aromatic_rings = []
         self.charges = []  # a list of points
+        self.has_hydrogens = False
 
     def load_pdb_from_text(
         self,
@@ -124,7 +136,7 @@ class Mol:
         # aren't loaded This basically gets rid of rotamers, I think.
         atom_already_loaded = []
 
-        for t in range(0, len(lines)):
+        for t in range(len(lines)):
             line = lines[t]
 
             if line[:3] == "END" and line[:7] != "ENDROOT" and line[:9] != "ENDBRANCH":
@@ -152,6 +164,9 @@ class Mol:
                 temp_atom = Atom()
                 temp_atom.read_pdb_line(line)
 
+                if temp_atom.element == "H":
+                    self.has_hydrogens = True
+
                 if (
                     temp_atom.coordinates.x > min_x
                     and temp_atom.coordinates.x < max_x
@@ -161,20 +176,12 @@ class Mol:
                     and temp_atom.coordinates.z < max_z
                 ):
 
-                    if self.max_x < temp_atom.coordinates.x:
-                        self.max_x = temp_atom.coordinates.x
-                    if self.max_y < temp_atom.coordinates.y:
-                        self.max_y = temp_atom.coordinates.y
-                    if self.max_z < temp_atom.coordinates.z:
-                        self.max_z = temp_atom.coordinates.z
-
-                    if self.min_x > temp_atom.coordinates.x:
-                        self.min_x = temp_atom.coordinates.x
-                    if self.min_y > temp_atom.coordinates.y:
-                        self.min_y = temp_atom.coordinates.y
-                    if self.min_z > temp_atom.coordinates.z:
-                        self.min_z = temp_atom.coordinates.z
-
+                    self.max_x = max(self.max_x, temp_atom.coordinates.x)
+                    self.max_y = max(self.max_y, temp_atom.coordinates.y)
+                    self.max_z = max(self.max_z, temp_atom.coordinates.z)
+                    self.min_x = min(self.min_x, temp_atom.coordinates.x)
+                    self.min_y = min(self.min_y, temp_atom.coordinates.y)
+                    self.min_z = min(self.min_z, temp_atom.coordinates.z)
                     # this string uniquely identifies each atom
                     key = (
                         temp_atom.atom_name.strip()
@@ -201,23 +208,24 @@ class Mol:
 
                     if (
                         key not in atom_already_loaded
-                        or not temp_atom.residue.strip() in self.protein_resnames
+                        or temp_atom.residue.strip() not in self.protein_resnames
                     ):
                         # So either the atom hasn't been loaded, or else
                         # it's a non-protein atom So note that non-protein
                         # atoms can have redundant names, but protein
                         # atoms cannot. This is because protein residues
                         # often contain rotamers
-                        atom_already_loaded.append(
-                            key
-                        )  # So each atom can only be loaded once. No rotamers.
-                        self.all_atoms[
-                            autoindex
-                        ] = temp_atom  # So you're actually reindexing everything here.
+
+                        # So each atom can only be loaded once. No rotamers.
+                        atom_already_loaded.append(key)
+
+                        # So you're actually reindexing everything here.
+                        self.all_atoms[autoindex] = temp_atom
+
                         if temp_atom.residue[-3:] not in self.protein_resnames:
                             self.non_protein_atoms[autoindex] = temp_atom
 
-                        autoindex = autoindex + 1
+                        autoindex += 1
 
         self.check_protein_format()
 
@@ -227,6 +235,12 @@ class Mol:
 
         self.assign_aromatic_rings()
         self.assign_charges()
+
+        if not self.has_hydrogens:
+            self.printout(
+                "WARNING: Detected molecule with no hydrogen atoms. Did you forget to add them? Adding hydrogen atoms improves salt-bridge and hydrogen-bond detection."
+            )
+            print("")
 
     # Load PDB file
     # Param file_name (string)
@@ -293,13 +307,10 @@ class Mol:
     # Returns a new PDB line
     # Param self (Mol)
     def save_pdb_string(self):
-        to_output = ""
-
-        # Write coordinates of all atoms
-        for atom_index in self.all_atoms.keys():
-            to_output += self.all_atoms[atom_index].create_pdb_line(atom_index) + "\n"
-
-        return to_output
+        return "".join(
+            self.all_atoms[atom_index].create_pdb_line(atom_index) + "\n"
+            for atom_index in self.all_atoms.keys()
+        )
 
     # Adds a new atom to this Mol
     # Param self (Mol)
@@ -308,11 +319,11 @@ class Mol:
         # first get available index
         t = 1
         all_atom_keys = list(self.all_atoms.keys())
-        
+
         """?
         all_atom_keys = [int(k) for k in all_atom_keys]
         ?"""
-        
+
         while t in all_atom_keys:
             t += 1
 
@@ -330,7 +341,7 @@ class Mol:
     # Param self (Mol)
     # Param index (integer): index of atom
     # Param connected_atom_element (string): element in question
-    def connected_atoms_of_given_element(self, index, connected_atom_element):
+    def connected_atoms_of_element(self, index, connected_atom_element):
         atom = self.all_atoms[index]
         connected_atoms = []
         for index2 in atom.indecies_of_atoms_connecting:
@@ -380,6 +391,16 @@ class Mol:
 
         self.check_protein_format_process_residue(residue, last_key)
 
+    def warn_bad_atom_name(self, name, residue):
+        self.printout(
+            'Warning: There is no atom named "'
+            + name
+            + '" in the protein residue '
+            + residue
+            + ". Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
+        )
+        print("")
+
     # Correct format of the protein and residues
     # Param self (Mol)
     # Param residue ()
@@ -388,304 +409,103 @@ class Mol:
         temp = last_key.strip().split("_")
         resname = temp[0]
         real_resname = resname[-3:]
-        resid = temp[1]
-        chain = temp[2]
+        # resid = temp[1]
+        # chain = temp[2]
 
         if real_resname in self.protein_resnames:  # so it's a protein residue
             if "N" not in residue:
-                self.printout(
-                    'Warning: There is no atom named "N" in the protein residue '
-                    + last_key
-                    + ". Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
-                )
-                print("")
+                self.warn_bad_atom_name("N", last_key)
             if "C" not in residue:
-                self.printout(
-                    'Warning: There is no atom named "C" in the protein residue '
-                    + last_key
-                    + ". Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
-                )
-                print("")
+                self.warn_bad_atom_name("C", last_key)
             if "CA" not in residue:
-                self.printout(
-                    'Warning: There is no atom named "CA" in the protein residue '
-                    + last_key
-                    + ". Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
-                )
-                print("")
+                self.warn_bad_atom_name("CA", last_key)
 
-            if real_resname == "GLU" or real_resname == "GLH" or real_resname == "GLX":
+            if real_resname in ["GLU", "GLH", "GLX"]:
                 if "OE1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "OE1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("OE1", last_key)
                 if "OE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "OE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("OE2", last_key)
 
-            if real_resname == "ASP" or real_resname == "ASH" or real_resname == "ASX":
+            if real_resname in ["ASP", "ASH", "ASX"]:
                 if "OD1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "OD1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("OD1", last_key)
                 if "OD2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "OD2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("OD2", last_key)
 
-            if real_resname == "LYS" or real_resname == "LYN":
-                if "NZ" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NZ" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-cation and salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+            if real_resname in ["LYS", "LYN"] and "NZ" not in residue:
+                self.warn_bad_atom_name("NZ", last_key)
 
             if real_resname == "ARG":
                 if "NH1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NH1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-cation and salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("NH1", last_key)
                 if "NH2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NH2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-cation and salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("NH2", last_key)
 
-            if (
-                real_resname == "HIS"
-                or real_resname == "HID"
-                or real_resname == "HIE"
-                or real_resname == "HIP"
-            ):
+            if real_resname in ["HIS", "HID", "HIE", "HIP"]:
                 if "NE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-cation and salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("NE2", last_key)
                 if "ND1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "ND1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-cation and salt-bridge interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("ND1", last_key)
 
             if real_resname == "PHE":
                 if "CG" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CG" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CG", last_key)
                 if "CD1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD1", last_key)
                 if "CD2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD2", last_key)
                 if "CE1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE1", last_key)
                 if "CE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE2", last_key)
                 if "CZ" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CZ" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CZ", last_key)
 
             if real_resname == "TYR":
                 if "CG" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CG" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CG", last_key)
                 if "CD1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD1", last_key)
                 if "CD2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD2", last_key)
                 if "CE1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE1", last_key)
                 if "CE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE2", last_key)
                 if "CZ" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CZ" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CZ", last_key)
 
             if real_resname == "TRP":
                 if "CG" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CG" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CG", last_key)
                 if "CD1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD1", last_key)
                 if "CD2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD2", last_key)
                 if "NE1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NE1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("NE1", last_key)
                 if "CE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE2", last_key)
                 if "CE3" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE3" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE3", last_key)
                 if "CZ2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CZ2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CZ2", last_key)
                 if "CZ3" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CZ3" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CZ3", last_key)
                 if "CH2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CH2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CH2", last_key)
 
-            if (
-                real_resname == "HIS"
-                or real_resname == "HID"
-                or real_resname == "HIE"
-                or real_resname == "HIP"
-            ):
+            if real_resname in ["HIS", "HID", "HIE", "HIP"]:
                 if "CG" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CG" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CG", last_key)
                 if "ND1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "ND1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("ND1", last_key)
                 if "CD2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CD2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CD2", last_key)
                 if "CE1" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "CE1" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("CE1", last_key)
                 if "NE2" not in residue:
-                    self.printout(
-                        'Warning: There is no atom named "NE2" in the protein residue '
-                        + last_key
-                        + ". Please use standard naming conventions for all protein residues. This atom is needed to determine pi-pi and pi-cation interactions. If this residue is far from the active site, this warning may not affect the NNScore."
-                    )
-                    print("")
+                    self.warn_bad_atom_name("NE2", last_key)
 
     # Functions to determine the bond connectivity based on distance
     # ==============================================================
@@ -700,7 +520,7 @@ class Mol:
                 for atom_index2 in self.non_protein_atoms.keys():
                     if atom_index1 != atom_index2:
                         atom2 = self.non_protein_atoms[atom_index2]
-                        if not atom2.residue[-3:] in self.protein_resnames:
+                        if atom2.residue[-3:] not in self.protein_resnames:
                             # so it's not a protein residue
                             dist = distance(atom1.coordinates, atom2.coordinates)
 
@@ -710,6 +530,14 @@ class Mol:
                             ):
                                 atom1.add_neighbor_atom_index(atom_index2)
                                 atom2.add_neighbor_atom_index(atom_index1)
+
+    def update_distance(self, element1, element2, orig_distance, match):
+        match_element1, match_element2, match_dist = match
+        if element1 == match_element1 and element2 == match_element2:
+            return match_dist
+        if element1 == match_element2 and element2 == match_element1:
+            return match_dist
+        return orig_distance
 
     # Retuns bond length between two elements
     # Param self (Mol)
@@ -722,376 +550,397 @@ class Mol:
         lengths would be incorrect, probably slight errors (<0.06) in the hundreds."""
 
         distance = 0.0
-        if element1 == "C" and element2 == "C":
-            distance = 1.53
-        if element1 == "N" and element2 == "N":
-            distance = 1.425
-        if element1 == "O" and element2 == "O":
-            distance = 1.469
-        if element1 == "S" and element2 == "S":
-            distance = 2.048
-        if (element1 == "C" and element2 == "H") or (
-            element1 == "H" and element2 == "C"
-        ):
-            distance = 1.059
-        if (element1 == "C" and element2 == "N") or (
-            element1 == "N" and element2 == "C"
-        ):
-            distance = 1.469
-        if (element1 == "C" and element2 == "O") or (
-            element1 == "O" and element2 == "C"
-        ):
-            distance = 1.413
-        if (element1 == "C" and element2 == "S") or (
-            element1 == "S" and element2 == "C"
-        ):
-            distance = 1.819
-        if (element1 == "N" and element2 == "H") or (
-            element1 == "H" and element2 == "N"
-        ):
-            distance = 1.009
-        if (element1 == "N" and element2 == "O") or (
-            element1 == "O" and element2 == "N"
-        ):
-            distance = 1.463
-        if (element1 == "O" and element2 == "S") or (
-            element1 == "S" and element2 == "O"
-        ):
-            distance = 1.577
-        if (element1 == "O" and element2 == "H") or (
-            element1 == "H" and element2 == "O"
-        ):
-            distance = 0.967
-        if (element1 == "S" and element2 == "H") or (
-            element1 == "H" and element2 == "S"
-        ):
-            # This one not from source sited above. Not sure where it's from,
-            # but it wouldn't ever be used in the current context ("AutoGrow")
-            distance = 2.025 / 1.5
-        if (element1 == "S" and element2 == "N") or (
-            element1 == "H" and element2 == "N"
-        ):
-            distance = 1.633
+        distance = self.update_distance(element1, element2, distance, ["C", "C", 1.53])
+        distance = self.update_distance(element1, element2, distance, ["N", "N", 1.425])
+        distance = self.update_distance(element1, element2, distance, ["O", "O", 1.469])
+        distance = self.update_distance(element1, element2, distance, ["S", "S", 2.048])
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "SI", 2.359]
+        )
 
-        if (element1 == "C" and element2 == "F") or (
-            element1 == "F" and element2 == "C"
-        ):
-            distance = 1.399
-        if (element1 == "C" and element2 == "CL") or (
-            element1 == "CL" and element2 == "C"
-        ):
-            distance = 1.790
-        if (element1 == "C" and element2 == "BR") or (
-            element1 == "BR" and element2 == "C"
-        ):
-            distance = 1.910
-        if (element1 == "C" and element2 == "I") or (
-            element1 == "I" and element2 == "C"
-        ):
-            distance = 2.162
+        distance = self.update_distance(element1, element2, distance, ["C", "H", 1.059])
+        distance = self.update_distance(element1, element2, distance, ["C", "N", 1.469])
+        distance = self.update_distance(element1, element2, distance, ["C", "O", 1.413])
+        distance = self.update_distance(element1, element2, distance, ["C", "S", 1.819])
+        distance = self.update_distance(element1, element2, distance, ["N", "H", 1.009])
+        distance = self.update_distance(element1, element2, distance, ["N", "O", 1.463])
+        distance = self.update_distance(element1, element2, distance, ["O", "S", 1.577])
+        distance = self.update_distance(element1, element2, distance, ["O", "H", 0.967])
 
-        if (element1 == "S" and element2 == "BR") or (
-            element1 == "BR" and element2 == "S"
-        ):
-            distance = 2.321
-        if (element1 == "S" and element2 == "CL") or (
-            element1 == "CL" and element2 == "S"
-        ):
-            distance = 2.283
-        if (element1 == "S" and element2 == "F") or (
-            element1 == "F" and element2 == "S"
-        ):
-            distance = 1.640
-        if (element1 == "S" and element2 == "I") or (
-            element1 == "I" and element2 == "S"
-        ):
-            distance = 2.687
+        # This one not from source sited above. Not sure where it's from,
+        # but it wouldn't ever be used in the current context ("AutoGrow")
+        distance = self.update_distance(
+            element1, element2, distance, ["S", "H", 2.025 / 1.5]
+        )
 
-        if (element1 == "P" and element2 == "BR") or (
-            element1 == "BR" and element2 == "P"
-        ):
-            distance = 2.366
-        if (element1 == "P" and element2 == "CL") or (
-            element1 == "CL" and element2 == "P"
-        ):
-            distance = 2.008
-        if (element1 == "P" and element2 == "F") or (
-            element1 == "F" and element2 == "P"
-        ):
-            distance = 1.495
-        if (element1 == "P" and element2 == "I") or (
-            element1 == "I" and element2 == "P"
-        ):
-            distance = 2.490
-        if (element1 == "P" and element2 == "O") or (
-            element1 == "O" and element2 == "P"
-        ):
-            # estimate based on eye balling Handbook of Chemistry and Physics
-            distance = 1.6
+        distance = self.update_distance(element1, element2, distance, ["S", "N", 1.633])
 
-        if (element1 == "N" and element2 == "BR") or (
-            element1 == "BR" and element2 == "N"
-        ):
-            distance = 1.843
-        if (element1 == "N" and element2 == "CL") or (
-            element1 == "CL" and element2 == "N"
-        ):
-            distance = 1.743
-        if (element1 == "N" and element2 == "F") or (
-            element1 == "F" and element2 == "N"
-        ):
-            distance = 1.406
-        if (element1 == "N" and element2 == "I") or (
-            element1 == "I" and element2 == "N"
-        ):
-            distance = 2.2
+        distance = self.update_distance(element1, element2, distance, ["C", "F", 1.399])
+        distance = self.update_distance(
+            element1, element2, distance, ["C", "CL", 1.790]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["C", "BR", 1.910]
+        )
+        distance = self.update_distance(element1, element2, distance, ["C", "I", 2.162])
 
-        if (element1 == "SI" and element2 == "BR") or (
-            element1 == "BR" and element2 == "SI"
-        ):
-            distance = 2.284
-        if (element1 == "SI" and element2 == "CL") or (
-            element1 == "CL" and element2 == "SI"
-        ):
-            distance = 2.072
-        if (element1 == "SI" and element2 == "F") or (
-            element1 == "F" and element2 == "SI"
-        ):
-            distance = 1.636
-        if (element1 == "SI" and element2 == "P") or (
-            element1 == "P" and element2 == "SI"
-        ):
-            distance = 2.264
-        if (element1 == "SI" and element2 == "S") or (
-            element1 == "S" and element2 == "SI"
-        ):
-            distance = 2.145
-        if (element1 == "SI" and element2 == "SI") or (
-            element1 == "SI" and element2 == "SI"
-        ):
-            distance = 2.359
-        if (element1 == "SI" and element2 == "C") or (
-            element1 == "C" and element2 == "SI"
-        ):
-            distance = 1.888
-        if (element1 == "SI" and element2 == "N") or (
-            element1 == "N" and element2 == "SI"
-        ):
-            distance = 1.743
-        if (element1 == "SI" and element2 == "O") or (
-            element1 == "O" and element2 == "SI"
-        ):
-            distance = 1.631
+        distance = self.update_distance(
+            element1, element2, distance, ["S", "BR", 2.321]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["S", "CL", 2.283]
+        )
+        distance = self.update_distance(element1, element2, distance, ["S", "F", 1.640])
+        distance = self.update_distance(element1, element2, distance, ["S", "I", 2.687])
+
+        distance = self.update_distance(
+            element1, element2, distance, ["P", "BR", 2.366]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["P", "CL", 2.008]
+        )
+        distance = self.update_distance(element1, element2, distance, ["P", "F", 1.495])
+        distance = self.update_distance(element1, element2, distance, ["P", "I", 2.490])
+
+        # estimate based on eye balling Handbook of Chemistry and Physics
+        distance = self.update_distance(element1, element2, distance, ["P", "O", 1.6])
+
+        distance = self.update_distance(
+            element1, element2, distance, ["N", "BR", 1.843]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["N", "CL", 1.743]
+        )
+        distance = self.update_distance(element1, element2, distance, ["N", "F", 1.406])
+        distance = self.update_distance(element1, element2, distance, ["N", "I", 2.2])
+
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "BR", 2.284]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "CL", 2.072]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "F", 1.636]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "P", 2.264]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "S", 2.145]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "C", 1.888]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "N", 1.743]
+        )
+        distance = self.update_distance(
+            element1, element2, distance, ["SI", "O", 1.631]
+        )
 
         return distance
 
-    # Functions to identify positive charges
-    # ======================================
-    def regardless_of_hydrogens(self):
-        # Charged groups that can be assigned regardless of whether the
-        # molecules includes hydrogen atoms.
-        for atom_index in self.non_protein_atoms.keys():
-            atom = self.non_protein_atoms[atom_index]
-            if atom.element in ["MG", "MN", "RH", "ZN", "FE", "BI", "AS", "AG"]:
-                chrg = self.Charged(atom.coordinates, [atom_index], True)
-                self.charges.append(chrg)
-            if atom.element == "N" and atom.number_of_neighbors() == 4:
-                # a quartinary amine, so it's easy
+    # Functions to identify hydrogen bond donors and acceptors
+    # ========================================================
+
+    def _categorize_donor_acceptor_with_hydrogens(self, atom, hydrogen_bond=True):
+        # Also good for halides even when no hydrogens.
+
+        central_atom_names = (
+            ["H"] if hydrogen_bond else ["I", "BR", "Br", "CL", "Cl", "F"]
+        )
+        h_or_hals = []
+
+        for atm_index in self.all_atoms.keys():
+            central_atom = self.all_atoms[atm_index]
+            element = central_atom.element
+            if element in central_atom_names:
+                # so it's a hydrogen (or halogen)
+                dist = central_atom.coordinates.dist_to(atom.coordinates)
+                if dist < _max_donor_X_dist[element]:  # 1.3 for H
+                    # central_atom.comment = lbl
+                    h_or_hals.append(central_atom)
+
+        # N and O can always be acceptors.
+        charaterizations = [["ACCEPTOR", None]]
+
+        # Might also be donors
+        for h_or_hal in h_or_hals:
+            charaterizations.append(["DONOR", h_or_hal])
+
+        return charaterizations
+
+    def _categorize_donor_acceptor_without_hydrogens(self, atom):
+        charaterizations = []
+
+        num_neighbors = atom.number_of_neighbors()
+
+        if atom.element == "O":
+            # If it's an oxygen atom, it's always an acceptor. True of OH, COC, =O,
+            # nitro, etc.
+            charaterizations.append(["ACCEPTOR", None])
+
+            if num_neighbors == 1:
+                neighbor_idx = atom.indecies_of_atoms_connecting[0]
+                neighbor = self.all_atoms[neighbor_idx]
+                neighbor_is_sp3 = neighbor.has_sp3_geometry(self)
+
+                if neighbor.element == "C" and neighbor_is_sp3:
+                    # If its single neighbor is SP3 hybridized, assume COH =>
+                    # donor.
+                    charaterizations.append(["DONOR", atom])
+
+                    # So otherwise, carboxylate, ketone, amide, etc. Assume not donor.
+
+                # Note that phosphates, sulfonates, etc., always considered
+                # deprotonated (not donors).
+
+        elif atom.element == "N":
+            # Assume all nitrogens can be acceptors
+            charaterizations.append(["ACCEPTOR", None])
+
+            num_neighbors = len(atom.indecies_of_atoms_connecting)
+
+            # Note that if bound to only one atom, assuming sp3.
+            is_sp3 = atom.has_sp3_geometry(self) if num_neighbors > 1 else True
+
+            if (is_sp3 and num_neighbors < 4) or (not is_sp3 and num_neighbors < 3):
+                # If sp3 but not a quartinary amine, assume it's a donor. Also,
+                # always assume sp2 hybridized nitrogens can be protonated
+                # unless connected to three heteroatoms. Some almost certainly
+                # aren't. But hard to distinguish without calculating pKa.
+                charaterizations.append(["DONOR", atom])
+
+        return charaterizations
+
+    def is_hbond_donor_acceptor(self, atom, hydrogen_bond=True):
+        # hydrogen_bond == False means halogen bond
+
+        if not hydrogen_bond or self.has_hydrogens:
+            # Halide bond or hydrogen bond with hydrogens specified.
+            return self._categorize_donor_acceptor_with_hydrogens(atom, hydrogen_bond)
+        else:
+            # Hydrogen bond and hydrogens not specified (so guess).
+            return self._categorize_donor_acceptor_without_hydrogens(atom)
+
+    # Functions to identify charged groups
+    # ====================================
+
+    def charges_metals(self, atom_index, atom):
+        # Works regardless of added hydrogens
+        if atom.element in ["MG", "MN", "RH", "ZN", "FE", "BI", "AS", "AG"]:
+            chrg = self.Charged(atom.coordinates, [atom_index], True)
+            self.charges.append(chrg)
+
+    def charges_arginine_like(self, atom_index, atom):
+        # e.g., arginine-like, but note that charges on protein residues are
+        # determined based on residue and atom names. The works regardless of
+        # hydrogens atoms, though might give slightly different answers.
+
+        if atom.element != "C" or atom.number_of_neighbors() != 3:
+            return
+
+        # the carbon has only three atoms connected to it
+        nitrogens = self.connected_atoms_of_element(atom_index, "N")
+        if len(nitrogens) >= 2:
+            # so carbon is connected to at least two nitrogens. now we need
+            # to count the number of nitrogens that are only connected to
+            # one heavy atom (the carbon, so terminal nitrogens).
+            # not_term_nitros will contain all the atoms connected to the
+            # carbon that are not terminal nitrogens.
+            nitros_to_use = []
+            no_term_nitros = atom.indecies_of_atoms_connecting[:]
+            for atmindex in nitrogens:
+                if len(self.connected_heavy_atoms(atmindex)) == 1:
+                    # It's a terminal nitrogen
+                    nitros_to_use.append(atmindex)
+                    no_term_nitros.remove(atmindex)
+
+            no_term_nitro_idx = no_term_nitros[0] if len(no_term_nitros) > 0 else -1
+            if len(nitros_to_use) == 2 and no_term_nitro_idx != -1:
+                # so there are at two terminal nitrogens that are only
+                # connected to the carbon (and probably some hydrogens)
+
+                # now you need to make sure not_term_nitro_index atom is
+                # sp3 hybridized. For example, NC(N)=C is not charged,
+                # not is NC(N)=O. If there are no hydrogens added, just
+                # pass this step automatically (less accurate).
+                no_term_atm = self.all_atoms[no_term_nitro_idx]
+                no_term_elem = no_term_atm.element
+                no_term_neigh = no_term_atm.number_of_neighbors()
+
+                # TODO: You could use has_sp3_geometry instead of making
+                # exception if not self.has_hydrogens. Not sure if that would
+                # lead to better or worse accuracy. It's hard without the
+                # hydrogens added.
+                if not self.has_hydrogens or (
+                    (no_term_elem == "C" and no_term_neigh == 4)
+                    or (no_term_elem == "O" and no_term_neigh == 2)
+                    or no_term_elem in ["N", "S", "P"]
+                ):
+                    pt = self.all_atoms[nitros_to_use[0]].coordinates.copy_of()
+
+                    coor_to_use2 = self.all_atoms[nitros_to_use[1]].coordinates
+
+                    pt.x = pt.x + coor_to_use2.x
+                    pt.y = pt.y + coor_to_use2.y
+                    pt.z = pt.z + coor_to_use2.z
+                    pt.x = pt.x / 2.0
+                    pt.y = pt.y / 2.0
+                    pt.z = pt.z / 2.0
+
+                    indexes = [atom_index]
+
+                    # Note that * notation doesn't work in transcrypt! Keep
+                    # extend below rather than merge.
+                    indexes.extend(nitros_to_use)
+
+                    indexes.extend(
+                        self.connected_atoms_of_element(nitros_to_use[0], "H")
+                    )
+                    indexes.extend(
+                        self.connected_atoms_of_element(nitros_to_use[1], "H")
+                    )
+
+                    # True because it's positive
+                    chrg = self.Charged(pt, indexes, True)
+                    self.charges.append(chrg)
+
+    def charges_amines(self, atom_index, atom):
+        if atom.element != "N":
+            return
+
+        # If a nitrogen has 4 neighbors, regardless of added hydrogens, it's
+        # positively charged.
+
+        num_neighors = atom.number_of_neighbors()
+
+        if num_neighors == 4:
+            # a quartinary amine, so it's easy
+            indexes = [atom_index]
+            indexes.extend(atom.indecies_of_atoms_connecting)
+
+            # so the indicies stored is just the index of the nitrogen and any
+            # attached atoms
+            chrg = self.Charged(atom.coordinates, indexes, True)
+            self.charges.append(chrg)
+
+        if self.has_hydrogens:
+            # maybe you only have two hydrogen's added, but they're sp3
+            # hybridized. Just count this as a quartinary amine, since I think
+            # the positive charge would be stabalized.
+            if num_neighors == 3 and atom.has_sp3_geometry(self):
                 indexes = [atom_index]
                 indexes.extend(atom.indecies_of_atoms_connecting)
 
-                # so the indicies stored is just the index of the nitrogen
-                # and any attached atoms
+                # indexes added are the nitrogen and any attached atoms.
                 chrg = self.Charged(atom.coordinates, indexes, True)
+                self.charges.append(chrg)
+
+        elif num_neighors == 1 or atom.has_sp3_geometry(self):
+            # Hydrogens have not been added. Assume nitrogens bonded to only one
+            # atom or ones that could be SP3 hybridized are charged. Case of
+            # quartinary amine covered above.
+
+            chrg = self.Charged(atom.coordinates, [atom_index], True)
+            self.charges.append(chrg)
+
+    def charges_carboxylate(self, atom_index, atom):
+        if atom.element != "C":
+            return
+
+        # Works regardless of whether hydrogens added.
+
+        if atom.number_of_neighbors() == 3:
+            # a carboxylate carbon will have three items connected to it.
+            oxygens = self.connected_atoms_of_element(atom_index, "O")
+            if len(oxygens) == 2 and (
+                len(self.connected_heavy_atoms(oxygens[0])) == 1
+                and len(self.connected_heavy_atoms(oxygens[1])) == 1
+            ):
+                # so it's a carboxylate! Add a negative charge.
+                pt = self.all_atoms[oxygens[0]].coordinates.copy_of()
+                pt2 = self.all_atoms[oxygens[1]].coordinates
+                pt.x = pt.x + pt2.x
+                pt.y = pt.y + pt2.y
+                pt.z = pt.z + pt2.z
+                pt.x = pt.x / 2.0
+                pt.y = pt.y / 2.0
+                pt.z = pt.z / 2.0
+                chrg = self.Charged(pt, [oxygens[0], atom_index, oxygens[1]], False)
+                self.charges.append(chrg)
+
+    def charges_phosphrous_compounds(self, atom_index, atom):
+        if atom.element != "P":
+            return
+
+        # Doesn't matter whether hydrogens have been added.
+
+        # let's check for a phosphate or anything where a phosphorus is bound to
+        # two oxygens where both oxygens are bound to only one heavy atom (the
+        # phosphorus). I think this will get several phosphorus substances.
+        oxygens = self.connected_atoms_of_element(atom_index, "O")
+        if len(oxygens) >= 2:
+            # the phosphorus is bound to at least two oxygens now count the
+            # number of oxygens that are only bound to the phosphorus
+            count = sum(
+                len(self.connected_heavy_atoms(oxygen_index)) == 1
+                for oxygen_index in oxygens
+            )
+
+            if count >= 2:
+                # so there are at least two oxygens that are only
+                # bound to the phosphorus
+                indexes = [atom_index]
+                indexes.extend(oxygens)
+                chrg = self.Charged(atom.coordinates, indexes, False)
+                self.charges.append(chrg)
+
+    def charges_sulfur_compounds(self, atom_index, atom):
+        if atom.element != "S":
+            return
+
+        # Doesn't matter whether hydrogens added.
+
+        # let's check for a sulfonate or anything where a sulfur is bound to at
+        # least three oxygens and at least three are bound to only the sulfur
+        # (or the sulfur and a hydrogen).
+        oxygens = self.connected_atoms_of_element(atom_index, "O")
+        if len(oxygens) >= 3:
+            # the sulfur is bound to at least three oxygens. now count the
+            # number of oxygens that are only bound to the sulfur
+            count = sum(
+                len(self.connected_heavy_atoms(oxygen_index)) == 1
+                for oxygen_index in oxygens
+            )
+
+            if count >= 3:
+                # so there are at least three oxygens that are only bound to the
+                # sulfur
+                indexes = [atom_index]
+                indexes.extend(oxygens)
+                chrg = self.Charged(atom.coordinates, indexes, False)
                 self.charges.append(chrg)
 
     # Assign Charges to atoms in protein
     # Param self (Mol)
     def assign_charges(self):
-        # Get all the quartinary amines on non-protein residues (these are the
+        # Get all the charged groups on non-protein residues (these are the
         # only non-protein groups that will be identified as positively
         # charged)
+
         for atom_index in self.non_protein_atoms.keys():
             atom = self.non_protein_atoms[atom_index]
+            self.charges_metals(atom_index, atom)
+            self.charges_arginine_like(atom_index, atom)
+            self.charges_amines(atom_index, atom)
+            self.charges_carboxylate(atom_index, atom)
+            self.charges_phosphrous_compounds(atom_index, atom)
+            self.charges_sulfur_compounds(atom_index, atom)
 
-            if atom.element == "N" and atom.number_of_neighbors() == 3:
-                # maybe you only have two hydrogen's added, by they're sp3
-                # hybridized. Just count this as a quartinary amine, since
-                # I think the positive charge would be stabalized.
-                nitrogen = atom
-                atom1 = self.all_atoms[atom.indecies_of_atoms_connecting[0]]
-                atom2 = self.all_atoms[atom.indecies_of_atoms_connecting[1]]
-                atom3 = self.all_atoms[atom.indecies_of_atoms_connecting[2]]
-                angle1 = (
-                    angle_between_three_points(
-                        atom1.coordinates, nitrogen.coordinates, atom2.coordinates
-                    )
-                    * 180.0
-                    / math.pi
-                )
-                angle2 = (
-                    angle_between_three_points(
-                        atom1.coordinates, nitrogen.coordinates, atom3.coordinates
-                    )
-                    * 180.0
-                    / math.pi
-                )
-                angle3 = (
-                    angle_between_three_points(
-                        atom2.coordinates, nitrogen.coordinates, atom3.coordinates
-                    )
-                    * 180.0
-                    / math.pi
-                )
-                average_angle = (angle1 + angle2 + angle3) / 3
-                if fabs(average_angle - 109.0) < 5.0:
-                    indexes = [atom_index]
-                    indexes.extend(atom.indecies_of_atoms_connecting)
-                    # so indexes added are the nitrogen and any attached
-                    # atoms.
-                    chrg = self.Charged(nitrogen.coordinates, indexes, True)
-                    self.charges.append(chrg)
-
-            if atom.element == "C" and atom.number_of_neighbors() == 3:
-                # the carbon has only three atoms connected to it
-                nitrogens = self.connected_atoms_of_given_element(atom_index, "N")
-                if len(nitrogens) >= 2:
-                    # so carbon is connected to at least two nitrogens.
-                    # now we need to count the number of nitrogens that
-                    # are only connected to one heavy atom (the carbon).
-                    nitrogens_to_use = []
-                    all_connected = atom.indecies_of_atoms_connecting[:]
-                    for atmindex in nitrogens:
-                        if len(self.connected_heavy_atoms(atmindex)) == 1:
-                            nitrogens_to_use.append(atmindex)
-                            all_connected.remove(atmindex)
-
-                    not_isolated = all_connected[0] if len(all_connected) > 0 else -1
-                    if len(nitrogens_to_use) == 2 and not_isolated != -1:
-                        # so there are at two nitrogens that are only
-                        # connected to the carbon (and probably some
-                        # hydrogens)
-
-                        # now you need to make sure not_isolated atom is
-                        # sp3 hybridized
-                        not_isolated_atom = self.all_atoms[not_isolated]
-                        if (
-                                (
-                                    not_isolated_atom.element == "C"
-                                    and not_isolated_atom.number_of_neighbors() == 4
-                                )
-                                or (
-                                    not_isolated_atom.element == "O"
-                                    and not_isolated_atom.number_of_neighbors() == 2
-                                )
-                                or not_isolated_atom.element == "N"
-                                or not_isolated_atom.element == "S"
-                                or not_isolated_atom.element == "P"
-                            ):
-
-                            pt = self.all_atoms[
-                                nitrogens_to_use[0]
-                            ].coordinates.copy_of()
-                            pt.x = (
-                                pt.x
-                                + self.all_atoms[nitrogens_to_use[1]].coordinates.x
-                            )
-                            pt.y = (
-                                pt.y
-                                + self.all_atoms[nitrogens_to_use[1]].coordinates.y
-                            )
-                            pt.z = (
-                                pt.z
-                                + self.all_atoms[nitrogens_to_use[1]].coordinates.z
-                            )
-                            pt.x = pt.x / 2.0
-                            pt.y = pt.y / 2.0
-                            pt.z = pt.z / 2.0
-
-                            indexes = [atom_index, *nitrogens_to_use]
-                            indexes.extend(
-                                self.connected_atoms_of_given_element(
-                                    nitrogens_to_use[0], "H"
-                                )
-                            )
-                            indexes.extend(
-                                self.connected_atoms_of_given_element(
-                                    nitrogens_to_use[1], "H"
-                                )
-                            )
-
-                            chrg = self.Charged(
-                                pt, indexes, True  # True because it's positive
-                            )
-                            self.charges.append(chrg)
-
-            if atom.element == "C" and atom.number_of_neighbors() == 3:
-                # a carboxylate carbon will have three items connected to
-                # it.
-                oxygens = self.connected_atoms_of_given_element(atom_index, "O")
-                if len(oxygens) == 2 and (
-                    len(self.connected_heavy_atoms(oxygens[0])) == 1
-                    and len(self.connected_heavy_atoms(oxygens[1])) == 1
-                ):
-                    # so it's a carboxylate! Add a negative charge.
-                    pt = self.all_atoms[oxygens[0]].coordinates.copy_of()
-                    pt.x = pt.x + self.all_atoms[oxygens[1]].coordinates.x
-                    pt.y = pt.y + self.all_atoms[oxygens[1]].coordinates.y
-                    pt.z = pt.z + self.all_atoms[oxygens[1]].coordinates.z
-                    pt.x = pt.x / 2.0
-                    pt.y = pt.y / 2.0
-                    pt.z = pt.z / 2.0
-                    chrg = self.Charged(
-                        pt, [oxygens[0], atom_index, oxygens[1]], False
-                    )
-                    self.charges.append(chrg)
-
-            if atom.element == "P":
-                # let's check for a phosphate or anything where a phosphorus
-                # is bound to two oxygens where both oxygens are bound to only
-                # one heavy atom (the phosphorus). I think this will get
-                # several phosphorus substances.
-                oxygens = self.connected_atoms_of_given_element(atom_index, "O")
-                if len(oxygens) >= 2:
-                    # the phosphorus is bound to at least two oxygens now
-                    # count the number of oxygens that are only bound to the
-                    # phosphorus
-                    count = sum(
-                        len(self.connected_heavy_atoms(oxygen_index)) == 1
-                        for oxygen_index in oxygens
-                    )
-
-                    if count >= 2:
-                        # so there are at least two oxygens that are only
-                        # bound to the phosphorus
-                        indexes = [atom_index]
-                        indexes.extend(oxygens)
-                        chrg = self.Charged(atom.coordinates, indexes, False)
-                        self.charges.append(chrg)
-
-            if atom.element == "S":
-                # let's check for a sulfonate or anything where a sulfur is
-                # bound to at least three oxygens and at least three are bound
-                # to only the sulfur (or the sulfur and a hydrogen).
-                oxygens = self.connected_atoms_of_given_element(atom_index, "O")
-                if len(oxygens) >= 3:
-                    # the sulfur is bound to at least three oxygens. now count
-                    # the number of oxygens that are only bound to the sulfur
-                    count = sum(
-                        len(self.connected_heavy_atoms(oxygen_index)) == 1
-                        for oxygen_index in oxygens
-                    )
-
-                    if count >= 3:
-                        # so there are at least three oxygens that are only
-                        # bound to the sulfur
-                        indexes = [atom_index]
-                        indexes.extend(oxygens)
-                        chrg = self.Charged(atom.coordinates, indexes, False)
-                        self.charges.append(chrg)
-
-        # Now that you've found all the positive charges in non-protein
-        # residues, it's time to look for aromatic rings in protein residues
+        # Now that you've found all the charges in non-protein residues, it's
+        # time to look for charges in protein residues
         curr_res = ""
         first = True
         residue = []
@@ -1108,7 +957,7 @@ class Mol:
 
             if key != curr_res:
 
-                self.assign_charged_from_protein_process_residue(residue, last_key)
+                self.assign_charged_from_protein_residue(residue, last_key)
 
                 residue = []
                 curr_res = key
@@ -1116,20 +965,20 @@ class Mol:
             residue.append(atom_index)
             last_key = key
 
-        self.assign_charged_from_protein_process_residue(residue, last_key)
+        self.assign_charged_from_protein_residue(residue, last_key)
 
     # Assign charges but with protein residue
     # Param self (Mol)
     # Param residue ()
     # Param last_key ()
-    def assign_charged_from_protein_process_residue(self, residue, last_key):
+    def assign_charged_from_protein_residue(self, residue, last_key):
         temp = last_key.strip().split("_")
         resname = temp[0]
         real_resname = resname[-3:]
         # resid = temp[1]
         # chain = temp[2]
 
-        if real_resname == "LYS" or real_resname == "LYN":
+        if real_resname in ["LYS", "LYN"]:
             # regardless of protonation state, assume it's charged.
             for index in residue:
                 atom = self.all_atoms[index]
@@ -1140,11 +989,7 @@ class Mol:
                     indexes = [index]
                     for index2 in residue:
                         atom2 = self.all_atoms[index2]
-                        if atom2.atom_name.strip() == "HZ1":
-                            indexes.append(index2)
-                        if atom2.atom_name.strip() == "HZ2":
-                            indexes.append(index2)
-                        if atom2.atom_name.strip() == "HZ3":
+                        if atom2.atom_name.strip() in ["HZ1", "HZ2", "HZ3"]:
                             indexes.append(index2)
 
                     chrg = self.Charged(atom.coordinates, indexes, True)
@@ -1157,27 +1002,14 @@ class Mol:
             indices = []
             for index in residue:
                 atom = self.all_atoms[index]
-                if atom.atom_name.strip() == "NH1":
+                atm_name = atom.atom_name.strip()
+                if atm_name in ["NH1", "NH2"]:
                     charge_pt.x = charge_pt.x + atom.coordinates.x
                     charge_pt.y = charge_pt.y + atom.coordinates.y
                     charge_pt.z = charge_pt.z + atom.coordinates.z
                     indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "NH2":
-                    charge_pt.x = charge_pt.x + atom.coordinates.x
-                    charge_pt.y = charge_pt.y + atom.coordinates.y
-                    charge_pt.z = charge_pt.z + atom.coordinates.z
-                    indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "2HH2":
-                    indices.append(index)
-                if atom.atom_name.strip() == "1HH2":
-                    indices.append(index)
-                if atom.atom_name.strip() == "CZ":
-                    indices.append(index)
-                if atom.atom_name.strip() == "2HH1":
-                    indices.append(index)
-                if atom.atom_name.strip() == "1HH1":
+                    count += 1.0
+                if atm_name in ["2HH2", "1HH2", "CZ", "2HH1", "1HH1"]:
                     indices.append(index)
 
             if count != 0.0:
@@ -1199,27 +1031,14 @@ class Mol:
             indices = []
             for index in residue:
                 atom = self.all_atoms[index]
-                if atom.atom_name.strip() == "NE2":
+                atm_name = atom.atom_name.strip()
+                if atm_name in ["NE2", "ND1"]:
                     charge_pt.x = charge_pt.x + atom.coordinates.x
                     charge_pt.y = charge_pt.y + atom.coordinates.y
                     charge_pt.z = charge_pt.z + atom.coordinates.z
                     indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "ND1":
-                    charge_pt.x = charge_pt.x + atom.coordinates.x
-                    charge_pt.y = charge_pt.y + atom.coordinates.y
-                    charge_pt.z = charge_pt.z + atom.coordinates.z
-                    indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "HE2":
-                    indices.append(index)
-                if atom.atom_name.strip() == "HD1":
-                    indices.append(index)
-                if atom.atom_name.strip() == "CE1":
-                    indices.append(index)
-                if atom.atom_name.strip() == "CD2":
-                    indices.append(index)
-                if atom.atom_name.strip() == "CG":
+                    count += 1.0
+                if atm_name in ["HE2", "HD1", "CE1", "CD2", "CG"]:
                     indices.append(index)
 
             if count != 0.0:
@@ -1239,19 +1058,15 @@ class Mol:
             indices = []
             for index in residue:
                 atom = self.all_atoms[index]
-                if atom.atom_name.strip() == "OE1":
+                atm_name = atom.atom_name.strip()
+                if atm_name in ["OE1", "OE2"]:
                     charge_pt.x = charge_pt.x + atom.coordinates.x
                     charge_pt.y = charge_pt.y + atom.coordinates.y
                     charge_pt.z = charge_pt.z + atom.coordinates.z
                     indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "OE2":
-                    charge_pt.x = charge_pt.x + atom.coordinates.x
-                    charge_pt.y = charge_pt.y + atom.coordinates.y
-                    charge_pt.z = charge_pt.z + atom.coordinates.z
-                    indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "CD":
+                    count += 1.0
+
+                if atm_name == "CD":
                     indices.append(index)
 
             if count != 0.0:
@@ -1259,11 +1074,8 @@ class Mol:
                 charge_pt.y = charge_pt.y / count
                 charge_pt.z = charge_pt.z / count
                 if charge_pt.x != 0.0 or charge_pt.y != 0.0 or charge_pt.z != 0.0:
-                    chrg = self.Charged(
-                        charge_pt,
-                        indices,
-                        False,  # False because it's a negative charge
-                    )
+                    # False because it's a negative charge
+                    chrg = self.Charged(charge_pt, indices, False)
                     self.charges.append(chrg)
 
         if real_resname in ["ASP", "ASH", "ASX"]:
@@ -1275,19 +1087,14 @@ class Mol:
             indices = []
             for index in residue:
                 atom = self.all_atoms[index]
-                if atom.atom_name.strip() == "OD1":
+                atm_name = atom.atom_name.strip()
+                if atm_name in ["OD1", "OD2"]:
                     charge_pt.x = charge_pt.x + atom.coordinates.x
                     charge_pt.y = charge_pt.y + atom.coordinates.y
                     charge_pt.z = charge_pt.z + atom.coordinates.z
                     indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "OD2":
-                    charge_pt.x = charge_pt.x + atom.coordinates.x
-                    charge_pt.y = charge_pt.y + atom.coordinates.y
-                    charge_pt.z = charge_pt.z + atom.coordinates.z
-                    indices.append(index)
-                    count = count + 1.0
-                if atom.atom_name.strip() == "CG":
+                    count += 1.0
+                if atm_name == "CG":
                     indices.append(index)
 
             if count != 0.0:
@@ -1521,8 +1328,8 @@ class Mol:
         temp = last_key.strip().split("_")
         resname = temp[0]
         real_resname = resname[-3:]
-        resid = temp[1]
-        chain = temp[2]
+        # resid = temp[1]
+        # chain = temp[2]
 
         if real_resname == "PHE":
             indicies_of_ring = []
@@ -1584,12 +1391,7 @@ class Mol:
 
             self.add_aromatic_marker(indicies_of_ring)
 
-        if (
-            real_resname == "HIS"
-            or real_resname == "HID"
-            or real_resname == "HIE"
-            or real_resname == "HIP"
-        ):
+        if real_resname in ["HIS", "HID", "HIE", "HIP"]:
             indicies_of_ring = []
 
             for index in residue:  # written this way because order is important
@@ -1761,36 +1563,36 @@ class Mol:
                         # Now give easier to use names to the atoms
                         for atom in atoms:
                             if atom.resid == resid1 and atom.atom_name.strip() == "N":
-                                first_N = atom
+                                first_n = atom
                             if atom.resid == resid1 and atom.atom_name.strip() == "C":
-                                first_C = atom
+                                first_c = atom
                             if atom.resid == resid1 and atom.atom_name.strip() == "CA":
-                                first_CA = atom
+                                first_ca = atom
 
                             if atom.resid == resid2 and atom.atom_name.strip() == "N":
-                                second_N = atom
+                                second_n = atom
                             if atom.resid == resid2 and atom.atom_name.strip() == "C":
-                                second_C = atom
+                                second_c = atom
                             if atom.resid == resid2 and atom.atom_name.strip() == "CA":
-                                second_CA = atom
+                                second_ca = atom
 
                         # Now compute the phi and psi dihedral angles
                         phi = (
                             dihedral(
-                                first_C.coordinates,
-                                second_N.coordinates,
-                                second_CA.coordinates,
-                                second_C.coordinates,
+                                first_c.coordinates,
+                                second_n.coordinates,
+                                second_ca.coordinates,
+                                second_c.coordinates,
                             )
                             * 180.0
                             / math.pi
                         )
                         psi = (
                             dihedral(
-                                first_N.coordinates,
-                                first_CA.coordinates,
-                                first_C.coordinates,
-                                second_N.coordinates,
+                                first_n.coordinates,
+                                first_ca.coordinates,
+                                first_c.coordinates,
+                                second_n.coordinates,
                             )
                             * 180.0
                             / math.pi
@@ -1799,8 +1601,8 @@ class Mol:
                         # Now use those angles to determine if it's alpha or
                         # beta
                         if phi > -145 and phi < -35 and psi > -70 and psi < 50:
-                            key1 = str(first_C.resid) + "_" + first_C.chain
-                            key2 = str(second_C.resid) + "_" + second_C.chain
+                            key1 = str(first_c.resid) + "_" + first_c.chain
+                            key2 = str(second_c.resid) + "_" + second_c.chain
                             structure[key1] = "ALPHA"
                             structure[key2] = "ALPHA"
                         if (phi >= -180 and phi < -40 and psi <= 180 and psi > 90) or (
@@ -1808,8 +1610,8 @@ class Mol:
                         ):
                             # beta. This gets some loops (by my eye), but it's
                             # the best I could do.
-                            key1 = str(first_C.resid) + "_" + first_C.chain
-                            key2 = str(second_C.resid) + "_" + second_C.chain
+                            key1 = str(first_c.resid) + "_" + first_c.chain
+                            key2 = str(second_c.resid) + "_" + second_c.chain
                             structure[key1] = "BETA"
                             structure[key2] = "BETA"
 
@@ -1820,14 +1622,14 @@ class Mol:
             atom.structure = structure[key]
 
         # Some more post processing.
-        CA_list = []  # first build a list of the indices of all the alpha carbons
+        ca_list = []  # first build a list of the indices of all the alpha carbons
         for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             if (
                 atom.residue.strip() in self.protein_resnames
                 and atom.atom_name.strip() == "CA"
             ):
-                CA_list.append(atom_index)
+                ca_list.append(atom_index)
 
         # some more post processing.
         change = True
@@ -1836,13 +1638,13 @@ class Mol:
 
             # A residue of index i is only going to be in an alpha helix its
             # CA is within 6 A of the CA of the residue i + 3
-            for CA_atom_index in CA_list:
+            for CA_atom_index in ca_list:
                 CA_atom = self.all_atoms[CA_atom_index]
                 if CA_atom.structure == "ALPHA":  # so it's in an alpha helix
                     another_alpha_is_close = False
                     for (
                         other_CA_atom_index
-                    ) in CA_list:  # so now compare that CA to all the other CA's
+                    ) in ca_list:  # so now compare that CA to all the other CA's
                         other_CA_atom = self.all_atoms[other_CA_atom_index]
                         if other_CA_atom.structure == "ALPHA":
                             # so it's also in an alpha helix
@@ -1868,14 +1670,14 @@ class Mol:
             # residues (to wrap around and hydrogen bond). I'm going to
             # require them to span at least 5 residues, based on examination
             # of many structures.
-            for index_in_list in range(len(CA_list) - 5):
+            for index_in_list in range(len(ca_list) - 5):
 
-                index_in_pdb1 = CA_list[index_in_list]
-                index_in_pdb2 = CA_list[index_in_list + 1]
-                index_in_pdb3 = CA_list[index_in_list + 2]
-                index_in_pdb4 = CA_list[index_in_list + 3]
-                index_in_pdb5 = CA_list[index_in_list + 4]
-                index_in_pdb6 = CA_list[index_in_list + 5]
+                index_in_pdb1 = ca_list[index_in_list]
+                index_in_pdb2 = ca_list[index_in_list + 1]
+                index_in_pdb3 = ca_list[index_in_list + 2]
+                index_in_pdb4 = ca_list[index_in_list + 3]
+                index_in_pdb5 = ca_list[index_in_list + 4]
+                index_in_pdb6 = ca_list[index_in_list + 5]
 
                 atom1 = self.all_atoms[index_in_pdb1]
                 atom2 = self.all_atoms[index_in_pdb2]
@@ -1995,11 +1797,11 @@ class Mol:
             # now go through each of the BETA CA atoms. A residue is only
             # going to be called a beta sheet if CA atom is within 6.0 A of
             # another CA beta, same chain, but index difference > 2.
-            for CA_atom_index in CA_list:
+            for CA_atom_index in ca_list:
                 CA_atom = self.all_atoms[CA_atom_index]
                 if CA_atom.structure == "BETA":  # so it's in a beta sheet
                     another_beta_is_close = False
-                    for other_CA_atom_index in CA_list:
+                    for other_CA_atom_index in ca_list:
                         if other_CA_atom_index != CA_atom_index:
                             # so not comparing an atom to itself
                             other_CA_atom = self.all_atoms[other_CA_atom_index]
@@ -2035,12 +1837,12 @@ class Mol:
             # beta strand, for example) Beta sheets are usually at least 3
             # residues long
 
-            for index_in_list in range(len(CA_list) - 3):
+            for index_in_list in range(len(ca_list) - 3):
 
-                index_in_pdb1 = CA_list[index_in_list]
-                index_in_pdb2 = CA_list[index_in_list + 1]
-                index_in_pdb3 = CA_list[index_in_list + 2]
-                index_in_pdb4 = CA_list[index_in_list + 3]
+                index_in_pdb1 = ca_list[index_in_list]
+                index_in_pdb2 = ca_list[index_in_list + 1]
+                index_in_pdb3 = ca_list[index_in_list + 2]
+                index_in_pdb4 = ca_list[index_in_list + 3]
 
                 atom1 = self.all_atoms[index_in_pdb1]
                 atom2 = self.all_atoms[index_in_pdb2]

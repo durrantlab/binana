@@ -4,9 +4,25 @@
 
 # this file contains the Atom class for binana.py
 
+import math
 import binana
 from binana._structure.point import Point
 from binana._utils.shim import r_just, round_to_thousandths_to_str
+from binana._utils._math_functions import angle_between_three_points
+
+# __pragma__ ('skip')
+# Python
+from math import fabs
+
+# __pragma__ ('noskip')
+
+
+"""?
+# Transcrypt
+import binana._utils
+from binana._utils import shim
+from binana._utils.shim import fabs
+?"""
 
 """
 Class Atom defines an atom
@@ -81,10 +97,10 @@ class Atom:
             + r_just(self.residue, 4)
         )
 
-        output = output + r_just(round_to_thousandths_to_str(self.coordinates.x), 18)
-        output = output + r_just(round_to_thousandths_to_str(self.coordinates.y), 8)
-        output = output + r_just(round_to_thousandths_to_str(self.coordinates.z), 8)
-        output = output + r_just(self.element, 24)
+        output += r_just(round_to_thousandths_to_str(self.coordinates.x), 18)
+        output += r_just(round_to_thousandths_to_str(self.coordinates.y), 8)
+        output += r_just(round_to_thousandths_to_str(self.coordinates.z), 8)
+        output += r_just(self.element, 24)
         return output
 
     # Returns the number of an atom's nearest neighbors
@@ -96,19 +112,14 @@ class Atom:
     # Param self (Atom)
     # Param index (float): index of atom to be added
     def add_neighbor_atom_index(self, index):
-        if not (index in self.indecies_of_atoms_connecting):
+        if index not in self.indecies_of_atoms_connecting:
             self.indecies_of_atoms_connecting.append(index)
 
     # Returns whether the atom is part of the backbone or a sidechain
     # Only really applies to proteins, assuming standard atom names
     # Param self (Atom)
     def side_chain_or_backbone(self):
-        if (
-            self.atom_name.strip() == "CA"
-            or self.atom_name.strip() == "C"
-            or self.atom_name.strip() == "O"
-            or self.atom_name.strip() == "N"
-        ):
+        if self.atom_name.strip() in ["CA", "C", "O", "N"]:
             return "BACKBONE"
         else:
             return "SIDECHAIN"
@@ -205,3 +216,25 @@ class Atom:
 
         if self.residue.strip() == "":
             self.residue = " MOL"
+
+    # TODO: Might make more sense to put this in mol.
+    def has_sp3_geometry(self, parent_mol):
+        ncrs = [
+            parent_mol.all_atoms[i].coordinates
+            for i in self.indecies_of_atoms_connecting
+        ]
+        ccr = self.coordinates
+        to_deg = 180.0 / math.pi
+        angles = [angle_between_three_points(ncrs[0], ccr, ncrs[1]) * to_deg]
+        if len(ncrs) > 2:
+            angles.append(angle_between_three_points(ncrs[0], ccr, ncrs[2]) * to_deg)
+            angles.append(angle_between_three_points(ncrs[1], ccr, ncrs[2]) * to_deg)
+
+        if len(ncrs) > 3:
+            angles.append(angle_between_three_points(ncrs[0], ccr, ncrs[3]) * to_deg)
+            angles.append(angle_between_three_points(ncrs[1], ccr, ncrs[3]) * to_deg)
+            angles.append(angle_between_three_points(ncrs[2], ccr, ncrs[3]) * to_deg)
+
+        average_angle = sum(angles) / float(len(angles))
+
+        return fabs(average_angle - 109.0) < 5.0

@@ -220,7 +220,7 @@ def _get_active_site_flexibility(active_site_flexibility, output):
     return output
 
 
-def _get_hbonds(hbonds, output, hydrogen_bond = True):
+def _get_hbonds(hbonds, output, hydrogen_bond=True):
 
     name = "Hydrogen" if hydrogen_bond else "Halogen"
 
@@ -525,7 +525,7 @@ def collect(
     output = _get_active_site_flexibility(active_site_flexibility, output)
 
     output = _get_hbonds(hydrogen_bonds, output, True)   # hydrogen bonds
-    output = _get_hbonds(hydrogen_bonds, output, False)  # halogen bonds
+    output = _get_hbonds(halogen_bonds, output, False)  # halogen bonds
 
     output = _get_hydrophobics(hydrophobics, output)
 

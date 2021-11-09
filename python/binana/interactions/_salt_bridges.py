@@ -64,32 +64,42 @@ def get_salt_bridges(ligand, receptor, cutoff=None):
                 key = "SALT-BRIDGE_" + structure
 
                 for index in receptor_charge.indices:
-                    pdb_salt_bridges.add_new_atom(receptor.all_atoms[index].copy_of())
+                    idx = int(index)
+                    atom = receptor.all_atoms[idx]
+                    pdb_salt_bridges.add_new_atom(atom.copy_of())
+
                 for index in ligand_charge.indices:
-                    pdb_salt_bridges.add_new_atom(ligand.all_atoms[index].copy_of())
+                    idx = int(index)
+                    atom = ligand.all_atoms[idx]
+                    pdb_salt_bridges.add_new_atom(atom.copy_of())
 
                 hashtable_entry_add_one(salt_bridges, key)
 
                 salt_bridge_labels.append(
                     (
-                        "["
-                        + " / ".join(
-                            [
-                                ligand.all_atoms[index].string_id()
-                                for index in ligand_charge.indices
-                            ]
-                        )
-                        + "]",
-                        "["
-                        + " / ".join(
-                            [
-                                receptor.all_atoms[index].string_id()
-                                for index in receptor_charge.indices
-                            ]
-                        )
-                        + "]",
+                        (
+                            (
+                                "["
+                                + " / ".join(
+                                    ligand.all_atoms[int(index)].string_id()
+                                    for index in ligand_charge.indices
+                                )
+                            )
+                            + "]"
+                        ),
+                        (
+                            (
+                                "["
+                                + " / ".join(
+                                    receptor.all_atoms[int(index)].string_id()
+                                    for index in receptor_charge.indices
+                                )
+                            )
+                            + "]"
+                        ),
                     )
                 )
+
 
     return {
         "counts": salt_bridges,

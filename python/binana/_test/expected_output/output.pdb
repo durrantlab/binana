@@ -8,17 +8,17 @@ REMARK            cation_pi_dist_cutoff        |             6.0
 REMARK         close_contacts_dist1_cutoff     |             2.5            
 REMARK         close_contacts_dist2_cutoff     |             4.0            
 REMARK          electrostatic_dist_cutoff      |             4.0            
-REMARK          hydrogen_halogen_bond_angle_cutoff     |             40.0           
-REMARK          hydrogen_halogen_bond_dist_cutoff      |             4.0            
+REMARK      hydrogen_halogen_bond_angle_cutoff |             40.0           
+REMARK      hydrogen_halogen_bond_dist_cutoff  |             4.0            
 REMARK           hydrophobic_dist_cutoff       |             4.0            
-REMARK                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/input/ligand.pdbqt
-REMARK                  output_dir             | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/output/
-REMARK                 output_file             | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/output/output.pdb
-REMARK                 output_json             | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/output/output.json
+REMARK                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/input/ligand.pdbqt
+REMARK                  output_dir             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/
+REMARK                 output_file             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/output.pdb
+REMARK                 output_json             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/output.json
 REMARK               pi_padding_dist           |             0.75           
 REMARK        pi_pi_interacting_dist_cutoff    |             7.5            
 REMARK         pi_stacking_angle_tolerance     |             30.0           
-REMARK                   receptor              | /Users/jdurrant/Documents/Work/durrant_git/binana/binana/test/input/receptor.pdbqt
+REMARK                   receptor              | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/input/receptor.pdbqt
 REMARK           salt_bridge_dist_cutoff       |             5.5            
 REMARK                     test                |            False           
 REMARK 
@@ -8328,11 +8328,11 @@ REMARK "OTH" indicate receptor contacts whose respective protein residues have
 REMARK the alpha-helix, beta-sheet, or "other" secondary structure. "BAC" and
 REMARK "SID" indicate receptor contacts that are part of the protein backbone
 REMARK and sidechain, respectively. "HYD" indicates hydrophobic contacts
-REMARK between the protein and ligand. "HBN" indicates hydrogen bonds. "SAL"
-REMARK indicates salt bridges. "PIS" indicates pi-pi stacking interactions,
-REMARK "PIT" indicates T-stacking interactions, and "PIC" indicates cation-pi
-REMARK interactions. Protein residue names are unchanged, but the ligand
-REMARK residue is now named "LIG".
+REMARK between the protein and ligand. "HBN" indicates hydrogen bonds. "HAL"
+REMARK indicates halogen bonds. "SAL" indicates salt bridges. "PIS" indicates
+REMARK pi-pi stacking interactions, "PIT" indicates T-stacking interactions,
+REMARK and "PIC" indicates cation-pi interactions. Protein residue names are
+REMARK unchanged, but the ligand residue is now named "LIG".
 REMARK
 ATOM      1  N   ASP            23.366  -3.399  14.662                       N
 ATOM      2  CA  ASP            22.530  -2.226  14.843                       C

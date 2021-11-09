@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-05 16:24:08
+// Transcrypt'ed from Python, 2021-11-09 00:25:32
 var binana = {};
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -84,8 +84,7 @@ export var dihedral = function (point1, point2, point3, point4) {
 	var b2Xb3 = cross_product (b2, b3);
 	var b1Xb2 = cross_product (b1, b2);
 	var b1XMagb2 = vector_scalar_multiply (b1, b2.magnitude ());
-	var radians = math.atan2 (dot_product (b1XMagb2, b2Xb3), dot_product (b1Xb2, b2Xb3));
-	return radians;
+	return math.atan2 (dot_product (b1XMagb2, b2Xb3), dot_product (b1Xb2, b2Xb3));
 };
 export var angle_between_three_points = function (point1, point2, point3) {
 	var vector1 = vector_subtraction (point1, point2);
@@ -96,12 +95,8 @@ export var angle_between_points = function (point1, point2) {
 	var new_point1 = return_normalized_vector (point1);
 	var new_point2 = return_normalized_vector (point2);
 	var dot_prod = dot_product (new_point1, new_point2);
-	if (dot_prod > 1.0) {
-		var dot_prod = 1.0;
-	}
-	if (dot_prod < -(1.0)) {
-		var dot_prod = -(1.0);
-	}
+	var dot_prod = min (dot_prod, 1.0);
+	var dot_prod = max (dot_prod, -(1.0));
 	return math.acos (dot_prod);
 };
 export var return_normalized_vector = function (vector) {
