@@ -110,7 +110,8 @@ export const store = new Vuex.Store({
         // "jsonOutput": "{}",
         "interactionVisibilityStatus": defaultInteractionVisibilityStatus,
         "filesToSave": {},
-        "legendItems": []
+        "legendItems": [],
+        "showMissingHydrogensWarning": false
     },
     "mutations": {
         /**

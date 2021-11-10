@@ -719,6 +719,26 @@ export function setup(): void {
                             </template>
                         </b-table>
 
+                        <b-alert show variant="warning" v-if="$store.state.showMissingHydrogensWarning">
+                            Do both your files include hydrogen atoms? You can
+                            further improve BINANA accuracy by adding them. 
+                            To add hydrogen atoms to your receptor, consider using
+                            <a href="http://molprobity.biochem.duke.edu/"
+                            target="_blank">MolProbity</a> or
+                            <a href="http://server.poissonboltzmann.org/"
+                            target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
+                            ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+                            target="_blank">Gypsum-DL</a> or <a
+                            href="https://avogadro.cc/docs/menus/build-menu/"
+                            target="_blank">Avogadro</a>.
+
+                            <br /><br />
+
+                            You may also get this warning if one or more of your files is
+                            improperly formatted.
+                        </b-alert>
+
+
                         <!--
                         DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this 
                         commented in case you want to bring it back.

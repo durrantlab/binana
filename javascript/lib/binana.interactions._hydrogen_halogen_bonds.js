@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-09 00:25:33
+// Transcrypt'ed from Python, 2021-11-09 23:51:07
 var __future__ = {};
 var binana = {};
 var math = {};
@@ -21,19 +21,36 @@ __nest__ (binana, '', __module_binana__);
 import {HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF} from './binana.interactions.default_params.js';
 import {_set_default} from './binana._utils.shim.js';
 var __name__ = 'binana.interactions._hydrogen_halogen_bonds';
-export var _mimic_set_minus = function (set1, set2) {
-	for (var s2 of set2) {
-		var set1 = (function () {
-			var __accu0__ = [];
-			for (var s of set1) {
-				if (s [0] != s2 [0]) {
-					__accu0__.append (s);
-				}
+export var _get_potential_donors_acceptors = function (ligand, receptor, dist_cutoff) {
+	var ligand_receptor_dists = _get_ligand_receptor_dists (ligand, receptor);
+	var close_donors_acceptors = (function () {
+		var __accu0__ = [];
+		for (var [ligand_atom, receptor_atom, dist] of ligand_receptor_dists) {
+			if (dist < dist_cutoff && __in__ (ligand_atom.element, ['O', 'N']) && __in__ (receptor_atom.element, ['O', 'N'])) {
+				__accu0__.append ([ligand_atom, receptor_atom]);
 			}
-			return __accu0__;
-		}) ();
+		}
+		return __accu0__;
+	}) ();
+	return close_donors_acceptors;
+};
+export var _update_mol_and_data = function (pdb_hbonds, hbonds, hbonds_labels, lig_donor_or_accept, receptor_atom, ligand_atom, center_atom) {
+	var comment = (lig_donor_or_accept == 'ACCEPTOR' ? 'RECEPTOR' : 'LIGAND');
+	var hbonds_key = (((('HDONOR_' + comment) + '_') + receptor_atom.side_chain_or_backbone ()) + '_') + receptor_atom.structure;
+	pdb_hbonds.add_new_atom (ligand_atom.copy_of ());
+	pdb_hbonds.add_new_atom (center_atom.copy_of ());
+	pdb_hbonds.add_new_atom (receptor_atom.copy_of ());
+	hashtable_entry_add_one (hbonds, hbonds_key);
+	hbonds_labels.append (tuple ([ligand_atom.string_id (), center_atom.string_id (), receptor_atom.string_id (), comment]));
+};
+export var _product = function (lst1, lst2) {
+	var combos = [];
+	for (var l1 of lst1) {
+		for (var l2 of lst2) {
+			combos.append ([l1, l2]);
+		}
 	}
-	return set1;
+	return combos;
 };
 export var get_hydrogen_or_halogen_bonds = function (ligand, receptor, dist_cutoff, angle_cutoff, hydrogen_bond) {
 	if (typeof dist_cutoff == 'undefined' || (dist_cutoff != null && dist_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
@@ -51,51 +68,30 @@ export var get_hydrogen_or_halogen_bonds = function (ligand, receptor, dist_cuto
 	var dist_cutoff = _set_default (dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF);
 	var angle_cutoff = _set_default (angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF);
 	var lig_and_recep_have_hydrogens = ligand.has_hydrogens && receptor.has_hydrogens;
-	var ligand_receptor_dists = _get_ligand_receptor_dists (ligand, receptor);
-	var close_donors_acceptors = (function () {
-		var __accu0__ = [];
-		for (var [ligand_atom, receptor_atom, dist] of ligand_receptor_dists) {
-			if (dist < dist_cutoff && __in__ (ligand_atom.element, ['O', 'N']) && __in__ (receptor_atom.element, ['O', 'N'])) {
-				__accu0__.append ([ligand_atom, receptor_atom]);
-			}
-		}
-		return __accu0__;
-	}) ();
+	var close_donors_acceptors = _get_potential_donors_acceptors (ligand, receptor, dist_cutoff);
 	for (var [ligand_atom, receptor_atom] of close_donors_acceptors) {
-		var hbond_detected = false;
 		var lig_atm_hbond_infs = ligand.is_hbond_donor_acceptor (ligand_atom, hydrogen_bond);
 		var recep_atm_hbond_infs = receptor.is_hbond_donor_acceptor (receptor_atom, hydrogen_bond);
-		for (var lig_atm_hbond_inf of lig_atm_hbond_infs) {
-			if (hbond_detected) {
-				break;
-			}
+		var combos = _product (lig_atm_hbond_infs, recep_atm_hbond_infs);
+		for (var [lig_atm_hbond_inf, recep_atm_hbond_inf] of combos) {
 			var __left0__ = lig_atm_hbond_inf;
 			var lig_donor_or_accept = __left0__ [0];
 			var lig_center_atom = __left0__ [1];
-			for (var recep_atm_hbond_inf of recep_atm_hbond_infs) {
-				var __left0__ = recep_atm_hbond_inf;
-				var accept_donor_or_accept = __left0__ [0];
-				var accept_center_atom = __left0__ [1];
-				if (lig_donor_or_accept == accept_donor_or_accept) {
+			var __left0__ = recep_atm_hbond_inf;
+			var recep_donor_or_accept = __left0__ [0];
+			var accept_center_atom = __left0__ [1];
+			if (lig_donor_or_accept == recep_donor_or_accept) {
+				continue;
+			}
+			var center_atom = (lig_donor_or_accept == 'DONOR' ? lig_center_atom : accept_center_atom);
+			if (lig_and_recep_have_hydrogens || !(hydrogen_bond)) {
+				var angle = angle_between_three_points (ligand_atom.coordinates, center_atom.coordinates, receptor_atom.coordinates);
+				if (fabs (180 - (angle * 180.0) / math.pi) > angle_cutoff) {
 					continue;
 				}
-				var center_atom = (lig_donor_or_accept == 'DONOR' ? lig_center_atom : accept_center_atom);
-				if (lig_and_recep_have_hydrogens && hydrogen_bond) {
-					var angle = angle_between_three_points (ligand_atom.coordinates, center_atom.coordinates, receptor_atom.coordinates);
-					if (fabs (180 - (angle * 180.0) / math.pi) > angle_cutoff) {
-						continue;
-					}
-				}
-				var comment = (lig_donor_or_accept == 'ACCEPTOR' ? 'RECEPTOR' : 'LIGAND');
-				var hbonds_key = (((('HDONOR_' + comment) + '_') + receptor_atom.side_chain_or_backbone ()) + '_') + receptor_atom.structure;
-				pdb_hbonds.add_new_atom (ligand_atom.copy_of ());
-				pdb_hbonds.add_new_atom (center_atom.copy_of ());
-				pdb_hbonds.add_new_atom (receptor_atom.copy_of ());
-				hashtable_entry_add_one (hbonds, hbonds_key);
-				hbonds_labels.append (tuple ([ligand_atom.string_id (), center_atom.string_id (), receptor_atom.string_id (), comment]));
-				var hbond_detected = true;
-				break;
 			}
+			_update_mol_and_data (pdb_hbonds, hbonds, hbonds_labels, lig_donor_or_accept, receptor_atom, ligand_atom, center_atom);
+			break;
 		}
 	}
 	return dict ({'counts': hbonds, 'mol': pdb_hbonds, 'labels': hbonds_labels});

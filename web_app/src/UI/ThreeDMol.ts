@@ -378,26 +378,31 @@ let methodsFunctions = {
         let elements = mol["selectedAtoms"]({}).map(a => a["elem"]);
         if (elements.indexOf("H") === -1) {
             // No hydrogens
-            this.$store.commit("openModal", {
-                title: "Warning!",
-                body: `<p>
-                    One of your files has no hydrogen atoms. BINANA may not be
-                    able to identify some interactions (e.g., hydrogen bonds).
-                    To add hydrogen atoms to your receptor, consider using
-                    <a href="http://molprobity.biochem.duke.edu/"
-                    target="_blank">MolProbity</a> or
-                    <a href="http://server.poissonboltzmann.org/"
-                    target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
-                    ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
-                    target="_blank">Gypsum-DL</a> or <a
-                    href="https://avogadro.cc/docs/menus/build-menu/"
-                    target="_blank">Avogadro</a>.
-                </p>
-                <p>
-                    You may also get this error if one or more of your files is
-                    improperly formatted.
-                </p>`
+            this.$store.commit("setVar", {
+                name: "showMissingHydrogensWarning",
+                val: true
             });
+
+            // this.$store.commit("openModal", {
+            //     title: "Warning!",
+            //     body: `<p>
+            //         One of your files has no hydrogen atoms. BINANA may not be
+            //         able to identify some interactions (e.g., hydrogen bonds).
+            //         To add hydrogen atoms to your receptor, consider using
+            //         <a href="http://molprobity.biochem.duke.edu/"
+            //         target="_blank">MolProbity</a> or
+            //         <a href="http://server.poissonboltzmann.org/"
+            //         target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
+            //         ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+            //         target="_blank">Gypsum-DL</a> or <a
+            //         href="https://avogadro.cc/docs/menus/build-menu/"
+            //         target="_blank">Avogadro</a>.
+            //     </p>
+            //     <p>
+            //         You may also get this error if one or more of your files is
+            //         improperly formatted.
+            //     </p>`
+            // });
         }
     },
 

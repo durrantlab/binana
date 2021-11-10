@@ -38,7 +38,8 @@ from binana._utils.shim import OpenFile as openFile
 Class Mol handles PDB filing
 """
 
-# O-H distance is 0.96 A, N-H is 1.01 A. See
+# The maximum distance between a hydrogen- or halogen-bond donor and the middle
+# (central atom), but it H or X. O-H distance is 0.96 A, N-H is 1.01 A. See
 # http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
 _max_donor_X_dist = {
     "H": 1.3,
@@ -49,6 +50,76 @@ _max_donor_X_dist = {
     "Cl": 1.71 * 1.4,
     "F": 1.33 * 1.4,  # O-F: 1.33
 }
+
+_alternate_protein_resname = {
+    "LYS": ["LYS", "LYN"],
+    "HIS": ["HIS", "HID", "HIE", "HIP"],
+    "GLU": ["GLU", "GLH", "GLX"],
+    "ASP": ["ASP", "ASH", "ASX"],
+}
+
+# Information about protein atoms that can be hydrogen-bond donors. Useful for
+# when hydrogen atoms haven't been added to the protein model.
+# TODO: CYS??? SH
+_protein_hydro_bond_donors = [
+    [["ARG"], ["NE", "NH1", "NH2"]],
+    [_alternate_protein_resname["HIS"], ["NE2", "ND1"]],
+    [_alternate_protein_resname["LYS"], ["NZ"]],
+    [["SER"], ["OG"]],
+    [["THR"], ["OG1"]],
+    [["ASN"], ["ND2"]],
+    [["GLN"], ["NE2"]],
+    [["TYR"], ["OH"]],
+    [["TRP"], ["NE1"]],
+]
+
+protein_resnames = [
+    "ALA",
+    "ARG",
+    "ASN",
+    "ASP",
+    "ASH",
+    "ASX",
+    "CYS",
+    "CYM",
+    "CYX",
+    "GLN",
+    "GLU",
+    "GLH",
+    "GLX",
+    "GLY",
+    "HIS",
+    "HID",
+    "HIE",
+    "HIP",
+    "ILE",
+    "LEU",
+    "LYS",
+    "LYN",
+    "MET",
+    "PHE",
+    "PRO",
+    "SER",
+    "THR",
+    "TRP",
+    "TYR",
+    "VAL",
+]
+
+# Specifies names that must be present in protein residues. Will throw a warning
+# otherwise. Important for detecting charged groups and hydrogen bonds in some
+# cases.
+_required_protein_atom_names = [
+    [_alternate_protein_resname["GLU"], ["OE1", "OE2"]],
+    [_alternate_protein_resname["ASP"], ["OD1", "OD2"]],
+    [["ARG"], ["NH1", "NH2", "NE"]],
+    [_alternate_protein_resname["HIS"], ["NE2", "ND1"]],
+    [["PHE"], ["CG", "CD1", "CD2", "CE1", "CE2", "CZ"]],
+    [["TYR"], ["CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH"]],
+    [["TRP"], ["CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2"]],
+    [_alternate_protein_resname["HIS"], ["CG", "ND1", "CD2", "CE1", "NE2"]],
+    [_alternate_protein_resname["LYS"], ["NZ"]],
+]
 
 
 class Mol:
@@ -64,38 +135,6 @@ class Mol:
         self.max_z = -9999.99
         self.min_z = 9999.99
         self.rotatable_bonds_count = -1  # To indicate not set.
-        self.protein_resnames = [
-            "ALA",
-            "ARG",
-            "ASN",
-            "ASP",
-            "ASH",
-            "ASX",
-            "CYS",
-            "CYM",
-            "CYX",
-            "GLN",
-            "GLU",
-            "GLH",
-            "GLX",
-            "GLY",
-            "HIS",
-            "HID",
-            "HIE",
-            "HIP",
-            "ILE",
-            "LEU",
-            "LYS",
-            "LYN",
-            "MET",
-            "PHE",
-            "PRO",
-            "SER",
-            "THR",
-            "TRP",
-            "TYR",
-            "VAL",
-        ]
         self.aromatic_rings = []
         self.charges = []  # a list of points
         self.has_hydrogens = False
@@ -195,12 +234,12 @@ class Mol:
 
                     if (
                         key in atom_already_loaded
-                        and temp_atom.residue.strip() in self.protein_resnames
+                        and temp_atom.residue.strip() in protein_resnames
                     ):
                         # so this is a protein atom that has already been
                         # loaded once
                         self.printout(
-                            'Warning: Duplicate protein atom detected: "'
+                            'WARNING: Duplicate protein atom detected: "'
                             + temp_atom.line.strip()
                             + '". Not loading this duplicate.'
                         )
@@ -208,7 +247,7 @@ class Mol:
 
                     if (
                         key not in atom_already_loaded
-                        or temp_atom.residue.strip() not in self.protein_resnames
+                        or temp_atom.residue.strip() not in protein_resnames
                     ):
                         # So either the atom hasn't been loaded, or else
                         # it's a non-protein atom So note that non-protein
@@ -222,7 +261,7 @@ class Mol:
                         # So you're actually reindexing everything here.
                         self.all_atoms[autoindex] = temp_atom
 
-                        if temp_atom.residue[-3:] not in self.protein_resnames:
+                        if temp_atom.residue[-3:] not in protein_resnames:
                             self.non_protein_atoms[autoindex] = temp_atom
 
                         autoindex += 1
@@ -393,119 +432,42 @@ class Mol:
 
     def warn_bad_atom_name(self, name, residue):
         self.printout(
-            'Warning: There is no atom named "'
+            'WARNING: There is no atom named "'
             + name
             + '" in the protein residue '
-            + residue
-            + ". Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
+            + residue.strip()
+            + ". Please use standard naming conventions for all protein residues to improve BINANA accuracy."
+            
+            #  Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
         )
         print("")
 
     # Correct format of the protein and residues
     # Param self (Mol)
-    # Param residue ()
+    # Param residue_atom_names ()
     # Param last_key ()
-    def check_protein_format_process_residue(self, residue, last_key):
+    def check_protein_format_process_residue(self, residue_atom_names, last_key):
         temp = last_key.strip().split("_")
         resname = temp[0]
         real_resname = resname[-3:]
         # resid = temp[1]
         # chain = temp[2]
 
-        if real_resname in self.protein_resnames:  # so it's a protein residue
-            if "N" not in residue:
+        if real_resname in protein_resnames:  # so it's a protein residue
+            if "N" not in residue_atom_names:
                 self.warn_bad_atom_name("N", last_key)
-            if "C" not in residue:
+            if "C" not in residue_atom_names:
                 self.warn_bad_atom_name("C", last_key)
-            if "CA" not in residue:
+            if "CA" not in residue_atom_names:
                 self.warn_bad_atom_name("CA", last_key)
 
-            if real_resname in ["GLU", "GLH", "GLX"]:
-                if "OE1" not in residue:
-                    self.warn_bad_atom_name("OE1", last_key)
-                if "OE2" not in residue:
-                    self.warn_bad_atom_name("OE2", last_key)
-
-            if real_resname in ["ASP", "ASH", "ASX"]:
-                if "OD1" not in residue:
-                    self.warn_bad_atom_name("OD1", last_key)
-                if "OD2" not in residue:
-                    self.warn_bad_atom_name("OD2", last_key)
-
-            if real_resname in ["LYS", "LYN"] and "NZ" not in residue:
-                self.warn_bad_atom_name("NZ", last_key)
-
-            if real_resname == "ARG":
-                if "NH1" not in residue:
-                    self.warn_bad_atom_name("NH1", last_key)
-                if "NH2" not in residue:
-                    self.warn_bad_atom_name("NH2", last_key)
-
-            if real_resname in ["HIS", "HID", "HIE", "HIP"]:
-                if "NE2" not in residue:
-                    self.warn_bad_atom_name("NE2", last_key)
-                if "ND1" not in residue:
-                    self.warn_bad_atom_name("ND1", last_key)
-
-            if real_resname == "PHE":
-                if "CG" not in residue:
-                    self.warn_bad_atom_name("CG", last_key)
-                if "CD1" not in residue:
-                    self.warn_bad_atom_name("CD1", last_key)
-                if "CD2" not in residue:
-                    self.warn_bad_atom_name("CD2", last_key)
-                if "CE1" not in residue:
-                    self.warn_bad_atom_name("CE1", last_key)
-                if "CE2" not in residue:
-                    self.warn_bad_atom_name("CE2", last_key)
-                if "CZ" not in residue:
-                    self.warn_bad_atom_name("CZ", last_key)
-
-            if real_resname == "TYR":
-                if "CG" not in residue:
-                    self.warn_bad_atom_name("CG", last_key)
-                if "CD1" not in residue:
-                    self.warn_bad_atom_name("CD1", last_key)
-                if "CD2" not in residue:
-                    self.warn_bad_atom_name("CD2", last_key)
-                if "CE1" not in residue:
-                    self.warn_bad_atom_name("CE1", last_key)
-                if "CE2" not in residue:
-                    self.warn_bad_atom_name("CE2", last_key)
-                if "CZ" not in residue:
-                    self.warn_bad_atom_name("CZ", last_key)
-
-            if real_resname == "TRP":
-                if "CG" not in residue:
-                    self.warn_bad_atom_name("CG", last_key)
-                if "CD1" not in residue:
-                    self.warn_bad_atom_name("CD1", last_key)
-                if "CD2" not in residue:
-                    self.warn_bad_atom_name("CD2", last_key)
-                if "NE1" not in residue:
-                    self.warn_bad_atom_name("NE1", last_key)
-                if "CE2" not in residue:
-                    self.warn_bad_atom_name("CE2", last_key)
-                if "CE3" not in residue:
-                    self.warn_bad_atom_name("CE3", last_key)
-                if "CZ2" not in residue:
-                    self.warn_bad_atom_name("CZ2", last_key)
-                if "CZ3" not in residue:
-                    self.warn_bad_atom_name("CZ3", last_key)
-                if "CH2" not in residue:
-                    self.warn_bad_atom_name("CH2", last_key)
-
-            if real_resname in ["HIS", "HID", "HIE", "HIP"]:
-                if "CG" not in residue:
-                    self.warn_bad_atom_name("CG", last_key)
-                if "ND1" not in residue:
-                    self.warn_bad_atom_name("ND1", last_key)
-                if "CD2" not in residue:
-                    self.warn_bad_atom_name("CD2", last_key)
-                if "CE1" not in residue:
-                    self.warn_bad_atom_name("CE1", last_key)
-                if "NE2" not in residue:
-                    self.warn_bad_atom_name("NE2", last_key)
+            for residue_names, required_atom_names in _required_protein_atom_names:
+                if real_resname in residue_names:
+                    # It is the right residue
+                    for required_atom_name in required_atom_names:
+                        if required_atom_name not in residue_atom_names:
+                            # Atom not present, or named differently.
+                            self.warn_bad_atom_name(required_atom_name, last_key)
 
     # Functions to determine the bond connectivity based on distance
     # ==============================================================
@@ -515,12 +477,12 @@ class Mol:
     def create_bonds_by_distance(self):
         for atom_index1 in self.non_protein_atoms.keys():
             atom1 = self.non_protein_atoms[atom_index1]
-            if atom1.residue[-3:] not in self.protein_resnames:
+            if atom1.residue[-3:] not in protein_resnames:
                 # so it's not a protein residue
                 for atom_index2 in self.non_protein_atoms.keys():
                     if atom_index1 != atom_index2:
                         atom2 = self.non_protein_atoms[atom_index2]
-                        if atom2.residue[-3:] not in self.protein_resnames:
+                        if atom2.residue[-3:] not in protein_resnames:
                             # so it's not a protein residue
                             dist = distance(atom1.coordinates, atom2.coordinates)
 
@@ -644,7 +606,7 @@ class Mol:
     # Functions to identify hydrogen bond donors and acceptors
     # ========================================================
 
-    def _categorize_donor_acceptor_with_hydrogens(self, atom, hydrogen_bond=True):
+    def _categorize_hdonor_haccep_with_hydros(self, atom, hydrogen_bond=True):
         # Also good for halides even when no hydrogens.
 
         central_atom_names = (
@@ -671,37 +633,61 @@ class Mol:
 
         return charaterizations
 
-    def _categorize_donor_acceptor_without_hydrogens(self, atom):
+    def _is_hbond_donor_per_protein(self, atom):
+        atom_name = atom.atom_name.strip()
+        resname = atom.residue.strip()
+
+        # If it's not a protein residue at all, then return None
+        if resname not in protein_resnames:
+            return None
+
+        # Backbone nitrogen atom is always donor
+        if atom_name == "N":
+            return True
+
+        return any(
+            resname in resnames and atom_name in atom_names
+            for resnames, atom_names in _protein_hydro_bond_donors
+        )
+
+    def _categorize_hydro_bond_donor_accep_no_hydros(self, atom):
         charaterizations = []
 
+        # If it's an oxygen or nitrogen, it's always an acceptor.
+        if atom.element in ["O", "N"]:
+            charaterizations.append(["ACCEPTOR", None])
+
+        # Check if it matches certain protein atoms to identify if also
+        # acceptor.
+        is_protein_hbond_donor = self._is_hbond_donor_per_protein(atom)
+        if is_protein_hbond_donor is not None:
+            # It is a protein residue
+            if self._is_hbond_donor_per_protein(atom):
+                # It's a protein atom that is a hydrogen-bond donor.
+                charaterizations.append(["DONOR", atom])
+            return charaterizations
+
+        # Not an identifiable protein atom, so use heuristics instead.
         num_neighbors = atom.number_of_neighbors()
 
-        if atom.element == "O":
-            # If it's an oxygen atom, it's always an acceptor. True of OH, COC, =O,
-            # nitro, etc.
-            charaterizations.append(["ACCEPTOR", None])
+        # If it's an oxygen atom, it's always an acceptor. True of OH, COC, =O,
+        # nitro, etc.
+        if atom.element == "O" and num_neighbors == 1:
+            neighbor_idx = atom.indecies_of_atoms_connecting[0]
+            neighbor = self.all_atoms[neighbor_idx]
+            neighbor_is_sp3 = neighbor.has_sp3_geometry(self)
 
-            if num_neighbors == 1:
-                neighbor_idx = atom.indecies_of_atoms_connecting[0]
-                neighbor = self.all_atoms[neighbor_idx]
-                neighbor_is_sp3 = neighbor.has_sp3_geometry(self)
+            if neighbor.element == "C" and neighbor_is_sp3:
+                # If its single neighbor is SP3 hybridized, assume COH =>
+                # donor.
+                charaterizations.append(["DONOR", atom])
 
-                if neighbor.element == "C" and neighbor_is_sp3:
-                    # If its single neighbor is SP3 hybridized, assume COH =>
-                    # donor.
-                    charaterizations.append(["DONOR", atom])
+                # So otherwise, carboxylate, ketone, amide, etc. Assume not donor.
 
-                    # So otherwise, carboxylate, ketone, amide, etc. Assume not donor.
-
-                # Note that phosphates, sulfonates, etc., always considered
-                # deprotonated (not donors).
+            # Note that phosphates, sulfonates, etc., always considered
+            # deprotonated (not donors).
 
         elif atom.element == "N":
-            # Assume all nitrogens can be acceptors
-            charaterizations.append(["ACCEPTOR", None])
-
-            num_neighbors = len(atom.indecies_of_atoms_connecting)
-
             # Note that if bound to only one atom, assuming sp3.
             is_sp3 = atom.has_sp3_geometry(self) if num_neighbors > 1 else True
 
@@ -719,10 +705,10 @@ class Mol:
 
         if not hydrogen_bond or self.has_hydrogens:
             # Halide bond or hydrogen bond with hydrogens specified.
-            return self._categorize_donor_acceptor_with_hydrogens(atom, hydrogen_bond)
+            return self._categorize_hdonor_haccep_with_hydros(atom, hydrogen_bond)
         else:
             # Hydrogen bond and hydrogens not specified (so guess).
-            return self._categorize_donor_acceptor_without_hydrogens(atom)
+            return self._categorize_hydro_bond_donor_accep_no_hydros(atom)
 
     # Functions to identify charged groups
     # ====================================
@@ -790,7 +776,7 @@ class Mol:
                     pt.y = pt.y / 2.0
                     pt.z = pt.z / 2.0
 
-                    indexes = [atom_index]
+                    indexes = [atom_index]  # Don't merge!
 
                     # Note that * notation doesn't work in transcrypt! Keep
                     # extend below rather than merge.
@@ -978,7 +964,7 @@ class Mol:
         # resid = temp[1]
         # chain = temp[2]
 
-        if real_resname in ["LYS", "LYN"]:
+        if real_resname in _alternate_protein_resname["LYS"]:
             # regardless of protonation state, assume it's charged.
             for index in residue:
                 atom = self.all_atoms[index]
@@ -1021,7 +1007,7 @@ class Mol:
                     chrg = self.Charged(charge_pt, indices, True)
                     self.charges.append(chrg)
 
-        if real_resname in ["HIS", "HID", "HIE", "HIP"]:
+        if real_resname in _alternate_protein_resname["HIS"]:
             # regardless of protonation state, assume it's charged. This based
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized. But let's not consider HIS when doing salt
@@ -1049,7 +1035,7 @@ class Mol:
                     chrg = self.Charged(charge_pt, indices, True)
                     self.charges.append(chrg)
 
-        if real_resname in ["GLU", "GLH", "GLX"]:
+        if real_resname in _alternate_protein_resname["GLU"]:
             # regardless of protonation state, assume it's charged. This based
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized.
@@ -1078,7 +1064,7 @@ class Mol:
                     chrg = self.Charged(charge_pt, indices, False)
                     self.charges.append(chrg)
 
-        if real_resname in ["ASP", "ASH", "ASX"]:
+        if real_resname in _alternate_protein_resname["ASP"]:
             # regardless of protonation state, assume it's charged. This based
             # on "The Cation-Pi Interaction," which suggests protonated state
             # would be stabalized.
@@ -1141,9 +1127,9 @@ class Mol:
         for index in indicies_of_ring:
             atom = self.all_atoms[index]
             points_list.append(atom.coordinates)
-            x_sum = x_sum + atom.coordinates.x
-            y_sum = y_sum + atom.coordinates.y
-            z_sum = z_sum + atom.coordinates.z
+            x_sum += atom.coordinates.x
+            y_sum += atom.coordinates.y
+            z_sum += atom.coordinates.z
 
         if total == 0:
             return  # to prevent errors in some cases
@@ -1391,7 +1377,7 @@ class Mol:
 
             self.add_aromatic_marker(indicies_of_ring)
 
-        if real_resname in ["HIS", "HID", "HIE", "HIP"]:
+        if real_resname in _alternate_protein_resname["HIS"]:
             indicies_of_ring = []
 
             for index in residue:  # written this way because order is important
@@ -1504,7 +1490,7 @@ class Mol:
         temp.append(index)
 
         for connected_atom in atom.indecies_of_atoms_connecting:
-            if not connected_atom in already_crossed:
+            if connected_atom not in already_crossed:
                 self.ring_recursive(connected_atom, temp, orig_atom, all_rings)
 
             # if connected_atom == orig_atom and orig_atom != already_crossed[-1]:
@@ -1529,10 +1515,7 @@ class Mol:
                 last_key = key
                 resids.append(last_key)
 
-        structure = {}
-        for resid in resids:
-            structure[resid] = "OTHER"
-
+        structure = {resid: "OTHER" for resid in resids}
         atoms = []
 
         for atom_index in self.all_atoms.keys():
@@ -1626,14 +1609,14 @@ class Mol:
         for atom_index in self.all_atoms.keys():
             atom = self.all_atoms[atom_index]
             if (
-                atom.residue.strip() in self.protein_resnames
+                atom.residue.strip() in protein_resnames
                 and atom.atom_name.strip() == "CA"
             ):
                 ca_list.append(atom_index)
 
         # some more post processing.
         change = True
-        while change == True:
+        while change:
             change = False
 
             # A residue of index i is only going to be in an alpha helix its
@@ -1646,21 +1629,24 @@ class Mol:
                         other_CA_atom_index
                     ) in ca_list:  # so now compare that CA to all the other CA's
                         other_CA_atom = self.all_atoms[other_CA_atom_index]
-                        if other_CA_atom.structure == "ALPHA":
-                            # so it's also in an alpha helix
-                            if (
-                                other_CA_atom.resid - 3 == CA_atom.resid
-                                or other_CA_atom.resid + 3 == CA_atom.resid
-                            ):  # so this CA atom is one of the ones the first atom might hydrogen bond with
-                                if (
-                                    other_CA_atom.coordinates.dist_to(
-                                        CA_atom.coordinates
-                                    )
-                                    < 6.0
-                                ):  # so these two CA atoms are close enough together that their residues are probably hydrogen bonded
-                                    another_alpha_is_close = True
-                                    break
-                    if another_alpha_is_close == False:
+                        if (
+                            other_CA_atom.structure == "ALPHA"
+                            and (
+                                (
+                                    other_CA_atom.resid - 3 == CA_atom.resid
+                                    or other_CA_atom.resid + 3 == CA_atom.resid
+                                )
+                            )
+                            and (
+                                other_CA_atom.coordinates.dist_to(
+                                    CA_atom.coordinates
+                                )
+                                < 6.0
+                            )
+                        ):  # so these two CA atoms are close enough together that their residues are probably hydrogen bonded
+                            another_alpha_is_close = True
+                            break
+                    if not another_alpha_is_close:
                         self.set_structure_of_residue(
                             CA_atom.chain, CA_atom.resid, "OTHER"
                         )
@@ -1805,28 +1791,23 @@ class Mol:
                         if other_CA_atom_index != CA_atom_index:
                             # so not comparing an atom to itself
                             other_CA_atom = self.all_atoms[other_CA_atom_index]
-                            if other_CA_atom.structure == "BETA":
-                                # so you're comparing it only to other
-                                # BETA-sheet atoms
-                                if other_CA_atom.chain == CA_atom.chain:
-                                    # so require them to be on the same chain.
-                                    # needed to indecies can be fairly
-                                    # compared
-                                    if fabs(other_CA_atom.resid - CA_atom.resid) > 2:
-                                        # so the two residues are not simply
-                                        # adjacent to each other on the chain
-                                        if (
-                                            CA_atom.coordinates.dist_to(
-                                                other_CA_atom.coordinates
-                                            )
-                                            < 6.0
-                                        ):
-                                            # so these to atoms are close to
-                                            # each other
-                                            another_beta_is_close = True
-                                            break
+                            if (
+                                other_CA_atom.structure == "BETA"
+                                and other_CA_atom.chain == CA_atom.chain
+                                and fabs(other_CA_atom.resid - CA_atom.resid) > 2
+                                and (
+                                    CA_atom.coordinates.dist_to(
+                                        other_CA_atom.coordinates
+                                    )
+                                    < 6.0
+                                )
+                            ):
+                                # so these to atoms are close to
+                                # each other
+                                another_beta_is_close = True
+                                break
 
-                    if another_beta_is_close == False:
+                    if not another_beta_is_close:
                         self.set_structure_of_residue(
                             CA_atom.chain, CA_atom.resid, "OTHER"
                         )

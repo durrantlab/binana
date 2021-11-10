@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-09 00:25:33
+// Transcrypt'ed from Python, 2021-11-09 23:51:07
 var binana = {};
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -22,6 +22,10 @@ __nest__ (binana, '', __module_binana__);
 var __name__ = 'binana._structure.mol';
 export var textwrap = shim;
 export var _max_donor_X_dist = dict ({'H': 1.3, 'I': 2.04 * 1.4, 'BR': 1.86 * 1.4, 'Br': 1.86 * 1.4, 'CL': 1.71 * 1.4, 'Cl': 1.71 * 1.4, 'F': 1.33 * 1.4});
+export var _alternate_protein_resname = dict ({'LYS': ['LYS', 'LYN'], 'HIS': ['HIS', 'HID', 'HIE', 'HIP'], 'GLU': ['GLU', 'GLH', 'GLX'], 'ASP': ['ASP', 'ASH', 'ASX']});
+export var _protein_hydro_bond_donors = [[['ARG'], ['NE', 'CZ', 'NH1', 'NH2']], [_alternate_protein_resname ['HIS'], ['NE2', 'ND1']], [_alternate_protein_resname ['LYS'], ['NZ']], [['SER'], ['OG']], [['THR'], ['OG1']], [['ASN'], ['ND2']], [['GLN'], ['NE2']], [['TYR'], ['OH']], [['TRP'], ['NE1']]];
+export var protein_resnames = ['ALA', 'ARG', 'ASN', 'ASP', 'ASH', 'ASX', 'CYS', 'CYM', 'CYX', 'GLN', 'GLU', 'GLH', 'GLX', 'GLY', 'HIS', 'HID', 'HIE', 'HIP', 'ILE', 'LEU', 'LYS', 'LYN', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'];
+export var _required_protein_atom_names = [[_alternate_protein_resname ['GLU'], ['OE1', 'OE2']], [_alternate_protein_resname ['ASP'], ['OD1', 'OD2']], [['ARG'], ['NH1', 'NH2']], [_alternate_protein_resname ['HIS'], ['NE2', 'ND1']], [['PHE'], ['CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ']], [['TYR'], ['CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ']], [['TRP'], ['CG', 'CD1', 'CD2', 'NE1', 'CE2', 'CE3', 'CZ2', 'CZ3', 'CH2']], [_alternate_protein_resname ['HIS'], ['CG', 'ND1', 'CD2', 'CE1', 'NE2']], [_alternate_protein_resname ['LYS'], ['NZ']]];
 export var Mol =  __class__ ('Mol', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
@@ -34,7 +38,6 @@ export var Mol =  __class__ ('Mol', [object], {
 		self.max_z = -(9999.99);
 		self.min_z = 9999.99;
 		self.rotatable_bonds_count = -(1);
-		self.protein_resnames = ['ALA', 'ARG', 'ASN', 'ASP', 'ASH', 'ASX', 'CYS', 'CYM', 'CYX', 'GLN', 'GLU', 'GLH', 'GLX', 'GLY', 'HIS', 'HID', 'HIE', 'HIP', 'ILE', 'LEU', 'LYS', 'LYN', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'];
 		self.aromatic_rings = [];
 		self.charges = [];
 		self.has_hydrogens = false;
@@ -101,14 +104,14 @@ export var Mol =  __class__ ('Mol', [object], {
 					self.min_y = min (self.min_y, temp_atom.coordinates.y);
 					self.min_z = min (self.min_z, temp_atom.coordinates.z);
 					var key = (((((temp_atom.atom_name.strip () + '_') + str (temp_atom.resid)) + '_') + temp_atom.residue.strip ()) + '_') + temp_atom.chain.strip ();
-					if (__in__ (key, atom_already_loaded) && __in__ (temp_atom.residue.strip (), self.protein_resnames)) {
-						self.printout (('Warning: Duplicate protein atom detected: "' + temp_atom.line.strip ()) + '". Not loading this duplicate.');
+					if (__in__ (key, atom_already_loaded) && __in__ (temp_atom.residue.strip (), protein_resnames)) {
+						self.printout (('WARNING: Duplicate protein atom detected: "' + temp_atom.line.strip ()) + '". Not loading this duplicate.');
 						print ('');
 					}
-					if (!__in__ (key, atom_already_loaded) || !__in__ (temp_atom.residue.strip (), self.protein_resnames)) {
+					if (!__in__ (key, atom_already_loaded) || !__in__ (temp_atom.residue.strip (), protein_resnames)) {
 						atom_already_loaded.append (key);
 						self.all_atoms [autoindex] = temp_atom;
-						if (!__in__ (temp_atom.residue.__getslice__ (-(3), null, 1), self.protein_resnames)) {
+						if (!__in__ (temp_atom.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
 							self.non_protein_atoms [autoindex] = temp_atom;
 						}
 						autoindex++;
@@ -244,142 +247,30 @@ export var Mol =  __class__ ('Mol', [object], {
 		self.check_protein_format_process_residue (residue, last_key);
 	});},
 	get warn_bad_atom_name () {return __get__ (this, function (self, py_name, residue) {
-		self.printout (((('Warning: There is no atom named "' + py_name) + '" in the protein residue ') + residue) + '. Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore.');
+		self.printout (((('WARNING: There is no atom named "' + py_name) + '" in the protein residue ') + residue.strip ()) + '. Please use standard naming conventions for all protein residues to improve BINANA accuracy.');
 		print ('');
 	});},
-	get check_protein_format_process_residue () {return __get__ (this, function (self, residue, last_key) {
+	get check_protein_format_process_residue () {return __get__ (this, function (self, residue_atom_names, last_key) {
 		var temp = last_key.strip ().py_split ('_');
 		var resname = temp [0];
 		var real_resname = resname.__getslice__ (-(3), null, 1);
-		if (__in__ (real_resname, self.protein_resnames)) {
-			if (!__in__ ('N', residue)) {
+		if (__in__ (real_resname, protein_resnames)) {
+			if (!__in__ ('N', residue_atom_names)) {
 				self.warn_bad_atom_name ('N', last_key);
 			}
-			if (!__in__ ('C', residue)) {
+			if (!__in__ ('C', residue_atom_names)) {
 				self.warn_bad_atom_name ('C', last_key);
 			}
-			if (!__in__ ('CA', residue)) {
+			if (!__in__ ('CA', residue_atom_names)) {
 				self.warn_bad_atom_name ('CA', last_key);
 			}
-			if (__in__ (real_resname, ['GLU', 'GLH', 'GLX'])) {
-				if (!__in__ ('OE1', residue)) {
-					self.warn_bad_atom_name ('OE1', last_key);
-				}
-				if (!__in__ ('OE2', residue)) {
-					self.warn_bad_atom_name ('OE2', last_key);
-				}
-			}
-			if (__in__ (real_resname, ['ASP', 'ASH', 'ASX'])) {
-				if (!__in__ ('OD1', residue)) {
-					self.warn_bad_atom_name ('OD1', last_key);
-				}
-				if (!__in__ ('OD2', residue)) {
-					self.warn_bad_atom_name ('OD2', last_key);
-				}
-			}
-			if (__in__ (real_resname, ['LYS', 'LYN']) && !__in__ ('NZ', residue)) {
-				self.warn_bad_atom_name ('NZ', last_key);
-			}
-			if (real_resname == 'ARG') {
-				if (!__in__ ('NH1', residue)) {
-					self.warn_bad_atom_name ('NH1', last_key);
-				}
-				if (!__in__ ('NH2', residue)) {
-					self.warn_bad_atom_name ('NH2', last_key);
-				}
-			}
-			if (__in__ (real_resname, ['HIS', 'HID', 'HIE', 'HIP'])) {
-				if (!__in__ ('NE2', residue)) {
-					self.warn_bad_atom_name ('NE2', last_key);
-				}
-				if (!__in__ ('ND1', residue)) {
-					self.warn_bad_atom_name ('ND1', last_key);
-				}
-			}
-			if (real_resname == 'PHE') {
-				if (!__in__ ('CG', residue)) {
-					self.warn_bad_atom_name ('CG', last_key);
-				}
-				if (!__in__ ('CD1', residue)) {
-					self.warn_bad_atom_name ('CD1', last_key);
-				}
-				if (!__in__ ('CD2', residue)) {
-					self.warn_bad_atom_name ('CD2', last_key);
-				}
-				if (!__in__ ('CE1', residue)) {
-					self.warn_bad_atom_name ('CE1', last_key);
-				}
-				if (!__in__ ('CE2', residue)) {
-					self.warn_bad_atom_name ('CE2', last_key);
-				}
-				if (!__in__ ('CZ', residue)) {
-					self.warn_bad_atom_name ('CZ', last_key);
-				}
-			}
-			if (real_resname == 'TYR') {
-				if (!__in__ ('CG', residue)) {
-					self.warn_bad_atom_name ('CG', last_key);
-				}
-				if (!__in__ ('CD1', residue)) {
-					self.warn_bad_atom_name ('CD1', last_key);
-				}
-				if (!__in__ ('CD2', residue)) {
-					self.warn_bad_atom_name ('CD2', last_key);
-				}
-				if (!__in__ ('CE1', residue)) {
-					self.warn_bad_atom_name ('CE1', last_key);
-				}
-				if (!__in__ ('CE2', residue)) {
-					self.warn_bad_atom_name ('CE2', last_key);
-				}
-				if (!__in__ ('CZ', residue)) {
-					self.warn_bad_atom_name ('CZ', last_key);
-				}
-			}
-			if (real_resname == 'TRP') {
-				if (!__in__ ('CG', residue)) {
-					self.warn_bad_atom_name ('CG', last_key);
-				}
-				if (!__in__ ('CD1', residue)) {
-					self.warn_bad_atom_name ('CD1', last_key);
-				}
-				if (!__in__ ('CD2', residue)) {
-					self.warn_bad_atom_name ('CD2', last_key);
-				}
-				if (!__in__ ('NE1', residue)) {
-					self.warn_bad_atom_name ('NE1', last_key);
-				}
-				if (!__in__ ('CE2', residue)) {
-					self.warn_bad_atom_name ('CE2', last_key);
-				}
-				if (!__in__ ('CE3', residue)) {
-					self.warn_bad_atom_name ('CE3', last_key);
-				}
-				if (!__in__ ('CZ2', residue)) {
-					self.warn_bad_atom_name ('CZ2', last_key);
-				}
-				if (!__in__ ('CZ3', residue)) {
-					self.warn_bad_atom_name ('CZ3', last_key);
-				}
-				if (!__in__ ('CH2', residue)) {
-					self.warn_bad_atom_name ('CH2', last_key);
-				}
-			}
-			if (__in__ (real_resname, ['HIS', 'HID', 'HIE', 'HIP'])) {
-				if (!__in__ ('CG', residue)) {
-					self.warn_bad_atom_name ('CG', last_key);
-				}
-				if (!__in__ ('ND1', residue)) {
-					self.warn_bad_atom_name ('ND1', last_key);
-				}
-				if (!__in__ ('CD2', residue)) {
-					self.warn_bad_atom_name ('CD2', last_key);
-				}
-				if (!__in__ ('CE1', residue)) {
-					self.warn_bad_atom_name ('CE1', last_key);
-				}
-				if (!__in__ ('NE2', residue)) {
-					self.warn_bad_atom_name ('NE2', last_key);
+			for (var [residue_names, required_atom_names] of _required_protein_atom_names) {
+				if (__in__ (real_resname, residue_names)) {
+					for (var required_atom_name of required_atom_names) {
+						if (!__in__ (required_atom_name, residue_atom_names)) {
+							self.warn_bad_atom_name (required_atom_name, last_key);
+						}
+					}
 				}
 			}
 		}
@@ -387,11 +278,11 @@ export var Mol =  __class__ ('Mol', [object], {
 	get create_bonds_by_distance () {return __get__ (this, function (self) {
 		for (var atom_index1 of self.non_protein_atoms.py_keys ()) {
 			var atom1 = self.non_protein_atoms [atom_index1];
-			if (!__in__ (atom1.residue.__getslice__ (-(3), null, 1), self.protein_resnames)) {
+			if (!__in__ (atom1.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
 				for (var atom_index2 of self.non_protein_atoms.py_keys ()) {
 					if (atom_index1 != atom_index2) {
 						var atom2 = self.non_protein_atoms [atom_index2];
-						if (!__in__ (atom2.residue.__getslice__ (-(3), null, 1), self.protein_resnames)) {
+						if (!__in__ (atom2.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
 							var dist = distance (atom1.coordinates, atom2.coordinates);
 							if (dist < self.bond_length (atom1.element, atom2.element) * 1.2) {
 								atom1.add_neighbor_atom_index (atom_index2);
@@ -460,7 +351,7 @@ export var Mol =  __class__ ('Mol', [object], {
 		var distance = self.update_distance (element1, element2, distance, ['SI', 'O', 1.631]);
 		return distance;
 	});},
-	get _categorize_donor_acceptor_with_hydrogens () {return __get__ (this, function (self, atom, hydrogen_bond) {
+	get _categorize_hdonor_haccep_with_hydros () {return __get__ (this, function (self, atom, hydrogen_bond) {
 		if (typeof hydrogen_bond == 'undefined' || (hydrogen_bond != null && hydrogen_bond.hasOwnProperty ("__kwargtrans__"))) {;
 			var hydrogen_bond = true;
 		};
@@ -482,23 +373,45 @@ export var Mol =  __class__ ('Mol', [object], {
 		}
 		return charaterizations;
 	});},
-	get _categorize_donor_acceptor_without_hydrogens () {return __get__ (this, function (self, atom) {
+	get _is_hbond_donor_per_protein () {return __get__ (this, function (self, atom) {
+		var atom_name = atom.atom_name.strip ();
+		var resname = atom.residue.strip ();
+		if (!__in__ (resname, protein_resnames)) {
+			return null;
+		}
+		if (atom_name == 'N') {
+			return true;
+		}
+		return any ((function () {
+			var __accu0__ = [];
+			for (var [resnames, atom_names] of _protein_hydro_bond_donors) {
+				__accu0__.append (__in__ (resname, resnames) && __in__ (atom_name, atom_names));
+			}
+			return py_iter (__accu0__);
+		}) ());
+	});},
+	get _categorize_hydro_bond_donor_accep_no_hydros () {return __get__ (this, function (self, atom) {
 		var charaterizations = [];
-		var num_neighbors = atom.number_of_neighbors ();
-		if (atom.element == 'O') {
+		if (__in__ (atom.element, ['O', 'N'])) {
 			charaterizations.append (['ACCEPTOR', null]);
-			if (num_neighbors == 1) {
-				var neighbor_idx = atom.indecies_of_atoms_connecting [0];
-				var neighbor = self.all_atoms [neighbor_idx];
-				var neighbor_is_sp3 = neighbor.has_sp3_geometry (self);
-				if (neighbor.element == 'C' && neighbor_is_sp3) {
-					charaterizations.append (['DONOR', atom]);
-				}
+		}
+		var is_protein_hbond_donor = self._is_hbond_donor_per_protein (atom);
+		if (is_protein_hbond_donor !== null) {
+			if (self._is_hbond_donor_per_protein (atom)) {
+				charaterizations.append (['DONOR', atom]);
+			}
+			return charaterizations;
+		}
+		var num_neighbors = atom.number_of_neighbors ();
+		if (atom.element == 'O' && num_neighbors == 1) {
+			var neighbor_idx = atom.indecies_of_atoms_connecting [0];
+			var neighbor = self.all_atoms [neighbor_idx];
+			var neighbor_is_sp3 = neighbor.has_sp3_geometry (self);
+			if (neighbor.element == 'C' && neighbor_is_sp3) {
+				charaterizations.append (['DONOR', atom]);
 			}
 		}
 		else if (atom.element == 'N') {
-			charaterizations.append (['ACCEPTOR', null]);
-			var num_neighbors = len (atom.indecies_of_atoms_connecting);
 			var is_sp3 = (num_neighbors > 1 ? atom.has_sp3_geometry (self) : true);
 			if (is_sp3 && num_neighbors < 4 || !(is_sp3) && num_neighbors < 3) {
 				charaterizations.append (['DONOR', atom]);
@@ -511,10 +424,10 @@ export var Mol =  __class__ ('Mol', [object], {
 			var hydrogen_bond = true;
 		};
 		if (!(hydrogen_bond) || self.has_hydrogens) {
-			return self._categorize_donor_acceptor_with_hydrogens (atom, hydrogen_bond);
+			return self._categorize_hdonor_haccep_with_hydros (atom, hydrogen_bond);
 		}
 		else {
-			return self._categorize_donor_acceptor_without_hydrogens (atom);
+			return self._categorize_hydro_bond_donor_accep_no_hydros (atom);
 		}
 	});},
 	get charges_metals () {return __get__ (this, function (self, atom_index, atom) {
@@ -682,7 +595,7 @@ export var Mol =  __class__ ('Mol', [object], {
 		var temp = last_key.strip ().py_split ('_');
 		var resname = temp [0];
 		var real_resname = resname.__getslice__ (-(3), null, 1);
-		if (__in__ (real_resname, ['LYS', 'LYN'])) {
+		if (__in__ (real_resname, _alternate_protein_resname ['LYS'])) {
 			for (var index of residue) {
 				var atom = self.all_atoms [index];
 				if (atom.atom_name.strip () == 'NZ') {
@@ -727,7 +640,7 @@ export var Mol =  __class__ ('Mol', [object], {
 				}
 			}
 		}
-		if (__in__ (real_resname, ['HIS', 'HID', 'HIE', 'HIP'])) {
+		if (__in__ (real_resname, _alternate_protein_resname ['HIS'])) {
 			var charge_pt = Point (0.0, 0.0, 0.0);
 			var count = 0.0;
 			var indices = [];
@@ -755,7 +668,7 @@ export var Mol =  __class__ ('Mol', [object], {
 				}
 			}
 		}
-		if (__in__ (real_resname, ['GLU', 'GLH', 'GLX'])) {
+		if (__in__ (real_resname, _alternate_protein_resname ['GLU'])) {
 			var charge_pt = Point (0.0, 0.0, 0.0);
 			var count = 0.0;
 			var indices = [];
@@ -783,7 +696,7 @@ export var Mol =  __class__ ('Mol', [object], {
 				}
 			}
 		}
-		if (__in__ (real_resname, ['ASP', 'ASH', 'ASX'])) {
+		if (__in__ (real_resname, _alternate_protein_resname ['ASP'])) {
 			var charge_pt = Point (0.0, 0.0, 0.0);
 			var count = 0.0;
 			var indices = [];
@@ -1059,7 +972,7 @@ export var Mol =  __class__ ('Mol', [object], {
 			}
 			self.add_aromatic_marker (indicies_of_ring);
 		}
-		if (__in__ (real_resname, ['HIS', 'HID', 'HIE', 'HIP'])) {
+		if (__in__ (real_resname, _alternate_protein_resname ['HIS'])) {
 			var indicies_of_ring = [];
 			for (var index of residue) {
 				var atom = self.all_atoms [index];
@@ -1274,7 +1187,7 @@ export var Mol =  __class__ ('Mol', [object], {
 		var ca_list = [];
 		for (var atom_index of self.all_atoms.py_keys ()) {
 			var atom = self.all_atoms [atom_index];
-			if (__in__ (atom.residue.strip (), self.protein_resnames) && atom.atom_name.strip () == 'CA') {
+			if (__in__ (atom.residue.strip (), protein_resnames) && atom.atom_name.strip () == 'CA') {
 				ca_list.append (atom_index);
 			}
 		}

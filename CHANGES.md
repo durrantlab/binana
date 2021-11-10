@@ -17,24 +17,20 @@ WIP
 hydrogen_halogen_bond_angle_cutoff
 11. Removed ability to toggle on and off cylinder interactions, to simplify UI. Always on for those interaction where appropriate.
 12. Some interactions are shown as spheres, others as bonds. Keeps it simplier.
-13. Improved ability to detect salt bridges even if protein and ligand models do not have hydrogen atoms. TODO: Try to detect hydrogen bonds too.
+13. Improved ability to detect salt bridges and hydrogen bonds even if protein and ligand models do not have hydrogen atoms.
 
 TODO:
 
 Halogen bonds mention in all documentation?
-Halogen bonds counted twice? Good to check. In the chart in log file.
-
-CAPTURE WARNINGS. Also, move no-hydrogen warning to below table to be less
-obtrusive.
 
 Consider "S" as donor/acceptors? Need to investigate.
 
-Much of hydrogen-bond detecting code should go into mol. Also, use protein
-definitions where possible, like you do for electrostatics. But in case of
-hydrogen bonds detecvt only on the ffly (otherwise too many).
-
-
 Test should also test version of protein without hydrogens
+
+If you add in new receptor or ligand, be sure to reevaluate whether warning
+should appear.
+
+Don't appear in table if it's not actually shown (so if deteting nothing, hide).
 
 2.0
 ---
