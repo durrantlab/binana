@@ -9,6 +9,7 @@ import binana
 from binana._structure.point import Point
 from binana._utils.shim import r_just, round_to_thousandths_to_str
 from binana._utils._math_functions import angle_between_three_points
+from binana._structure.consts import to_deg, two_leter_atom_names, protein_resnames
 
 # __pragma__ ('skip')
 # Python
@@ -133,11 +134,9 @@ class Atom:
         # Read atom name
         if len(self.atom_name) == 1:
             self.atom_name = self.atom_name + "  "
-        elif len(self.atom_name) == 2:
-            self.atom_name = self.atom_name + " "
-        elif len(self.atom_name) == 3:
-            # This line is necessary for babel to work, though many PDBs in
-            # the PDB would have this line commented out
+        elif len(self.atom_name) in [2, 3]:
+            # Len 3 is necessary for babel to work, though many PDBs in the PDB
+            # would have this line commented out
             self.atom_name = self.atom_name + " "
 
         self.coordinates = Point(
@@ -145,41 +144,53 @@ class Atom:
         )
 
         # Now read in atom type (for pdbqt)
-        self.atom_type = line[77:79].strip().upper()
+        self.atom_type = line[76:79].strip().upper()
 
         # Read the atom's charge
-        if line[69:76].strip() != "":
-            self.charge = float(line[69:76])
-        else:
-            self.charge = 0.0
+        self.charge = float(line[69:76]) if line[69:76].strip() != "" else 0.0
+
+        self.residue = line[16:20]
+        # This only uses the rightmost three characters, essentially removing
+        # unique rotamer identification
+        self.residue = " " + self.residue[-3:]
 
         # Try to guess at element from name
         if self.element == "":
             two_letters = self.atom_name[0:2].strip().upper()
-            if two_letters == "BR":
-                self.element = "BR"
-            elif two_letters == "CL":
-                self.element = "CL"
-            elif two_letters == "BI":
-                self.element = "BI"
-            elif two_letters == "AS":
-                self.element = "AS"
-            elif two_letters == "AG":
-                self.element = "AG"
-            elif two_letters == "LI":
-                self.element = "LI"
-            # elif two_letters=='HG':
-            #    self.element='HG'
-            elif two_letters == "MG":
-                self.element = "MG"
-            elif two_letters == "MN":
-                self.element = "MN"
-            elif two_letters == "RH":
-                self.element = "RH"
-            elif two_letters == "ZN":
-                self.element = "ZN"
-            elif two_letters == "FE":
-                self.element = "FE"
+
+            if (
+                two_letters in two_leter_atom_names
+                and self.residue[-3:] not in protein_resnames
+            ):
+                # Note that excluding protein residues, which cannot contain
+                # metals. This is because otherwise HG is a metal, but it should
+                # be hydrogen if it belongs to a protein.
+                self.element = two_letters
+
+            # if two_letters == "BR":
+            #     self.element = "BR"
+            # elif two_letters == "CL":
+            #     self.element = "CL"
+            # elif two_letters == "BI":
+            #     self.element = "BI"
+            # elif two_letters == "AS":
+            #     self.element = "AS"
+            # elif two_letters == "AG":
+            #     self.element = "AG"
+            # elif two_letters == "LI":
+            #     self.element = "LI"
+            # # elif two_letters=='HG':
+            # #    self.element='HG'
+            # elif two_letters == "MG":
+            #     self.element = "MG"
+            # elif two_letters == "MN":
+            #     self.element = "MN"
+            # elif two_letters == "RH":
+            #     self.element = "RH"
+            # elif two_letters == "ZN":
+            #     self.element = "ZN"
+            # elif two_letters == "FE":
+            #     self.element = "FE"
             else:
                 # So, just assume it's the first letter. Any number needs to
                 # be removed from the element name
@@ -199,10 +210,6 @@ class Atom:
                 self.element = self.element[0:1].strip().upper()
 
         self.pdb_index = line[6:12].strip()
-        self.residue = line[16:20]
-        # This only uses the rightmost three characters, essentially removing
-        # unique rotamer identification
-        self.residue = " " + self.residue[-3:]
 
         # It's possible the pdbqt might not have any resid entries.
         try:
@@ -223,14 +230,20 @@ class Atom:
             parent_mol.all_atoms[i].coordinates
             for i in self.indecies_of_atoms_connecting
         ]
+        ncrs_len = len(ncrs)
+
+        if ncrs_len <= 1:
+            # Something like an isolated water molecule (0) or a terminal atom
+            # (1). Assume Sp3 hybridized.
+            return True
+
         ccr = self.coordinates
-        to_deg = 180.0 / math.pi
         angles = [angle_between_three_points(ncrs[0], ccr, ncrs[1]) * to_deg]
-        if len(ncrs) > 2:
+        if ncrs_len > 2:
             angles.append(angle_between_three_points(ncrs[0], ccr, ncrs[2]) * to_deg)
             angles.append(angle_between_three_points(ncrs[1], ccr, ncrs[2]) * to_deg)
 
-        if len(ncrs) > 3:
+        if ncrs_len > 3:
             angles.append(angle_between_three_points(ncrs[0], ccr, ncrs[3]) * to_deg)
             angles.append(angle_between_three_points(ncrs[1], ccr, ncrs[3]) * to_deg)
             angles.append(angle_between_three_points(ncrs[2], ccr, ncrs[3]) * to_deg)

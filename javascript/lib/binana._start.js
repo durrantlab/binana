@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-09 23:51:06
+// Transcrypt'ed from Python, 2021-11-12 01:16:44
 var __future__ = {};
 var binana = {};
 var math = {};

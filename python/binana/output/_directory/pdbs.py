@@ -14,6 +14,7 @@ def output_dir_pdbs(
     pdb_pi_T,
     pdb_pi_cat,
     pdb_salt_bridges,
+    pdb_metal_coordinations,
     ligand,
     receptor,
 ):
@@ -43,5 +44,6 @@ def output_dir_pdbs(
     pdb_pi_T.save_pdb(parameters.params["output_dir"] + "/T_stacking.pdb")
     pdb_pi_cat.save_pdb(parameters.params["output_dir"] + "/cat_pi.pdb")
     pdb_salt_bridges.save_pdb(parameters.params["output_dir"] + "/salt_bridges.pdb")
+    pdb_metal_coordinations.save_pdb(parameters.params["output_dir"] + "/metal_coordinations.pdb")
     ligand.save_pdb(parameters.params["output_dir"] + "/ligand.pdb")
     receptor.save_pdb(parameters.params["output_dir"] + "/receptor.pdb")

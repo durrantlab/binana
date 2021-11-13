@@ -61,6 +61,7 @@ def vmd_state_file(parameters):
     add_rep(vmd, "hydrogen_bonds.pdb", thick_sticks)
     add_rep(vmd, "halogen_bonds.pdb", thick_sticks)
     add_rep(vmd, "salt_bridges.pdb", thick_sticks)
+    add_rep(vmd, "metal_coordinations.pdb", big_vmd)
     add_rep(vmd, "cat_pi.pdb", thick_sticks)
     add_rep(vmd, "pi_pi_stacking.pdb", thick_sticks)
     add_rep(vmd, "T_stacking.pdb", thick_sticks)

@@ -60,7 +60,6 @@ def dumps(data, indent=None):
 
     # __pragma__ ('skip')
     import json
-
     data_str = json.dumps(data, indent=indent, sort_keys=True, separators=(",", ": "))
     # __pragma__ ('noskip')
 
@@ -82,8 +81,8 @@ def _set_default(val, default):
 def round_to_thousandths_to_str(val):
     val = round(val, 3)
     val_str = str(val)
-    if not "." in val_str:
-        val_str = val_str + ".0"
+    if "." not in val_str:
+        val_str += ".0"
     prts = val_str.split(".")
     prts[1] = prts[1][:3]
     while len(prts[1]) < 3:

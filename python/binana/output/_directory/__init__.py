@@ -26,6 +26,7 @@ def make_directory_output(
     pi_pi,
     cat_pi,
     salt_bridges,
+    metal_coordinations,
     ligand,
     receptor,
 ):
@@ -51,6 +52,7 @@ def make_directory_output(
         pi_pi["mols"]["T_stacking"],
         cat_pi["mol"],
         salt_bridges["mol"],
+        metal_coordinations["mol"],
         ligand,
         receptor,
     )

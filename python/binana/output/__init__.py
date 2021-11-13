@@ -34,6 +34,7 @@ def _write_main(
     hydrogen_bonds,
     halogen_bonds,
     salt_bridges,
+    metal_coordinations,
     pi_pi,
     cat_pi,
     electrostatic_energies,
@@ -76,6 +77,7 @@ def _write_main(
             halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
+        TODO: metal_coordinations
         pi_pi (dict): A dictionary containing information about the pi-pi
             (stacking and T-shaped) protein/ligand interactions.
         cat_pi (dict): A dictionary containing information about the pi-cation
@@ -98,6 +100,7 @@ def _write_main(
         hydrogen_bonds,
         halogen_bonds,
         salt_bridges,
+        metal_coordinations,
         pi_pi,
         cat_pi,
         electrostatic_energies,
@@ -117,6 +120,7 @@ def _write_main(
         hydrogen_bonds,
         halogen_bonds,
         salt_bridges,
+        metal_coordinations,
         pi_pi,
         cat_pi,
         electrostatic_energies,
@@ -145,6 +149,7 @@ def _write_main(
             hydrogen_bonds,
             halogen_bonds,
             salt_bridges,
+            metal_coordinations,
             pi_pi,
             cat_pi,
             active_site_flexibility,
@@ -165,6 +170,7 @@ def _write_main(
             pi_pi,
             cat_pi,
             salt_bridges,
+            metal_coordinations,
             ligand,
             receptor,
         )

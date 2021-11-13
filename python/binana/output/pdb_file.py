@@ -38,6 +38,7 @@ def write(
     hydrogen_bonds=None,
     halogen_bonds=None,
     salt_bridges=None,
+    metal_coordinations=None,
     pi_pi=None,
     cat_pi=None,
     active_site_flexibility=None,
@@ -67,6 +68,7 @@ def write(
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
             None.
+        TODO: metal_coordinations
         pi_pi (dict, optional): A dictionary containing information about the
             pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
             to None.
@@ -104,6 +106,7 @@ def write(
         + '"HYD" indicates hydrophobic contacts between the protein and ligand. '
         + '"HBN" indicates hydrogen bonds. "HAL" indicates halogen bonds. "SAL" indicates salt bridges. '
         + '"PIS" indicates pi-pi stacking interactions, "PIT" indicates T-stacking interactions, and "PIC" indicates cation-pi interactions. '
+        + '"MTL" indicates metal-coordination interactions. '
         + 'Protein residue names are unchanged, but the ligand residue is now named "LIG".'
     )
 
@@ -191,6 +194,10 @@ def write(
     if salt_bridges is not None:
         salt_bridges["mol"].set_resname("SAL")
         log_output = log_output + salt_bridges["mol"].save_pdb_string() + "TER\n"
+
+    if metal_coordinations is not None:
+        metal_coordinations["mol"].set_resname("MTL")
+        log_output = log_output + metal_coordinations["mol"].save_pdb_string() + "TER\n"
 
     if as_str:
         return log_output

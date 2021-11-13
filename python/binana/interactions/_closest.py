@@ -47,23 +47,23 @@ def get_closest(ligand, receptor, cutoff=None):
     closest_contacts_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, cutoff)
 
     # Identify closest contacts
     for ligand_atom, receptor_atom, dist in ligand_receptor_dists:
-        if dist < cutoff:
-            # less than 2.5 A
-            list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
-            hashtable_entry_add_one(
-                ligand_receptor_atom_type_pairs_closest,
-                list_alphebetize_and_combine(list_ligand_atom),
-            )
-            pdb_closest_contacts.add_new_atom(ligand_atom.copy_of())
-            pdb_closest_contacts.add_new_atom(receptor_atom.copy_of())
+        # if dist < cutoff:
+        # less than 2.5 A
+        list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
+        hashtable_entry_add_one(
+            ligand_receptor_atom_type_pairs_closest,
+            list_alphebetize_and_combine(list_ligand_atom),
+        )
+        pdb_closest_contacts.add_new_atom(ligand_atom.copy_of())
+        pdb_closest_contacts.add_new_atom(receptor_atom.copy_of())
 
-            closest_contacts_labels.append(
-                (ligand_atom.string_id(), receptor_atom.string_id())
-            )
+        closest_contacts_labels.append(
+            (ligand_atom.string_id(), receptor_atom.string_id())
+        )
 
     return {
         "counts": ligand_receptor_atom_type_pairs_closest,

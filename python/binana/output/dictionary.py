@@ -314,6 +314,49 @@ def _collect_salt_bridge(salt_bridge_interactions, json_output):
         i += 1
 
 
+def _collect_metal_coordinations(metal_coordinations_interactions, json_output):
+    # reset counter for interaction
+    i = 0
+    # metal coordination interactions
+    for metal_coord_atoms in metal_coordinations_interactions:
+        # add new dictionary to salt_bridges list
+        json_output["metalCoordinations"].append({})
+
+        # parse atom_pairs into individual atoms
+        metal_atom = metal_coord_atoms[0]
+        metal_atoms_details = re.split(r"[\[\]():]", metal_atom)
+
+        coord_atoms = metal_coord_atoms[1]
+        coord_atoms_details = [
+            re.split(r"[\[\]():]", atom) for atom in coord_atoms if atom != ""
+        ]
+
+        # remove whitespace
+        metal_atoms_details = [d for d in metal_atoms_details if d != ""]
+        # for detail_list in metal_atoms_details:
+        #     for detail in detail_list:
+        #         if detail == "":
+        #             detail_list.remove(detail)
+        for j, detail_list in enumerate(coord_atoms_details):
+            coord_atoms_details[j] = [d for d in detail_list if d != ""]
+
+        # add each detail to the appropriate key in ligand_atoms and receptor_atoms
+        # add "metalAtoms" and "coordinatingAtoms" keys to dictionary
+        json_output["metalCoordinations"][i] = {
+            "metalAtoms": [],
+            "coordinatingAtoms": [],
+        }
+        json_output["metalCoordinations"][i]["metalAtoms"].append(
+            _atom_details_to_dict(metal_atoms_details)
+        )
+        for detail in coord_atoms_details:
+            json_output["metalCoordinations"][i]["coordinatingAtoms"].append(
+                _atom_details_to_dict(detail)
+            )
+        # increment counter
+        i += 1
+
+
 # json output
 def collect(
     closest=None,
@@ -322,6 +365,7 @@ def collect(
     hydrogen_bonds=None,
     halogen_bonds=None,
     salt_bridges=None,
+    metal_coordinations=None,
     pi_pi=None,
     cat_pi=None,
     electrostatic_energies=None,
@@ -349,6 +393,7 @@ def collect(
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
             None.
+        TODO: metal_coordinations
         pi_pi (dict, optional): A dictionary containing information about the
             pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
             to None.
@@ -400,6 +445,9 @@ def collect(
     if salt_bridges is not None:
         json_output["saltBridges"] = []
         _collect_salt_bridge(salt_bridges["labels"], json_output)
+    if metal_coordinations is not None:
+        json_output["metalCoordinations"] = []
+        _collect_metal_coordinations(metal_coordinations["labels"], json_output)
 
     # For flexibility and electrostatics, just return the counts
     if active_site_flexibility is not None:

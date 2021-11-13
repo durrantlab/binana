@@ -72,6 +72,22 @@ let computedFunctions = {
                 val: val
             })
         }
+    },
+
+    "legendItems"() {
+        let legendItems = this.$store.state["legendItems"];
+        
+        legendItems = legendItems.filter((l) => {
+            let interactionName = l["interactionName"];
+            return this.$store.state["bondTypesDetected"][interactionName];
+        });
+        
+        legendItems = legendItems.map((l) => {
+            delete l["interactionName"];
+            return l;
+        });
+        
+        return legendItems;
     }
 
 }
@@ -603,151 +619,160 @@ export function setup(): void {
                     </form-group>
 
                     <b-container
-                        v-if="$store.state.receptorContents != '' && $store.state.ligandContents != '' && $store.state.filesToSave != '{}'"
+                        v-if="($store.state.receptorContents != '') && ($store.state.ligandContents != '')"
                     >
-                        <b-row no-gutters>
-                            <b-col no-gutters>
-                                <b-dropdown variant="primary" text="Common" block>
-                                    <b-dropdown-item @click="updateHighlight('hydrogenBonds');">
-                                        <check-mark :value="getInteractionVisibility('hydrogenBonds')">
-                                            <div class="centerMenuItem" style="width:115px;">
-                                                Hydrogen Bonds
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('halogenBonds');">
-                                        <check-mark :value="getInteractionVisibility('halogenBonds')">
-                                            <div class="centerMenuItem" style="width:115px;">
-                                                Halogen Bonds
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('hydrophobicContacts');">
-                                        <check-mark :value="getInteractionVisibility('hydrophobicContacts')">
-                                            <div class="centerMenuItem" style="width:115px;">
-                                                Hydrophobic
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('saltBridges');">
-                                        <check-mark :value="getInteractionVisibility('saltBridges')">
-                                            <div class="centerMenuItem" style="width:115px;">
-                                                Salt Bridge
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </b-col>
-                            <b-col no-gutters>
-                                <b-dropdown variant="primary" text="Contacts" block>
-                                    <b-dropdown-item @click="updateHighlight('closeContacts');">
-                                        <check-mark :value="getInteractionVisibility('closeContacts')">
-                                            <div class="centerMenuItem" style="width:55px;">
-                                                Close
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('closestContacts');">
-                                        <check-mark :value="getInteractionVisibility('closestContacts')">
-                                            <div class="centerMenuItem" style="width:55px;">
-                                                Closest
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </b-col>
-                            <b-col no-gutters>
-                                <b-dropdown variant="primary" text="Aromatic" block>
-                                    <b-dropdown-item @click="updateHighlight('piPiStackingInteractions');">
-                                        <check-mark :value="getInteractionVisibility('piPiStackingInteractions')">
-                                            <div class="centerMenuItem" style="width:95px;">
-                                                π-π Stacking
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('tStackingInteractions');">
-                                        <check-mark :value="getInteractionVisibility('tStackingInteractions')">
-                                            <div class="centerMenuItem" style="width:95px;">
-                                                T Shaped
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                    <b-dropdown-item @click="updateHighlight('cationPiInteractions');">
-                                        <check-mark :value="getInteractionVisibility('cationPiInteractions')">
-                                            <div class="centerMenuItem" style="width:95px;">
-                                                Cation-π
-                                            </div>
-                                        </check-mark>
-                                    </b-dropdown-item>
-                                </b-dropdown>
-                            </b-col>
-                            <b-col no-gutters>
-                                <b-button variant="primary" @click="clearInteraction();" block>Reset</b-button>
-                            </b-col>
-                        </b-row>
-                        <b-row no-gutters>
-                            <!-- 
-                            DEPRECIATED, but leave commented out in case you
-                            bring it back in the future.
-                            <b-col no-gutters @click="updateHighlight();">
-                                <b-button @click="onChangeColor();" block>
-                                    {{colorByInteractionBtnTxt}}
-                                </b-button>
-                            </b-col>
-                            -->
-                            <!--
-                            DEPRECIATED, but leave comented out in case you
-                            bring it back in the future.
-                            <b-col no-gutters>
-                                <b-button @click="onBondVisChange();" block v-html="bondVisBtnTxt">
-                                </b-button>
-                            </b-col>
-                            -->
-                            <b-col no-gutters>
-                                <b-button @click="onSaveFiles();" block>
-                                    Save
-                                </b-button>
-                            </b-col>
-                        </b-row>
-                        
-                        <b-table striped small :items="$store.state.legendItems">
-                            <template #cell(Representation)="data">
-                                <span v-html="data.value"></span>
-                            </template>
-                            <template #cell(Name)="data">
-                                <span v-html="data.value"></span>
-                            </template>
-                        </b-table>
-
-                        <b-alert show variant="warning" v-if="$store.state.showMissingHydrogensWarning">
-                            Do both your files include hydrogen atoms? You can
-                            further improve BINANA accuracy by adding them. 
-                            To add hydrogen atoms to your receptor, consider using
-                            <a href="http://molprobity.biochem.duke.edu/"
-                            target="_blank">MolProbity</a> or
-                            <a href="http://server.poissonboltzmann.org/"
-                            target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
-                            ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
-                            target="_blank">Gypsum-DL</a> or <a
-                            href="https://avogadro.cc/docs/menus/build-menu/"
-                            target="_blank">Avogadro</a>.
-
+                        <div 
+                            v-if="JSON.stringify($store.state.filesToSave) == '{}'"
+                            style="font-weight:bold;text-align:center;"
+                        >
                             <br /><br />
+                            Identifying interactions...
+                        </div>
+                        <span v-else>
+                            <b-row no-gutters>
+                                <b-col no-gutters>
+                                    <b-dropdown variant="primary" text="Common" block>
+                                        <b-dropdown-item @click="updateHighlight('hydrogenBonds');">
+                                            <check-mark :value="getInteractionVisibility('hydrogenBonds')">
+                                                <div class="centerMenuItem" style="width:115px;">
+                                                    Hydrogen Bonds
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('halogenBonds');">
+                                            <check-mark :value="getInteractionVisibility('halogenBonds')">
+                                                <div class="centerMenuItem" style="width:115px;">
+                                                    Halogen Bonds
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('hydrophobicContacts');">
+                                            <check-mark :value="getInteractionVisibility('hydrophobicContacts')">
+                                                <div class="centerMenuItem" style="width:115px;">
+                                                    Hydrophobic
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('saltBridges');">
+                                            <check-mark :value="getInteractionVisibility('saltBridges')">
+                                                <div class="centerMenuItem" style="width:115px;">
+                                                    Salt Bridge
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                    </b-dropdown>
+                                </b-col>
+                                <b-col no-gutters>
+                                    <b-dropdown variant="primary" text="Contacts" block>
+                                        <b-dropdown-item @click="updateHighlight('closeContacts');">
+                                            <check-mark :value="getInteractionVisibility('closeContacts')">
+                                                <div class="centerMenuItem" style="width:55px;">
+                                                    Close
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('closestContacts');">
+                                            <check-mark :value="getInteractionVisibility('closestContacts')">
+                                                <div class="centerMenuItem" style="width:55px;">
+                                                    Closest
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                    </b-dropdown>
+                                </b-col>
+                                <b-col no-gutters>
+                                    <b-dropdown variant="primary" text="Aromatic" block>
+                                        <b-dropdown-item @click="updateHighlight('piPiStackingInteractions');">
+                                            <check-mark :value="getInteractionVisibility('piPiStackingInteractions')">
+                                                <div class="centerMenuItem" style="width:95px;">
+                                                    π-π Stacking
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('tStackingInteractions');">
+                                            <check-mark :value="getInteractionVisibility('tStackingInteractions')">
+                                                <div class="centerMenuItem" style="width:95px;">
+                                                    T Shaped
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('cationPiInteractions');">
+                                            <check-mark :value="getInteractionVisibility('cationPiInteractions')">
+                                                <div class="centerMenuItem" style="width:95px;">
+                                                    Cation-π
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                    </b-dropdown>
+                                </b-col>
+                                <b-col no-gutters>
+                                    <b-button variant="primary" @click="clearInteraction();" block>Reset</b-button>
+                                </b-col>
+                            </b-row>
+                            <b-row no-gutters>
+                                <!-- 
+                                DEPRECIATED, but leave commented out in case you
+                                bring it back in the future.
+                                <b-col no-gutters @click="updateHighlight();">
+                                    <b-button @click="onChangeColor();" block>
+                                        {{colorByInteractionBtnTxt}}
+                                    </b-button>
+                                </b-col>
+                                -->
+                                <!--
+                                DEPRECIATED, but leave comented out in case you
+                                bring it back in the future.
+                                <b-col no-gutters>
+                                    <b-button @click="onBondVisChange();" block v-html="bondVisBtnTxt">
+                                    </b-button>
+                                </b-col>
+                                -->
+                                <b-col no-gutters>
+                                    <b-button @click="onSaveFiles();" block>
+                                        Save
+                                    </b-button>
+                                </b-col>
+                            </b-row>
+                            
+                            <b-table striped small :items="legendItems">
+                                <template #cell(Representation)="data">
+                                    <span v-html="data.value"></span>
+                                </template>
+                                <template #cell(Name)="data">
+                                    <span v-html="data.value"></span>
+                                </template>
+                            </b-table>
 
-                            You may also get this warning if one or more of your files is
-                            improperly formatted.
-                        </b-alert>
+                            <b-alert show variant="warning" v-if="$store.state.showMissingHydrogensWarning">
+                                Do both your files include hydrogen atoms? You can
+                                further improve BINANA accuracy by adding them. 
+                                To add hydrogen atoms to your receptor, consider using
+                                <a href="http://molprobity.biochem.duke.edu/"
+                                target="_blank">MolProbity</a> or
+                                <a href="http://server.poissonboltzmann.org/"
+                                target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
+                                ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+                                target="_blank">Gypsum-DL</a> or <a
+                                href="https://avogadro.cc/docs/menus/build-menu/"
+                                target="_blank">Avogadro</a>.
+
+                                <br /><br />
+
+                                You may also get this warning if one or more of your files is
+                                improperly formatted.
+                            </b-alert>
 
 
-                        <!--
-                        DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this 
-                        commented in case you want to bring it back.
-                        <b-row v-if="this.$store.state.colorMessage !== ''" no-gutters>
-                            <b-col no-gutters>
-                                <p style="text-align:center;">({{this.$store.state.colorMessage}})</p>
-                            </b-col>
-                        </b-row>
-                        -->
+                            <!--
+                            DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this 
+                            commented in case you want to bring it back.
+                            <b-row v-if="this.$store.state.colorMessage !== ''" no-gutters>
+                                <b-col no-gutters>
+                                    <p style="text-align:center;">({{this.$store.state.colorMessage}})</p>
+                                </b-col>
+                            </b-row>
+                            -->
+                        </span>
                     </b-container>
                 </sub-section>
 

@@ -9,12 +9,11 @@ def hashtable_entry_add_one(hashtable, key, toadd=None):
     # note that dictionaries (hashtables) are passed by reference in
     # python
 
-    toadd = _set_default(toadd, 1)
+    # This is to keep track of the different kinds of interactions (counts), I
+    # think.
 
-    if key in hashtable:
-        hashtable[key] = hashtable[key] + toadd
-    else:
-        hashtable[key] = toadd
+    toadd = _set_default(toadd, 1)
+    hashtable[key] = hashtable[key] + toadd if key in hashtable else toadd
 
 
 def list_alphebetize_and_combine(list_obj):

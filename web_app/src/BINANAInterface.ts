@@ -149,6 +149,19 @@ export function start(pdbtxt: string, ligtxt: string): void {
             binanaFiles = e.data;
             binanaData = JSON.parse(binanaFiles["output.json"]);
 
+            // Summarize which bonds were detected. Good for determining which
+            // bond types should be listed in the table legend, for example.
+            let bondTypes = Object.keys(binanaData);
+            let bondTypesDetectedVals = bondTypes.map(k => binanaData[k].length !== 0);
+            let bondTypesDetected = {};
+            for (let i = 0; i < bondTypes.length; i++) {
+                bondTypesDetected[bondTypes[i]] = bondTypesDetectedVals[i];
+            }
+            Store.store.commit("setVar", {
+                name: "bondTypesDetected",
+                val: bondTypesDetected
+            });
+
             // Update the store too.
             // Store.store.commit("setVar", {
             //     name: "jsonOutput",
@@ -337,24 +350,26 @@ function drawCylinders(interactionType: any[], interactionName: string): void {
 
     if (["hydrogenBonds", "halogenBonds"].indexOf(interactionName) !== -1) {
         let hBondHeavyAtomPairs = interactionTypeAtoms.map(i => [
-            [2 - i[0].length, i[0].filter(a => a["elem"] !== "H")[0]],
-            [2 - i[1].length, i[1].filter(a => a["elem"] !== "H")[0]]
+            [2 - i[0].length, i[0].filter(a => a !== undefined && a["elem"] !== "H")[0]],
+            [2 - i[1].length, i[1].filter(a => a !== undefined && a["elem"] !== "H")[0]]
         ]);
         hBondHeavyAtomPairs = hBondHeavyAtomPairs.map(i => i.sort().map(i2 => i2[1]));
     
         for (let i = 0; i < hBondHeavyAtomPairs.length; i++){
-            // viewer["addCylinder"]({
-            viewer["addArrow"]({
-                "dashed": true,
-                "start": {"x": hBondHeavyAtomPairs[i][0]["x"], "y": hBondHeavyAtomPairs[i][0]["y"], "z": hBondHeavyAtomPairs[i][0]["z"]},
-                "end": {"x": hBondHeavyAtomPairs[i][1]["x"], "y": hBondHeavyAtomPairs[i][1]["y"], "z": hBondHeavyAtomPairs[i][1]["z"]},
-                "radius": 0.125, // 0.1,
-                "radiusRatio": 3.0,
-                "mid": 0.7,
-                "fromCap": 2,
-                "toCap": 2,
-                "color": interactionsInfo[interactionName].colorHex // 'black'
-            });
+            if (hBondHeavyAtomPairs[i][0] !== undefined && hBondHeavyAtomPairs[i][1] !== undefined) {
+                // viewer["addCylinder"]({
+                viewer["addArrow"]({
+                    "dashed": true,
+                    "start": {"x": hBondHeavyAtomPairs[i][0]["x"], "y": hBondHeavyAtomPairs[i][0]["y"], "z": hBondHeavyAtomPairs[i][0]["z"]},
+                    "end": {"x": hBondHeavyAtomPairs[i][1]["x"], "y": hBondHeavyAtomPairs[i][1]["y"], "z": hBondHeavyAtomPairs[i][1]["z"]},
+                    "radius": 0.125, // 0.1,
+                    "radiusRatio": 3.0,
+                    "mid": 0.7,
+                    "fromCap": 2,
+                    "toCap": 2,
+                    "color": interactionsInfo[interactionName].colorHex // 'black'
+                });
+            }
         }
     } else {
         // If not hydrogen bond, just line between geometric centers.
@@ -487,7 +502,15 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
         }
         idxOfAtomsSeen.add(atomInf["atomIndex"]);
         let atom = atomInfTo3DMolAtom(mol, atomInf);
+        if (atom === undefined) {
+            // This happens is PDB fed to binana doesn't match one in viewport.
+            // For example, you removed water molcules in web interface, but PDB
+            // fed to BINANA still includes water molecules.
+            continue;
+        }
+
         let radius = vdwRadii[atom["elem"]];
+
         radius = radius === undefined ? 1.5 : radius;
 
         atomObjsRadiiColors.push([atom, radius, color])
@@ -542,6 +565,7 @@ export function highlightAll(): void {
                     interactionInfo.representation
                         .replace(/COLOR/g, `<span style="font-weight:bold; color:${interactionInfo.colorHex}; text-shadow: 1px 1px 2px #555555;">${interactionInfo.color}</span>`)
                 ) + ".",
+                "interactionName": interactionName
                 // "Link": interactionInfo.link
             });
         }

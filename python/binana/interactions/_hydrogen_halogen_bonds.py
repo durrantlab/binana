@@ -36,20 +36,12 @@ def _get_potential_donors_acceptors(ligand, receptor, dist_cutoff):
     # Any that are close to each other (not considering orientation yet).
 
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, dist_cutoff, ["O", "N"])
 
-    # Get all donor-acceptor pairs that are near each other.
-    close_donors_acceptors = [
+    return [
         [ligand_atom, receptor_atom]
         for ligand_atom, receptor_atom, dist in ligand_receptor_dists
-        if (
-            dist < dist_cutoff
-            and ligand_atom.element in ["O", "N"]
-            and receptor_atom.element in ["O", "N"]
-        )
     ]
-
-    return close_donors_acceptors
 
 
 def _update_mol_and_data(
@@ -142,7 +134,7 @@ def get_hydrogen_or_halogen_bonds(
 
     # Check if hydrogen atoms added.
     lig_and_recep_have_hydrogens = ligand.has_hydrogens and receptor.has_hydrogens
-
+    
     # Get all donor-acceptor pairs that are near each other.
     close_donors_acceptors = _get_potential_donors_acceptors(
         ligand, receptor, dist_cutoff
@@ -171,10 +163,6 @@ def get_hydrogen_or_halogen_bonds(
                 if lig_donor_or_accept == "DONOR"
                 else accept_center_atom
             )
-
-            import pdb
-
-            pdb.set_trace()
 
             # Now that you've got the atoms, check the angles if appropriate.
             if lig_and_recep_have_hydrogens or not hydrogen_bond:

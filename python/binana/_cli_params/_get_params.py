@@ -21,6 +21,7 @@ from binana.interactions.default_params import (
     PI_PADDING_DIST,
     PI_PI_INTERACTING_DIST_CUTOFF,
     PI_STACKING_ANGLE_TOLERANCE,
+    METAL_COORDINATION_CUTOFF,
     RECEPTOR,
     SALT_BRIDGE_DIST_CUTOFF,
     T_STACKING_ANGLE_TOLERANCE,
@@ -49,8 +50,7 @@ class CommandLineParameters:
 
     def is_num(self, num):
         try:
-            t = float(num)
-            return t
+            return float(num)
         except ValueError:
             return num
 
@@ -73,6 +73,7 @@ class CommandLineParameters:
         self.params["T_stacking_closest_dist_cutoff"] = T_STACKING_CLOSEST_DIST_CUTOFF
         self.params["cation_pi_dist_cutoff"] = CATION_PI_DIST_CUTOFF
         self.params["salt_bridge_dist_cutoff"] = SALT_BRIDGE_DIST_CUTOFF
+        self.params["metal_coordination_dist_cutoff"] = METAL_COORDINATION_CUTOFF
         self.params["receptor"] = RECEPTOR
         self.params["ligand"] = LIGAND
         self.params["output_dir"] = OUTPUT_DIR
@@ -118,7 +119,4 @@ class CommandLineParameters:
 
     def okay_to_proceed(self):
         # at the very least, you need the ligand and the receptor
-        if self.params["receptor"] != "" and self.params["ligand"] != "":
-            return True
-        else:
-            return False
+        return self.params["receptor"] != "" and self.params["ligand"] != ""

@@ -65,6 +65,7 @@ def _get_all_interactions(parameters):
         parameters.params["T_stacking_closest_dist_cutoff"],
         parameters.params["cation_pi_dist_cutoff"],
         parameters.params["salt_bridge_dist_cutoff"],
+        parameters.params["metal_coordination_dist_cutoff"],
         pi_padding,
     )
 
@@ -84,6 +85,7 @@ def _get_all_interactions(parameters):
         all_interacts["hydrogen_bonds"],
         all_interacts["halogen_bonds"],
         all_interacts["salt_bridges"],
+        all_interacts["metal_coordinations"],
         all_interacts["pi_pi"],
         all_interacts["cat_pi"],
         all_interacts["electrostatic_energies"],

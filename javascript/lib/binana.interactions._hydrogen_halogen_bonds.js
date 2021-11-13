@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-09 23:51:07
+// Transcrypt'ed from Python, 2021-11-12 01:16:45
 var __future__ = {};
 var binana = {};
 var math = {};
@@ -22,17 +22,16 @@ import {HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF} f
 import {_set_default} from './binana._utils.shim.js';
 var __name__ = 'binana.interactions._hydrogen_halogen_bonds';
 export var _get_potential_donors_acceptors = function (ligand, receptor, dist_cutoff) {
-	var ligand_receptor_dists = _get_ligand_receptor_dists (ligand, receptor);
-	var close_donors_acceptors = (function () {
+	var ligand_receptor_dists = _get_ligand_receptor_dists (ligand, receptor, dist_cutoff);
+	return (function () {
 		var __accu0__ = [];
 		for (var [ligand_atom, receptor_atom, dist] of ligand_receptor_dists) {
-			if (dist < dist_cutoff && __in__ (ligand_atom.element, ['O', 'N']) && __in__ (receptor_atom.element, ['O', 'N'])) {
+			if (__in__ (ligand_atom.element, ['O', 'N']) && __in__ (receptor_atom.element, ['O', 'N'])) {
 				__accu0__.append ([ligand_atom, receptor_atom]);
 			}
 		}
 		return __accu0__;
 	}) ();
-	return close_donors_acceptors;
 };
 export var _update_mol_and_data = function (pdb_hbonds, hbonds, hbonds_labels, lig_donor_or_accept, receptor_atom, ligand_atom, center_atom) {
 	var comment = (lig_donor_or_accept == 'ACCEPTOR' ? 'RECEPTOR' : 'LIGAND');

@@ -38,6 +38,8 @@ from binana.interactions import _flexibility
 from binana.interactions import _electrostatic_energies
 from binana.interactions import _close
 from binana.interactions import _closest
+from binana.interactions import _metal_coordination
+from binana.interactions.default_params import METAL_COORDINATION_CUTOFF
 
 
 def get_cation_pi(ligand, receptor, cutoff=None, pi_padding=None):
@@ -433,9 +435,12 @@ def get_closest(ligand, receptor, cutoff=None):
     """
 
     cutoff = _set_default(cutoff, CLOSE_CONTACTS_DIST1_CUTOFF)
-
     return _closest.get_closest(ligand, receptor, cutoff)
 
+def get_metal_coordinations(ligand, receptor, cutoff=None):
+    # TODO: Missing docstring here!!!
+    cutoff = _set_default(cutoff, METAL_COORDINATION_CUTOFF)
+    return _metal_coordination.get_metal_coordination(ligand, receptor, cutoff)
 
 def get_all_interactions(
     ligand,
@@ -453,6 +458,7 @@ def get_all_interactions(
     t_stacking_closest_dist_cutoff=None,
     cation_pi_dist_cutoff=None,
     salt_bridge_dist_cutoff=None,
+    metal_coordination_dist_cutoff=None,
     pi_padding=None,
 ):
     """A single function to identify and characterize all BINANA-supported
@@ -470,6 +476,7 @@ def get_all_interactions(
             "pi_pi": ...,
             "cat_pi": ...,
             "salt_bridges": ...,
+            "metal_coordinations": ...,
         }
 
     where each `...` is a dictionary containing the corresponding interaction
@@ -510,6 +517,7 @@ def get_all_interactions(
             cutoff. Defaults to CATION_PI_DIST_CUTOFF.
         salt_bridge_dist_cutoff (float, optional): The salt-bridge distance
             cutoff. Defaults to SALT_BRIDGE_DIST_CUTOFF.
+        TODO: metal_coordination_dist_cutoff
         pi_padding (float, optional): The amount by which the radius of each pi
             ring should be artificially expanded, to be sure to catch the
             interactions. Defaults to PI_PADDING_DIST.
@@ -581,6 +589,12 @@ def get_all_interactions(
         False
     )
 
+    metal_coordinations = get_metal_coordinations(
+        ligand,
+        receptor,
+        metal_coordination_dist_cutoff
+    )
+
     ligand_atom_types = get_ligand_atom_types(ligand)
 
     # Count pi-pi stacking and pi-T stacking interactions
@@ -615,5 +629,6 @@ def get_all_interactions(
         "pi_pi": pi_pi,
         "cat_pi": cat_pi,
         "salt_bridges": salt_bridges,
+        "metal_coordinations": metal_coordinations,
         "ligand_rotatable_bonds": num_lig_rot_bonds,
     }

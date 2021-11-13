@@ -50,26 +50,21 @@ def get_hydrophobics(ligand, receptor, cutoff=None):
     hydrophobic_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, cutoff, ["C"])
 
     # Now see if there's hydrophobic contacts (C-C contacts)
     for ligand_atom, receptor_atom, dist in ligand_receptor_dists:
-        if (
-            dist < cutoff
-            and ligand_atom.element == "C"
-            and receptor_atom.element == "C"
-        ):
-            hydrophobic_key = (
-                receptor_atom.side_chain_or_backbone() + "_" + receptor_atom.structure
-            )
-            pdb_hydrophobic.add_new_atom(ligand_atom.copy_of())
-            pdb_hydrophobic.add_new_atom(receptor_atom.copy_of())
+        hydrophobic_key = (
+            receptor_atom.side_chain_or_backbone() + "_" + receptor_atom.structure
+        )
+        pdb_hydrophobic.add_new_atom(ligand_atom.copy_of())
+        pdb_hydrophobic.add_new_atom(receptor_atom.copy_of())
 
-            hashtable_entry_add_one(hydrophobics, hydrophobic_key)
+        hashtable_entry_add_one(hydrophobics, hydrophobic_key)
 
-            hydrophobic_labels.append(
-                (ligand_atom.string_id(), receptor_atom.string_id())
-            )
+        hydrophobic_labels.append(
+            (ligand_atom.string_id(), receptor_atom.string_id())
+        )
 
     return {
         "counts": hydrophobics,

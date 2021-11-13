@@ -5,8 +5,8 @@
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import SALT_BRIDGE_DIST_CUTOFF
 import binana
-from binana.load_ligand_receptor import _get_ligand_receptor_dists
-from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
+# from binana.load_ligand_receptor import _get_ligand_receptor_dists
+from binana._utils.utils import hashtable_entry_add_one # , list_alphebetize_and_combine
 from binana._structure.mol import Mol
 
 # Be sure to update the corresponding function in

@@ -15,6 +15,7 @@ from binana._utils._math_functions import (
     dihedral,
 )
 from binana._utils.shim import _set_default
+from binana._structure.consts import _max_donor_X_dist, _alternate_protein_resname, _protein_hydro_bond_donors, protein_resnames, _required_protein_atom_names
 
 # __pragma__ ('skip')
 # Python
@@ -38,90 +39,6 @@ from binana._utils.shim import OpenFile as openFile
 Class Mol handles PDB filing
 """
 
-# The maximum distance between a hydrogen- or halogen-bond donor and the middle
-# (central atom), but it H or X. O-H distance is 0.96 A, N-H is 1.01 A. See
-# http://www.science.uwaterloo.ca/~cchieh/cact/c120/bondel.html
-_max_donor_X_dist = {
-    "H": 1.3,
-    "I": 2.04 * 1.4,  # O-I: 2.04 per avogadro
-    "BR": 1.86 * 1.4,  # O-Br: 1.86
-    "Br": 1.86 * 1.4,
-    "CL": 1.71 * 1.4,  # O-Cl: 1.71
-    "Cl": 1.71 * 1.4,
-    "F": 1.33 * 1.4,  # O-F: 1.33
-}
-
-_alternate_protein_resname = {
-    "LYS": ["LYS", "LYN"],
-    "HIS": ["HIS", "HID", "HIE", "HIP"],
-    "GLU": ["GLU", "GLH", "GLX"],
-    "ASP": ["ASP", "ASH", "ASX"],
-}
-
-# Information about protein atoms that can be hydrogen-bond donors. Useful for
-# when hydrogen atoms haven't been added to the protein model.
-# TODO: CYS??? SH
-_protein_hydro_bond_donors = [
-    [["ARG"], ["NE", "NH1", "NH2"]],
-    [_alternate_protein_resname["HIS"], ["NE2", "ND1"]],
-    [_alternate_protein_resname["LYS"], ["NZ"]],
-    [["SER"], ["OG"]],
-    [["THR"], ["OG1"]],
-    [["ASN"], ["ND2"]],
-    [["GLN"], ["NE2"]],
-    [["TYR"], ["OH"]],
-    [["TRP"], ["NE1"]],
-]
-
-protein_resnames = [
-    "ALA",
-    "ARG",
-    "ASN",
-    "ASP",
-    "ASH",
-    "ASX",
-    "CYS",
-    "CYM",
-    "CYX",
-    "GLN",
-    "GLU",
-    "GLH",
-    "GLX",
-    "GLY",
-    "HIS",
-    "HID",
-    "HIE",
-    "HIP",
-    "ILE",
-    "LEU",
-    "LYS",
-    "LYN",
-    "MET",
-    "PHE",
-    "PRO",
-    "SER",
-    "THR",
-    "TRP",
-    "TYR",
-    "VAL",
-]
-
-# Specifies names that must be present in protein residues. Will throw a warning
-# otherwise. Important for detecting charged groups and hydrogen bonds in some
-# cases.
-_required_protein_atom_names = [
-    [_alternate_protein_resname["GLU"], ["OE1", "OE2"]],
-    [_alternate_protein_resname["ASP"], ["OD1", "OD2"]],
-    [["ARG"], ["NH1", "NH2", "NE"]],
-    [_alternate_protein_resname["HIS"], ["NE2", "ND1"]],
-    [["PHE"], ["CG", "CD1", "CD2", "CE1", "CE2", "CZ"]],
-    [["TYR"], ["CG", "CD1", "CD2", "CE1", "CE2", "CZ", "OH"]],
-    [["TRP"], ["CG", "CD1", "CD2", "NE1", "CE2", "CE3", "CZ2", "CZ3", "CH2"]],
-    [_alternate_protein_resname["HIS"], ["CG", "ND1", "CD2", "CE1", "NE2"]],
-    [_alternate_protein_resname["LYS"], ["NZ"]],
-]
-
-
 class Mol:
 
     # Initialize Mol
@@ -138,6 +55,7 @@ class Mol:
         self.aromatic_rings = []
         self.charges = []  # a list of points
         self.has_hydrogens = False
+        self.index_of_last_added_atom = -1
 
     def load_pdb_from_text(
         self,
@@ -182,13 +100,11 @@ class Mol:
                 t = textwrap.wrap(
                     "WARNING: END or ENDMDL term found in "
                     + filename_to_use
-                    + ". Everything after the first instance of this term will be ignored. \
-                    If any of your PDBQT files have multiple frames/poses, please partition them \
-                    into separate files using vina_split and feed each of the the single-frame files into Binana separately.",
+                    + ". Everything after the first instance of this term will be ignored. If any of your files have multiple frames/poses, please partition them into separate files using (e.g., using vina_split) and feed each of the the single-frame files into BINANA separately.",
                     80,
                 )
                 print(("\n".join(t) + "\n"))
-                print(line)
+                # print(line)
                 break
 
             if "between atoms" in line and " A " in line:
@@ -198,44 +114,49 @@ class Mol:
 
                 self.rotatable_bonds_count = self.rotatable_bonds_count + 1
 
-            if len(line) >= 7 and (line[0:4] == "ATOM" or line[0:6] == "HETATM"):
+            # if len(line) >= 7 and (line[0:4] == "ATOM" or line[0:6] == "HETATM"):
+            if line[0:4] == "ATOM" or line[0:6] == "HETATM":
                 # Load atom data (coordinates, etc.)
                 temp_atom = Atom()
                 temp_atom.read_pdb_line(line)
 
-                if temp_atom.element == "H":
+                if not self.has_hydrogens and temp_atom.element == "H":
                     self.has_hydrogens = True
 
+                temp_x = temp_atom.coordinates.x
+                temp_y = temp_atom.coordinates.y
+                temp_z = temp_atom.coordinates.z
+
                 if (
-                    temp_atom.coordinates.x > min_x
-                    and temp_atom.coordinates.x < max_x
-                    and temp_atom.coordinates.y > min_y
-                    and temp_atom.coordinates.y < max_y
-                    and temp_atom.coordinates.z > min_z
-                    and temp_atom.coordinates.z < max_z
+                    temp_x > min_x
+                    and temp_x < max_x
+                    and temp_y > min_y
+                    and temp_y < max_y
+                    and temp_z > min_z
+                    and temp_z < max_z
                 ):
 
-                    self.max_x = max(self.max_x, temp_atom.coordinates.x)
-                    self.max_y = max(self.max_y, temp_atom.coordinates.y)
-                    self.max_z = max(self.max_z, temp_atom.coordinates.z)
-                    self.min_x = min(self.min_x, temp_atom.coordinates.x)
-                    self.min_y = min(self.min_y, temp_atom.coordinates.y)
-                    self.min_z = min(self.min_z, temp_atom.coordinates.z)
+                    self.max_x = max(self.max_x, temp_x)
+                    self.max_y = max(self.max_y, temp_y)
+                    self.max_z = max(self.max_z, temp_z)
+                    self.min_x = min(self.min_x, temp_x)
+                    self.min_y = min(self.min_y, temp_y)
+                    self.min_z = min(self.min_z, temp_z)
+
+                    temp_residue = temp_atom.residue.strip()
+
                     # this string uniquely identifies each atom
                     key = (
                         temp_atom.atom_name.strip()
                         + "_"
                         + str(temp_atom.resid)
                         + "_"
-                        + temp_atom.residue.strip()
+                        + temp_residue
                         + "_"
                         + temp_atom.chain.strip()
                     )
 
-                    if (
-                        key in atom_already_loaded
-                        and temp_atom.residue.strip() in protein_resnames
-                    ):
+                    if key in atom_already_loaded and temp_residue in protein_resnames:
                         # so this is a protein atom that has already been
                         # loaded once
                         self.printout(
@@ -247,13 +168,12 @@ class Mol:
 
                     if (
                         key not in atom_already_loaded
-                        or temp_atom.residue.strip() not in protein_resnames
+                        or temp_residue not in protein_resnames
                     ):
-                        # So either the atom hasn't been loaded, or else
-                        # it's a non-protein atom So note that non-protein
-                        # atoms can have redundant names, but protein
-                        # atoms cannot. This is because protein residues
-                        # often contain rotamers
+                        # So either the atom hasn't been loaded, or else it's a
+                        # non-protein atom. So note that non-protein atoms can
+                        # have redundant names, but protein atoms cannot. This
+                        # is because protein residues often contain rotamers
 
                         # So each atom can only be loaded once. No rotamers.
                         atom_already_loaded.append(key)
@@ -355,19 +275,27 @@ class Mol:
     # Param self (Mol)
     # Param atom (binana._structure.atom.Atom): new atom being added
     def add_new_atom(self, atom):
-        # first get available index
-        t = 1
-        all_atom_keys = list(self.all_atoms.keys())
+        # first get available index, if it hasn't been saved
+        if self.index_of_last_added_atom == -1:
+            # First time.
 
-        """?
-        all_atom_keys = [int(k) for k in all_atom_keys]
-        ?"""
+            t = 1
+            all_atom_keys = list(self.all_atoms.keys())
 
-        while t in all_atom_keys:
-            t += 1
+            """?
+            all_atom_keys = [int(k) for k in all_atom_keys]
+            ?"""
+
+            while t in all_atom_keys:
+                t += 1
+
+            self.index_of_last_added_atom = t
 
         # now add atom
-        self.all_atoms[t] = atom
+        self.all_atoms[self.index_of_last_added_atom] = atom
+
+        # And increase index
+        self.index_of_last_added_atom = self.index_of_last_added_atom + 1
 
     # Assign residue name to atom
     # Param self (Mol)
@@ -437,7 +365,6 @@ class Mol:
             + '" in the protein residue '
             + residue.strip()
             + ". Please use standard naming conventions for all protein residues to improve BINANA accuracy."
-            
             #  Please use standard naming conventions for all protein residues. This atom is needed to determine secondary structure. If this residue is far from the active site, this warning may not affect the NNScore."
         )
         print("")
@@ -475,23 +402,28 @@ class Mol:
     # Define bonds between atoms using distance on the grid
     # Param self (Mol)
     def create_bonds_by_distance(self):
-        for atom_index1 in self.non_protein_atoms.keys():
+        non_protein_atoms = self.non_protein_atoms.keys()
+        for atom_index1 in non_protein_atoms:
             atom1 = self.non_protein_atoms[atom_index1]
-            if atom1.residue[-3:] not in protein_resnames:
-                # so it's not a protein residue
-                for atom_index2 in self.non_protein_atoms.keys():
-                    if atom_index1 != atom_index2:
-                        atom2 = self.non_protein_atoms[atom_index2]
-                        if atom2.residue[-3:] not in protein_resnames:
-                            # so it's not a protein residue
-                            dist = distance(atom1.coordinates, atom2.coordinates)
+            if atom1.residue[-3:] in protein_resnames:
+                continue
 
-                            if (
-                                dist
-                                < self.bond_length(atom1.element, atom2.element) * 1.2
-                            ):
-                                atom1.add_neighbor_atom_index(atom_index2)
-                                atom2.add_neighbor_atom_index(atom_index1)
+            # so it's not a protein residue
+            for atom_index2 in non_protein_atoms:
+                if atom_index1 == atom_index2:
+                    continue
+
+                atom2 = self.non_protein_atoms[atom_index2]
+                if atom2.residue[-3:] not in protein_resnames:
+                    # so it's not a protein residue
+                    dist = distance(atom1.coordinates, atom2.coordinates)
+
+                    if (
+                        dist
+                        < self.bond_length(atom1.element, atom2.element) * 1.2
+                    ):
+                        atom1.add_neighbor_atom_index(atom_index2)
+                        atom2.add_neighbor_atom_index(atom_index1)
 
     def update_distance(self, element1, element2, orig_distance, match):
         match_element1, match_element2, match_dist = match
@@ -512,94 +444,145 @@ class Mol:
         lengths would be incorrect, probably slight errors (<0.06) in the hundreds."""
 
         distance = 0.0
-        distance = self.update_distance(element1, element2, distance, ["C", "C", 1.53])
-        distance = self.update_distance(element1, element2, distance, ["N", "N", 1.425])
-        distance = self.update_distance(element1, element2, distance, ["O", "O", 1.469])
-        distance = self.update_distance(element1, element2, distance, ["S", "S", 2.048])
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "SI", 2.359]
-        )
 
-        distance = self.update_distance(element1, element2, distance, ["C", "H", 1.059])
-        distance = self.update_distance(element1, element2, distance, ["C", "N", 1.469])
-        distance = self.update_distance(element1, element2, distance, ["C", "O", 1.413])
-        distance = self.update_distance(element1, element2, distance, ["C", "S", 1.819])
-        distance = self.update_distance(element1, element2, distance, ["N", "H", 1.009])
-        distance = self.update_distance(element1, element2, distance, ["N", "O", 1.463])
-        distance = self.update_distance(element1, element2, distance, ["O", "S", 1.577])
-        distance = self.update_distance(element1, element2, distance, ["O", "H", 0.967])
+        # I'm going to put these in if statements just to try to speed things
+        # (avoid unnecessary function calls). It seems this is a speed bottle
+        # neck.
 
-        # This one not from source sited above. Not sure where it's from,
-        # but it wouldn't ever be used in the current context ("AutoGrow")
-        distance = self.update_distance(
-            element1, element2, distance, ["S", "H", 2.025 / 1.5]
-        )
+        elems = [element1, element2]
+        if "C" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "C", 1.53]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "H", 1.059]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "N", 1.469]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "O", 1.413]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "S", 1.819]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "F", 1.399]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "CL", 1.790]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "BR", 1.910]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["C", "I", 2.162]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "C", 1.888]
+            )
+        elif "O" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["O", "O", 1.469]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "O", 1.463]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["O", "S", 1.577]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["O", "H", 0.967]
+            )
 
-        distance = self.update_distance(element1, element2, distance, ["S", "N", 1.633])
+            # estimate based on eye balling Handbook of Chemistry and Physics
+            distance = self.update_distance(
+                element1, element2, distance, ["P", "O", 1.6]
+            )
 
-        distance = self.update_distance(element1, element2, distance, ["C", "F", 1.399])
-        distance = self.update_distance(
-            element1, element2, distance, ["C", "CL", 1.790]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["C", "BR", 1.910]
-        )
-        distance = self.update_distance(element1, element2, distance, ["C", "I", 2.162])
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "O", 1.631]
+            )
+        elif "N" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "N", 1.425]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "H", 1.009]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "N", 1.633]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "BR", 1.843]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "CL", 1.743]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "F", 1.406]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["N", "I", 2.2]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "N", 1.743]
+            )
+        elif "S" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "S", 2.048]
+            )
 
-        distance = self.update_distance(
-            element1, element2, distance, ["S", "BR", 2.321]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["S", "CL", 2.283]
-        )
-        distance = self.update_distance(element1, element2, distance, ["S", "F", 1.640])
-        distance = self.update_distance(element1, element2, distance, ["S", "I", 2.687])
+            # This one not from source sited above. Not sure where it's from,
+            # but it wouldn't ever be used in the current context ("AutoGrow")
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "H", 2.025 / 1.5]
+            )
 
-        distance = self.update_distance(
-            element1, element2, distance, ["P", "BR", 2.366]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["P", "CL", 2.008]
-        )
-        distance = self.update_distance(element1, element2, distance, ["P", "F", 1.495])
-        distance = self.update_distance(element1, element2, distance, ["P", "I", 2.490])
-
-        # estimate based on eye balling Handbook of Chemistry and Physics
-        distance = self.update_distance(element1, element2, distance, ["P", "O", 1.6])
-
-        distance = self.update_distance(
-            element1, element2, distance, ["N", "BR", 1.843]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["N", "CL", 1.743]
-        )
-        distance = self.update_distance(element1, element2, distance, ["N", "F", 1.406])
-        distance = self.update_distance(element1, element2, distance, ["N", "I", 2.2])
-
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "BR", 2.284]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "CL", 2.072]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "F", 1.636]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "P", 2.264]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "S", 2.145]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "C", 1.888]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "N", 1.743]
-        )
-        distance = self.update_distance(
-            element1, element2, distance, ["SI", "O", 1.631]
-        )
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "BR", 2.321]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "CL", 2.283]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "F", 1.640]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["S", "I", 2.687]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "S", 2.145]
+            )
+        elif "P" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["P", "BR", 2.366]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["P", "CL", 2.008]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["P", "F", 1.495]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["P", "I", 2.490]
+            )
+        elif "SI" in elems:
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "SI", 2.359]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "BR", 2.284]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "CL", 2.072]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "F", 1.636]
+            )
+            distance = self.update_distance(
+                element1, element2, distance, ["SI", "P", 2.264]
+            )
 
         return distance
 
@@ -1638,9 +1621,7 @@ class Mol:
                                 )
                             )
                             and (
-                                other_CA_atom.coordinates.dist_to(
-                                    CA_atom.coordinates
-                                )
+                                other_CA_atom.coordinates.dist_to(CA_atom.coordinates)
                                 < 6.0
                             )
                         ):  # so these two CA atoms are close enough together that their residues are probably hydrogen bonded

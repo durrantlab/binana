@@ -51,23 +51,22 @@ def get_close(ligand, receptor, cutoff=None):
     close_contacts_labels = []
 
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor)
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, cutoff)
 
-    # Identify close contacts
-    for ligand_atom, receptor_atom, dist in ligand_receptor_dists:
-        if dist < cutoff:
-            # less than 4 A
-            list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
-            hashtable_entry_add_one(
-                ligand_receptor_atom_type_pairs_close,
-                list_alphebetize_and_combine(list_ligand_atom),
-            )
-            pdb_close_contacts.add_new_atom(ligand_atom.copy_of())
-            pdb_close_contacts.add_new_atom(receptor_atom.copy_of())
+    for i, (ligand_atom, receptor_atom, dist) in enumerate(ligand_receptor_dists):
+        # if dist < cutoff:
+        # less than 4 A
+        list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
+        hashtable_entry_add_one(
+            ligand_receptor_atom_type_pairs_close,
+            list_alphebetize_and_combine(list_ligand_atom),
+        )
+        pdb_close_contacts.add_new_atom(ligand_atom.copy_of())
+        pdb_close_contacts.add_new_atom(receptor_atom.copy_of())
 
-            close_contacts_labels.append(
-                (ligand_atom.string_id(), receptor_atom.string_id())
-            )
+        close_contacts_labels.append(
+            (ligand_atom.string_id(), receptor_atom.string_id())
+        )
 
     return {
         "counts": ligand_receptor_atom_type_pairs_close,

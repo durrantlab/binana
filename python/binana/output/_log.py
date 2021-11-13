@@ -448,6 +448,37 @@ def _get_salt_bridges(salt_bridges, output):
         )
     return output
 
+def _get_metal_coordinations(metal_coordinations, output):
+    output = output + preface + "" + "\n"
+    output = output + preface + "Metal Coordinations:" + "\n"
+    # TODO: Perhaps in some future version you could report something in the
+    # table below.
+
+    # output = output + preface + "    Secondary Structure | Count " + "\n"
+    # output = output + preface + "   ---------------------|-------" + "\n"
+    # for key in sorted(metal_coordinations["counts"].keys()):
+    #     value = metal_coordinations["counts"][key]
+    #     key = key.split("_")
+    #     output = (
+    #         output
+    #         + preface
+    #         + "   "
+    #         + _center(key[1], 21)
+    #         + "|"
+    #         + _center(str(value), 7)
+    #         + "\n"
+    #     )
+
+    output = output + preface + "\n" + preface + "Raw data:\n"
+    for atom_pairs in metal_coordinations["labels"]:
+        metal = atom_pairs[0]
+        coord_atoms = atom_pairs[1]
+        output = (
+            output + preface + "     " + metal + " : " + " - ".join(coord_atoms) + "\n"
+        )
+
+    return output
+
 
 def collect(
     parameters,
@@ -458,6 +489,7 @@ def collect(
     hydrogen_bonds,
     halogen_bonds,
     salt_bridges,
+    metal_coordinations,
     pi_pi,
     cat_pi,
     electrostatic_energies,
@@ -486,6 +518,7 @@ def collect(
             halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
+        TODO: metal_coordinations
         pi_pi (dict): A dictionary containing information about the pi-pi
             (stacking and T-shaped) protein/ligand interactions.
         cat_pi (dict): A dictionary containing information about the pi-cation
@@ -533,6 +566,7 @@ def collect(
     output = _get_t_stacking(pi_pi, output)
     output = _get_pi_cation(pi_pi, cat_pi, output)
     output = _get_salt_bridges(salt_bridges, output)
+    output = _get_metal_coordinations(metal_coordinations, output)
 
     # Append the JSON file to the end of the log as well (always).
     output = output + preface + "\n"

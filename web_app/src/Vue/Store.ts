@@ -111,7 +111,8 @@ export const store = new Vuex.Store({
         "interactionVisibilityStatus": defaultInteractionVisibilityStatus,
         "filesToSave": {},
         "legendItems": [],
-        "showMissingHydrogensWarning": false
+        "showMissingHydrogensWarning": false,
+        "bondTypesDetected": []
     },
     "mutations": {
         /**
