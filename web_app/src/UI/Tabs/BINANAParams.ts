@@ -6,6 +6,7 @@ import * as Utils from "../../Utils";
 import * as BINANAInterface from "../../BINANAInterface";
 import * as Store from "../../Vue/Store";
 import { viewer } from "../ThreeDMol";
+import { IFileInfo, IFileLoadError, IResidueInfo } from "../FileLoaderSystem/Common/Interfaces";
 
 var FileSaver = require('file-saver');
 
@@ -47,20 +48,20 @@ let computedFunctions = {
      * protein structure.
      * @returns boolean  True if it should be shown. False otherwise.
      */
-    "showKeepProteinOnlyLink"(): boolean {
-        let ligLines = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
+    // "showKeepProteinOnlyLink"(): boolean {
+    //     let ligLines = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
 
-        let allResidues = ligLines.split("\n").map(l => l.substr(17,3).trim());
-        let residues = allResidues.filter(function(item, pos) {
-            return allResidues.indexOf(item) == pos;
-        }).filter(r => r !== "").sort();
+    //     let allResidues = ligLines.split("\n").map(l => l.substr(17,3).trim());
+    //     let residues = allResidues.filter(function(item, pos) {
+    //         return allResidues.indexOf(item) == pos;
+    //     }).filter(r => r !== "").sort();
 
-        // Don't include waters.
-        residues = residues.filter(r => Utils.waterResidues.indexOf(r) === -1);
+    //     // Don't include waters.
+    //     residues = residues.filter(r => Utils.waterResidues.indexOf(r) === -1);
 
-        this["nonProteinResidues"] = ": " + residues.join(", ");
-        return ligLines.length > 0;
-    },
+    //     this["nonProteinResidues"] = ": " + residues.join(", ");
+    //     return ligLines.length > 0;
+    // },
 
     interactionVisibilityStatus: {
         get(): string {
@@ -88,8 +89,46 @@ let computedFunctions = {
         });
         
         return legendItems;
-    }
+    },
 
+    "missingHydrogensWarning"(): string {
+        let receptorHasHydrogens = this.$store.state["receptorHasHydrogens"];
+        let ligandHasHydrogens = this.$store.state["ligandHasHydrogens"];
+        if (receptorHasHydrogens && ligandHasHydrogens) {
+            // Hydrogens added to both, so return "".
+            return "";
+        }
+
+        let msg = "";
+        if (!receptorHasHydrogens && !ligandHasHydrogens) {
+            // Neither has hydrogen atoms.
+            msg += "Do your receptor and ligand files include hydrogen atoms? ";
+        } else if (!receptorHasHydrogens) {
+            msg += "Does your receptor file include hydrogen atoms? ";
+        } else {
+            msg += "Does your ligand file include hydrogen atoms? ";
+        }
+        
+        msg += "You can further improve BINANA accuracy by adding them if appropriate. ";
+        
+        if (!receptorHasHydrogens) {
+            msg += `To add hydrogen atoms to your receptor, consider using
+        <a href="http://molprobity.biochem.duke.edu/"
+        target="_blank">MolProbity</a> or
+        <a href="http://server.poissonboltzmann.org/"
+        target="_blank">PDB2PQR</a>. `
+        }
+
+        if (!ligandHasHydrogens) {
+            msg += `To add hydrogen atoms to your
+        ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+        target="_blank">Gypsum-DL</a> or <a
+        href="https://avogadro.cc/docs/menus/build-menu/"
+        target="_blank">Avogadro</a>.`
+        }
+
+        return msg;
+    }
 }
 
 /** An object containing the vue-component methods functions. */
@@ -309,7 +348,6 @@ let methodsFunctions = {
                 }
             );
         });
-
     },
 
     /**
@@ -363,48 +401,52 @@ let methodsFunctions = {
      * @param  {any} e  The click event.
      * @returns void
      */
-     "onShowKeepProteinOnlyClick"(e: any): void {
-        let proteinLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"]);
-        let ligandLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
+    //  "onShowKeepProteinOnlyClick"(e: any): void {
+    //     // let proteinLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"]);
+    //     // let ligandLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
 
-        // Get new ligand filename
-        let receptorExt = Utils.getExt(this.$store.state["receptorFileName"]);
-        let newLigFilename = Utils.replaceExt(
-            this.$store.state["receptorFileName"],
-            "ligand." + receptorExt
-        );
+    //     let proteinLinesToKeep = this.$store.state["receptorContents"];
+    //     let ligandLinesToKeep = this.$store.state["receptorContents"];
 
-        // Update receptor contents.
-        this.$store.commit("setVar", {
-            name: "receptorContents",
-            val: proteinLinesToKeep
-        });
 
-        // Update receptor filename
-        this.$store.commit("updateFileName", {
-            type: "receptor",
-            filename: Utils.replaceExt(
-                this.$store.state["receptorFileName"],
-                "protein." + receptorExt
-            )
-        });
+    //     // Get new ligand filename
+    //     let receptorExt = Utils.getExt(this.$store.state["receptorFileName"]);
+    //     let newLigFilename = Utils.replaceExt(
+    //         this.$store.state["receptorFileName"],
+    //         "ligand." + receptorExt
+    //     );
 
-        // Update ligand contents
-        this.$store.commit("setVar", {
-            name: "ligandContents",
-            val: ligandLinesToKeep
-        });
+    //     // Update receptor contents.
+    //     this.$store.commit("setVar", {
+    //         name: "receptorContents",
+    //         val: proteinLinesToKeep
+    //     });
 
-        this.$store.commit("updateFileName", {
-            type: "ligand",
-            filename: newLigFilename
-        });
+    //     // Update receptor filename
+    //     this.$store.commit("updateFileName", {
+    //         type: "receptor",
+    //         filename: Utils.replaceExt(
+    //             this.$store.state["receptorFileName"],
+    //             "protein." + receptorExt
+    //         )
+    //     });
 
-        this["forceLigandFileName"] = newLigFilename;
+    //     // Update ligand contents
+    //     this.$store.commit("setVar", {
+    //         name: "ligandContents",
+    //         val: ligandLinesToKeep
+    //     });
 
-        e.preventDefault();
-        e.stopPropagation();
-    },
+    //     this.$store.commit("updateFileName", {
+    //         type: "ligand",
+    //         filename: newLigFilename
+    //     });
+
+    //     this["forceLigandFileName"] = newLigFilename;
+
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    // },
 
     "getInteractionVisibility"(interactionID: string): boolean {
         let interactionVisibilityStatus = JSON.parse(this.interactionVisibilityStatus);
@@ -412,6 +454,57 @@ let methodsFunctions = {
             return false;
         }
         return interactionVisibilityStatus[interactionID];
+    },
+
+    "onError"(msg: IFileLoadError) {
+        this.$store.commit("openModal", {
+            title: msg.title,
+            body: `${msg.body}`
+        });
+    },
+
+    "onReceptorFileReady"(fileInfo: IFileInfo) {
+        this.$store.commit("setVar", {
+            name: "receptorContents",
+            val: fileInfo.fileContents,
+        });
+        this.$store.commit("updateFileName", {
+            type: "receptor",
+            filename: fileInfo.filename,
+        });
+    },
+
+    "onLigandFileReady"(fileInfo: IFileInfo) {
+        this.$store.commit("setVar", {
+            name: "ligandContents",
+            val: fileInfo.fileContents,
+        });
+        this.$store.commit("updateFileName", {
+            type: "ligand",
+            filename: fileInfo.filename,
+        });
+    },
+
+    "onExtractReceptorAtomsToLigand"(residueInfo: IResidueInfo): void {
+        // Get the existing ligand contents
+        // let ligContents: string = this.$store.state["ligandContents"];
+        // let ligFilename: string = this.$store.state["ligandFileName"]
+        
+        let ligContents = residueInfo.residuePdbLines;
+        let ligFilename = residueInfo.residueId.filter(r => [undefined, ""].indexOf(r) === -1).join("-") + ".pdb";
+
+        // ligContents = ligContents.trim();
+        // ligFilename += "_" + residueInfo.residueId.join("-");
+        
+        // if (ligFilename.slice(0, 1) === "_") {
+        //     ligFilename = ligFilename.slice(1);
+        // }
+
+        // ligFilename += ".pdb";
+
+        this.$refs["ligandMolLoader"]["loadMolFromExternal"](
+            ligFilename, ligContents
+        );
     }
 }
 
@@ -499,7 +592,7 @@ export function setup(): void {
                                         <b-card-text>
                                             <div style='text-align:left;'>
                                                 Parameters used to identify interactions between
-                                                atomatic rings. Once an aromatic ring is identified, a plane is
+                                                aromatic rings. Once an aromatic ring is identified, a plane is
                                                 defined that passes through three ring atoms. The center of
                                                 the ring is the average of all ring-atom coordinates,
                                                 and the radius is the maximum distance between the center and
@@ -566,6 +659,15 @@ export function setup(): void {
                                             number of angstroms participate in &quot;hydrophobic
                                             contacts.&quot;" placeholder="$store.state.hydrophobic_dist_cutoff"
                                         ></numeric-input>
+                                        <numeric-input
+                                            label="Metal Coordination Dist Cutoff"
+                                            id="metal_coordination_dist_cutoff"
+                                            description="Atoms such as nitrogens and oxygens that come within this
+                                            number of angstroms of a metal cation participate in &quot;metal coordination
+                                            contacts.&quot;" placeholder="$store.state.metal_coordination_dist_cutoff"
+                                        ></numeric-input>
+
+                                        
                                     </b-card>
                                 </b-card-body>
                             </b-collapse>
@@ -574,7 +676,41 @@ export function setup(): void {
                 </sub-section>
 
                 <sub-section title="Input Files" v-if="showFileInputs">
-                    <file-input
+                    <mol-loader
+                        :allowDeleteHeteroAtoms="true"
+                        :allowExtractHeteroAtoms="true"
+                        :multipleFiles="false"
+                        :fileLoaderPlugins="['pdb-id-input', 'file-loader-input']"
+                        label="Receptor"
+                        description="Formats: PDB, PDBQT. Consider first (1) adding polar hydrogen atoms if necessary and (2) removing any ligands from the file."
+                        extraDescription=""
+                        accept=".pdb, .pdbqt"
+                        convert=""
+                        :required="true"
+                        @onError="onError"
+                        @onFileReady="onReceptorFileReady"
+                        @onExtractAtoms="onExtractReceptorAtomsToLigand"
+                    ></mol-loader>
+                    <!-- , 'url-input']" -->
+
+                    <mol-loader
+                        ref="ligandMolLoader"
+                        :allowDeleteHeteroAtoms="false"
+                        :allowExtractHeteroAtoms="false"
+                        :multipleFiles="false"
+                        :fileLoaderPlugins="['file-loader-input']"
+                        label="Ligand"
+                        description="Formats: PDB, PDBQT, SDF. Consider first adding polar hydrogen atoms if necessary."
+                        extraDescription=""
+                        accept=".pdb, .pdbqt, .sdf"
+                        convert=""
+                        :required="true"
+                        @onError="onError"
+                        @onFileReady="onLigandFileReady"
+                    ></mol-loader>
+                    <!-- , 'url-input']" -->
+
+                    <!-- <file-input
                         label="Receptor"
                         id="receptor"
                         description="Formats: PDB, PDBQT. Be sure to (1) add polar hydrogen atoms if necessary and (2) remove any ligands from the file."
@@ -585,9 +721,7 @@ export function setup(): void {
                                 <span style="color:red;">Your receptor file includes non-protein residue(s){{nonProteinResidues}}</span>.
                                 <a href='' @click="onShowKeepProteinOnlyClick($event);">Treat these as the ligand instead?</a>
                             </span>
-                            <!-- <span v-else>
                                 <b>(Removed all non-protein atoms!)</b>
-                            </span> -->
                         </template>
                     </file-input>
 
@@ -599,6 +733,7 @@ export function setup(): void {
                         :forceFileName="forceLigandFileName"
                     >
                     </file-input>
+                    -->
 
                     <form-button @click.native="useExampleInputFiles" cls="float-right">Use Example Files</form-button>  <!-- variant="default" -->
                 </sub-section>
@@ -657,6 +792,13 @@ export function setup(): void {
                                             <check-mark :value="getInteractionVisibility('saltBridges')">
                                                 <div class="centerMenuItem" style="width:115px;">
                                                     Salt Bridge
+                                                </div>
+                                            </check-mark>
+                                        </b-dropdown-item>
+                                        <b-dropdown-item @click="updateHighlight('metalCoordinations');">
+                                            <check-mark :value="getInteractionVisibility('metalCoordinations')">
+                                                <div class="centerMenuItem" style="width:115px;">
+                                                    Metal Coordination
                                                 </div>
                                             </check-mark>
                                         </b-dropdown-item>
@@ -743,18 +885,8 @@ export function setup(): void {
                                 </template>
                             </b-table>
 
-                            <b-alert show variant="warning" v-if="$store.state.showMissingHydrogensWarning">
-                                Do both your files include hydrogen atoms? You can
-                                further improve BINANA accuracy by adding them. 
-                                To add hydrogen atoms to your receptor, consider using
-                                <a href="http://molprobity.biochem.duke.edu/"
-                                target="_blank">MolProbity</a> or
-                                <a href="http://server.poissonboltzmann.org/"
-                                target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
-                                ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
-                                target="_blank">Gypsum-DL</a> or <a
-                                href="https://avogadro.cc/docs/menus/build-menu/"
-                                target="_blank">Avogadro</a>.
+                            <b-alert show variant="warning" v-if="missingHydrogensWarning !== ''">
+                                <span v-html="missingHydrogensWarning"></span>
 
                                 <br /><br />
 

@@ -13,6 +13,7 @@ import * as OpenModal from "../UI/Modal/OpenModal";
 import * as SubSection from "../UI/SubSection";
 import * as FormButton from "../UI/Forms/FormButton";
 import * as CheckMark from "../UI/CheckMark";
+import { setupMolLoader } from "../UI/FileLoaderSystem/MolLoader.Vue";
 
 declare var Vue;
 declare var Vuex;
@@ -34,6 +35,7 @@ export function setup(): void {
     ThreeDMol.setup();
     NumericInput.setup();
     FileInput.setup();
+    setupMolLoader();
     BINANAParams.setup();
     StartOver.setup();
 }

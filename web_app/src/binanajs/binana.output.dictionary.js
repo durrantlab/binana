@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-12 01:16:46
+// Transcrypt'ed from Python, 2021-11-19 00:20:09
 var binana = {};
 var re = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -251,7 +251,51 @@ export var _collect_salt_bridge = function (salt_bridge_interactions, json_outpu
 		i++;
 	}
 };
-export var collect = function (closest, close, hydrophobics, hydrogen_bonds, halogen_bonds, salt_bridges, pi_pi, cat_pi, electrostatic_energies, active_site_flexibility, ligand_atom_types, ligand_rotatable_bonds) {
+export var _collect_metal_coordinations = function (metal_coordinations_interactions, json_output) {
+	var i = 0;
+	for (var metal_coord_atoms of metal_coordinations_interactions) {
+		json_output ['metalCoordinations'].append (dict ({}));
+		var metal_atom = metal_coord_atoms [0];
+		var metal_atoms_details = re.py_split ('[\\[\\]():]', metal_atom);
+		var coord_atoms = metal_coord_atoms [1];
+		var coord_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of coord_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		var metal_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var d of metal_atoms_details) {
+				if (d != '') {
+					__accu0__.append (d);
+				}
+			}
+			return __accu0__;
+		}) ();
+		for (var [j, detail_list] of enumerate (coord_atoms_details)) {
+			coord_atoms_details [j] = (function () {
+				var __accu0__ = [];
+				for (var d of detail_list) {
+					if (d != '') {
+						__accu0__.append (d);
+					}
+				}
+				return __accu0__;
+			}) ();
+		}
+		json_output ['metalCoordinations'] [i] = dict ({'metalAtoms': [], 'coordinatingAtoms': []});
+		json_output ['metalCoordinations'] [i] ['metalAtoms'].append (_atom_details_to_dict (metal_atoms_details));
+		for (var detail of coord_atoms_details) {
+			json_output ['metalCoordinations'] [i] ['coordinatingAtoms'].append (_atom_details_to_dict (detail));
+		}
+		i++;
+	}
+};
+export var collect = function (closest, close, hydrophobics, hydrogen_bonds, halogen_bonds, salt_bridges, metal_coordinations, pi_pi, cat_pi, electrostatic_energies, active_site_flexibility, ligand_atom_types, ligand_rotatable_bonds) {
 	if (typeof closest == 'undefined' || (closest != null && closest.hasOwnProperty ("__kwargtrans__"))) {;
 		var closest = null;
 	};
@@ -269,6 +313,9 @@ export var collect = function (closest, close, hydrophobics, hydrogen_bonds, hal
 	};
 	if (typeof salt_bridges == 'undefined' || (salt_bridges != null && salt_bridges.hasOwnProperty ("__kwargtrans__"))) {;
 		var salt_bridges = null;
+	};
+	if (typeof metal_coordinations == 'undefined' || (metal_coordinations != null && metal_coordinations.hasOwnProperty ("__kwargtrans__"))) {;
+		var metal_coordinations = null;
 	};
 	if (typeof pi_pi == 'undefined' || (pi_pi != null && pi_pi.hasOwnProperty ("__kwargtrans__"))) {;
 		var pi_pi = null;
@@ -319,6 +366,10 @@ export var collect = function (closest, close, hydrophobics, hydrogen_bonds, hal
 	if (salt_bridges !== null) {
 		json_output ['saltBridges'] = [];
 		_collect_salt_bridge (salt_bridges ['labels'], json_output);
+	}
+	if (metal_coordinations !== null) {
+		json_output ['metalCoordinations'] = [];
+		_collect_metal_coordinations (metal_coordinations ['labels'], json_output);
 	}
 	if (active_site_flexibility !== null) {
 		json_output ['activeSiteFlexibility'] = active_site_flexibility ['counts'];

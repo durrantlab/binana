@@ -36,7 +36,7 @@ def _get_potential_donors_acceptors(ligand, receptor, dist_cutoff):
     # Any that are close to each other (not considering orientation yet).
 
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, dist_cutoff, ["O", "N"])
+    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, dist_cutoff, ["O", "N", "S"])
 
     return [
         [ligand_atom, receptor_atom]

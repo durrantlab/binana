@@ -56,6 +56,13 @@ let interactionsInfo: {[key: string]: ILegendItem } = {
         colorHex: "#FF0000",  //red
         link: "https://en.wikipedia.org/wiki/Salt_bridge_(protein_and_supramolecular)"
     },
+    "metalCoordinations": {
+        name: "Metal Coordination",
+        color: "ORANGE",
+        representation: "COLOR dashed line",
+        colorHex: "#FFA500",  //red
+        link: "https://en.wikipedia.org/wiki/Coordination_complex"
+    },
     "closeContacts": {
         name: "Close contact",
         color: "PURPLE",
@@ -107,6 +114,7 @@ let renderOrder = [
     "hydrogenBonds",
     "halogenBonds",
     "saltBridges",
+    "metalCoordinations",
     "piPiStackingInteractions",
     "tStackingInteractions",
     "cationPiInteractions",
@@ -183,7 +191,7 @@ export function start(pdbtxt: string, ligtxt: string): void {
 export function highlight(highlightInfos: IHighlightInfo[]) {
     // Render sticks of protein model too. Clears (resets) the protein
     // rendering.
-    ThreeDMol.showSticksAsAppropriate();
+    ThreeDMol.showSticksOrRibbonAsAppropriate();
 
     let residues = [];
 
@@ -235,6 +243,23 @@ export function getInfoForHighlight(interactionName: string): IHighlightInfo {
     // make an array for the interactions
     let interactionType = binanaData[interactionName];
 
+    if (interactionName === "metalCoordinations") {
+        // In this case, organized by "coordinatingAtoms" and "metalAtoms".
+        // Trick it into using "ligandAtoms" and "receptorAtoms" so below code
+        // will work without modification.
+        let newInteractionType = [];
+        for (let idx in interactionType) {
+            let metalAtomInf = interactionType[idx]["metalAtoms"][0];
+            for (let coordinatingAtom of interactionType[idx]["coordinatingAtoms"]) {
+                newInteractionType.push({
+                    "ligandAtoms": [metalAtomInf],
+                    "receptorAtoms": [coordinatingAtom]
+                })
+            }
+        }
+        interactionType = newInteractionType;
+    }
+
     // A single atom may participate in multiple interactions with other
     // atoms. Make sure each atom is rendered in the viewer only once.
     idxOfAtomsSeen = new Set([]);
@@ -247,6 +272,7 @@ export function getInfoForHighlight(interactionName: string): IHighlightInfo {
 
     // loop through the interactions
     for (let i = 0; i < interactionType.length; i++) {
+
         let ligandAtomInfs = interactionType[i]["ligandAtoms"];
         let receptorAtomInfs = interactionType[i]["receptorAtoms"];
 
@@ -533,7 +559,7 @@ export function clearInteraction(): void {
         return;
     }
 
-    ThreeDMol.showSticksAsAppropriate();
+    ThreeDMol.showSticksOrRibbonAsAppropriate();
 
     viewer["removeAllShapes"]();
     viewer["render"]();

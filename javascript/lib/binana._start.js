@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-12 01:16:44
+// Transcrypt'ed from Python, 2021-11-19 00:20:08
 var __future__ = {};
 var binana = {};
 var math = {};
@@ -26,11 +26,11 @@ export var _get_all_interactions = function (parameters) {
 	var ligand = __left0__ [0];
 	var receptor = __left0__ [1];
 	var pi_padding = parameters.params ['pi_padding_dist'];
-	var all_interacts = get_all_interactions (ligand, receptor, parameters.params ['close_contacts_dist1_cutoff'], parameters.params ['close_contacts_dist2_cutoff'], parameters.params ['electrostatic_dist_cutoff'], parameters.params ['active_site_flexibility_dist_cutoff'], parameters.params ['hydrophobic_dist_cutoff'], parameters.params ['hydrogen_halogen_bond_dist_cutoff'], parameters.params ['hydrogen_halogen_bond_angle_cutoff'], parameters.params ['pi_pi_interacting_dist_cutoff'], parameters.params ['pi_stacking_angle_tolerance'], parameters.params ['T_stacking_angle_tolerance'], parameters.params ['T_stacking_closest_dist_cutoff'], parameters.params ['cation_pi_dist_cutoff'], parameters.params ['salt_bridge_dist_cutoff'], pi_padding);
+	var all_interacts = get_all_interactions (ligand, receptor, parameters.params ['close_contacts_dist1_cutoff'], parameters.params ['close_contacts_dist2_cutoff'], parameters.params ['electrostatic_dist_cutoff'], parameters.params ['active_site_flexibility_dist_cutoff'], parameters.params ['hydrophobic_dist_cutoff'], parameters.params ['hydrogen_halogen_bond_dist_cutoff'], parameters.params ['hydrogen_halogen_bond_angle_cutoff'], parameters.params ['pi_pi_interacting_dist_cutoff'], parameters.params ['pi_stacking_angle_tolerance'], parameters.params ['T_stacking_angle_tolerance'], parameters.params ['T_stacking_closest_dist_cutoff'], parameters.params ['cation_pi_dist_cutoff'], parameters.params ['salt_bridge_dist_cutoff'], parameters.params ['metal_coordination_dist_cutoff'], pi_padding);
 	for (var key of all_interacts ['cat_pi'] ['counts'].py_keys ()) {
 		all_interacts ['pi_pi'] ['counts'] [key] = all_interacts ['cat_pi'] ['counts'] [key];
 	}
-	_write_main (parameters, ligand, receptor, all_interacts ['closest'], all_interacts ['close'], all_interacts ['hydrophobics'], all_interacts ['hydrogen_bonds'], all_interacts ['halogen_bonds'], all_interacts ['salt_bridges'], all_interacts ['pi_pi'], all_interacts ['cat_pi'], all_interacts ['electrostatic_energies'], all_interacts ['active_site_flexibility'], all_interacts ['ligand_atom_types']);
+	_write_main (parameters, ligand, receptor, all_interacts ['closest'], all_interacts ['close'], all_interacts ['hydrophobics'], all_interacts ['hydrogen_bonds'], all_interacts ['halogen_bonds'], all_interacts ['salt_bridges'], all_interacts ['metal_coordinations'], all_interacts ['pi_pi'], all_interacts ['cat_pi'], all_interacts ['electrostatic_energies'], all_interacts ['active_site_flexibility'], all_interacts ['ligand_atom_types']);
 };
 export var _intro = function () {
 	var version = '2.0';

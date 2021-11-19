@@ -4,6 +4,7 @@
 
 import * as BINANAInterface from "../BINANAInterface";
 import { store } from "../Vue/Store";
+import { proteinResnames } from "./FileLoaderSystem/ProteinProcessing.Vue";
 
 declare var $3Dmol;
 declare var jQuery;
@@ -18,15 +19,16 @@ var runBINANATimeout;
 * settings.
 * @returns void
 */
-export function showSticksAsAppropriate(): void {
+export function showSticksOrRibbonAsAppropriate(): void {
     // If no protein has been loaded, no need to proceed.
-    if (store.state["receptorMol"] === undefined) {
+    let receptorMol= store.state["receptorMol"];
+    if (receptorMol === undefined) {
         return;
     }
 
     if (store.state["renderProteinSticks"] === true) {
         // Set up the style.
-        store.state["receptorMol"].setStyle(
+        receptorMol.setStyle(
             {},
             {
                 "stick": { "radius": 0.1 },  // 0.15
@@ -37,6 +39,31 @@ export function showSticksAsAppropriate(): void {
     } else {
         showProteinRibbon();
     }
+
+    // Non-protein residiues should be visible as sticks, but with low opacity.
+    let notProtSel = {
+        "or": proteinResnames.map((r) => {
+            return {"resn": r}
+        }),
+        "invert": true
+    };
+
+    // @ts-ignore
+    // notProtSel = {"resn": "TRP"};
+    // var atoms = receptorMol["selectedAtoms"](notProtSel);
+
+    // debugger
+    receptorMol.setStyle(
+        notProtSel, 
+        {
+            "stick": { "radius": 0.4, "opacity": 0.5 }
+        }
+    );
+
+    // Remember water molecules and metals.
+    receptorMol.setStyle({"bonds":0}, {
+        "sphere": { "radius": 0.5, "opacity": 0.5 }
+    });
 }
 
 export function showProteinRibbon(add=false): void {
@@ -175,7 +202,7 @@ let methodsFunctions = {
                     }
                 }
 
-                this.msgIfNoHydrogens(this[typeStr + "Mol"]);
+                this.msgIfNoHydrogens(typeStr);
 
                 return this[typeStr + "Mol"];
             } else if (origModelContent !== "") {
@@ -257,7 +284,7 @@ let methodsFunctions = {
         this.makeAtomsHoverable(mol);
         
         this.showSurfaceAsAppropriate();
-        showSticksAsAppropriate();
+        showSticksOrRibbonAsAppropriate();
     },
 
     /**
@@ -270,6 +297,12 @@ let methodsFunctions = {
         mol.setStyle({}, {
             "stick": { "radius": 0.4 }
         });
+
+        // Remember water molecules and metals.
+        mol.setStyle({"bonds":0}, {
+            "sphere": { "radius": 0.5 }
+        });
+
         viewer["render"]();
     },
 
@@ -280,7 +313,7 @@ let methodsFunctions = {
      */
     makeAtomsHoverable(mol: any): void {
         // Also make labels.
-        var atoms = mol.selectedAtoms({});
+        var atoms = mol["selectedAtoms"]({});
         let len = atoms.length;
         if (len <= 5000) {
             // If there are a lot of atoms, this becomes slow. So only if <
@@ -366,44 +399,43 @@ let methodsFunctions = {
             name: "renderProteinSticks",
             val: !this.$store.state["renderProteinSticks"]
         })
-        showSticksAsAppropriate();
+        showSticksOrRibbonAsAppropriate();
     },
 
     /**
      * Shows a warning modal if the given molecule has no hydrogen atoms.
-     * @param  {*} mol  The molecule.
+     * @param  {string} typeStr  The type of molecule.
      * @returns void
      */
-    msgIfNoHydrogens(mol: any): void {
+    msgIfNoHydrogens(typeStr: string): void {
+        let mol = this[typeStr + "Mol"];
         let elements = mol["selectedAtoms"]({}).map(a => a["elem"]);
-        if (elements.indexOf("H") === -1) {
-            // No hydrogens
-            this.$store.commit("setVar", {
-                name: "showMissingHydrogensWarning",
-                val: true
-            });
+        // Has hydrogens or not
+        this.$store.commit("setVar", {
+            name: typeStr + "HasHydrogens",
+            val: elements.indexOf("H") !== -1
+        });
 
-            // this.$store.commit("openModal", {
-            //     title: "Warning!",
-            //     body: `<p>
-            //         One of your files has no hydrogen atoms. BINANA may not be
-            //         able to identify some interactions (e.g., hydrogen bonds).
-            //         To add hydrogen atoms to your receptor, consider using
-            //         <a href="http://molprobity.biochem.duke.edu/"
-            //         target="_blank">MolProbity</a> or
-            //         <a href="http://server.poissonboltzmann.org/"
-            //         target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
-            //         ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
-            //         target="_blank">Gypsum-DL</a> or <a
-            //         href="https://avogadro.cc/docs/menus/build-menu/"
-            //         target="_blank">Avogadro</a>.
-            //     </p>
-            //     <p>
-            //         You may also get this error if one or more of your files is
-            //         improperly formatted.
-            //     </p>`
-            // });
-        }
+        // this.$store.commit("openModal", {
+        //     title: "Warning!",
+        //     body: `<p>
+        //         One of your files has no hydrogen atoms. BINANA may not be
+        //         able to identify some interactions (e.g., hydrogen bonds).
+        //         To add hydrogen atoms to your receptor, consider using
+        //         <a href="http://molprobity.biochem.duke.edu/"
+        //         target="_blank">MolProbity</a> or
+        //         <a href="http://server.poissonboltzmann.org/"
+        //         target="_blank">PDB2PQR</a>. To add hydrogen atoms to your
+        //         ligand, consider <a href="http://durrantlab.com/gypsum-dl/"
+        //         target="_blank">Gypsum-DL</a> or <a
+        //         href="https://avogadro.cc/docs/menus/build-menu/"
+        //         target="_blank">Avogadro</a>.
+        //     </p>
+        //     <p>
+        //         You may also get this error if one or more of your files is
+        //         improperly formatted.
+        //     </p>`
+        // });
     },
 
 
@@ -674,7 +706,7 @@ function justify(str: string, cols: number, right = true, deflt = "X"): string {
  * @returns string  The PDB-formatted string.
  */
 function mol3DToPDB(mol: any): string {
-    let atoms: any[] = mol.selectedAtoms({});
+    let atoms: any[] = mol["selectedAtoms"]({});
     const atomsLen = atoms.length;
     let pdbTxt = "";
     for (let i = 0; i < atomsLen; i++) {

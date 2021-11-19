@@ -21,6 +21,7 @@ export let defaultInteractionVisibilityStatus = JSON.stringify({
     "hydrogenBonds": true,
     "halogenBonds": true,
     "saltBridges": true,
+    "metalCoordinations": true,
     "piPiStackingInteractions": true,
     "tStackingInteractions": true,
     "cationPiInteractions": true,
@@ -72,6 +73,7 @@ export const store = new Vuex.Store({
             "electrostatic_dist_cutoff" : 4.0,
             "active_site_flexibility_dist_cutoff" : 4.0,
             "hydrophobic_dist_cutoff" : 4.0,
+            "metal_coordination_dist_cutoff": 3.5,
             "hydrogen_halogen_bond_dist_cutoff" : 4.0,
             "hydrogen_halogen_bond_angle_cutoff" : 40.0,
             "pi_padding_dist" : 0.75,
@@ -111,7 +113,8 @@ export const store = new Vuex.Store({
         "interactionVisibilityStatus": defaultInteractionVisibilityStatus,
         "filesToSave": {},
         "legendItems": [],
-        "showMissingHydrogensWarning": false,
+        "receptorHasHydrogens": true,
+        "ligandHasHydrogens": true,
         "bondTypesDetected": []
     },
     "mutations": {

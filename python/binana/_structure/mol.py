@@ -636,8 +636,8 @@ class Mol:
     def _categorize_hydro_bond_donor_accep_no_hydros(self, atom):
         charaterizations = []
 
-        # If it's an oxygen or nitrogen, it's always an acceptor.
-        if atom.element in ["O", "N"]:
+        # If it's an oxygen, nitrogen, or sulfur, it's always an acceptor.
+        if atom.element in ["O", "N", "S"]:
             charaterizations.append(["ACCEPTOR", None])
 
         # Check if it matches certain protein atoms to identify if also
@@ -653,9 +653,9 @@ class Mol:
         # Not an identifiable protein atom, so use heuristics instead.
         num_neighbors = atom.number_of_neighbors()
 
-        # If it's an oxygen atom, it's always an acceptor. True of OH, COC, =O,
-        # nitro, etc.
-        if atom.element == "O" and num_neighbors == 1:
+        # If it's an oxygen or sulfur atom, it's always an acceptor. True of OH,
+        # COC, =O, nitro, etc.
+        if atom.element in ["O", "S"] and num_neighbors == 1:
             neighbor_idx = atom.indecies_of_atoms_connecting[0]
             neighbor = self.all_atoms[neighbor_idx]
             neighbor_is_sp3 = neighbor.has_sp3_geometry(self)

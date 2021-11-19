@@ -23,41 +23,39 @@ WIP
 13. Improved ability to detect salt bridges and hydrogen bonds even if protein
     and ligand models do not have hydrogen atoms.
 14. Speed improvements
+15. Revised file input system. Can now also specify PDB ID, extract delete
+    non-protein residues, etc.
+16. Sulfur can now be a hydrogen bond donor and acceptor.
 
 TODO:
 
 Halogen bonds mention in all documentation?
 
-Consider "S" as donor/acceptors? Need to investigate.
+Test should also test version of protein without hydrogens, and make sure you
+get all interactions tested. Metal, halogen, hydrogen with S.
 
-Test should also test version of protein without hydrogens
-
-If you add in new receptor or ligand, be sure to reevaluate whether warning
-should appear.
-
-# Metal Bonds
-
-Great site: https://chem.libretexts.org/Bookshelves/General_Chemistry/Chemistry_(OpenSTAX)/19%3A_Transition_Metals_and_Coordination_Chemistry/19.2%3A_Coordination_Chemistry_of_Transition_Metals
-
-These can form metal bonds:
-N
-O
-Cl
-F
-Br
-I
-
-How about calculate all L-M-L angles. Some will be too big (e.g., 180). But just
-keep lower ones (like all within tolerance of min value). Average. See
-deviation. Etc.
-
-On file input, really modularize these. Separate widgets for input, removing
-ligans, selecting between existing, etc. These shouldn't modify vuex store
-directly (to keep broad).
+If you add in new receptor or ligand, be sure to reevaluate whether new hydrogen
+warning should appear.
 
 METAL_COORDINATION_CUTOFF. Get into web app, documentation, parameters, etc.
 
-Make sure all documentation/examples account for get_all_interactions (updated for metal coordination)
+Make sure all documentation/examples account for get_all_interactions (updated for metal coordination, halogen bonds)
+
+finish README.md on file loading component.
+
+Check all docstrings on functions.
+
+PDBQT in webapp looks strange?
+
+SDF on ligand works?
+
+Makesure can loadin multipleligands. Probably need to rewritecodethat triggersbinana run. Also, can run if restart.
+
+Report actualdistanbes and anglesin json?
+
+Convert Json to CSV?
+
+Notvisualizing metalcoord bonds. 2M30
 
 2.0
 ---

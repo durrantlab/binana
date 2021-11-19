@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-12 01:16:45
+// Transcrypt'ed from Python, 2021-11-19 00:20:08
 var binana = {};
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -10,6 +10,7 @@ import {fabs} from './binana._utils.shim.js';
 import * as shim from './binana._utils.shim.js';
 import * as __module_binana__utils__ from './binana._utils.js';
 __nest__ (binana, '_utils', __module_binana__utils__);
+import {protein_resnames, to_deg, two_leter_atom_names} from './binana._structure.consts.js';
 import {angle_between_three_points} from './binana._utils._math_functions.js';
 import {r_just, round_to_thousandths_to_str} from './binana._utils.shim.js';
 import {Point} from './binana._structure.point.js';
@@ -18,7 +19,6 @@ __nest__ (binana, '', __module_binana__);
 import * as __module_math__ from './math.js';
 __nest__ (math, '', __module_math__);
 var __name__ = 'binana._structure.atom';
-export var to_deg = 180.0 / math.pi;
 export var Atom =  __class__ ('Atom', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
@@ -92,54 +92,18 @@ export var Atom =  __class__ ('Atom', [object], {
 		if (len (self.atom_name) == 1) {
 			self.atom_name = self.atom_name + '  ';
 		}
-		else if (len (self.atom_name) == 2) {
-			self.atom_name = self.atom_name + ' ';
-		}
-		else if (len (self.atom_name) == 3) {
+		else if (__in__ (len (self.atom_name), [2, 3])) {
 			self.atom_name = self.atom_name + ' ';
 		}
 		self.coordinates = Point (float (line.__getslice__ (30, 38, 1)), float (line.__getslice__ (38, 46, 1)), float (line.__getslice__ (46, 54, 1)));
-		self.atom_type = line.__getslice__ (77, 79, 1).strip ().upper ();
-		if (line.__getslice__ (69, 76, 1).strip () != '') {
-			self.charge = float (line.__getslice__ (69, 76, 1));
-		}
-		else {
-			self.charge = 0.0;
-		}
+		self.atom_type = line.__getslice__ (76, 79, 1).strip ().upper ();
+		self.charge = (line.__getslice__ (69, 76, 1).strip () != '' ? float (line.__getslice__ (69, 76, 1)) : 0.0);
+		self.residue = line.__getslice__ (16, 20, 1);
+		self.residue = ' ' + self.residue.__getslice__ (-(3), null, 1);
 		if (self.element == '') {
 			var two_letters = self.atom_name.__getslice__ (0, 2, 1).strip ().upper ();
-			if (two_letters == 'BR') {
-				self.element = 'BR';
-			}
-			else if (two_letters == 'CL') {
-				self.element = 'CL';
-			}
-			else if (two_letters == 'BI') {
-				self.element = 'BI';
-			}
-			else if (two_letters == 'AS') {
-				self.element = 'AS';
-			}
-			else if (two_letters == 'AG') {
-				self.element = 'AG';
-			}
-			else if (two_letters == 'LI') {
-				self.element = 'LI';
-			}
-			else if (two_letters == 'MG') {
-				self.element = 'MG';
-			}
-			else if (two_letters == 'MN') {
-				self.element = 'MN';
-			}
-			else if (two_letters == 'RH') {
-				self.element = 'RH';
-			}
-			else if (two_letters == 'ZN') {
-				self.element = 'ZN';
-			}
-			else if (two_letters == 'FE') {
-				self.element = 'FE';
+			if (__in__ (two_letters, two_leter_atom_names) && !__in__ (self.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
+				self.element = two_letters;
 			}
 			else {
 				self.element = self.atom_name;
@@ -158,8 +122,6 @@ export var Atom =  __class__ ('Atom', [object], {
 			}
 		}
 		self.pdb_index = line.__getslice__ (6, 12, 1).strip ();
-		self.residue = line.__getslice__ (16, 20, 1);
-		self.residue = ' ' + self.residue.__getslice__ (-(3), null, 1);
 		try {
 			self.resid = int (line.__getslice__ (23, 26, 1));
 		}

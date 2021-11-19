@@ -22,7 +22,6 @@ _alternate_protein_resname = {
 
 # Information about protein atoms that can be hydrogen-bond donors. Useful for
 # when hydrogen atoms haven't been added to the protein model.
-# TODO: CYS??? SH
 _protein_hydro_bond_donors = [
     [["ARG"], ["NE", "NH1", "NH2"]],
     [_alternate_protein_resname["HIS"], ["NE2", "ND1"]],
@@ -33,6 +32,7 @@ _protein_hydro_bond_donors = [
     [["GLN"], ["NE2"]],
     [["TYR"], ["OH"]],
     [["TRP"], ["NE1"]],
+    [["CYS"], ["SG"]]
 ]
 
 protein_resnames = [

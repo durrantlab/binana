@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-12 01:16:45
+// Transcrypt'ed from Python, 2021-11-19 00:20:08
 var binana = {};
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -11,6 +11,7 @@ import {fabs} from './binana._utils.shim.js';
 import * as shim from './binana._utils.shim.js';
 import * as __module_binana__utils__ from './binana._utils.js';
 __nest__ (binana, '_utils', __module_binana__utils__);
+import {_alternate_protein_resname, _max_donor_X_dist, _protein_hydro_bond_donors, _required_protein_atom_names, protein_resnames} from './binana._structure.consts.js';
 import {_set_default} from './binana._utils.shim.js';
 import {cross_product, dihedral, distance, vector_subtraction} from './binana._utils._math_functions.js';
 import {Atom} from './binana._structure.atom.js';
@@ -21,11 +22,6 @@ import * as __module_binana__ from './binana.js';
 __nest__ (binana, '', __module_binana__);
 var __name__ = 'binana._structure.mol';
 export var textwrap = shim;
-export var _max_donor_X_dist = dict ({'H': 1.3, 'I': 2.04 * 1.4, 'BR': 1.86 * 1.4, 'Br': 1.86 * 1.4, 'CL': 1.71 * 1.4, 'Cl': 1.71 * 1.4, 'F': 1.33 * 1.4});
-export var _alternate_protein_resname = dict ({'LYS': ['LYS', 'LYN'], 'HIS': ['HIS', 'HID', 'HIE', 'HIP'], 'GLU': ['GLU', 'GLH', 'GLX'], 'ASP': ['ASP', 'ASH', 'ASX']});
-export var _protein_hydro_bond_donors = [[['ARG'], ['NE', 'NH1', 'NH2']], [_alternate_protein_resname ['HIS'], ['NE2', 'ND1']], [_alternate_protein_resname ['LYS'], ['NZ']], [['SER'], ['OG']], [['THR'], ['OG1']], [['ASN'], ['ND2']], [['GLN'], ['NE2']], [['TYR'], ['OH']], [['TRP'], ['NE1']]];
-export var protein_resnames = ['ALA', 'ARG', 'ASN', 'ASP', 'ASH', 'ASX', 'CYS', 'CYM', 'CYX', 'GLN', 'GLU', 'GLH', 'GLX', 'GLY', 'HIS', 'HID', 'HIE', 'HIP', 'ILE', 'LEU', 'LYS', 'LYN', 'MET', 'PHE', 'PRO', 'SER', 'THR', 'TRP', 'TYR', 'VAL'];
-export var _required_protein_atom_names = [[_alternate_protein_resname ['GLU'], ['OE1', 'OE2']], [_alternate_protein_resname ['ASP'], ['OD1', 'OD2']], [['ARG'], ['NH1', 'NH2', 'NE']], [_alternate_protein_resname ['HIS'], ['NE2', 'ND1']], [['PHE'], ['CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ']], [['TYR'], ['CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ', 'OH']], [['TRP'], ['CG', 'CD1', 'CD2', 'NE1', 'CE2', 'CE3', 'CZ2', 'CZ3', 'CH2']], [_alternate_protein_resname ['HIS'], ['CG', 'ND1', 'CD2', 'CE1', 'NE2']], [_alternate_protein_resname ['LYS'], ['NZ']]];
 export var Mol =  __class__ ('Mol', [object], {
 	__module__: __name__,
 	get __init__ () {return __get__ (this, function (self) {
@@ -416,7 +412,7 @@ export var Mol =  __class__ ('Mol', [object], {
 	});},
 	get _categorize_hydro_bond_donor_accep_no_hydros () {return __get__ (this, function (self, atom) {
 		var charaterizations = [];
-		if (__in__ (atom.element, ['O', 'N'])) {
+		if (__in__ (atom.element, ['O', 'N', 'S'])) {
 			charaterizations.append (['ACCEPTOR', null]);
 		}
 		var is_protein_hbond_donor = self._is_hbond_donor_per_protein (atom);
@@ -427,7 +423,7 @@ export var Mol =  __class__ ('Mol', [object], {
 			return charaterizations;
 		}
 		var num_neighbors = atom.number_of_neighbors ();
-		if (atom.element == 'O' && num_neighbors == 1) {
+		if (__in__ (atom.element, ['O', 'S']) && num_neighbors == 1) {
 			var neighbor_idx = atom.indecies_of_atoms_connecting [0];
 			var neighbor = self.all_atoms [neighbor_idx];
 			var neighbor_is_sp3 = neighbor.has_sp3_geometry (self);

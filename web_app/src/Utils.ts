@@ -5,7 +5,7 @@
 // For functions that don't really need to be within the Vue framework.
 
 // ignored in some ways
-export const waterResidues = ["HOH", "WAT", "TIP", "TIP3"];  
+// export const waterResidues = ["HOH", "WAT", "TIP", "TIP3"];  
 
 /**
  * Creates a new object with a property updated.
@@ -67,42 +67,42 @@ export function curPath(): string {
  * @param  {boolean} invert  If true, returns only non-protein atoms.
  * @returns string  the PDB text containing only the protein atoms.
  */
- export function keepOnlyProteinAtoms(pdbTxt: string, invert: boolean = false): string {
-    let proteinResidues = [
-        "ALA", "ARG", "ASH", "ASN", "ASP", "ASX", "CYM", "CYS", "CYX",
-        "GLH", "GLN", "GLU", "GLX", "GLY", "HID", "HIE", "HIP", "HIS",
-        "HSD", "HSE", "HSP", "ILE", "LEU", "LYN", "LYS", "MET", "MSE",
-        "PHE", "PRO", "SER", "THR", "TRP", "TYR", "VAL"
-    ];
-    let lines: string[] = pdbTxt.split("\n");
-    let l = lines.length;
-    let linesToKeep = "";
-    for (let i = 0; i < l; i++) {
-        if ((lines[i].substr(0, 5) !== "ATOM ") && (lines[i].substr(0, 7) !== "HETATM ")) {
-            // Not an atom line.
-            continue;
-        }
+//  export function keepOnlyProteinAtoms(pdbTxt: string, invert: boolean = false): string {
+//     let proteinResidues = [
+//         "ALA", "ARG", "ASH", "ASN", "ASP", "ASX", "CYM", "CYS", "CYX",
+//         "GLH", "GLN", "GLU", "GLX", "GLY", "HID", "HIE", "HIP", "HIS",
+//         "HSD", "HSE", "HSP", "ILE", "LEU", "LYN", "LYS", "MET", "MSE",
+//         "PHE", "PRO", "SER", "THR", "TRP", "TYR", "VAL"
+//     ];
+//     let lines: string[] = pdbTxt.split("\n");
+//     let l = lines.length;
+//     let linesToKeep = "";
+//     for (let i = 0; i < l; i++) {
+//         if ((lines[i].substr(0, 5) !== "ATOM ") && (lines[i].substr(0, 7) !== "HETATM ")) {
+//             // Not an atom line.
+//             continue;
+//         }
 
-        const resname = lines[i].substr(17,3);
+//         const resname = lines[i].substr(17,3);
 
-        if (invert === false) {
-            // Keep only receptor atoms.
-            if (proteinResidues.indexOf(resname) !== -1) {
-                linesToKeep += lines[i] + "\n";
-            }
-        } else {
-            // Keep only ligand atoms. (But not waters).
-            if (
-                (proteinResidues.indexOf(resname) === -1) && 
-                (waterResidues.indexOf(resname) === -1)
-            ) {
-                linesToKeep += lines[i] + "\n";
-            }
-        }
-    }
+//         if (invert === false) {
+//             // Keep only receptor atoms.
+//             if (proteinResidues.indexOf(resname) !== -1) {
+//                 linesToKeep += lines[i] + "\n";
+//             }
+//         } else {
+//             // Keep only ligand atoms. (But not waters).
+//             if (
+//                 (proteinResidues.indexOf(resname) === -1) && 
+//                 (waterResidues.indexOf(resname) === -1)
+//             ) {
+//                 linesToKeep += lines[i] + "\n";
+//             }
+//         }
+//     }
 
-    return linesToKeep;
-}
+//     return linesToKeep;
+// }
 
 /**
  * Given a filename, replace its extension.

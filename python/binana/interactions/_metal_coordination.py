@@ -116,16 +116,21 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
         "Tm", "Yb", "Zn", "Zr"
     ]
 
-    metals += [m.upper() for m in metals]
+    for m in metals[:]:
+        metals.append(m.upper())
+
     coord_lig_atoms = ["N", "O", "Cl", "F", "Br", "I", "CL", "BR", "S"]
 
-    meta_coord_dists = _get_ligand_receptor_dists(
-        ligand, receptor, cutoff, metals + coord_lig_atoms
+    atoms_together = metals[:]
+    atoms_together.extend(coord_lig_atoms)
+
+    metal_coord_dists = _get_ligand_receptor_dists(
+        ligand, receptor, cutoff, atoms_together
     )
 
     metal_coordinations = {}
 
-    for ligand_atom, receptor_atom, dist in meta_coord_dists:
+    for ligand_atom, receptor_atom, dist in metal_coord_dists:
         metal_atom = None
         coord_atom = None
         metal_id = ""

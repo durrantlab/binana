@@ -2,21 +2,16 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-12 01:16:44
+// Transcrypt'ed from Python, 2021-11-19 00:20:08
 var binana = {};
-var math = {};
-var time = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
-import * as __module_time__ from './time.js';
-__nest__ (time, '', __module_time__);
 import * as _math_functions from './binana._utils._math_functions.js';
 import {Mol as _Mol} from './binana._structure.mol.js';
 import {Point as _Point} from './binana._structure.point.js';
-import * as __module_math__ from './math.js';
-__nest__ (math, '', __module_math__);
+import {pi, sqrt} from './math.js';
 import * as __module_binana__ from './binana.js';
 __nest__ (binana, '', __module_binana__);
-export {_Mol, _Point, _math_functions};
+export {_math_functions, pi, _Mol, sqrt, _Point};
 var __name__ = 'binana.load_ligand_receptor';
 export var _ligand_receptor_dists_cache = dict ({});
 export var _ligand_receptor_aromatic_dists = null;
@@ -42,44 +37,77 @@ export var _clear_cache = function () {
 	_ligand_receptor_dists_cache = dict ({});
 	_ligand_receptor_aromatic_dists = null;
 };
-export var cum_time = 0;
-export var _get_ligand_receptor_dists = function (ligand, receptor, max_dist) {
-	var t1 = time.time ();
+export var _get_coor_mol_dists = function (atom, coor, mol_all_atoms, max_dist_sqr, dist_inf_list) {
+	for (var mol_atom of mol_all_atoms) {
+		var mol_coor = mol_atom.coordinates;
+		var delta_x = mol_coor.x - coor.x;
+		var summed = delta_x * delta_x;
+		if (summed > max_dist_sqr) {
+			continue;
+		}
+		var delta_y = mol_coor.y - coor.y;
+		summed += delta_y * delta_y;
+		if (summed > max_dist_sqr) {
+			continue;
+		}
+		var delta_z = mol_coor.z - coor.z;
+		summed += delta_z * delta_z;
+		if (summed > max_dist_sqr) {
+			continue;
+		}
+		var dist = sqrt (summed);
+		var val = tuple ([atom, mol_atom, dist]);
+		dist_inf_list.append (val);
+	}
+};
+export var _get_ligand_receptor_dists = function (ligand, receptor, max_dist, elements) {
+	if (typeof elements == 'undefined' || (elements != null && elements.hasOwnProperty ("__kwargtrans__"))) {;
+		var elements = null;
+	};
+	var ligand_all_atoms_dict = ligand.all_atoms;
+	var receptor_all_atoms_dict = receptor.all_atoms;
+	var ligand_atom_indexes = ligand_all_atoms_dict.py_keys ();
+	var receptor_atom_indexes = receptor_all_atoms_dict.py_keys ();
+	var ligand_all_atoms = (function () {
+		var __accu0__ = [];
+		for (var i of ligand_atom_indexes) {
+			__accu0__.append (ligand_all_atoms_dict [i]);
+		}
+		return __accu0__;
+	}) ();
+	var receptor_all_atoms = (function () {
+		var __accu0__ = [];
+		for (var i of receptor_atom_indexes) {
+			__accu0__.append (receptor_all_atoms_dict [i]);
+		}
+		return __accu0__;
+	}) ();
+	if (elements !== null) {
+		var ligand_all_atoms = (function () {
+			var __accu0__ = [];
+			for (var a of ligand_all_atoms) {
+				if (__in__ (a.element, elements)) {
+					__accu0__.append (a);
+				}
+			}
+			return __accu0__;
+		}) ();
+		var receptor_all_atoms = (function () {
+			var __accu0__ = [];
+			for (var a of receptor_all_atoms) {
+				if (__in__ (a.element, elements)) {
+					__accu0__.append (a);
+				}
+			}
+			return __accu0__;
+		}) ();
+	}
 	var ligand_receptor_dists = [];
 	var max_dist_sqr = max_dist * max_dist;
-	var ligand_all_atoms = ligand.all_atoms;
-	var receptor_all_atoms = receptor.all_atoms;
-	var ligand_atom_indexes = ligand_all_atoms.py_keys ();
-	var receptor_atom_indexes = receptor_all_atoms.py_keys ();
-	var sqrt_func = math.sqrt;
-	for (var ligand_atom_index of ligand_atom_indexes) {
-		var ligand_atom = ligand_all_atoms [ligand_atom_index];
+	for (var ligand_atom of ligand_all_atoms) {
 		var ligand_coor = ligand_atom.coordinates;
-		for (var receptor_atom_index of receptor_atom_indexes) {
-			var receptor_atom = receptor_all_atoms [receptor_atom_index];
-			var receptor_coor = receptor_atom.coordinates;
-			var delta_x = receptor_coor.x - ligand_coor.x;
-			var summed = delta_x * delta_x;
-			if (summed > max_dist_sqr) {
-				continue;
-			}
-			var delta_y = receptor_coor.y - ligand_coor.y;
-			summed += delta_y * delta_y;
-			if (summed > max_dist_sqr) {
-				continue;
-			}
-			var delta_z = receptor_coor.z - ligand_coor.z;
-			summed += delta_z * delta_z;
-			if (summed > max_dist_sqr) {
-				continue;
-			}
-			var dist = sqrt_func (summed);
-			var val = tuple ([ligand_atom, receptor_atom, dist]);
-			ligand_receptor_dists.append (val);
-		}
+		_get_coor_mol_dists (ligand_atom, ligand_coor, receptor_all_atoms, max_dist_sqr, ligand_receptor_dists);
 	}
-	cum_time += time.time () - t1;
-	print (cum_time);
 	return ligand_receptor_dists;
 };
 export var _get_ligand_receptor_aromatic_dists = function (ligand, receptor, pi_pi_general_dist_cutoff) {
@@ -93,7 +121,7 @@ export var _get_ligand_receptor_aromatic_dists = function (ligand, receptor, pi_
 			if (dist < pi_pi_general_dist_cutoff) {
 				var ligand_aromatic_norm_vector = _Point (ligand_aromatic.plane_coeff [0], ligand_aromatic.plane_coeff [1], ligand_aromatic.plane_coeff [2]);
 				var receptor_aromatic_norm_vector = _Point (receptor_aromatic.plane_coeff [0], receptor_aromatic.plane_coeff [1], receptor_aromatic.plane_coeff [2]);
-				var angle_between_planes = (_math_functions.angle_between_points (ligand_aromatic_norm_vector, receptor_aromatic_norm_vector) * 180.0) / math.pi;
+				var angle_between_planes = (_math_functions.angle_between_points (ligand_aromatic_norm_vector, receptor_aromatic_norm_vector) * 180.0) / pi;
 				_ligand_receptor_aromatic_dists.append (tuple ([ligand_aromatic, receptor_aromatic, dist, angle_between_planes]));
 			}
 		}
