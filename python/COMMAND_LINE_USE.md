@@ -197,10 +197,10 @@ are implemented in order to accommodate low-resolution crystal structures. A
 hydrogen bond is identified if the hydrogen-bond donor comes within
 `hydrogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the
 angle formed between the donor, the hydrogen atom, and the acceptor is no
-greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the number of
-hydrogen bonds according to the secondary structure of the receptor atom, the
-side-chain/backbone status of the receptor atom, and the location (ligand or
-receptor) of the hydrogen bond donor. Thus there are twelve possible
+greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the
+number of hydrogen bonds according to the secondary structure of the receptor
+atom, the side-chain/backbone status of the receptor atom, and the location
+(ligand or receptor) of the hydrogen bond donor. Thus there are twelve possible
 categorizations: alpha-sidechain-ligand, alpha-backbone-ligand, beta-sidechain-
 ligand, beta-backbone-ligand, other-sidechain-ligand, other-backbone-ligand,
 alpha-sidechain-receptor, alpha-backbone-receptor, beta-sidechain-receptor,
@@ -318,6 +318,6 @@ aromatic ring or charged functional group: alpha helix, beta sheet, or other.
 Ligand Atom Types and Rotatable Bonds
 =====================================
 
-   BINANA also tallies the number of atoms of each AutoDock type present in the
+BINANA also tallies the number of atoms of each AutoDock type present in the
 ligand as well as the number of ligand rotatable bonds identified by the
 AutoDockTools scripts used to generate the input PDBQT files.

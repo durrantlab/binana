@@ -19,7 +19,7 @@ The BINANA Git repository is hosted at
 
 ## Command-Line Use
 
-See `./COMMAND_LINE_USE.md` in the Git repository for detailed instructions.
+See `./python/COMMAND_LINE_USE.md` in the Git repository for detailed instructions.
 Here is a simple example:
 
 ```bash
