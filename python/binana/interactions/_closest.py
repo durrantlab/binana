@@ -62,7 +62,9 @@ def get_closest(ligand, receptor, cutoff=None):
         pdb_closest_contacts.add_new_atom(receptor_atom.copy_of())
 
         closest_contacts_labels.append(
-            (ligand_atom.string_id(), receptor_atom.string_id())
+            (ligand_atom.string_id(), receptor_atom.string_id(), {
+                "distance": dist
+            })
         )
 
     return {

@@ -95,7 +95,7 @@ python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.
 Though we recommend using program defaults, the following command-line tags can
 also be specified: `-close_contacts_dist1_cutoff` `-close_contacts_dist2_cutoff`
 `-electrostatic_dist_cutoff` `-active_site_flexibility_dist_cutoff`
-`-hydrophobic_dist_cutoff` `-hydrogen_halogen_bond_dist_cutoff`
+`-hydrophobic_dist_cutoff` `-hydrogen_bond_dist_cutoff`
 `-hydrogen_halogen_bond_angle_cutoff` `-pi_padding_dist`
 `-pi_pi_interacting_dist_cutoff` `-pi_stacking_angle_tolerance`
 `-T_stacking_angle_tolerance` `-T_stacking_closest_dist_cutoff`
@@ -105,7 +105,7 @@ For example, if you want to tell BINANA to detect only hydrogen bonds where the
 donor and acceptor are less than 3.0 angstroms distant, run:
 
 ```bash
-python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_halogen_bond_dist_cutoff 3.0
+python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_bond_dist_cutoff 3.0
 ```
 
 What follows is a detailed description of the BINANA algorithm and a further
@@ -195,7 +195,7 @@ BINANA allows hydroxyl and amine groups to act as hydrogen-bond donors. Oxygen
 and nitrogen atoms can act as hydrogen-bond acceptors. Fairly liberal cutoffs
 are implemented in order to accommodate low-resolution crystal structures. A
 hydrogen bond is identified if the hydrogen-bond donor comes within
-`hydrogen_halogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the
+`hydrogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the
 angle formed between the donor, the hydrogen atom, and the acceptor is no
 greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the number of
 hydrogen bonds according to the secondary structure of the receptor atom, the

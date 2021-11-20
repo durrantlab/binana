@@ -68,7 +68,9 @@ def write(
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
             None.
-        TODO: metal_coordinations
+        metal_coordinations (dict, optional): A dictionary containing 
+            information about the metal-coordination protein/ligand 
+            interactions. Defaults to None.
         pi_pi (dict, optional): A dictionary containing information about the
             pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
             to None.

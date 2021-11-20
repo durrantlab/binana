@@ -15,7 +15,7 @@ WIP
 8. zip download now includes vmd state directory.
 9. Vmd state file centers on ligand automatically.
 10. changed hydrogen_bond_dist_cutoff and hydrogen_bond_angle_cutoff parameter
-    names to hydrogen_halogen_bond_dist_cutoff
+    names to hydrogen_bond_dist_cutoff
     hydrogen_halogen_bond_angle_cutoff
 11. Removed ability to toggle on and off cylinder interactions, to simplify UI.
     Always on for those interaction where appropriate.
@@ -26,18 +26,33 @@ WIP
 15. Revised file input system. Can now also specify PDB ID, extract delete
     non-protein residues, etc.
 16. Sulfur can now be a hydrogen bond donor and acceptor.
+17. If input structure has mmultiple frames, keepsfirst one.
+18. JSON file now includes distances and angles.
+19. output_csv option now also prints csv file containing same information as json.
 
 TODO:
+
+Hydrogen bonds w/o hydrogens added. Need to be more judicious. Remove certain
+bonds per this heuristic:
+
+* For oxygen and sulfur, sum of actual neighbors and hydrogen bonds cannot be >
+  two. Remember to account for water molecules. Pick based on distance, dihedral
+  angle. =O not marked as donor, so don't need to worry about that.
+* Nitrogen cannot donate to more than actual neighbors + hydrogen bonds > 4, as
+  above.
+
+Are water molecules able to be hydrogen bond donors?
+
+Tests on all operating systems (including mobile).
+
+Be sure to compress javascript
 
 Halogen bonds mention in all documentation?
 
 Test should also test version of protein without hydrogens, and make sure you
 get all interactions tested. Metal, halogen, hydrogen with S.
 
-If you add in new receptor or ligand, be sure to reevaluate whether new hydrogen
-warning should appear.
-
-METAL_COORDINATION_CUTOFF. Get into web app, documentation, parameters, etc.
+METAL_COORDINATION_CUTOFF. Get into web app (DONE), documentation, parameters, etc.
 
 Make sure all documentation/examples account for get_all_interactions (updated for metal coordination, halogen bonds)
 
@@ -51,11 +66,11 @@ SDF on ligand works?
 
 Makesure can loadin multipleligands. Probably need to rewritecodethat triggersbinana run. Also, can run if restart.
 
-Report actualdistanbes and anglesin json?
+Make sure output_csv parameter documented.
 
-Convert Json to CSV?
+// And you need a message explaining difference between delete/extract. Also,
+// converting files hasn't been implemented.
 
-Notvisualizing metalcoord bonds. 2M30
 
 2.0
 ---

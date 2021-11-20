@@ -63,7 +63,9 @@ def get_hydrophobics(ligand, receptor, cutoff=None):
         hashtable_entry_add_one(hydrophobics, hydrophobic_key)
 
         hydrophobic_labels.append(
-            (ligand_atom.string_id(), receptor_atom.string_id())
+            (ligand_atom.string_id(), receptor_atom.string_id(), {
+                "distance": dist
+            })
         )
 
     return {

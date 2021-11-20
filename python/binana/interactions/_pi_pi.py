@@ -37,6 +37,7 @@ def _t_stacking(
     receptor,
     ligand_aromatic,
     receptor_aromatic,
+    dist,
     angle_between_planes,
     t_stacking_angle_tol,
     t_stacking_closest_dist_cutoff,
@@ -45,9 +46,10 @@ def _t_stacking(
     pdb_pi_t,
     t_stacking_labels,
 ):
+
     if (
-        fabs(angle_between_planes - 90) < t_stacking_angle_tol
-        or fabs(angle_between_planes - 270) < t_stacking_angle_tol
+        min(fabs(angle_between_planes - 90), fabs(angle_between_planes - 270))
+        < t_stacking_angle_tol
     ):
         # so they're more or less perpendicular, it's probably a pi-edge
         # interaction
@@ -109,14 +111,30 @@ def _t_stacking(
 
                 t_stacking_labels.append(
                     _make_pi_pi_interaction_label(
-                        ligand, ligand_aromatic, receptor, receptor_aromatic
+                        ligand,
+                        ligand_aromatic,
+                        receptor,
+                        receptor_aromatic,
+                        {
+                            "distance": dist,
+                            "angle": min(
+                                fabs(angle_between_planes - 0),
+                                fabs(angle_between_planes - 180),
+                            ),
+                        },
                     )
                 )
 
-    return pi_pi_interactions, pdb_pi_t, t_stacking_labels
+    return (
+        pi_pi_interactions,
+        pdb_pi_t,
+        t_stacking_labels,
+    )
 
 
-def _make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_aromatic):
+def _make_pi_pi_interaction_label(
+    ligand, ligand_aromatic, receptor, receptor_aromatic, metric
+):
     return (
         "["
         + " / ".join(
@@ -131,6 +149,7 @@ def _make_pi_pi_interaction_label(ligand, ligand_aromatic, receptor, receptor_ar
             ]
         )
         + "]",
+        metric,
     )
 
 
@@ -159,6 +178,7 @@ def _pi_stacking(
     receptor,
     ligand_aromatic,
     receptor_aromatic,
+    dist,
     angle_between_planes,
     pi_stacking_angle_tol,
     pi_padding,
@@ -166,10 +186,8 @@ def _pi_stacking(
     pdb_pistack,
     pi_stacking_labels,
 ):
-    if (
-        fabs(angle_between_planes - 0) < pi_stacking_angle_tol
-        or fabs(angle_between_planes - 180) < pi_stacking_angle_tol
-    ):
+    angle = min(fabs(angle_between_planes - 0), fabs(angle_between_planes - 180))
+    if angle < pi_stacking_angle_tol:
         # so they're more or less parallel, it's probably pi-pi
         # stackingoutput_dir now, pi-pi are not usually right on top of each
         # other. They're often staggared. So I don't want to just look at the
@@ -207,13 +225,18 @@ def _pi_stacking(
 
             pi_stacking_labels.append(
                 _make_pi_pi_interaction_label(
-                    ligand, ligand_aromatic, receptor, receptor_aromatic
+                    ligand,
+                    ligand_aromatic,
+                    receptor,
+                    receptor_aromatic,
+                    {"distance": dist, "angle": angle},
                 )
             )
         pi_stacking_detected = True
     else:
         pi_stacking_detected = False
-    return pi_pi_interactions, pdb_pistack, pi_stacking_labels, pi_stacking_detected
+
+    return (pi_pi_interactions, pdb_pistack, pi_stacking_labels, pi_stacking_detected)
 
 
 # Be sure to update the corresponding function in
@@ -315,6 +338,7 @@ def get_pi_pi(
         dist,
         angle_between_planes,
     ) in ligand_receptor_aromatic_dists:
+
         (
             pi_interactions,
             pdb_pistack,
@@ -325,6 +349,7 @@ def get_pi_pi(
             receptor,
             ligand_aromatic,
             receptor_aromatic,
+            dist,
             angle_between_planes,
             pi_stacking_angle_tol,
             pi_padding,
@@ -339,6 +364,7 @@ def get_pi_pi(
                 receptor,
                 ligand_aromatic,
                 receptor_aromatic,
+                dist,
                 angle_between_planes,
                 t_stacking_angle_tol,
                 t_stacking_closest_dist_cutoff,

@@ -25,10 +25,8 @@ def _detect_pi_cat(
     for aromatic in mol_with_aromatic.aromatic_rings:
         for charged in mol_with_pos_charge.charges:
             # so only consider positive charges, because no pi-anion interaction
-            if (
-                charged.positive == True
-                and charged.coordinates.dist_to(aromatic.center) < cutoff
-            ):
+            charge_ring_dist = charged.coordinates.dist_to(aromatic.center)
+            if charged.positive == True and charge_ring_dist < cutoff:
                 # distance cutoff based on "Cation-pi interactions in
                 # structural biology." project the charged onto the
                 # plane of the aromatic
@@ -69,7 +67,6 @@ def _detect_pi_cat(
                         )
                     ) + "]"
 
-
                     aromatic_mol_lbls = (
                         "["
                         + " / ".join(
@@ -78,12 +75,12 @@ def _detect_pi_cat(
                         )
                     ) + "]"
 
-
                     if name_of_charged == "LIGAND":
                         cat_pi_labels.append(
                             (
                                 charged_mol_lbls,
                                 aromatic_mol_lbls,
+                                {"distance": charge_ring_dist},
                             )
                         )
                     else:
@@ -91,6 +88,7 @@ def _detect_pi_cat(
                             (
                                 aromatic_mol_lbls,
                                 charged_mol_lbls,
+                                {"distance": charge_ring_dist},
                             )
                         )
 

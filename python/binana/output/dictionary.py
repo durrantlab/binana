@@ -48,11 +48,8 @@ def _atom_details_to_dict(details):
 # interaction_labels: list containind raw data to be parsed into the dictionary
 # returns list
 def _get_close_atom_list(interaction_labels):
-    # set counter for interaction
-    i = 0
     interaction_list = []
-
-    for atom_pairs in interaction_labels:
+    for i, atom_pairs in enumerate(interaction_labels):
         # add new dictionary to interaction list
         # json_output[interaction_name].append({})
         interaction_list.append({})
@@ -73,19 +70,17 @@ def _get_close_atom_list(interaction_labels):
         interaction_list[i] = {
             "ligandAtoms": [_atom_details_to_dict(ligand_atom_details)],
             "receptorAtoms": [_atom_details_to_dict(receptor_atom_details)],
+            "metrics": atom_pairs[2],
         }
-        # increment counter
-        i += 1
+
     return interaction_list
 
 
 def _collect_hydrogen_halogen_bonds(hydrogen_bonds, json_output, hydrogen_bond=True):
     dict_key = "hydrogenBonds" if hydrogen_bond else "halogenBonds"
 
-    # reset counter for interaction
-    i = 0
     # hydrogen bonds
-    for atom_pairs in hydrogen_bonds:
+    for i, atom_pairs in enumerate(hydrogen_bonds):
         # add new dictionary to hydrogen_bonds list
         json_output[dict_key].append({})
         # parse atom_trios
@@ -120,7 +115,11 @@ def _collect_hydrogen_halogen_bonds(hydrogen_bonds, json_output, hydrogen_bond=T
                     atom.remove(detail)
         # add each detail to the appropriate key in ligand_atoms and receptor_atoms
         # add "ligandAtoms" and "receptorAtoms" keys to dictionary
-        json_output[dict_key][i] = {"ligandAtoms": [], "receptorAtoms": []}
+        json_output[dict_key][i] = {
+            "ligandAtoms": [],
+            "receptorAtoms": [],
+            "metrics": atom_pairs[4],
+        }
         for detail in ligand_atom_details:
             json_output[dict_key][i]["ligandAtoms"].append(
                 _atom_details_to_dict(detail)
@@ -129,29 +128,29 @@ def _collect_hydrogen_halogen_bonds(hydrogen_bonds, json_output, hydrogen_bond=T
             json_output[dict_key][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
-        # increment counter
-        i += 1
 
 
 def _collect_pi_pi(pi_stacking_interactions, json_output):
-    # reset counter for interaction
-    i = 0
     # pi-pi stacking interactions
-    for atom_pair in pi_stacking_interactions:
+    for i, atom_pair in enumerate(pi_stacking_interactions):
         # add new dictionary to pi_stacking list
         json_output["piPiStackingInteractions"].append({})
         # parse atom_pairs into individual atoms
         individual_ligand_atoms = atom_pair[0].split("/")
         individual_receptor_atoms = atom_pair[1].split("/")
         # parse individual atoms into details
-        individual_ligand_atoms_details = []
-        for atom in individual_ligand_atoms:
-            if atom != "":
-                individual_ligand_atoms_details.append(re.split(r"[\[\]():]", atom))
-        individual_receptor_atoms_details = []
-        for atom in individual_receptor_atoms:
-            if atom != "":
-                individual_receptor_atoms_details.append(re.split(r"[\[\]():]", atom))
+        individual_ligand_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_ligand_atoms
+            if atom != ""
+        ]
+
+        individual_receptor_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_receptor_atoms
+            if atom != ""
+        ]
+
         # remove whitespace
         for detail_list in individual_ligand_atoms_details:
             for detail in detail_list:
@@ -166,6 +165,7 @@ def _collect_pi_pi(pi_stacking_interactions, json_output):
         json_output["piPiStackingInteractions"][i] = {
             "ligandAtoms": [],
             "receptorAtoms": [],
+            "metrics": atom_pair[2]
         }
         for detail in individual_ligand_atoms_details:
             json_output["piPiStackingInteractions"][i]["ligandAtoms"].append(
@@ -175,29 +175,29 @@ def _collect_pi_pi(pi_stacking_interactions, json_output):
             json_output["piPiStackingInteractions"][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
-        # increment counter
-        i += 1
 
 
 def _collect_t_stacking(t_stacking_interactions, json_output):
-    # reset counter for interaction
-    i = 0
     # t stacking interactions
-    for atom_pair in t_stacking_interactions:
+    for i, atom_pair in enumerate(t_stacking_interactions):
         # add new dictionary to t_stacking list
         json_output["tStackingInteractions"].append({})
         # parse atom_pairs into individual atoms
         individual_ligand_atoms = atom_pair[0].split("/")
         individual_receptor_atoms = atom_pair[1].split("/")
         # parse individual atoms into details
-        individual_ligand_atoms_details = []
-        for atom in individual_ligand_atoms:
-            if atom != "":
-                individual_ligand_atoms_details.append(re.split(r"[\[\]():]", atom))
-        individual_receptor_atoms_details = []
-        for atom in individual_receptor_atoms:
-            if atom != "":
-                individual_receptor_atoms_details.append(re.split(r"[\[\]():]", atom))
+        individual_ligand_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_ligand_atoms
+            if atom != ""
+        ]
+
+        individual_receptor_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_receptor_atoms
+            if atom != ""
+        ]
+
         # remove whitespace
         for detail_list in individual_ligand_atoms_details:
             for detail in detail_list:
@@ -212,7 +212,9 @@ def _collect_t_stacking(t_stacking_interactions, json_output):
         json_output["tStackingInteractions"][i] = {
             "ligandAtoms": [],
             "receptorAtoms": [],
+            "metrics": atom_pair[2]
         }
+
         for detail in individual_ligand_atoms_details:
             json_output["tStackingInteractions"][i]["ligandAtoms"].append(
                 _atom_details_to_dict(detail)
@@ -221,29 +223,29 @@ def _collect_t_stacking(t_stacking_interactions, json_output):
             json_output["tStackingInteractions"][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
-        # increment counter
-        i += 1
 
 
 def _collect_cat_pi(cat_pi_interactions, json_output):
-    # reset counter for interaction
-    i = 0
     # cat-pi stacking interactions
-    for atom_pair in cat_pi_interactions:
+    for i, atom_pair in enumerate(cat_pi_interactions):
         # add new dictionary to cation-pi_stacking list
         json_output["cationPiInteractions"].append({})
         # parse atom_pairs into individual atoms
         individual_ligand_atoms = atom_pair[0].split("/")
         individual_receptor_atoms = atom_pair[1].split("/")
         # parse individual atoms into details
-        individual_ligand_atoms_details = []
-        for atom in individual_ligand_atoms:
-            if atom != "":
-                individual_ligand_atoms_details.append(re.split(r"[\[\]():]", atom))
-        individual_receptor_atoms_details = []
-        for atom in individual_receptor_atoms:
-            if atom != "":
-                individual_receptor_atoms_details.append(re.split(r"[\[\]():]", atom))
+        individual_ligand_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_ligand_atoms
+            if atom != ""
+        ]
+
+        individual_receptor_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_receptor_atoms
+            if atom != ""
+        ]
+
         # remove whitespace
         for detail_list in individual_ligand_atoms_details:
             for detail in detail_list:
@@ -258,6 +260,7 @@ def _collect_cat_pi(cat_pi_interactions, json_output):
         json_output["cationPiInteractions"][i] = {
             "ligandAtoms": [],
             "receptorAtoms": [],
+            "metrics": atom_pair[2],
         }
         for detail in individual_ligand_atoms_details:
             json_output["cationPiInteractions"][i]["ligandAtoms"].append(
@@ -267,29 +270,29 @@ def _collect_cat_pi(cat_pi_interactions, json_output):
             json_output["cationPiInteractions"][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
-        # increment counter
-        i += 1
 
 
 def _collect_salt_bridge(salt_bridge_interactions, json_output):
-    # reset counter for interaction
-    i = 0
     # salt bridge interactions
-    for atom_pair in salt_bridge_interactions:
+    for i, atom_pair in enumerate(salt_bridge_interactions):
         # add new dictionary to salt_bridges list
         json_output["saltBridges"].append({})
         # parse atom_pairs into individual atoms
         individual_ligand_atoms = atom_pair[0].split("/")
         individual_receptor_atoms = atom_pair[1].split("/")
         # parse individual atoms into details
-        individual_ligand_atoms_details = []
-        for atom in individual_ligand_atoms:
-            if atom != "":
-                individual_ligand_atoms_details.append(re.split(r"[\[\]():]", atom))
-        individual_receptor_atoms_details = []
-        for atom in individual_receptor_atoms:
-            if atom != "":
-                individual_receptor_atoms_details.append(re.split(r"[\[\]():]", atom))
+        individual_ligand_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_ligand_atoms
+            if atom != ""
+        ]
+
+        individual_receptor_atoms_details = [
+            re.split(r"[\[\]():]", atom)
+            for atom in individual_receptor_atoms
+            if atom != ""
+        ]
+
         # remove whitespace
         for detail_list in individual_ligand_atoms_details:
             for detail in detail_list:
@@ -301,7 +304,7 @@ def _collect_salt_bridge(salt_bridge_interactions, json_output):
                     detail_list.remove(detail)
         # add each detail to the appropriate key in ligand_atoms and receptor_atoms
         # add "ligandAtoms" and "receptorAtoms" keys to dictionary
-        json_output["saltBridges"][i] = {"ligandAtoms": [], "receptorAtoms": []}
+        json_output["saltBridges"][i] = {"ligandAtoms": [], "receptorAtoms": [], "metrics": atom_pair[2]}
         for detail in individual_ligand_atoms_details:
             json_output["saltBridges"][i]["ligandAtoms"].append(
                 _atom_details_to_dict(detail)
@@ -310,51 +313,28 @@ def _collect_salt_bridge(salt_bridge_interactions, json_output):
             json_output["saltBridges"][i]["receptorAtoms"].append(
                 _atom_details_to_dict(detail)
             )
-        # increment counter
-        i += 1
 
 
 def _collect_metal_coordinations(metal_coordinations_interactions, json_output):
-    # reset counter for interaction
-    i = 0
     # metal coordination interactions
-    for metal_coord_atoms in metal_coordinations_interactions:
-        # add new dictionary to salt_bridges list
+    for i, metal_coord_atoms in enumerate(metal_coordinations_interactions):
+        # add new dictionary to metalCoordinations list
         json_output["metalCoordinations"].append({})
 
         # parse atom_pairs into individual atoms
-        metal_atom = metal_coord_atoms[0]
-        metal_atoms_details = re.split(r"[\[\]():]", metal_atom)
+        ligand_atom = metal_coord_atoms[0]
+        ligand_atom_details = re.split(r"[\[\]():]", ligand_atom)
+        ligand_atom_details = [d for d in ligand_atom_details if d != ""]
 
-        coord_atoms = metal_coord_atoms[1]
-        coord_atoms_details = [
-            re.split(r"[\[\]():]", atom) for atom in coord_atoms if atom != ""
-        ]
+        receptor_atom = metal_coord_atoms[1]
+        receptor_atom_details = re.split(r"[\[\]():]", receptor_atom)
+        receptor_atom_details = [d for d in receptor_atom_details if d != ""]
 
-        # remove whitespace
-        metal_atoms_details = [d for d in metal_atoms_details if d != ""]
-        # for detail_list in metal_atoms_details:
-        #     for detail in detail_list:
-        #         if detail == "":
-        #             detail_list.remove(detail)
-        for j, detail_list in enumerate(coord_atoms_details):
-            coord_atoms_details[j] = [d for d in detail_list if d != ""]
-
-        # add each detail to the appropriate key in ligand_atoms and receptor_atoms
-        # add "metalAtoms" and "coordinatingAtoms" keys to dictionary
         json_output["metalCoordinations"][i] = {
-            "metalAtoms": [],
-            "coordinatingAtoms": [],
+            "ligandAtoms": [_atom_details_to_dict(ligand_atom_details)],
+            "receptorAtoms": [_atom_details_to_dict(receptor_atom_details)],
+            "metrics": metal_coord_atoms[2]
         }
-        json_output["metalCoordinations"][i]["metalAtoms"].append(
-            _atom_details_to_dict(metal_atoms_details)
-        )
-        for detail in coord_atoms_details:
-            json_output["metalCoordinations"][i]["coordinatingAtoms"].append(
-                _atom_details_to_dict(detail)
-            )
-        # increment counter
-        i += 1
 
 
 # json output
@@ -393,7 +373,9 @@ def collect(
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
             None.
-        TODO: metal_coordinations
+        metal_coordinations (dict, optional): A dictionary containing 
+            information about the metal-coordination protein/ligand 
+            interactions. Defaults to None.
         pi_pi (dict, optional): A dictionary containing information about the
             pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
             to None.

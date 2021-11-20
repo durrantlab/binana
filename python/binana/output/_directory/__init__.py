@@ -28,7 +28,7 @@ def make_directory_output(
     salt_bridges,
     metal_coordinations,
     ligand,
-    receptor,
+    receptor
 ):
 
     # if an output directory is specified, and it doesn't exist, create it

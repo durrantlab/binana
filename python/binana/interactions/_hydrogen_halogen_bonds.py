@@ -5,13 +5,15 @@
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import (
     HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_BOND_DIST_CUTOFF,
+    HALOGEN_BOND_DIST_CUTOFF,
 )
 import binana
 from binana.load_ligand_receptor import _get_ligand_receptor_dists
 from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
 from binana._structure.mol import Mol
 from binana._utils._math_functions import angle_between_three_points
+from binana._structure.consts import to_deg
 
 import __future__
 
@@ -32,14 +34,23 @@ from binana._utils.shim import fabs
 # binana.interactions.__init__.py as well!
 
 
-def _get_potential_donors_acceptors(ligand, receptor, dist_cutoff):
+def _get_potential_donors_acceptors(ligand, receptor, dist_cutoff, hydrogen_bond=True):
     # Any that are close to each other (not considering orientation yet).
 
+    donors_and_acceptors = ["O", "N", "S"]
+
+    # The donor can be a carbon if halogen bond. See
+    # https://macmillan.princeton.edu/wp-content/uploads/HalogenBonding-min.pdf
+    if not hydrogen_bond:
+        donors_and_acceptors.append("C")
+
     # Calculate the distances.
-    ligand_receptor_dists = _get_ligand_receptor_dists(ligand, receptor, dist_cutoff, ["O", "N", "S"])
+    ligand_receptor_dists = _get_ligand_receptor_dists(
+        ligand, receptor, dist_cutoff, donors_and_acceptors
+    )
 
     return [
-        [ligand_atom, receptor_atom]
+        [ligand_atom, receptor_atom, dist]
         for ligand_atom, receptor_atom, dist in ligand_receptor_dists
     ]
 
@@ -52,6 +63,8 @@ def _update_mol_and_data(
     receptor_atom,
     ligand_atom,
     center_atom,
+    dist,
+    angle,
 ):
     comment = "RECEPTOR" if lig_donor_or_accept == "ACCEPTOR" else "LIGAND"
 
@@ -75,6 +88,7 @@ def _update_mol_and_data(
             center_atom.string_id(),
             receptor_atom.string_id(),
             comment,
+            {"distance": dist, "angle": angle},
         )
     )
 
@@ -113,7 +127,7 @@ def get_hydrogen_or_halogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
             HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
         hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds.
@@ -129,20 +143,23 @@ def get_hydrogen_or_halogen_bonds(
     pdb_hbonds = Mol()
     hbonds_labels = []
 
-    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF)
+    dist_cutoff = _set_default(
+        dist_cutoff,
+        HYDROGEN_BOND_DIST_CUTOFF if hydrogen_bond else HALOGEN_BOND_DIST_CUTOFF,
+    )
     angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
 
     # Check if hydrogen atoms added.
     lig_and_recep_have_hydrogens = ligand.has_hydrogens and receptor.has_hydrogens
-    
+
     # Get all donor-acceptor pairs that are near each other.
     close_donors_acceptors = _get_potential_donors_acceptors(
-        ligand, receptor, dist_cutoff
+        ligand, receptor, dist_cutoff, hydrogen_bond
     )
 
     # Go through those pairs and find ones with complementary receptor/ligand
     # labels.
-    for ligand_atom, receptor_atom in close_donors_acceptors:
+    for ligand_atom, receptor_atom, dist in close_donors_acceptors:
         # hbond_detected = False
         lig_atm_hbond_infs = ligand.is_hbond_donor_acceptor(ligand_atom, hydrogen_bond)
         recep_atm_hbond_infs = receptor.is_hbond_donor_acceptor(
@@ -164,18 +181,25 @@ def get_hydrogen_or_halogen_bonds(
                 else accept_center_atom
             )
 
+            # print(hydrogen_bond, center_atom.element)
+
             # Now that you've got the atoms, check the angles if appropriate.
+            angle = None
             if lig_and_recep_have_hydrogens or not hydrogen_bond:
                 # Hydrogens present and you're detecting hydrogen bonds, or
                 # you're detecting halogen bonds (so hydrogens don't matter).
 
-                angle = angle_between_three_points(
-                    ligand_atom.coordinates,
-                    center_atom.coordinates,
-                    receptor_atom.coordinates,
+                angle = fabs(
+                    180
+                    - angle_between_three_points(
+                        ligand_atom.coordinates,
+                        center_atom.coordinates,
+                        receptor_atom.coordinates,
+                    )
+                    * to_deg
                 )
 
-                if fabs(180 - angle * 180.0 / math.pi) > angle_cutoff:
+                if angle > angle_cutoff:
                     # Angle is too big.
                     continue
 
@@ -188,6 +212,8 @@ def get_hydrogen_or_halogen_bonds(
                 receptor_atom,
                 ligand_atom,
                 center_atom,
+                dist,
+                angle,
             )
 
             # If you get here, it's identified a hydrogen bond. No need to keep

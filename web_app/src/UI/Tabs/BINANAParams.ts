@@ -301,6 +301,10 @@ let methodsFunctions = {
             );
     
             zip["folder"]("binana_output")["file"](
+                "binana.csv", this.$store.state["filesToSave"]["output.csv"]
+            );
+    
+            zip["folder"]("binana_output")["file"](
                 "log.txt", this.$store.state["filesToSave"]["log.txt"]
             );
     
@@ -571,20 +575,27 @@ export function setup(): void {
                                     ></numeric-input> -->
 
                                     <b-card class="mb-2 text-center" style="margin-bottom:1.4rem !important;">
-                                        <b-card-text>Parameters used to identify hydrogen bonds.</b-card-text>
+                                        <b-card-text>Parameters used to identify hydrogen and halogen bonds.</b-card-text>
                                         <numeric-input
                                             label="Hydrogen Bond Dist Cutoff"
-                                            id="hydrogen_halogen_bond_dist_cutoff"
+                                            id="hydrogen_bond_dist_cutoff"
                                             description="A hydrogen bond is identified if the hydrogen-bond
                                             donor comes within this number of angstroms of the hydrogen-bond
-                                            acceptor." placeholder="$store.state.hydrogen_halogen_bond_dist_cutoff"
+                                            acceptor." placeholder="$store.state.hydrogen_bond_dist_cutoff"
                                         ></numeric-input>
                                         <numeric-input
-                                            label="Hydrogen Bond Angle Cutoff"
+                                            label="Hydrogen and Halogen Bond Angle Cutoff"
                                             id="hydrogen_halogen_bond_angle_cutoff"
-                                            description="A hydrogen bond is identified if the angle formed
-                                            between the donor, the hydrogen atom, and the acceptor is no
+                                            description="A hydrogen or halogen bond is identified if the angle formed
+                                            between the donor, the hydrogen/halide atom, and the acceptor is no
                                             greater than this number of degrees." placeholder="$store.state.hydrogen_halogen_bond_angle_cutoff"
+                                        ></numeric-input>
+                                        <numeric-input
+                                            label="Halogen Bond Dist Cutoff"
+                                            id="halogen_bond_dist_cutoff"
+                                            description="A halogen bond is identified if the halogen-bond
+                                            donor comes within this number of angstroms of the halogen-bond
+                                            acceptor." placeholder="$store.state.halogen_bond_dist_cutoff"
                                         ></numeric-input>
                                     </b-card>
 

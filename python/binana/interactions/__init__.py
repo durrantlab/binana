@@ -16,7 +16,8 @@ from binana.interactions.default_params import (
     CLOSE_CONTACTS_DIST2_CUTOFF,
     ELECTROSTATIC_DIST_CUTOFF,
     HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_BOND_DIST_CUTOFF,
+    HALOGEN_BOND_DIST_CUTOFF,
     HYDROPHOBIC_DIST_CUTOFF,
     PI_PADDING_DIST,
     PI_PI_INTERACTING_DIST_CUTOFF,
@@ -53,8 +54,16 @@ def get_cation_pi(ligand, receptor, cutoff=None, pi_padding=None):
                 'PI-CATION_RECEPTOR-CHARGED_OTHER': 1
             },
             'labels': [
-                ('[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]', '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]'),
-                ('[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]', '[A:TRP(43):CE2(32) / A:TRP(43):CD2(30) / A:TRP(43):CE3(33) / A:TRP(43):CZ3(35) / A:TRP(43):CH2(36) / A:TRP(43):CZ2(34)]')
+                (
+                    '[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]',
+                    '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]',
+                    {'distance': 4.403228947034208}
+                ),
+                (
+                    '[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]',
+                    '[A:TRP(43):CE2(32) / A:TRP(43):CD2(30) / A:TRP(43):CE3(33) / A:TRP(43):CZ3(35) / A:TRP(43):CH2(36) / A:TRP(43):CZ2(34)]',
+                    {'distance': 3.608228947034208}
+                )
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb20488128>
         }
@@ -90,8 +99,16 @@ def get_salt_bridges(ligand, receptor, cutoff=None):
                 'SALT-BRIDGE_ALPHA': 2
             },
             'labels': [
-                ('[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]', '[A:ASP(45):CG(53) / A:ASP(45):OD1(54) / A:ASP(45):OD2(55)]'),
-                ('[A:CHT(1):N1(14) / A:CHT(1):C4(13) / A:CHT(1):H2(15) / A:CHT(1):H1(16) / A:CHT(1):C2(17)]', '[A:ASP(157):CG(283) / A:ASP(157):OD1(284) / A:ASP(157):OD2(285)]')
+                (
+                    '[A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) / A:CHT(1):C7(9)]',
+                    '[A:ASP(45):CG(53) / A:ASP(45):OD1(54) / A:ASP(45):OD2(55)]',
+                    {'distance': 4.403228947034208}
+                ),
+                (
+                    '[A:CHT(1):N1(14) / A:CHT(1):C4(13) / A:CHT(1):H2(15) / A:CHT(1):H1(16) / A:CHT(1):C2(17)]',
+                    '[A:ASP(157):CG(283) / A:ASP(157):OD1(284) / A:ASP(157):OD2(285)]',
+                    {'distance': 3.608228947034208}
+                )
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb20494098>
         }
@@ -128,12 +145,28 @@ def get_pi_pi(
         {
             'labels': {
                 'T_stacking': [
-                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:PHE(233):CG(657) / A:PHE(233):CD1(658) / A:PHE(233):CE1(660) / A:PHE(233):CZ(662) / A:PHE(233):CE2(661) / A:PHE(233):CD2(659)]'),
-                    ('[A:CHT(1):C2(17) / A:CHT(1):O1(18) / A:CHT(1):C5(19) / A:CHT(1):C4(20) / A:CHT(1):C3(21)]', '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]')
+                    (
+                        '[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]',
+                        '[A:PHE(233):CG(657) / A:PHE(233):CD1(658) / A:PHE(233):CE1(660) / A:PHE(233):CZ(662) / A:PHE(233):CE2(661) / A:PHE(233):CD2(659)]',
+                        {'distance': 3.2176272313616425, 'angle': 78.66902972009667}
+                    ),
+                    (
+                        '[A:CHT(1):C2(17) / A:CHT(1):O1(18) / A:CHT(1):C5(19) / A:CHT(1):C4(20) / A:CHT(1):C3(21)]',
+                        '[A:TRP(43):CG(28) / A:TRP(43):CD1(29) / A:TRP(43):NE1(31) / A:TRP(43):CE2(32) / A:TRP(43):CD2(30)]',
+                        {'distance': 3.8236272313616425, 'angle': 91.23102972009667}
+                    )
                 ],
                 'pi_stacking': [
-                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:TRP(90):CG(100) / A:TRP(90):CD1(101) / A:TRP(90):NE1(103) / A:TRP(90):CE2(104) / A:TRP(90):CD2(102)]'),
-                    ('[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]', '[A:TRP(90):CE2(104) / A:TRP(90):CD2(102) / A:TRP(90):CE3(105) / A:TRP(90):CZ3(107) / A:TRP(90):CH2(108) / A:TRP(90):CZ2(106)]')
+                    (
+                        '[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]',
+                        '[A:TRP(90):CG(100) / A:TRP(90):CD1(101) / A:TRP(90):NE1(103) / A:TRP(90):CE2(104) / A:TRP(90):CD2(102)]',
+                        {'distance': 4.296775339716984, 'angle': 17.315362614715923}
+                    ),
+                    (
+                        '[A:CHT(1):C6(4) / A:CHT(1):C7(5) / A:CHT(1):C8(6) / A:CHT(1):C9(7) / A:CHT(1):O2(8)]',
+                        '[A:TRP(90):CE2(104) / A:TRP(90):CD2(102) / A:TRP(90):CE3(105) / A:TRP(90):CZ3(107) / A:TRP(90):CH2(108) / A:TRP(90):CZ2(106)]',
+                        {'distance': 3.256775339716984, 'angle': 7.323362614715923}
+                    )
                 ]
             },
             'counts': {
@@ -176,7 +209,9 @@ def get_pi_pi(
     pi_stacking_angle_tol = _set_default(
         pi_stacking_angle_tol, PI_STACKING_ANGLE_TOLERANCE
     )
-    t_stacking_angle_tol = _set_default(t_stacking_angle_tol, T_STACKING_ANGLE_TOLERANCE)
+    t_stacking_angle_tol = _set_default(
+        t_stacking_angle_tol, T_STACKING_ANGLE_TOLERANCE
+    )
     t_stacking_closest_dist_cutoff = _set_default(
         t_stacking_closest_dist_cutoff, T_STACKING_CLOSEST_DIST_CUTOFF
     )
@@ -217,11 +252,7 @@ def get_ligand_atom_types(ligand):
 
 
 def get_hydrogen_or_halogen_bonds(
-    ligand,
-    receptor,
-    dist_cutoff=None,
-    angle_cutoff=None,
-    hydrogen_bond=True
+    ligand, receptor, dist_cutoff=None, angle_cutoff=None, hydrogen_bond=True
 ):
     """Identifies and counts the number of hydrogen bonds between the protein
     and ligand. Output is formatted like this::
@@ -232,9 +263,27 @@ def get_hydrogen_or_halogen_bonds(
                 'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
             },
             'labels': [
-                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'),
-                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'),
-                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
+                (
+                    'A:CHT(1):N1(14)',
+                    'A:CHT(1):H1(16)',
+                    'A:ASP(157):OD2(285)',
+                    'LIGAND',
+                    {'distance': 3.2340811308335455, 'angle': 16.087842801376098}
+                ),
+                (
+                    'A:CHT(1):O6(22)',
+                    'A:ASN(156):2HD2(276)',
+                    'A:ASN(156):ND2(274)',
+                    'RECEPTOR',
+                    {'distance': 2.8230811308335455, 'angle': 6.542342801376098}
+                ),
+                (
+                    'A:CHT(1):O6(22)',
+                    'A:CHT(1):HO6(23)',
+                    'A:ASP(157):OD1(284)',
+                    'LIGAND',
+                    {'distance': 3.2130811308335455, 'angle': 25.234842801376098}
+                )
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
         }
@@ -243,10 +292,10 @@ def get_hydrogen_or_halogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
             HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
-        hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds. 
+        hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds.
             Otherwise, calculates halogen bonds. Defaults to True.
 
     Returns:
@@ -255,15 +304,14 @@ def get_hydrogen_or_halogen_bonds(
         the log file ("labels").
     """
 
-    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF)
+    dist_cutoff = _set_default(
+        dist_cutoff,
+        HYDROGEN_BOND_DIST_CUTOFF if hydrogen_bond else HALOGEN_BOND_DIST_CUTOFF,
+    )
     angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
 
     return _hydrogen_halogen_bonds.get_hydrogen_or_halogen_bonds(
-        ligand,
-        receptor,
-        dist_cutoff,
-        angle_cutoff,
-        hydrogen_bond
+        ligand, receptor, dist_cutoff, angle_cutoff, hydrogen_bond
     )
 
 
@@ -278,9 +326,21 @@ def get_hydrophobics(ligand, receptor, cutoff=None):
                 'BACKBONE_OTHER': 2
             },
             'labels': [
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CD2(30)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE2(32)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE3(33)')
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CD2(30)',
+                    {'distance': 4.403228947034208}
+                ),
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CE2(32)',
+                    {'distance': 3.923228947034208}
+                ),
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CE3(33)',
+                    {'distance': 4.123228947034208}
+                )
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb000acc68>
         }
@@ -383,9 +443,21 @@ def get_close(ligand, receptor, cutoff=None):
                 'HD_N': 6
             },
             'labels': [
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CD2(30)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE2(32)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE3(33)')
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CD2(30)',
+                    {'distance': 4.403228947034208}
+                ),
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CE2(32)',
+                    {'distance': 3.923228947034208}
+                ),
+                (
+                    'A:CHT(1):C5(1)',
+                    'A:TRP(43):CE3(33)',
+                    {'distance': 4.123228947034208}
+                )
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb203ce3f8>
         }
@@ -417,8 +489,16 @@ def get_closest(ligand, receptor, cutoff=None):
                 'A_OA': 3
             },
             'labels': [
-                ('A:CHT(1):C9(7)', 'A:TRP(205):CB(467)'),
-                ('A:CHT(1):O2(8)', 'A:TRP(205):CG(468)'),
+                (
+                    'A:CHT(1):C9(7)',
+                    'A:TRP(205):CB(467)',
+                    {'distance': 4.403228947034208}
+                ),
+                (
+                    'A:CHT(1):O2(8)',
+                    'A:TRP(205):CG(468)',
+                    {'distance': 3.923228947034208}
+                )
             'mol': <binana._structure.mol.Mol instance at 0x7feb20290908>
         }
 
@@ -437,10 +517,47 @@ def get_closest(ligand, receptor, cutoff=None):
     cutoff = _set_default(cutoff, CLOSE_CONTACTS_DIST1_CUTOFF)
     return _closest.get_closest(ligand, receptor, cutoff)
 
+
 def get_metal_coordinations(ligand, receptor, cutoff=None):
-    # TODO: Missing docstring here!!!
+    """Identifies and counts the number of metal-coordination protein/ligand
+    contacts. Output is formatted like this::
+
+        {
+            'counts': {
+                'N_ZN': 3,
+                'O_ZN': 2
+            },
+            'labels': [
+                (
+                    'A:ZN(201):ZN(3059)',
+                    'A:HIS(97):ND1(1426)',
+                    {'distance': 1.974986835399159}
+                ),
+                (
+                    'A:ZN(201):ZN(3059)',
+                    'A:HIS(100):NE2(1470)',
+                    {'distance': 2.0332422383965976}
+                )
+            ],
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20290908>
+        }
+
+    Args:
+        ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
+        receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
+        cutoff (float, optional): The distance cutoff. Defaults to
+            METAL_COORDINATION_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
+        object with the participating atoms ("mol"), and the labels to use in
+        the log file ("labels").
+    """
+
     cutoff = _set_default(cutoff, METAL_COORDINATION_CUTOFF)
+
     return _metal_coordination.get_metal_coordination(ligand, receptor, cutoff)
+
 
 def get_all_interactions(
     ligand,
@@ -450,8 +567,9 @@ def get_all_interactions(
     electrostatic_dist_cutoff=None,
     active_site_flexibility_dist_cutoff=None,
     hydrophobic_dist_cutoff=None,
-    hydrogen_halogen_bond_dist_cutoff=None,
+    hydrogen_bond_dist_cutoff=None,
     hydrogen_halogen_bond_angle_cutoff=None,
+    halogen_bond_dist_cutoff=None,
     pi_pi_general_dist_cutoff=None,
     pi_stacking_angle_tol=None,
     t_stacking_angle_tol=None,
@@ -496,12 +614,13 @@ def get_all_interactions(
             ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF.
         hydrophobic_dist_cutoff (float, optional): The hydrophobic distance
             cutoff. Defaults to HYDROPHOBIC_DIST_CUTOFF.
-        hydrogen_halogen_bond_dist_cutoff (float, optional): The hydrogen- and 
-            halogen-bond distance cutoff. Defaults to
-            HYDROGEN_HALOGEN_BOND_DIST_CUTOFF.
-        hydrogen_halogen_bond_angle_cutoff (float, optional): The hydrogen- and 
+        hydrogen_bond_dist_cutoff (float, optional): The hydrogen-bond distance
+            cutoff. Defaults to HYDROGEN_BOND_DIST_CUTOFF.
+        hydrogen_halogen_bond_angle_cutoff (float, optional): The hydrogen- and
             halogen-bond angle cutoff. Defaults to
             HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+        halogen_bond_dist_cutoff (float, optional): The halogen-bond distance
+            cutoff. Defaults to HALOGEN_BOND_DIST_CUTOFF.
         pi_pi_general_dist_cutoff (float, optional): The distance cutoff used
             for all pi-pi interactions (stacking and T-shaped). Defaults to
             PI_PI_INTERACTING_DIST_CUTOFF.
@@ -517,7 +636,9 @@ def get_all_interactions(
             cutoff. Defaults to CATION_PI_DIST_CUTOFF.
         salt_bridge_dist_cutoff (float, optional): The salt-bridge distance
             cutoff. Defaults to SALT_BRIDGE_DIST_CUTOFF.
-        TODO: metal_coordination_dist_cutoff
+        metal_coordination_dist_cutoff (float, optional): The 
+            metal-coordination distance cutoff. Defaults to 
+            METAL_COORDINATION_CUTOFF.
         pi_padding (float, optional): The amount by which the radius of each pi
             ring should be artificially expanded, to be sure to catch the
             interactions. Defaults to PI_PADDING_DIST.
@@ -539,11 +660,14 @@ def get_all_interactions(
     hydrophobic_dist_cutoff = _set_default(
         hydrophobic_dist_cutoff, HYDROPHOBIC_DIST_CUTOFF
     )
-    hydrogen_halogen_bond_dist_cutoff = _set_default(
-        hydrogen_halogen_bond_dist_cutoff, HYDROGEN_HALOGEN_BOND_DIST_CUTOFF
+    hydrogen_bond_dist_cutoff = _set_default(
+        hydrogen_bond_dist_cutoff, HYDROGEN_BOND_DIST_CUTOFF
     )
     hydrogen_halogen_bond_angle_cutoff = _set_default(
         hydrogen_halogen_bond_angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF
+    )
+    halogen_bond_dist_cutoff = _set_default(
+        halogen_bond_dist_cutoff, HALOGEN_BOND_DIST_CUTOFF
     )
     pi_pi_general_dist_cutoff = _set_default(
         pi_pi_general_dist_cutoff, PI_PI_INTERACTING_DIST_CUTOFF
@@ -551,7 +675,9 @@ def get_all_interactions(
     pi_stacking_angle_tol = _set_default(
         pi_stacking_angle_tol, PI_STACKING_ANGLE_TOLERANCE
     )
-    t_stacking_angle_tol = _set_default(t_stacking_angle_tol, T_STACKING_ANGLE_TOLERANCE)
+    t_stacking_angle_tol = _set_default(
+        t_stacking_angle_tol, T_STACKING_ANGLE_TOLERANCE
+    )
     t_stacking_closest_dist_cutoff = _set_default(
         t_stacking_closest_dist_cutoff, T_STACKING_CLOSEST_DIST_CUTOFF
     )
@@ -576,23 +702,21 @@ def get_all_interactions(
     hydrogen_bonds = get_hydrogen_or_halogen_bonds(
         ligand,
         receptor,
-        hydrogen_halogen_bond_dist_cutoff,
+        hydrogen_bond_dist_cutoff,
         hydrogen_halogen_bond_angle_cutoff,
-        True
+        True,
     )
 
     halogen_bonds = get_hydrogen_or_halogen_bonds(
         ligand,
         receptor,
-        hydrogen_halogen_bond_dist_cutoff,
+        halogen_bond_dist_cutoff,
         hydrogen_halogen_bond_angle_cutoff,
-        False
+        False,
     )
 
     metal_coordinations = get_metal_coordinations(
-        ligand,
-        receptor,
-        metal_coordination_dist_cutoff
+        ligand, receptor, metal_coordination_dist_cutoff
     )
 
     ligand_atom_types = get_ligand_atom_types(ligand)

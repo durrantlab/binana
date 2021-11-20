@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-19 00:20:09
+// Transcrypt'ed from Python, 2021-11-20 02:43:22
 var binana = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
 import {fabs} from './binana._utils.shim.js';
@@ -15,8 +15,8 @@ __nest__ (binana, '', __module_binana__);
 import {PI_PADDING_DIST, PI_PI_INTERACTING_DIST_CUTOFF, PI_STACKING_ANGLE_TOLERANCE, T_STACKING_ANGLE_TOLERANCE, T_STACKING_CLOSEST_DIST_CUTOFF} from './binana.interactions.default_params.js';
 import {_set_default} from './binana._utils.shim.js';
 var __name__ = 'binana.interactions._pi_pi';
-export var _t_stacking = function (ligand, receptor, ligand_aromatic, receptor_aromatic, angle_between_planes, t_stacking_angle_tol, t_stacking_closest_dist_cutoff, pi_padding, pi_pi_interactions, pdb_pi_t, t_stacking_labels) {
-	if (fabs (angle_between_planes - 90) < t_stacking_angle_tol || fabs (angle_between_planes - 270) < t_stacking_angle_tol) {
+export var _t_stacking = function (ligand, receptor, ligand_aromatic, receptor_aromatic, dist, angle_between_planes, t_stacking_angle_tol, t_stacking_closest_dist_cutoff, pi_padding, pi_pi_interactions, pdb_pi_t, t_stacking_labels) {
+	if (min (fabs (angle_between_planes - 90), fabs (angle_between_planes - 270)) < t_stacking_angle_tol) {
 		var min_dist = 100.0;
 		for (var ligand_ind of ligand_aromatic.indices) {
 			var ligand_at = ligand.all_atoms [ligand_ind];
@@ -44,13 +44,13 @@ export var _t_stacking = function (ligand, receptor, ligand_aromatic, receptor_a
 					pdb_pi_t.add_new_atom (receptor.all_atoms [index].copy_of ());
 				}
 				hashtable_entry_add_one (pi_pi_interactions, key);
-				t_stacking_labels.append (_make_pi_pi_interaction_label (ligand, ligand_aromatic, receptor, receptor_aromatic));
+				t_stacking_labels.append (_make_pi_pi_interaction_label (ligand, ligand_aromatic, receptor, receptor_aromatic, dict ({'distance': dist, 'angle': min (fabs (angle_between_planes - 0), fabs (angle_between_planes - 180))})));
 			}
 		}
 	}
 	return tuple ([pi_pi_interactions, pdb_pi_t, t_stacking_labels]);
 };
-export var _make_pi_pi_interaction_label = function (ligand, ligand_aromatic, receptor, receptor_aromatic) {
+export var _make_pi_pi_interaction_label = function (ligand, ligand_aromatic, receptor, receptor_aromatic, metric) {
 	return tuple ([('[' + ' / '.join ((function () {
 		var __accu0__ = [];
 		for (var index of ligand_aromatic.indices) {
@@ -63,7 +63,7 @@ export var _make_pi_pi_interaction_label = function (ligand, ligand_aromatic, re
 			__accu0__.append (receptor.all_atoms [index].string_id ());
 		}
 		return __accu0__;
-	}) ())) + ']']);
+	}) ())) + ']', metric]);
 };
 export var _pi_pi_detect_by_projecting_all_ring_atoms = function (mol1, mol1_aromatic, mol2_aromatic, pi_padding) {
 	for (var mol1_ring_index of mol1_aromatic.indices) {
@@ -74,8 +74,9 @@ export var _pi_pi_detect_by_projecting_all_ring_atoms = function (mol1, mol1_aro
 	}
 	return false;
 };
-export var _pi_stacking = function (ligand, receptor, ligand_aromatic, receptor_aromatic, angle_between_planes, pi_stacking_angle_tol, pi_padding, pi_pi_interactions, pdb_pistack, pi_stacking_labels) {
-	if (fabs (angle_between_planes - 0) < pi_stacking_angle_tol || fabs (angle_between_planes - 180) < pi_stacking_angle_tol) {
+export var _pi_stacking = function (ligand, receptor, ligand_aromatic, receptor_aromatic, dist, angle_between_planes, pi_stacking_angle_tol, pi_padding, pi_pi_interactions, pdb_pistack, pi_stacking_labels) {
+	var angle = min (fabs (angle_between_planes - 0), fabs (angle_between_planes - 180));
+	if (angle < pi_stacking_angle_tol) {
 		var pi_pi = _pi_pi_detect_by_projecting_all_ring_atoms (ligand, ligand_aromatic, receptor_aromatic, pi_padding);
 		if (!(pi_pi)) {
 			var pi_pi = _pi_pi_detect_by_projecting_all_ring_atoms (receptor, receptor_aromatic, ligand_aromatic, pi_padding);
@@ -91,7 +92,7 @@ export var _pi_stacking = function (ligand, receptor, ligand_aromatic, receptor_
 				pdb_pistack.add_new_atom (receptor.all_atoms [index].copy_of ());
 			}
 			hashtable_entry_add_one (pi_pi_interactions, key);
-			pi_stacking_labels.append (_make_pi_pi_interaction_label (ligand, ligand_aromatic, receptor, receptor_aromatic));
+			pi_stacking_labels.append (_make_pi_pi_interaction_label (ligand, ligand_aromatic, receptor, receptor_aromatic, dict ({'distance': dist, 'angle': angle})));
 		}
 		var pi_stacking_detected = true;
 	}
@@ -128,13 +129,13 @@ export var get_pi_pi = function (ligand, receptor, pi_pi_general_dist_cutoff, pi
 	var pi_stacking_labels = [];
 	var t_stacking_labels = [];
 	for (var [ligand_aromatic, receptor_aromatic, dist, angle_between_planes] of ligand_receptor_aromatic_dists) {
-		var __left0__ = _pi_stacking (ligand, receptor, ligand_aromatic, receptor_aromatic, angle_between_planes, pi_stacking_angle_tol, pi_padding, pi_interactions, pdb_pistack, pi_stacking_labels);
+		var __left0__ = _pi_stacking (ligand, receptor, ligand_aromatic, receptor_aromatic, dist, angle_between_planes, pi_stacking_angle_tol, pi_padding, pi_interactions, pdb_pistack, pi_stacking_labels);
 		var pi_interactions = __left0__ [0];
 		var pdb_pistack = __left0__ [1];
 		var pi_stacking_labels = __left0__ [2];
 		var pi_stacking_detected = __left0__ [3];
 		if (!(pi_stacking_detected)) {
-			var __left0__ = _t_stacking (ligand, receptor, ligand_aromatic, receptor_aromatic, angle_between_planes, t_stacking_angle_tol, t_stacking_closest_dist_cutoff, pi_padding, pi_interactions, pdb_pi_t, t_stacking_labels);
+			var __left0__ = _t_stacking (ligand, receptor, ligand_aromatic, receptor_aromatic, dist, angle_between_planes, t_stacking_angle_tol, t_stacking_closest_dist_cutoff, pi_padding, pi_interactions, pdb_pi_t, t_stacking_labels);
 			var pi_interactions = __left0__ [0];
 			var pdb_pi_t = __left0__ [1];
 			var t_stacking_labels = __left0__ [2];

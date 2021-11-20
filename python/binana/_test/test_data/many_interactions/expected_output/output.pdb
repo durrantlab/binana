@@ -8,17 +8,20 @@ REMARK            cation_pi_dist_cutoff        |             6.0
 REMARK         close_contacts_dist1_cutoff     |             2.5            
 REMARK         close_contacts_dist2_cutoff     |             4.0            
 REMARK          electrostatic_dist_cutoff      |             4.0            
+REMARK           halogen_bond_dist_cutoff      |             5.5            
+REMARK          hydrogen_bond_dist_cutoff      |             4.0            
 REMARK      hydrogen_halogen_bond_angle_cutoff |             40.0           
-REMARK      hydrogen_halogen_bond_dist_cutoff  |             4.0            
 REMARK           hydrophobic_dist_cutoff       |             4.0            
-REMARK                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/input/ligand.pdbqt
+REMARK                    ligand               | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/test_data/many_interactions/input/ligand.pdbqt
+REMARK        metal_coordination_dist_cutoff   |             3.5            
+REMARK                  output_csv             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/output.csv
 REMARK                  output_dir             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/
 REMARK                 output_file             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/output.pdb
 REMARK                 output_json             | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/output/output.json
 REMARK               pi_padding_dist           |             0.75           
 REMARK        pi_pi_interacting_dist_cutoff    |             7.5            
 REMARK         pi_stacking_angle_tolerance     |             30.0           
-REMARK                   receptor              | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/input/receptor.pdbqt
+REMARK                   receptor              | /Users/jdurrant/Documents/Work/durrant_git/binana/python/binana/_test/test_data/many_interactions/input/receptor.pdbqt
 REMARK           salt_bridge_dist_cutoff       |             5.5            
 REMARK                     test                |            False           
 REMARK 
@@ -368,6 +371,12 @@ REMARK      A:CHT(1):N1(14) - A:CHT(1):H1(16) - A:ASP(157):OD2(285)
 REMARK      A:CHT(1):O6(22) - A:ASN(156):2HD2(276) - A:ASN(156):ND2(274)
 REMARK      A:CHT(1):O6(22) - A:CHT(1):HO6(23) - A:ASP(157):OD1(284)
 REMARK 
+REMARK Halogen bonds:
+REMARK     Location of Donor | Sidechain/Backbone | Secondary Structure | Count 
+REMARK    -------------------|--------------------|---------------------|-------
+REMARK 
+REMARK Raw data:
+REMARK 
 REMARK Hydrophobic contacts (C-C):
 REMARK     Sidechain/Backbone | Secondary Structure | Count 
 REMARK    --------------------|---------------------|-------
@@ -499,6 +508,10 @@ REMARK      [A:CHT(1):N1(2) / A:CHT(1):C5(1) / A:CHT(1):C6(3) / A:CHT(1):C6(4) /
 REMARK      [A:CHT(1):N1(14) / A:CHT(1):C4(13) / A:CHT(1):H2(15) / A:CHT(1):H1(16) / A:CHT(1):C2(17)] - [A:ASP(157):CG(283) / A:ASP(157):OD1(284) / A:ASP(157):OD2(285)]
 REMARK      [A:CHT(1):O4(11) / A:CHT(1):C1(10) / A:CHT(1):O3(12)] - [A:LYS(183):NZ(354) / A:LYS(183):HZ1(356) / A:LYS(183):HZ2(357) / A:LYS(183):HZ3(358)]
 REMARK 
+REMARK Metal Coordinations:
+REMARK 
+REMARK Raw data:
+REMARK 
 REMARK JSON Output:
 REMARK 
 REMARK 
@@ -549,6 +562,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 4.403228947034208
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -625,6 +641,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 4.280756595250165
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -708,6 +727,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 4.1748128341280175
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -784,6 +806,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 4.45074514048553
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -867,6 +892,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.57953875721998
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -910,6 +938,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.823813018441147
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -930,6 +961,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9368334991462337
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -950,6 +984,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.63186302054469
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -970,6 +1007,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8961235863355235
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -990,6 +1030,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.586078777718081
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -1010,6 +1053,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.713362088458381
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -1030,6 +1076,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7900133245148373
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -1050,6 +1099,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.014950745866341
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -1070,6 +1122,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.1922752074343483
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -1090,6 +1145,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2875337260627475
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 110,
@@ -1110,6 +1168,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8187145743037676
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -1130,6 +1191,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7771555435274315
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 110,
@@ -1150,6 +1214,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8926958524909194
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -1170,6 +1237,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.713489733390952
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -1190,6 +1260,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6003895622557294
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -1210,6 +1283,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5120371581177783
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 53,
@@ -1230,6 +1306,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.859569548026416
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 54,
@@ -1250,6 +1329,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5442038598252212
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 55,
@@ -1270,6 +1352,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.613334332718189
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -1290,6 +1375,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.213259715615904
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 110,
@@ -1310,6 +1398,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9187032293859656
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -1330,6 +1421,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.53358528975883
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 471,
@@ -1350,6 +1444,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7583552253612216
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -1370,6 +1467,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.504385538150732
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 478,
@@ -1390,6 +1490,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.940995559500163
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -1410,6 +1513,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8650632595081813
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -1430,6 +1536,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.657800705341941
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -1450,6 +1559,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.829019979054693
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -1470,6 +1582,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.900632897364221
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 470,
@@ -1490,6 +1605,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.911150853649089
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -1510,6 +1628,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.816204397041647
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 102,
@@ -1530,6 +1651,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9587477818118195
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 104,
@@ -1550,6 +1674,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3695174728735284
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -1570,6 +1697,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5842123262998804
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 657,
@@ -1590,6 +1720,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.251919279440989
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 658,
@@ -1610,6 +1743,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.999272558853672
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 659,
@@ -1630,6 +1766,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.377358139137749
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 660,
@@ -1650,6 +1789,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.812578917216009
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 662,
@@ -1670,6 +1812,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4871022353811196
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 464,
@@ -1690,6 +1835,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.135594764930838
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -1710,6 +1858,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.778954299732186
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -1730,6 +1881,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3159645655525334
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -1750,6 +1904,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6868639790477764
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 470,
@@ -1770,6 +1927,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.954059812395357
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 488,
@@ -1790,6 +1950,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.504626718694825
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -1810,6 +1973,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.2330438867160676
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -1830,6 +1996,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.462557004416345
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -1850,6 +2019,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.827968528820644
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 470,
@@ -1870,6 +2042,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0831511477707343
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 471,
@@ -1890,6 +2065,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.251463362856792
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -1910,6 +2088,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.732402577429182
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 473,
@@ -1930,6 +2111,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.742671505756282
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 478,
@@ -1950,6 +2134,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4845312453757673
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 255,
@@ -1970,6 +2157,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7319080910440428
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -1990,6 +2180,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.880916386628292
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -2010,6 +2203,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.75818919161875
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -2030,6 +2226,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8603657857773013
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -2050,6 +2249,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6283822841591546
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 27,
@@ -2070,6 +2272,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.128964525206383
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -2090,6 +2295,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.067471434259821
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 29,
@@ -2110,6 +2318,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6334994151643962
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -2130,6 +2341,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5275046420947516
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 31,
@@ -2150,6 +2364,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8802778251047956
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -2170,6 +2387,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.165511333102442
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 255,
@@ -2190,6 +2410,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2828507428757714
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 354,
@@ -2210,6 +2433,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0203660374199686
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 356,
@@ -2230,6 +2456,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.071015141610345
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 357,
@@ -2250,6 +2479,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7357799619121423
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 358,
@@ -2270,6 +2502,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.461965915487902
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -2290,6 +2525,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.8496698054336034
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -2310,6 +2548,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7445178594847155
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 475,
@@ -2330,6 +2571,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9965273234195604
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -2350,6 +2594,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7790698084071215
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 27,
@@ -2370,6 +2617,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.722628876655795
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -2390,6 +2640,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0664764796097796
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 29,
@@ -2410,6 +2663,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4379437168167826
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -2430,6 +2686,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8509082045668137
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 31,
@@ -2450,6 +2709,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.724056256288297
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 54,
@@ -2470,6 +2732,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.8536702682685675
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 354,
@@ -2490,6 +2755,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.6205648246131967
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 356,
@@ -2510,6 +2778,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3713373863708216
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 357,
@@ -2530,6 +2801,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.654423289530137
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 358,
@@ -2550,6 +2824,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.57628997705723
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 471,
@@ -2570,6 +2847,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0646923173460663
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -2590,6 +2870,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.474575721209598
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -2610,6 +2893,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.118666862619347
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -2630,6 +2916,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.578908353115515
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 478,
@@ -2650,6 +2939,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.769415604573208
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 27,
@@ -2670,6 +2962,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2654771473706563
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -2690,6 +2985,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7771346744441474
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 29,
@@ -2710,6 +3008,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.391607436010248
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 31,
@@ -2730,6 +3031,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7726359485113314
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 38,
@@ -2750,6 +3054,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.888429117265738
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 253,
@@ -2770,6 +3077,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8694889843492257
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 254,
@@ -2790,6 +3100,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.5692228396929675
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 255,
@@ -2810,6 +3123,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.954922249551817
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 350,
@@ -2830,6 +3146,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9031938204501215
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 353,
@@ -2850,6 +3169,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.5413171781578154
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 354,
@@ -2870,6 +3192,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.412883959082989
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 356,
@@ -2890,6 +3215,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.644687505169563
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 357,
@@ -2910,6 +3238,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7578981768009212
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 358,
@@ -2930,6 +3261,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.922424505328304
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -2950,6 +3284,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.916864755178065
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -2970,6 +3307,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6020169349962803
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 475,
@@ -2990,6 +3330,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.674579219241785
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -3010,6 +3353,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9414537927013673
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -3030,6 +3376,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9359546491289756
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -3050,6 +3399,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9894430689007208
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -3070,6 +3422,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.557114701552369
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -3090,6 +3445,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3303118472599524
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -3110,6 +3468,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.761517512919487
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -3130,6 +3491,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.098167361521968
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -3150,6 +3514,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5127099225526726
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -3170,6 +3537,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.862115741403925
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -3190,6 +3560,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2343169294303866
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -3210,6 +3583,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.328468867212071
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -3230,6 +3606,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0685589451727986
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -3250,6 +3629,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.991930234861326
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 109,
@@ -3270,6 +3652,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.623907559527422
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -3290,6 +3675,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7864112296474075
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -3310,6 +3698,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.112032936843696
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -3330,6 +3721,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7975793107613574
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -3350,6 +3744,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.6500811308335455
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -3370,6 +3767,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.912874391032761
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 95,
@@ -3390,6 +3790,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.637447594124208
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 96,
@@ -3410,6 +3813,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.2865259674886693
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -3430,6 +3836,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3618115928244565
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -3450,6 +3859,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3451381622411915
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -3470,6 +3882,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5860032069143477
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 102,
@@ -3490,6 +3905,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5033489692007556
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -3510,6 +3928,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.465861220533794
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 109,
@@ -3530,6 +3951,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9690656331182033
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 135,
@@ -3550,6 +3974,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7494075532009066
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -3570,6 +3997,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.73007747908807
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -3590,6 +4020,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.659602847304609
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -3610,6 +4043,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9625186919241555
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -3630,6 +4066,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.494124210728633
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -3650,6 +4089,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.962843045087705
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -3670,6 +4112,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.954712126059239
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -3690,6 +4135,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.937629489934267
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 132,
@@ -3710,6 +4158,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.1470877013518384
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 135,
@@ -3730,6 +4181,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.410188557836649
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -3750,6 +4204,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6029761309228796
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 282,
@@ -3770,6 +4227,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.121569937569819
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -3790,6 +4250,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.057527642584663
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -3810,6 +4273,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6354785232463318
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -3830,6 +4296,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.189888712792343
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -3850,6 +4319,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3963871981857436
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -3870,6 +4342,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.629724890554143
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -3890,6 +4365,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7379530494643727
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 93,
@@ -3910,6 +4388,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9627930806440053
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -3930,6 +4411,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3739272369154616
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -3950,6 +4434,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7000381079118636
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 109,
@@ -3970,6 +4457,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.956054972425242
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -3990,6 +4480,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0437680594946785
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -4010,6 +4503,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.227531254689875
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 146,
@@ -4030,6 +4526,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.959865022952171
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 147,
@@ -4050,6 +4549,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.475194335804766
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -4070,6 +4572,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9650610335781713
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -4090,6 +4595,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.57687936615145
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -4110,6 +4618,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.084222592485827
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -4130,6 +4641,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4731612401384417
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -4150,6 +4664,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9069122793782407
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -4170,6 +4687,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.988266415373978
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -4190,6 +4710,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7745864556722686
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -4210,6 +4733,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9066520259570106
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -4230,6 +4756,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0883751391306076
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -4250,6 +4779,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6768846867966904
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 146,
@@ -4270,6 +4802,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7474249825713657
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 147,
@@ -4290,6 +4825,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.359758038443772
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -4310,6 +4848,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.881356077455404
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 274,
@@ -4330,6 +4871,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5037165981283365
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -4350,6 +4894,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2708290997849456
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -4370,6 +4917,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.614138481412184
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -4390,6 +4940,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.67248117762365
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -4410,6 +4963,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.501947172645528
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 286,
@@ -4430,6 +4986,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.6777895735102115
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -4450,6 +5009,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4224521910466468
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -4470,6 +5032,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.176818320393321
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -4490,6 +5055,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.865322237537253
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 93,
@@ -4510,6 +5078,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.193384724708251
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -4530,6 +5101,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.72450013763993
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -4550,6 +5124,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.27515908010588
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 146,
@@ -4570,6 +5147,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.157219346196903
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 147,
@@ -4590,6 +5170,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7377312795711533
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -4610,6 +5193,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9106485395647623
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -4630,6 +5216,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9014434338790744
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -4650,6 +5239,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.555771116512588
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -4670,6 +5262,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7645886206138812
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -4690,6 +5285,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7971538025210423
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 92,
@@ -4710,6 +5308,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7045282398229835
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 93,
@@ -4730,6 +5331,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4198147610652834
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -4750,6 +5354,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.573612247406358
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -4770,6 +5377,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.694996474951313
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 146,
@@ -4790,6 +5400,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.134267857091988
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 147,
@@ -4810,6 +5423,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6440958001284474
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -4830,6 +5446,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.763270253383353
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -4850,6 +5469,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2176272313616425
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -4870,6 +5492,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.533408968169175
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -4890,6 +5515,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.125104703302874
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -4910,6 +5538,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.766301899741974
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 92,
@@ -4930,6 +5561,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.586874948659096
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 93,
@@ -4950,6 +5584,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.84436535724689
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -4970,6 +5607,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9213527688384366
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -4990,6 +5630,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8880613421086876
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 103,
@@ -5010,6 +5653,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3548217538343232
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 109,
@@ -5030,6 +5676,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2790757844246294
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -5050,6 +5699,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.7944908301871383
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 144,
@@ -5070,6 +5722,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.6576788745068507
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 146,
@@ -5090,6 +5745,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6747555020708518
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 147,
@@ -5110,6 +5768,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.168881739514627
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -5130,6 +5791,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4299155966291632
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -5150,6 +5814,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.963191860140007
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -5170,6 +5837,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.360122170397975
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -5190,6 +5860,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5847870229624528
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 272,
@@ -5210,6 +5883,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.49267934399939
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 273,
@@ -5230,6 +5906,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9006795755477723
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 274,
@@ -5250,6 +5929,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.0221006404232202
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -5270,6 +5952,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6462287366538035
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 277,
@@ -5290,6 +5975,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5668240775233087
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -5310,6 +5998,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.538558843123397
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -5330,6 +6021,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7884114084930114
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -5350,6 +6044,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9789690875904036
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 286,
@@ -5370,6 +6067,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5172183611484797
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -5390,6 +6090,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9739891796531106
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -5410,6 +6113,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.0475874064577715
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 272,
@@ -5430,6 +6136,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.8301070651125566
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 273,
@@ -5450,6 +6159,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.665629194017804
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 274,
@@ -5470,6 +6182,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.039670071359582
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -5490,6 +6205,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.527200164436376
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 277,
@@ -5510,6 +6228,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.93510215877555
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 278,
@@ -5530,6 +6251,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.732002379208334
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -5550,6 +6274,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6124087571084444
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -5570,6 +6297,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.177778154623131
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -5590,6 +6320,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.071720364876987
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 286,
@@ -5610,6 +6343,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.395732174362401
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 291,
@@ -5632,6 +6368,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.135594764930838
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -5652,6 +6391,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.2330438867160676
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -5672,6 +6414,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.462557004416345
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -5692,6 +6437,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3713373863708216
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 357,
@@ -5712,6 +6460,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.474575721209598
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -5732,6 +6483,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.412883959082989
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 356,
@@ -5752,6 +6506,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7578981768009212
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 358,
@@ -5772,6 +6529,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.2865259674886693
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -5792,6 +6552,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3618115928244565
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -5812,6 +6575,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.3451381622411915
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -5832,6 +6598,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.121569937569819
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -5852,6 +6621,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.057527642584663
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -5872,6 +6644,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6354785232463318
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -5892,6 +6667,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.475194335804766
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -5912,6 +6690,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.359758038443772
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -5932,6 +6713,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.176818320393321
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -5952,6 +6736,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7377312795711533
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -5972,6 +6759,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7645886206138812
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -5992,6 +6782,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6440958001284474
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -6012,6 +6805,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.125104703302874
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -6032,6 +6828,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.168881739514627
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 148,
@@ -6052,6 +6851,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.0221006404232202
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -6072,6 +6874,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.039670071359582
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 276,
@@ -6092,6 +6897,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.6124087571084444
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -6121,6 +6929,7 @@ REMARK     "N_N": 796.8226384968042,
 REMARK     "N_OA": 488848.33092751016,
 REMARK     "OA_OA": 591382.5385213972
 REMARK   },
+REMARK   "halogenBonds": [],
 REMARK   "hydrogenBonds": [
 REMARK     {
 REMARK       "ligandAtoms": [
@@ -6139,6 +6948,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 16.087842801376098,
+REMARK         "distance": 2.6500811308335455
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 285,
@@ -6159,6 +6972,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 35.51562311681741,
+REMARK         "distance": 2.9006795755477723
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 274,
@@ -6193,6 +7010,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 24.57128175960105,
+REMARK         "distance": 2.538558843123397
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 284,
@@ -6215,6 +7036,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.823813018441147
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -6235,6 +7059,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9368334991462337
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -6255,6 +7082,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.63186302054469
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -6275,6 +7105,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8961235863355235
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -6295,6 +7128,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.586078777718081
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -6315,6 +7151,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.713362088458381
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -6335,6 +7174,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7900133245148373
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -6355,6 +7197,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.014950745866341
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -6375,6 +7220,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8926958524909194
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -6395,6 +7243,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.713489733390952
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -6415,6 +7266,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6003895622557294
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -6435,6 +7289,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5120371581177783
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 53,
@@ -6455,6 +7312,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9187032293859656
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -6475,6 +7335,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7583552253612216
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -6495,6 +7358,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8650632595081813
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -6515,6 +7381,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.657800705341941
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -6535,6 +7404,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.829019979054693
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -6555,6 +7427,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.900632897364221
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 470,
@@ -6575,6 +7450,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.911150853649089
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -6595,6 +7473,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.816204397041647
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 102,
@@ -6615,6 +7496,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9587477818118195
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 104,
@@ -6635,6 +7519,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3695174728735284
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -6655,6 +7542,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.5842123262998804
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 657,
@@ -6675,6 +7565,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.251919279440989
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 658,
@@ -6695,6 +7588,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.999272558853672
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 659,
@@ -6715,6 +7611,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.377358139137749
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 660,
@@ -6735,6 +7634,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.812578917216009
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 662,
@@ -6755,6 +7657,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4871022353811196
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 464,
@@ -6775,6 +7680,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.135594764930838
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 467,
@@ -6795,6 +7703,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.778954299732186
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 468,
@@ -6815,6 +7726,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3159645655525334
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 469,
@@ -6835,6 +7749,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6868639790477764
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 470,
@@ -6855,6 +7772,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4845312453757673
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 255,
@@ -6875,6 +7795,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.880916386628292
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -6895,6 +7818,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.75818919161875
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -6915,6 +7841,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8603657857773013
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -6935,6 +7864,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6283822841591546
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 27,
@@ -6955,6 +7887,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.128964525206383
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -6975,6 +7910,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.067471434259821
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 29,
@@ -6995,6 +7933,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.6334994151643962
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 30,
@@ -7015,6 +7956,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.8802778251047956
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -7035,6 +7979,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.165511333102442
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 255,
@@ -7055,6 +8002,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.461965915487902
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 472,
@@ -7075,6 +8025,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.8496698054336034
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 474,
@@ -7095,6 +8048,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7445178594847155
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 475,
@@ -7115,6 +8071,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9965273234195604
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 476,
@@ -7135,6 +8094,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9414537927013673
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -7155,6 +8117,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9359546491289756
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -7175,6 +8140,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9894430689007208
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -7195,6 +8163,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.557114701552369
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -7215,6 +8186,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.761517512919487
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -7235,6 +8209,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.189888712792343
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -7255,6 +8232,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3963871981857436
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -7275,6 +8255,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.629724890554143
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -7295,6 +8278,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9627930806440053
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 99,
@@ -7315,6 +8301,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.3739272369154616
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -7335,6 +8324,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.956054972425242
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -7355,6 +8347,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.57687936615145
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -7375,6 +8370,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.6777895735102115
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -7395,6 +8393,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4224521910466468
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -7415,6 +8416,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.176818320393321
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -7435,6 +8439,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.193384724708251
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -7455,6 +8462,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.9106485395647623
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -7475,6 +8485,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9014434338790744
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -7495,6 +8508,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.555771116512588
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -7515,6 +8531,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 1.7645886206138812
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -7535,6 +8554,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.7971538025210423
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 92,
@@ -7555,6 +8577,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.4198147610652834
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -7575,6 +8600,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.763270253383353
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 33,
@@ -7595,6 +8623,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2176272313616425
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 34,
@@ -7615,6 +8646,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.533408968169175
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 35,
@@ -7635,6 +8669,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.125104703302874
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 36,
@@ -7655,6 +8692,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.766301899741974
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 92,
@@ -7675,6 +8715,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.84436535724689
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -7695,6 +8738,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.9213527688384366
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 101,
@@ -7715,6 +8761,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 3.2790757844246294
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 143,
@@ -7734,6 +8783,7 @@ REMARK     "N": 2,
 REMARK     "OA": 5
 REMARK   },
 REMARK   "ligandRotatableBonds": 8,
+REMARK   "metalCoordinations": [],
 REMARK   "piPiStackingInteractions": [
 REMARK     {
 REMARK       "ligandAtoms": [
@@ -7773,6 +8823,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 17.315362614715923,
+REMARK         "distance": 4.296775339716984
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 100,
@@ -7849,6 +8903,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 17.018736289239662,
+REMARK         "distance": 4.243586894492808
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 104,
@@ -7934,6 +8992,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 4.4297093301931225
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 53,
@@ -7996,6 +9057,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.5054695168770253
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 283,
@@ -8044,6 +9108,9 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "distance": 2.542578858167431
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 354,
@@ -8115,6 +9182,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 89.37454084362474,
+REMARK         "distance": 6.32071783898
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 657,
@@ -8198,6 +9269,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 78.27859758856768,
+REMARK         "distance": 4.496722584282913
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 28,
@@ -8274,6 +9349,10 @@ REMARK           "resID": 1,
 REMARK           "resName": "CHT"
 REMARK         }
 REMARK       ],
+REMARK       "metrics": {
+REMARK         "angle": 78.66902972009667,
+REMARK         "distance": 3.2176272313616425
+REMARK       },
 REMARK       "receptorAtoms": [
 REMARK         {
 REMARK           "atomIndex": 32,
@@ -8331,8 +9410,9 @@ REMARK and sidechain, respectively. "HYD" indicates hydrophobic contacts
 REMARK between the protein and ligand. "HBN" indicates hydrogen bonds. "HAL"
 REMARK indicates halogen bonds. "SAL" indicates salt bridges. "PIS" indicates
 REMARK pi-pi stacking interactions, "PIT" indicates T-stacking interactions,
-REMARK and "PIC" indicates cation-pi interactions. Protein residue names are
-REMARK unchanged, but the ligand residue is now named "LIG".
+REMARK and "PIC" indicates cation-pi interactions. "MTL" indicates metal-
+REMARK coordination interactions. Protein residue names are unchanged, but the
+REMARK ligand residue is now named "LIG".
 REMARK
 ATOM      1  N   ASP            23.366  -3.399  14.662                       N
 ATOM      2  CA  ASP            22.530  -2.226  14.843                       C
@@ -10264,6 +11344,7 @@ ATOM      7  O6  HBN            18.398   2.270   5.897                       O
 ATOM      8 HO6  HBN            18.813   2.276   5.007                       H
 ATOM      9 OD1  HBN            19.182   1.675   3.557                       O
 TER
+TER
 ATOM      1  C6  PIS            14.451   3.555   6.881                       C
 ATOM      2  C7  PIS            14.179   3.052   5.671                       C
 ATOM      3  C8  PIS            12.835   3.506   5.294                       C
@@ -10394,4 +11475,5 @@ ATOM     20 HZ3  SAL            18.465   7.012  10.355                       H
 ATOM     21  O4  SAL            16.818   5.027   9.728                       O
 ATOM     22  C1  SAL            17.243   5.230   8.677                       C
 ATOM     23  O3  SAL            18.046   6.106   8.908                       O
+TER
 TER

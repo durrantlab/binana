@@ -6,6 +6,7 @@
 
 from binana.output import _directory
 from binana.output import dictionary
+from binana.output import csv
 from binana.output import _log
 from binana.output import pdb_file
 import binana
@@ -77,7 +78,8 @@ def _write_main(
             halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
-        TODO: metal_coordinations
+        metal_coordinations (dict): A dictionary containing information about
+            the metal-coordination protein/ligand interactions.
         pi_pi (dict): A dictionary containing information about the pi-pi
             (stacking and T-shaped) protein/ligand interactions.
         cat_pi (dict): A dictionary containing information about the pi-cation
@@ -129,6 +131,12 @@ def _write_main(
         json_output,
     )
 
+    if parameters.params["output_csv"] != "":
+        csv_txt = csv.collect(json_output)
+        f = _openFile(parameters.params["output_csv"], "w")
+        f.write(csv_txt)
+        f.close()
+
     if parameters.params["output_json"] != "":
         f = _openFile(parameters.params["output_json"], "w")
         f.write(
@@ -172,5 +180,5 @@ def _write_main(
             salt_bridges,
             metal_coordinations,
             ligand,
-            receptor,
+            receptor
         )

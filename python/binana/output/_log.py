@@ -471,10 +471,8 @@ def _get_metal_coordinations(metal_coordinations, output):
 
     output = output + preface + "\n" + preface + "Raw data:\n"
     for atom_pairs in metal_coordinations["labels"]:
-        metal = atom_pairs[0]
-        coord_atoms = atom_pairs[1]
         output = (
-            output + preface + "     " + metal + " : " + " - ".join(coord_atoms) + "\n"
+            output + preface + "     " + atom_pairs[0] + " - " + atom_pairs[1] + "\n"
         )
 
     return output
@@ -518,7 +516,8 @@ def collect(
             halogen bonds between the protein and ligand.
         salt_bridges (dict): A dictionary containing information about the
             salt-bridges protein/ligand interactions.
-        TODO: metal_coordinations
+        metal_coordinations (dict): A dictionary containing information about
+            the metal-coordination protein/ligand interactions.
         pi_pi (dict): A dictionary containing information about the pi-pi
             (stacking and T-shaped) protein/ligand interactions.
         cat_pi (dict): A dictionary containing information about the pi-cation

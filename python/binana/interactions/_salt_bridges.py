@@ -5,8 +5,11 @@
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import SALT_BRIDGE_DIST_CUTOFF
 import binana
+
 # from binana.load_ligand_receptor import _get_ligand_receptor_dists
-from binana._utils.utils import hashtable_entry_add_one # , list_alphebetize_and_combine
+from binana._utils.utils import (
+    hashtable_entry_add_one,
+)  # , list_alphebetize_and_combine
 from binana._structure.mol import Mol
 
 # Be sure to update the corresponding function in
@@ -49,9 +52,8 @@ def get_salt_bridges(ligand, receptor, cutoff=None):
 
     for receptor_charge in receptor.charges:
         for ligand_charge in ligand.charges:
-            if ligand_charge.positive != receptor_charge.positive and (
-                ligand_charge.coordinates.dist_to(receptor_charge.coordinates) < cutoff
-            ):
+            dist = ligand_charge.coordinates.dist_to(receptor_charge.coordinates)
+            if ligand_charge.positive != receptor_charge.positive and (dist < cutoff):
                 # so they have oppositve charges 4 is good cutoff for salt
                 # bridges according to "Close-Range Electrostatic Interactions
                 # in Proteins", but looking at complexes, I decided to go with
@@ -97,9 +99,9 @@ def get_salt_bridges(ligand, receptor, cutoff=None):
                             )
                             + "]"
                         ),
+                        {"distance": dist},
                     )
                 )
-
 
     return {
         "counts": salt_bridges,

@@ -28,48 +28,63 @@ def _remove_lines_with_pass(txt):
 
 def _run_test(cmd_params):
     cur_dir = os.path.dirname(__file__) + os.sep
-    lig = cur_dir + "input" + os.sep + "ligand.pdbqt"
-    rec = cur_dir + "input" + os.sep + "receptor.pdbqt"
+    for test_dir in glob.glob(cur_dir + "test_data" + os.sep + "/*"):
+        test_dir = test_dir + os.sep
+        lig = glob.glob(test_dir + "input" + os.sep + "ligand.*")[0]
+        rec = glob.glob(test_dir + "input" + os.sep + "receptor.*")[0]
 
-    out_dir = cur_dir + "output" + os.sep
-    out_expected_dir = cur_dir + "expected_output" + os.sep
+        out_dir = cur_dir + "output" + os.sep
+        out_expected_dir = test_dir + "expected_output" + os.sep
 
-    if not os.path.exists(out_dir):
-        os.mkdir(out_dir)
+        if not os.path.exists(out_dir):
+            os.mkdir(out_dir)
 
-    # Modify the parameters in preparation or the test.
-    cmd_params.params["receptor"] = rec
-    cmd_params.params["ligand"] = lig
-    cmd_params.params["test"] = False
-    cmd_params.params["output_dir"] = out_dir
+        # Modify the parameters in preparation or the test.
+        cmd_params.params["receptor"] = rec
+        cmd_params.params["ligand"] = lig
+        cmd_params.params["test"] = False
+        cmd_params.params["output_dir"] = out_dir
 
-    args = []
-    for arg in cmd_params.params:
-        if arg == "test":
-            continue
-        args.append("-" + arg)
-        args.append(cmd_params.params[arg])
+        args = []
+        for arg in cmd_params.params:
+            if arg == "test":
+                continue
+            args.append("-" + arg)
+            args.append(cmd_params.params[arg])
 
-    binana.run(args)
+        binana.run(args)
+        
+        print("=" * 80)
+        print("TEST: " + os.path.basename(test_dir[:-1]).strip() + "\n")
 
-    for out_file in glob.glob(out_dir + "*"):
-        expect_file = out_expected_dir + os.path.basename(out_file)
+        with open(test_dir + "info.txt") as f:
+            print(f.read().strip())
+            print("")
 
-        out_txt = open(out_file).read()
-        expect_txt = open(expect_file).read()
+        for out_file in glob.glob(out_dir + "*"):
+            expect_file = out_expected_dir + os.path.basename(out_file)
 
-        out_txt = _remove_lines_with_pass(out_txt)
-        expect_txt = _remove_lines_with_pass(expect_txt)
+            out_txt = open(out_file).read()
+            expect_txt = open(expect_file).read()
 
-        if out_txt == expect_txt:
-            print("PASS: " + os.path.basename(out_file))
-        else:
-            print("FAIL: " + os.path.basename(out_file))
-            print("    Contents different:")
-            print("        " + out_file)
-            print("        " + expect_file)
+            out_txt = _remove_lines_with_pass(out_txt)
+            expect_txt = _remove_lines_with_pass(expect_txt)
 
-    # Delete output files (clean up)
-    for ext in [".pdb", "state.vmd", "output.json", "log.txt"]:
-        for fl in glob.glob(out_dir + "*" + ext):
-            os.unlink(fl)
+            if out_txt == expect_txt:
+                print("PASS: " + os.path.basename(out_file))
+            else:
+                print("FAIL: " + os.path.basename(out_file))
+                print("    Contents different:")
+                print("        " + out_file)
+                print("        " + expect_file)
+
+        # Delete output files (clean up)
+        for ext in [".pdb", "state.vmd", "output.json", "log.txt"]:
+            for fl in glob.glob(out_dir + "*" + ext):
+                os.unlink(fl)
+
+        print("")
+        try:
+            raw_input("Enter for next test > ")
+        except:
+            input("Enter for next test > ")

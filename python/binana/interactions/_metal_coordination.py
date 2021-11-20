@@ -70,30 +70,34 @@ from binana._utils._math_functions import angle_between_three_points
 
 
 def get_metal_coordination(ligand, receptor, cutoff=None):
-    # TODO: Fix docstring
-    """Identifies and counts the number of close protein/ligand contacts.
-    Output is formatted like this::
+    """Identifies and counts the number of metal-coordination protein/ligand
+    contacts. Output is formatted like this::
 
         {
             'counts': {
-                'C_C': 5,
-                'A_OA': 29,
-                'HD_NA': 1,
-                'HD_N': 6
+                'N_ZN': 3,
+                'O_ZN': 2
             },
             'labels': [
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CD2(30)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE2(32)'),
-                ('A:CHT(1):C5(1)', 'A:TRP(43):CE3(33)')
+                (
+                    'A:ZN(201):ZN(3059)',
+                    'A:HIS(97):ND1(1426)',
+                    {'distance': 1.974986835399159}
+                ),
+                (
+                    'A:ZN(201):ZN(3059)',
+                    'A:HIS(100):NE2(1470)',
+                    {'distance': 2.0332422383965976}
+                )
             ],
-            'mol': <binana._structure.mol.Mol instance at 0x7feb203ce3f8>
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20290908>
         }
 
     Args:
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         cutoff (float, optional): The distance cutoff. Defaults to
-            CLOSE_CONTACTS_DIST2_CUTOFF.
+            METAL_COORDINATION_CUTOFF.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -107,13 +111,82 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
     # https://chem.libretexts.org/Bookshelves/General_Chemistry/Chemistry_(OpenSTAX)/19%3A_Transition_Metals_and_Coordination_Chemistry/19.2%3A_Coordination_Chemistry_of_Transition_Metals
     # metals = ["Co", "Pt", "Ag", "Cr", "Ni", "Sn", "Mn", "Fe", "Cu", "Zn"]
     metals = [
-        "Ac", "Ag", "Al", "Am", "Au", "Ba", "Be", "Bi", "Bk", "Ca", "Cd", "Ce",
-        "Cf", "Cm", "Co", "Cr", "Cs", "Cu", "Db", "Dy", "Er", "Es", "Eu", "Fe",
-        "Fm", "Fr", "Ga", "Gd", "Ge", "Hf", "Hg", "Ho", "In", "Ir", "La", "Lr",
-        "Lu", "Md", "Mg", "Mn", "Mo", "Nb", "Nd", "Ni", "No", "Np", "Os", "Pa",
-        "Pb", "Pd", "Pm", "Po", "Pr", "Pt", "Pu", "Ra", "Re", "Rf", "Rh", "Ru",
-        "Sb", "Sc", "Sg", "Sm", "Sn", "Sr", "Ta", "Tb", "Tc", "Th", "Ti", "Tl",
-        "Tm", "Yb", "Zn", "Zr"
+        "Ac",
+        "Ag",
+        "Al",
+        "Am",
+        "Au",
+        "Ba",
+        "Be",
+        "Bi",
+        "Bk",
+        # "Cd",  # Keep C- ones to min to not confusion with carbon
+        # "Ce",
+        # "Cf",
+        # "Cm",
+        # "Cr",
+        # "Cs",
+        "Ca",
+        "Co",
+        "Cu",
+        "Db",
+        "Dy",
+        "Er",
+        "Es",
+        "Eu",
+        # "Fm",  # To avoid confusion with F
+        # "Fr",
+        "Fe",
+        "Ga",
+        "Gd",
+        "Ge",
+        # "Hf",  # I worry about confusing with a hydrogen
+        # "Hg",
+        # "Ho",
+        # "In",  # Too much potential for confusion with I
+        # "Ir",
+        "La",
+        "Lr",
+        "Lu",
+        "Md",
+        "Mg",
+        "Mn",
+        "Mo",
+        # "No",  # Keep to a min because of confusion with N.
+        # "Np",
+        # "Nb",
+        # "Nd",
+        "Ni",
+        # "Os",  # Confusion with O
+        # "Pa",  # Minimize confusion with P
+        # "Pd",
+        # "Pm",
+        # "Po",
+        # "Pr",
+        # "Pt",
+        # "Pu",
+        "Pb",
+        "Ra",
+        "Re",
+        "Rf",
+        "Rh",
+        "Ru",
+        # "Sb",  # Confusion with S
+        # "Sc",
+        # "Sg",
+        # "Sm",
+        # "Sn",
+        # "Sr",
+        "Ta",
+        "Tb",
+        "Tc",
+        "Th",
+        "Ti",
+        "Tl",
+        "Tm",
+        "Yb",
+        "Zn",
+        "Zr",
     ]
 
     for m in metals[:]:
@@ -128,53 +201,52 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
         ligand, receptor, cutoff, atoms_together
     )
 
-    metal_coordinations = {}
-
-    for ligand_atom, receptor_atom, dist in metal_coord_dists:
-        metal_atom = None
-        coord_atom = None
-        metal_id = ""
-        if ligand_atom.element in metals and receptor_atom.element not in metals:
-            metal_atom = ligand_atom
-            coord_atom = receptor_atom
-            metal_id = metal_atom.string_id()
-        elif ligand_atom.element not in metals and receptor_atom.element in metals:
-            metal_atom = receptor_atom
-            coord_atom = ligand_atom
-            metal_id = metal_atom.string_id()
-
-        if metal_atom is not None and coord_atom is not None:
-            if metal_id not in metal_coordinations.keys():
-                metal_coordinations[metal_id] = [metal_atom]
-            metal_coordinations[metal_id].append(coord_atom)
-
     atom_type_counts = {}
     pdb_metal_coordinations = Mol()
     metal_coordinations_labels = []
 
-    for metal_id in metal_coordinations.keys():
+    for ligand_atom, receptor_atom, dist in metal_coord_dists:
+        if (ligand_atom.element in metals and receptor_atom.element not in metals) or (
+            ligand_atom.element not in metals and receptor_atom.element in metals
+        ):
+            pdb_metal_coordinations.add_new_atom(ligand_atom.copy_of())
+            pdb_metal_coordinations.add_new_atom(receptor_atom.copy_of())
 
-        # _approve_metal_coordination_geometry(metal_coordinations[metal_id])
-
-        atoms = metal_coordinations[metal_id]
-        metal_atom = atoms[0]
-        coord_atoms = atoms[1:]
-
-        pdb_metal_coordinations.add_new_atom(metal_atom.copy_of())
-
-        coord_atoms_labels = []
-
-        for coord_atom in coord_atoms:
-            list_metal_atom = [metal_atom.atom_type, coord_atom.atom_type]
+            list_metal_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
             hashtable_entry_add_one(
                 atom_type_counts,
                 list_alphebetize_and_combine(list_metal_atom),
             )
-            pdb_metal_coordinations.add_new_atom(coord_atom.copy_of())
 
-            coord_atoms_labels.append(coord_atom.string_id())
+            metal_coordinations_labels.append(
+                (ligand_atom.string_id(), receptor_atom.string_id(), {
+                    "distance": dist
+                })
+            )
 
-        metal_coordinations_labels.append((metal_atom.string_id(), coord_atoms_labels))
+    # for metal_id in metal_coordinations.keys():
+
+    #     # _approve_metal_coordination_geometry(metal_coordinations[metal_id])
+
+    #     atoms = metal_coordinations[metal_id]
+    #     metal_atom = atoms[0]
+    #     coord_atoms = atoms[1:]
+
+    #     pdb_metal_coordinations.add_new_atom(metal_atom.copy_of())
+
+    #     coord_atoms_labels = []
+
+    #     for coord_atom in coord_atoms:
+    #         list_metal_atom = [metal_atom.atom_type, coord_atom.atom_type]
+    #         hashtable_entry_add_one(
+    #             atom_type_counts,
+    #             list_alphebetize_and_combine(list_metal_atom),
+    #         )
+    #         pdb_metal_coordinations.add_new_atom(coord_atom.copy_of())
+
+    #         coord_atoms_labels.append(coord_atom.string_id())
+
+    #     metal_coordinations_labels.append((metal_atom.string_id(), coord_atoms_labels))
 
     return {
         "counts": atom_type_counts,

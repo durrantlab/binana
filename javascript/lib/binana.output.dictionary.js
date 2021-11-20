@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-19 00:20:09
+// Transcrypt'ed from Python, 2021-11-20 02:43:22
 var binana = {};
 var re = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -21,9 +21,8 @@ export var _atom_details_to_dict = function (details) {
 	return dict ({'chain': details [0].strip (), 'resID': int (details [2]), 'resName': details [1], 'atomName': details [3], 'atomIndex': int (details [4])});
 };
 export var _get_close_atom_list = function (interaction_labels) {
-	var i = 0;
 	var interaction_list = [];
-	for (var atom_pairs of interaction_labels) {
+	for (var [i, atom_pairs] of enumerate (interaction_labels)) {
 		interaction_list.append (dict ({}));
 		var ligand_atom_details = re.py_split ('[():]', atom_pairs [0]);
 		var receptor_atom_details = re.py_split ('[():]', atom_pairs [1]);
@@ -37,8 +36,7 @@ export var _get_close_atom_list = function (interaction_labels) {
 				receptor_atom_details.remove (detail);
 			}
 		}
-		interaction_list [i] = dict ({'ligandAtoms': [_atom_details_to_dict (ligand_atom_details)], 'receptorAtoms': [_atom_details_to_dict (receptor_atom_details)]});
-		i++;
+		interaction_list [i] = dict ({'ligandAtoms': [_atom_details_to_dict (ligand_atom_details)], 'receptorAtoms': [_atom_details_to_dict (receptor_atom_details)], 'metrics': atom_pairs [2]});
 	}
 	return interaction_list;
 };
@@ -47,8 +45,7 @@ export var _collect_hydrogen_halogen_bonds = function (hydrogen_bonds, json_outp
 		var hydrogen_bond = true;
 	};
 	var dict_key = (hydrogen_bond ? 'hydrogenBonds' : 'halogenBonds');
-	var i = 0;
-	for (var atom_pairs of hydrogen_bonds) {
+	for (var [i, atom_pairs] of enumerate (hydrogen_bonds)) {
 		json_output [dict_key].append (dict ({}));
 		var ligand_and_receptor = [re.py_split ('[():]', atom_pairs [0]), re.py_split ('[():]', atom_pairs [1]), re.py_split ('[():]', atom_pairs [2])];
 		var ligand_atom_details = [ligand_and_receptor [0]];
@@ -73,226 +70,225 @@ export var _collect_hydrogen_halogen_bonds = function (hydrogen_bonds, json_outp
 				}
 			}
 		}
-		json_output [dict_key] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': []});
+		json_output [dict_key] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': [], 'metrics': atom_pairs [4]});
 		for (var detail of ligand_atom_details) {
 			json_output [dict_key] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
 		}
 		for (var detail of receptor_atom_details) {
 			json_output [dict_key] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
 		}
-		i++;
 	}
 };
 export var _collect_pi_pi = function (pi_stacking_interactions, json_output) {
-	var i = 0;
-	for (var atom_pair of pi_stacking_interactions) {
+	for (var [i, atom_pair] of enumerate (pi_stacking_interactions)) {
 		json_output ['piPiStackingInteractions'].append (dict ({}));
 		var individual_ligand_atoms = atom_pair [0].py_split ('/');
 		var individual_receptor_atoms = atom_pair [1].py_split ('/');
-		var individual_ligand_atoms_details = [];
-		for (var atom of individual_ligand_atoms) {
-			if (atom != '') {
-				individual_ligand_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		var individual_receptor_atoms_details = [];
-		for (var atom of individual_receptor_atoms) {
-			if (atom != '') {
-				individual_receptor_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		for (var detail_list of individual_ligand_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		for (var detail_list of individual_receptor_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		json_output ['piPiStackingInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': []});
-		for (var detail of individual_ligand_atoms_details) {
-			json_output ['piPiStackingInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
-		}
-		for (var detail of individual_receptor_atoms_details) {
-			json_output ['piPiStackingInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
-		}
-		i++;
-	}
-};
-export var _collect_t_stacking = function (t_stacking_interactions, json_output) {
-	var i = 0;
-	for (var atom_pair of t_stacking_interactions) {
-		json_output ['tStackingInteractions'].append (dict ({}));
-		var individual_ligand_atoms = atom_pair [0].py_split ('/');
-		var individual_receptor_atoms = atom_pair [1].py_split ('/');
-		var individual_ligand_atoms_details = [];
-		for (var atom of individual_ligand_atoms) {
-			if (atom != '') {
-				individual_ligand_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		var individual_receptor_atoms_details = [];
-		for (var atom of individual_receptor_atoms) {
-			if (atom != '') {
-				individual_receptor_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		for (var detail_list of individual_ligand_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		for (var detail_list of individual_receptor_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		json_output ['tStackingInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': []});
-		for (var detail of individual_ligand_atoms_details) {
-			json_output ['tStackingInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
-		}
-		for (var detail of individual_receptor_atoms_details) {
-			json_output ['tStackingInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
-		}
-		i++;
-	}
-};
-export var _collect_cat_pi = function (cat_pi_interactions, json_output) {
-	var i = 0;
-	for (var atom_pair of cat_pi_interactions) {
-		json_output ['cationPiInteractions'].append (dict ({}));
-		var individual_ligand_atoms = atom_pair [0].py_split ('/');
-		var individual_receptor_atoms = atom_pair [1].py_split ('/');
-		var individual_ligand_atoms_details = [];
-		for (var atom of individual_ligand_atoms) {
-			if (atom != '') {
-				individual_ligand_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		var individual_receptor_atoms_details = [];
-		for (var atom of individual_receptor_atoms) {
-			if (atom != '') {
-				individual_receptor_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		for (var detail_list of individual_ligand_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		for (var detail_list of individual_receptor_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		json_output ['cationPiInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': []});
-		for (var detail of individual_ligand_atoms_details) {
-			json_output ['cationPiInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
-		}
-		for (var detail of individual_receptor_atoms_details) {
-			json_output ['cationPiInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
-		}
-		i++;
-	}
-};
-export var _collect_salt_bridge = function (salt_bridge_interactions, json_output) {
-	var i = 0;
-	for (var atom_pair of salt_bridge_interactions) {
-		json_output ['saltBridges'].append (dict ({}));
-		var individual_ligand_atoms = atom_pair [0].py_split ('/');
-		var individual_receptor_atoms = atom_pair [1].py_split ('/');
-		var individual_ligand_atoms_details = [];
-		for (var atom of individual_ligand_atoms) {
-			if (atom != '') {
-				individual_ligand_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		var individual_receptor_atoms_details = [];
-		for (var atom of individual_receptor_atoms) {
-			if (atom != '') {
-				individual_receptor_atoms_details.append (re.py_split ('[\\[\\]():]', atom));
-			}
-		}
-		for (var detail_list of individual_ligand_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		for (var detail_list of individual_receptor_atoms_details) {
-			for (var detail of detail_list) {
-				if (detail == '') {
-					detail_list.remove (detail);
-				}
-			}
-		}
-		json_output ['saltBridges'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': []});
-		for (var detail of individual_ligand_atoms_details) {
-			json_output ['saltBridges'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
-		}
-		for (var detail of individual_receptor_atoms_details) {
-			json_output ['saltBridges'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
-		}
-		i++;
-	}
-};
-export var _collect_metal_coordinations = function (metal_coordinations_interactions, json_output) {
-	var i = 0;
-	for (var metal_coord_atoms of metal_coordinations_interactions) {
-		json_output ['metalCoordinations'].append (dict ({}));
-		var metal_atom = metal_coord_atoms [0];
-		var metal_atoms_details = re.py_split ('[\\[\\]():]', metal_atom);
-		var coord_atoms = metal_coord_atoms [1];
-		var coord_atoms_details = (function () {
+		var individual_ligand_atoms_details = (function () {
 			var __accu0__ = [];
-			for (var atom of coord_atoms) {
+			for (var atom of individual_ligand_atoms) {
 				if (atom != '') {
 					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
 				}
 			}
 			return __accu0__;
 		}) ();
-		var metal_atoms_details = (function () {
+		var individual_receptor_atoms_details = (function () {
 			var __accu0__ = [];
-			for (var d of metal_atoms_details) {
+			for (var atom of individual_receptor_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		for (var detail_list of individual_ligand_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		for (var detail_list of individual_receptor_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		json_output ['piPiStackingInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': [], 'metrics': atom_pair [2]});
+		for (var detail of individual_ligand_atoms_details) {
+			json_output ['piPiStackingInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
+		}
+		for (var detail of individual_receptor_atoms_details) {
+			json_output ['piPiStackingInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
+		}
+	}
+};
+export var _collect_t_stacking = function (t_stacking_interactions, json_output) {
+	for (var [i, atom_pair] of enumerate (t_stacking_interactions)) {
+		json_output ['tStackingInteractions'].append (dict ({}));
+		var individual_ligand_atoms = atom_pair [0].py_split ('/');
+		var individual_receptor_atoms = atom_pair [1].py_split ('/');
+		var individual_ligand_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_ligand_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		var individual_receptor_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_receptor_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		for (var detail_list of individual_ligand_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		for (var detail_list of individual_receptor_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		json_output ['tStackingInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': [], 'metrics': atom_pair [2]});
+		for (var detail of individual_ligand_atoms_details) {
+			json_output ['tStackingInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
+		}
+		for (var detail of individual_receptor_atoms_details) {
+			json_output ['tStackingInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
+		}
+	}
+};
+export var _collect_cat_pi = function (cat_pi_interactions, json_output) {
+	for (var [i, atom_pair] of enumerate (cat_pi_interactions)) {
+		json_output ['cationPiInteractions'].append (dict ({}));
+		var individual_ligand_atoms = atom_pair [0].py_split ('/');
+		var individual_receptor_atoms = atom_pair [1].py_split ('/');
+		var individual_ligand_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_ligand_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		var individual_receptor_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_receptor_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		for (var detail_list of individual_ligand_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		for (var detail_list of individual_receptor_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		json_output ['cationPiInteractions'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': [], 'metrics': atom_pair [2]});
+		for (var detail of individual_ligand_atoms_details) {
+			json_output ['cationPiInteractions'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
+		}
+		for (var detail of individual_receptor_atoms_details) {
+			json_output ['cationPiInteractions'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
+		}
+	}
+};
+export var _collect_salt_bridge = function (salt_bridge_interactions, json_output) {
+	for (var [i, atom_pair] of enumerate (salt_bridge_interactions)) {
+		json_output ['saltBridges'].append (dict ({}));
+		var individual_ligand_atoms = atom_pair [0].py_split ('/');
+		var individual_receptor_atoms = atom_pair [1].py_split ('/');
+		var individual_ligand_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_ligand_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		var individual_receptor_atoms_details = (function () {
+			var __accu0__ = [];
+			for (var atom of individual_receptor_atoms) {
+				if (atom != '') {
+					__accu0__.append (re.py_split ('[\\[\\]():]', atom));
+				}
+			}
+			return __accu0__;
+		}) ();
+		for (var detail_list of individual_ligand_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		for (var detail_list of individual_receptor_atoms_details) {
+			for (var detail of detail_list) {
+				if (detail == '') {
+					detail_list.remove (detail);
+				}
+			}
+		}
+		json_output ['saltBridges'] [i] = dict ({'ligandAtoms': [], 'receptorAtoms': [], 'metrics': atom_pair [2]});
+		for (var detail of individual_ligand_atoms_details) {
+			json_output ['saltBridges'] [i] ['ligandAtoms'].append (_atom_details_to_dict (detail));
+		}
+		for (var detail of individual_receptor_atoms_details) {
+			json_output ['saltBridges'] [i] ['receptorAtoms'].append (_atom_details_to_dict (detail));
+		}
+	}
+};
+export var _collect_metal_coordinations = function (metal_coordinations_interactions, json_output) {
+	for (var [i, metal_coord_atoms] of enumerate (metal_coordinations_interactions)) {
+		json_output ['metalCoordinations'].append (dict ({}));
+		var ligand_atom = metal_coord_atoms [0];
+		var ligand_atom_details = re.py_split ('[\\[\\]():]', ligand_atom);
+		var ligand_atom_details = (function () {
+			var __accu0__ = [];
+			for (var d of ligand_atom_details) {
 				if (d != '') {
 					__accu0__.append (d);
 				}
 			}
 			return __accu0__;
 		}) ();
-		for (var [j, detail_list] of enumerate (coord_atoms_details)) {
-			coord_atoms_details [j] = (function () {
-				var __accu0__ = [];
-				for (var d of detail_list) {
-					if (d != '') {
-						__accu0__.append (d);
-					}
+		var receptor_atom = metal_coord_atoms [1];
+		var receptor_atom_details = re.py_split ('[\\[\\]():]', receptor_atom);
+		var receptor_atom_details = (function () {
+			var __accu0__ = [];
+			for (var d of receptor_atom_details) {
+				if (d != '') {
+					__accu0__.append (d);
 				}
-				return __accu0__;
-			}) ();
-		}
-		json_output ['metalCoordinations'] [i] = dict ({'metalAtoms': [], 'coordinatingAtoms': []});
-		json_output ['metalCoordinations'] [i] ['metalAtoms'].append (_atom_details_to_dict (metal_atoms_details));
-		for (var detail of coord_atoms_details) {
-			json_output ['metalCoordinations'] [i] ['coordinatingAtoms'].append (_atom_details_to_dict (detail));
-		}
-		i++;
+			}
+			return __accu0__;
+		}) ();
+		json_output ['metalCoordinations'] [i] = dict ({'ligandAtoms': [_atom_details_to_dict (ligand_atom_details)], 'receptorAtoms': [_atom_details_to_dict (receptor_atom_details)], 'metrics': metal_coord_atoms [2]});
 	}
 };
 export var collect = function (closest, close, hydrophobics, hydrogen_bonds, halogen_bonds, salt_bridges, metal_coordinations, pi_pi, cat_pi, electrostatic_energies, active_site_flexibility, ligand_atom_types, ligand_rotatable_bonds) {

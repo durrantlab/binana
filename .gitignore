@@ -27,3 +27,5 @@ binana_web_app.zip
 .vscode
 make_zip_files_for_releases.sh
 releases
+python/binana/_test/output
+

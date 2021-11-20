@@ -87,12 +87,19 @@ _required_protein_atom_names = [
 to_deg = 180.0 / math.pi
 
 two_leter_atom_names = [
-    "AC", "AG", "AL", "AM", "AU", "BA", "BE", "BK", "CA", "CD", "CE",
-    "CF", "CM", "CO", "CR", "CS", "CU", "DB", "DY", "ER", "ES", "EU", "FE",
-    "FM", "FR", "GA", "GD", "GE", "HF", "HG", "HO", "IN", "IR", "LA", "LR",
-    "LU", "MD", "MG", "MN", "MO", "NB", "ND", "NI", "NO", "NP", "OS", "PA",
-    "PB", "PD", "PM", "PO", "PR", "PT", "PU", "RA", "RE", "RF", "RH", "RU",
-    "SB", "SC", "SG", "SM", "SN", "SR", "TA", "TB", "TC", "TH", "TI", "TL",
-    "TM", "YB", "ZN", "ZR",
-    "BR", "CL", "BI", "AS", "LI"
+    "AC", "AG", "AL", "AM", "AU", "BA", "BE", "BK", "CA", "CO", "CU", "DB",
+    "DY", "ER", "ES", "EU", "FE", "GA", "GD", "GE", "LA", "LR", "LU", "MD",
+    "MG", "MN", "MO", "NI", "PB", "RA", "RE", "RF", "RH", "RU", "TA", "TB",
+    "TC", "TH", "TI", "TL", "TM", "YB", "ZN", "ZR", "BR", "CL", "BI", "AS",
+    "LI",
+
+    # Rare ones no longer using because of potential for confusion with other
+    # elements (not worth it).
+    # "CD", "CE",
+    # "CF", "CM", "CR", "CS", "FM", "FR", 
+    # "HF", "HG", "HO", "IN", "IR", 
+    # "NO", "NP", "NB", "ND", 
+    # "OS", "PA", "PD", "PM", "PO", "PR", "PT", "PU", 
+    # "SB", "SC", "SG", "SM", "SN", "SR", 
+
 ]

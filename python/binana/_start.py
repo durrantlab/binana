@@ -57,8 +57,9 @@ def _get_all_interactions(parameters):
         parameters.params["electrostatic_dist_cutoff"],
         parameters.params["active_site_flexibility_dist_cutoff"],
         parameters.params["hydrophobic_dist_cutoff"],
-        parameters.params["hydrogen_halogen_bond_dist_cutoff"],
+        parameters.params["hydrogen_bond_dist_cutoff"],
         parameters.params["hydrogen_halogen_bond_angle_cutoff"],
+        parameters.params["halogen_bond_dist_cutoff"],
         parameters.params["pi_pi_interacting_dist_cutoff"],
         parameters.params["pi_stacking_angle_tolerance"],
         parameters.params["T_stacking_angle_tolerance"],
@@ -67,7 +68,7 @@ def _get_all_interactions(parameters):
         parameters.params["salt_bridge_dist_cutoff"],
         parameters.params["metal_coordination_dist_cutoff"],
         pi_padding,
-    )
+    )    
 
     # The original implementation merged all pi-related interactions into
     # one. Do that here too for backwards compatibility.
@@ -144,12 +145,12 @@ def _intro():
         "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/ > errors.txt",
         "```",
         "",
-        "Though we recommend using program defaults, the following command-line tags can also be specified: `-close_contacts_dist1_cutoff` `-close_contacts_dist2_cutoff` `-electrostatic_dist_cutoff` `-active_site_flexibility_dist_cutoff` `-hydrophobic_dist_cutoff` `-hydrogen_halogen_bond_dist_cutoff` `-hydrogen_halogen_bond_angle_cutoff` `-pi_padding_dist` `-pi_pi_interacting_dist_cutoff` `-pi_stacking_angle_tolerance` `-T_stacking_angle_tolerance` `-T_stacking_closest_dist_cutoff` `-cation_pi_dist_cutoff` `-salt_bridge_dist_cutoff`",
+        "Though we recommend using program defaults, the following command-line tags can also be specified: `-close_contacts_dist1_cutoff` `-close_contacts_dist2_cutoff` `-electrostatic_dist_cutoff` `-active_site_flexibility_dist_cutoff` `-hydrophobic_dist_cutoff` `-hydrogen_bond_dist_cutoff` `-hydrogen_halogen_bond_angle_cutoff` `-pi_padding_dist` `-pi_pi_interacting_dist_cutoff` `-pi_stacking_angle_tolerance` `-T_stacking_angle_tolerance` `-T_stacking_closest_dist_cutoff` `-cation_pi_dist_cutoff` `-salt_bridge_dist_cutoff`",
         "",
         "For example, if you want to tell BINANA to detect only hydrogen bonds where the donor and acceptor are less than 3.0 angstroms distant, run:",
         "",
         "```bash",
-        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_halogen_bond_dist_cutoff 3.0",
+        "python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -hydrogen_bond_dist_cutoff 3.0",
         "```",
         "",
         "What follows is a detailed description of the BINANA algorithm and a further explaination of the optional parameters described above. Parameter names are enclosed in braces.",
@@ -183,7 +184,7 @@ def _intro():
         "Hydrogen Bonds",
         "==============",
         "",
-        "BINANA allows hydroxyl and amine groups to act as hydrogen-bond donors. Oxygen and nitrogen atoms can act as hydrogen-bond acceptors. Fairly liberal cutoffs are implemented in order to accommodate low-resolution crystal structures. A hydrogen bond is identified if the hydrogen-bond donor comes within `hydrogen_halogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the angle formed between the donor, the hydrogen atom, and the acceptor is no greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the number of hydrogen bonds according to the secondary structure of the receptor atom, the side-chain/backbone status of the receptor atom, and the location (ligand or receptor) of the hydrogen bond donor. Thus there are twelve possible categorizations: alpha-sidechain-ligand, alpha-backbone-ligand, beta-sidechain-ligand, beta-backbone-ligand, other-sidechain-ligand, other-backbone-ligand, alpha-sidechain-receptor, alpha-backbone-receptor, beta-sidechain-receptor, beta-backbone-receptor, other-sidechain-receptor, other-backbone-receptor.",
+        "BINANA allows hydroxyl and amine groups to act as hydrogen-bond donors. Oxygen and nitrogen atoms can act as hydrogen-bond acceptors. Fairly liberal cutoffs are implemented in order to accommodate low-resolution crystal structures. A hydrogen bond is identified if the hydrogen-bond donor comes within `hydrogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the angle formed between the donor, the hydrogen atom, and the acceptor is no greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the number of hydrogen bonds according to the secondary structure of the receptor atom, the side-chain/backbone status of the receptor atom, and the location (ligand or receptor) of the hydrogen bond donor. Thus there are twelve possible categorizations: alpha-sidechain-ligand, alpha-backbone-ligand, beta-sidechain-ligand, beta-backbone-ligand, other-sidechain-ligand, other-backbone-ligand, alpha-sidechain-receptor, alpha-backbone-receptor, beta-sidechain-receptor, beta-backbone-receptor, other-sidechain-receptor, other-backbone-receptor.",
         "",
         "Salt Bridges",
         "============",

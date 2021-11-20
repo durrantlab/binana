@@ -12,12 +12,14 @@ from binana.interactions.default_params import (
     CLOSE_CONTACTS_DIST2_CUTOFF,
     ELECTROSTATIC_DIST_CUTOFF,
     HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF,
-    HYDROGEN_HALOGEN_BOND_DIST_CUTOFF,
+    HYDROGEN_BOND_DIST_CUTOFF,
+    HALOGEN_BOND_DIST_CUTOFF,
     HYDROPHOBIC_DIST_CUTOFF,
     LIGAND,
     OUTPUT_DIR,
     OUTPUT_FILE,
     OUTPUT_JSON,
+    OUTPUT_CSV,
     PI_PADDING_DIST,
     PI_PI_INTERACTING_DIST_CUTOFF,
     PI_STACKING_ANGLE_TOLERANCE,
@@ -64,8 +66,9 @@ class CommandLineParameters:
             "active_site_flexibility_dist_cutoff"
         ] = ACTIVE_SITE_FLEXIBILITY_DIST_CUTOFF
         self.params["hydrophobic_dist_cutoff"] = HYDROPHOBIC_DIST_CUTOFF
-        self.params["hydrogen_halogen_bond_dist_cutoff"] = HYDROGEN_HALOGEN_BOND_DIST_CUTOFF
+        self.params["hydrogen_bond_dist_cutoff"] = HYDROGEN_BOND_DIST_CUTOFF
         self.params["hydrogen_halogen_bond_angle_cutoff"] = HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF
+        self.params["halogen_bond_dist_cutoff"] = HALOGEN_BOND_DIST_CUTOFF
         self.params["pi_padding_dist"] = PI_PADDING_DIST
         self.params["pi_pi_interacting_dist_cutoff"] = PI_PI_INTERACTING_DIST_CUTOFF
         self.params["pi_stacking_angle_tolerance"] = PI_STACKING_ANGLE_TOLERANCE
@@ -79,6 +82,7 @@ class CommandLineParameters:
         self.params["output_dir"] = OUTPUT_DIR
         self.params["output_file"] = OUTPUT_FILE
         self.params["output_json"] = OUTPUT_JSON
+        self.params["output_csv"] = OUTPUT_CSV
         self.params["test"] = TEST
 
         # now get user inputed values
@@ -107,7 +111,7 @@ class CommandLineParameters:
 
         # If an output directory is specified but a log file isn't, set a
         # default logfile
-        single_output_files = [("output_file", "pdb"), ("output_json", "json")]
+        single_output_files = [("output_file", "pdb"), ("output_json", "json"), ("output_csv", "csv")]
         for single_output_file, ext in single_output_files:
             if (
                 self.params["output_dir"] != ""

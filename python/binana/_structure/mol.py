@@ -15,7 +15,13 @@ from binana._utils._math_functions import (
     dihedral,
 )
 from binana._utils.shim import _set_default
-from binana._structure.consts import _max_donor_X_dist, _alternate_protein_resname, _protein_hydro_bond_donors, protein_resnames, _required_protein_atom_names
+from binana._structure.consts import (
+    _max_donor_X_dist,
+    _alternate_protein_resname,
+    _protein_hydro_bond_donors,
+    protein_resnames,
+    _required_protein_atom_names,
+)
 
 # __pragma__ ('skip')
 # Python
@@ -38,6 +44,7 @@ from binana._utils.shim import OpenFile as openFile
 """
 Class Mol handles PDB filing
 """
+
 
 class Mol:
 
@@ -418,10 +425,7 @@ class Mol:
                     # so it's not a protein residue
                     dist = distance(atom1.coordinates, atom2.coordinates)
 
-                    if (
-                        dist
-                        < self.bond_length(atom1.element, atom2.element) * 1.2
-                    ):
+                    if dist < self.bond_length(atom1.element, atom2.element) * 1.2:
                         atom1.add_neighbor_atom_index(atom_index2)
                         atom2.add_neighbor_atom_index(atom_index1)
 
@@ -595,7 +599,7 @@ class Mol:
         central_atom_names = (
             ["H"] if hydrogen_bond else ["I", "BR", "Br", "CL", "Cl", "F"]
         )
-        h_or_hals = []
+        neighboring_h_or_hals = []
 
         for atm_index in self.all_atoms.keys():
             central_atom = self.all_atoms[atm_index]
@@ -604,14 +608,18 @@ class Mol:
                 # so it's a hydrogen (or halogen)
                 dist = central_atom.coordinates.dist_to(atom.coordinates)
                 if dist < _max_donor_X_dist[element]:  # 1.3 for H
-                    # central_atom.comment = lbl
-                    h_or_hals.append(central_atom)
+                    # The candidate central atom is the one that is bonded to
+                    # this one.
 
-        # N and O can always be acceptors.
-        charaterizations = [["ACCEPTOR", None]]
+                    # central_atom.comment = lbl
+                    neighboring_h_or_hals.append(central_atom)
+
+        # N and O can always be acceptors. For halogen bond, C can be donor, but
+        # never acceptor.
+        charaterizations = [["ACCEPTOR", None]] if atom.element != "C" else []
 
         # Might also be donors
-        for h_or_hal in h_or_hals:
+        for h_or_hal in neighboring_h_or_hals:
             charaterizations.append(["DONOR", h_or_hal])
 
         return charaterizations
@@ -636,7 +644,9 @@ class Mol:
     def _categorize_hydro_bond_donor_accep_no_hydros(self, atom):
         charaterizations = []
 
-        # If it's an oxygen, nitrogen, or sulfur, it's always an acceptor.
+        # If it's an oxygen, nitrogen, or sulfur, it's always an acceptor. If
+        # it's an oxygen or sulfur atom, it's always an acceptor. True of OH,
+        # COC, =O, nitro, etc.
         if atom.element in ["O", "N", "S"]:
             charaterizations.append(["ACCEPTOR", None])
 
@@ -653,8 +663,6 @@ class Mol:
         # Not an identifiable protein atom, so use heuristics instead.
         num_neighbors = atom.number_of_neighbors()
 
-        # If it's an oxygen or sulfur atom, it's always an acceptor. True of OH,
-        # COC, =O, nitro, etc.
         if atom.element in ["O", "S"] and num_neighbors == 1:
             neighbor_idx = atom.indecies_of_atoms_connecting[0]
             neighbor = self.all_atoms[neighbor_idx]
