@@ -29,3 +29,7 @@ make_zip_files_for_releases.sh
 releases
 python/binana/_test/output
 
+cli_example_output
+ligand_receptor_output.csv
+ligand_receptor_output.json
+test.pdb

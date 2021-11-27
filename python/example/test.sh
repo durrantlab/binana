@@ -4,7 +4,4 @@
 python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_file test.pdb
 python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_dir ./cli_example_output/
 python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_json ligand_receptor_output.json
-
-python3 ../run_binana.py -receptor metal_coordination/recep_no_zn.pdb -ligand metal_coordination/Zn_lig.pdb -output_dir ./cli_example_output/
-
-python3 ../run_binana.py -receptor ~/Downloads/binana_examples/metal/2M30.pdb -ligand ~/Downloads/binana_examples/metal/lig.pdb -output_dir ./cli_example_output/
+python3 ../run_binana.py -receptor receptor.pdbqt -ligand ligand.pdbqt -output_csv ligand_receptor_output.csv

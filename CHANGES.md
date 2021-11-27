@@ -50,23 +50,6 @@ Be sure to compress javascript
 
 MAke sure not javascript is external.
 
-DOCUMENTATION:
-
-1. Halogen bonds mention in all documentation?
-2. METAL_COORDINATION_CUTOFF. Get into web app (DONE), documentation,
-   parameters, etc.
-3. Make sure all documentation/examples account for get_all_interactions
-   (updated for metal coordination, halogen bonds)
-4. Make sure output_csv parameter documented.
-
-hydrogen_halogen_bond_angle_cutoff
-halogen_bond_dist_cutoff
-metal_coordination_dist_cutoff
-output_csv
-
-(COMMAND_LINE_USE updated)
-
-
 Clean up examples directory
 
 Tests both python2 and python3
