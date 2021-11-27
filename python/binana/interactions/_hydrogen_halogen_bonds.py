@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import (
@@ -88,7 +88,12 @@ def _update_mol_and_data(
             center_atom.string_id(),
             receptor_atom.string_id(),
             comment,
-            {"distance": dist, "angle": angle},
+            {
+                "distance": dist,
+                
+                # Because if no hydrogens, angle might be None
+                "angle": angle,
+            },
         )
     )
 

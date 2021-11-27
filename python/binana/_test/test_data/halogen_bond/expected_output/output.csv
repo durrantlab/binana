@@ -14,7 +14,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.76917961896
+,,,distance,3.7691796189621964
 ,,receptorAtoms
 ,,,atomIndex,798
 ,,,atomName,N
@@ -29,7 +29,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.96794821035
+,,,distance,3.9679482103475117
 ,,receptorAtoms
 ,,,atomIndex,795
 ,,,atomName,C
@@ -44,7 +44,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.93289829515
+,,,distance,3.9328982951507965
 ,,receptorAtoms
 ,,,atomIndex,798
 ,,,atomName,N
@@ -59,7 +59,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.78039482065
+,,,distance,3.780394820650351
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -74,7 +74,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.92188959559
+,,,distance,3.9218895955903696
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -89,7 +89,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.41394683614
+,,,distance,3.4139468361414127
 ,,receptorAtoms
 ,,,atomIndex,803
 ,,,atomName,CG
@@ -104,7 +104,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,2.8328568619
+,,,distance,2.832856861897538
 ,,receptorAtoms
 ,,,atomIndex,804
 ,,,atomName,OD1
@@ -119,7 +119,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.5878050393
+,,,distance,3.5878050392963043
 ,,receptorAtoms
 ,,,atomIndex,805
 ,,,atomName,ND2
@@ -134,7 +134,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.71760151173
+,,,distance,3.7176015117276826
 ,,receptorAtoms
 ,,,atomIndex,820
 ,,,atomName,N
@@ -149,7 +149,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.64694474869
+,,,distance,3.646944748690332
 ,,receptorAtoms
 ,,,atomIndex,824
 ,,,atomName,CB
@@ -164,7 +164,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.60673827717
+,,,distance,3.6067382771695597
 ,,receptorAtoms
 ,,,atomIndex,798
 ,,,atomName,N
@@ -179,7 +179,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.84350738259
+,,,distance,3.843507382586902
 ,,receptorAtoms
 ,,,atomIndex,803
 ,,,atomName,CG
@@ -194,7 +194,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.50564715851
+,,,distance,3.505647158514393
 ,,receptorAtoms
 ,,,atomIndex,804
 ,,,atomName,OD1
@@ -209,7 +209,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.34638879989
+,,,distance,3.3463887998856356
 ,,receptorAtoms
 ,,,atomIndex,824
 ,,,atomName,CB
@@ -224,7 +224,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.72974529961
+,,,distance,3.7297452996149745
 ,,receptorAtoms
 ,,,atomIndex,794
 ,,,atomName,CA
@@ -239,7 +239,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.86166298374
+,,,distance,3.861662983741587
 ,,receptorAtoms
 ,,,atomIndex,795
 ,,,atomName,C
@@ -254,7 +254,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.1116087479
+,,,distance,3.11160874789875
 ,,receptorAtoms
 ,,,atomIndex,798
 ,,,atomName,N
@@ -269,7 +269,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.61207322739
+,,,distance,3.6120732273861766
 ,,receptorAtoms
 ,,,atomIndex,803
 ,,,atomName,CG
@@ -284,7 +284,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.75539611759
+,,,distance,3.7553961175886643
 ,,receptorAtoms
 ,,,atomIndex,804
 ,,,atomName,OD1
@@ -299,7 +299,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.70385704368
+,,,distance,3.7038570436775737
 ,,receptorAtoms
 ,,,atomIndex,805
 ,,,atomName,ND2
@@ -314,7 +314,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.60117341987
+,,,distance,3.60117341987303
 ,,receptorAtoms
 ,,,atomIndex,794
 ,,,atomName,CA
@@ -329,7 +329,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.83335714485
+,,,distance,3.833357144853589
 ,,receptorAtoms
 ,,,atomIndex,798
 ,,,atomName,N
@@ -344,7 +344,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.84225988189
+,,,distance,3.8422598818924296
 ,,receptorAtoms
 ,,,atomIndex,788
 ,,,atomName,O
@@ -359,7 +359,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.94273788122
+,,,distance,3.942737881219093
 ,,receptorAtoms
 ,,,atomIndex,794
 ,,,atomName,CA
@@ -374,7 +374,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.80749917925
+,,,distance,3.807499179251385
 ,,receptorAtoms
 ,,,atomIndex,794
 ,,,atomName,CA
@@ -389,7 +389,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.98120145182
+,,,distance,3.9812014518233028
 ,,receptorAtoms
 ,,,atomIndex,193
 ,,,atomName,O
@@ -404,7 +404,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.79885456421
+,,,distance,3.7988545642074816
 ,,receptorAtoms
 ,,,atomIndex,788
 ,,,atomName,O
@@ -419,7 +419,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.52565979641
+,,,distance,3.5256597964069045
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -434,7 +434,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.82314870231
+,,,distance,3.8231487023133166
 ,,receptorAtoms
 ,,,atomIndex,787
 ,,,atomName,C
@@ -449,7 +449,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.58761132231
+,,,distance,3.5876113223146127
 ,,receptorAtoms
 ,,,atomIndex,788
 ,,,atomName,O
@@ -464,7 +464,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.96014583065
+,,,distance,3.96014583064816
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -479,7 +479,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.79807925141
+,,,distance,3.798079251411165
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -494,7 +494,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.8508331566
+,,,distance,3.8508331566039127
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -509,7 +509,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.74233683679
+,,,distance,3.7423368367906136
 ,,receptorAtoms
 ,,,atomIndex,779
 ,,,atomName,C
@@ -524,7 +524,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.05733822139
+,,,distance,3.0573382213945512
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -539,7 +539,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.89785517945
+,,,distance,3.897855179454473
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -554,7 +554,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.77821081995
+,,,distance,3.7782108199516906
 ,,receptorAtoms
 ,,,atomIndex,335
 ,,,atomName,CB
@@ -569,7 +569,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.81544833539
+,,,distance,3.815448335386024
 ,,receptorAtoms
 ,,,atomIndex,756
 ,,,atomName,CB
@@ -584,7 +584,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.15214292189
+,,,distance,3.1521429218866275
 ,,receptorAtoms
 ,,,atomIndex,758
 ,,,atomName,SD
@@ -599,7 +599,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.66406072548
+,,,distance,3.6640607254793096
 ,,receptorAtoms
 ,,,atomIndex,759
 ,,,atomName,CE
@@ -614,7 +614,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.91807848313
+,,,distance,3.9180784831343063
 ,,receptorAtoms
 ,,,atomIndex,1230
 ,,,atomName,CD2
@@ -629,7 +629,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.38395641225
+,,,distance,3.383956412248831
 ,,receptorAtoms
 ,,,atomIndex,335
 ,,,atomName,CB
@@ -644,7 +644,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.44563172727
+,,,distance,3.445631727274409
 ,,receptorAtoms
 ,,,atomIndex,763
 ,,,atomName,O
@@ -659,7 +659,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.73458243985
+,,,distance,3.7345824398451812
 ,,receptorAtoms
 ,,,atomIndex,777
 ,,,atomName,N
@@ -674,7 +674,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.97950964316
+,,,distance,3.9795096431595707
 ,,receptorAtoms
 ,,,atomIndex,335
 ,,,atomName,CB
@@ -689,7 +689,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.8256907873
+,,,distance,3.8256907872958106
 ,,receptorAtoms
 ,,,atomIndex,775
 ,,,atomName,CD1
@@ -704,7 +704,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.03859474099
+,,,distance,3.0385947409945913
 ,,receptorAtoms
 ,,,atomIndex,777
 ,,,atomName,N
@@ -719,7 +719,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.80409213874
+,,,distance,3.8040921387369133
 ,,receptorAtoms
 ,,,atomIndex,778
 ,,,atomName,CA
@@ -734,7 +734,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.75264839813
+,,,distance,3.752648398131648
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -749,7 +749,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.73725367081
+,,,distance,3.737253670812293
 ,,receptorAtoms
 ,,,atomIndex,781
 ,,,atomName,CB
@@ -764,7 +764,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.91124967242
+,,,distance,3.911249672419294
 ,,receptorAtoms
 ,,,atomIndex,1229
 ,,,atomName,CD1
@@ -779,7 +779,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.49271599189
+,,,distance,3.4927159918894026
 ,,receptorAtoms
 ,,,atomIndex,1229
 ,,,atomName,CD1
@@ -794,7 +794,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.80978280221
+,,,distance,3.809782802208022
 ,,receptorAtoms
 ,,,atomIndex,1230
 ,,,atomName,CD2
@@ -809,7 +809,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.72381350231
+,,,distance,3.7238135023118524
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -824,7 +824,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.6109335358
+,,,distance,3.6109335358048305
 ,,receptorAtoms
 ,,,atomIndex,1229
 ,,,atomName,CD1
@@ -839,7 +839,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.54038373626
+,,,distance,3.540383736263629
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -854,7 +854,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.82004253903
+,,,distance,3.820042539030169
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -869,7 +869,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.99145224198
+,,,distance,3.991452241979104
 ,,receptorAtoms
 ,,,atomIndex,199
 ,,,atomName,CA
@@ -884,7 +884,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.76340922569
+,,,distance,3.7634092256888567
 ,,receptorAtoms
 ,,,atomIndex,202
 ,,,atomName,N
@@ -899,7 +899,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.81228382994
+,,,distance,3.8122838299371167
 ,,receptorAtoms
 ,,,atomIndex,204
 ,,,atomName,C
@@ -914,7 +914,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.7378936582
+,,,distance,3.7378936581984306
 ,,receptorAtoms
 ,,,atomIndex,205
 ,,,atomName,O
@@ -929,7 +929,7 @@ closeContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.83782659848
+,,,distance,3.8378265984799262
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -961,8 +961,8 @@ halogenBonds
 ,,,resID,501
 ,,,resName,3WH
 ,metrics
-,,angle,9.7397307749
-,,distance,5.22133651472
+,,angle,9.739730774901375
+,,distance,5.221336514724938
 ,receptorAtoms
 ,,atomIndex,758
 ,,atomName,SD
@@ -978,7 +978,7 @@ hydrogenBonds
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,angle,,,distance,3.1116087479
+,,,angle,,,distance,3.11160874789875
 ,,receptorAtoms
 ,,,receptorAtoms.1
 ,,,,atomIndex,798
@@ -1007,7 +1007,7 @@ hydrogenBonds
 ,,,,resID,501
 ,,,,resName,3WH
 ,,metrics
-,,,angle,,,distance,3.05733822139
+,,,angle,,,distance,3.0573382213945512
 ,,receptorAtoms
 ,,,atomIndex,780
 ,,,atomName,O
@@ -1022,7 +1022,7 @@ hydrogenBonds
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,angle,,,distance,3.03859474099
+,,,angle,,,distance,3.0385947409945913
 ,,receptorAtoms
 ,,,receptorAtoms.1
 ,,,,atomIndex,777
@@ -1045,7 +1045,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.96794821035
+,,,distance,3.9679482103475117
 ,,receptorAtoms
 ,,,atomIndex,795
 ,,,atomName,C
@@ -1060,7 +1060,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.78039482065
+,,,distance,3.780394820650351
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -1075,7 +1075,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.41394683614
+,,,distance,3.4139468361414127
 ,,receptorAtoms
 ,,,atomIndex,803
 ,,,atomName,CG
@@ -1090,7 +1090,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.64694474869
+,,,distance,3.646944748690332
 ,,receptorAtoms
 ,,,atomIndex,824
 ,,,atomName,CB
@@ -1105,7 +1105,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.84350738259
+,,,distance,3.843507382586902
 ,,receptorAtoms
 ,,,atomIndex,803
 ,,,atomName,CG
@@ -1120,7 +1120,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.34638879989
+,,,distance,3.3463887998856356
 ,,receptorAtoms
 ,,,atomIndex,824
 ,,,atomName,CB
@@ -1135,7 +1135,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.60117341987
+,,,distance,3.60117341987303
 ,,receptorAtoms
 ,,,atomIndex,794
 ,,,atomName,CA
@@ -1150,7 +1150,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.82314870231
+,,,distance,3.8231487023133166
 ,,receptorAtoms
 ,,,atomIndex,787
 ,,,atomName,C
@@ -1165,7 +1165,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.96014583065
+,,,distance,3.96014583064816
 ,,receptorAtoms
 ,,,atomIndex,197
 ,,,atomName,CD1
@@ -1180,7 +1180,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.77821081995
+,,,distance,3.7782108199516906
 ,,receptorAtoms
 ,,,atomIndex,335
 ,,,atomName,CB
@@ -1195,7 +1195,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.38395641225
+,,,distance,3.383956412248831
 ,,receptorAtoms
 ,,,atomIndex,335
 ,,,atomName,CB
@@ -1210,7 +1210,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.91124967242
+,,,distance,3.911249672419294
 ,,receptorAtoms
 ,,,atomIndex,1229
 ,,,atomName,CD1
@@ -1225,7 +1225,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.49271599189
+,,,distance,3.4927159918894026
 ,,receptorAtoms
 ,,,atomIndex,1229
 ,,,atomName,CD1
@@ -1240,7 +1240,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.80978280221
+,,,distance,3.809782802208022
 ,,receptorAtoms
 ,,,atomIndex,1230
 ,,,atomName,CD2
@@ -1255,7 +1255,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.54038373626
+,,,distance,3.540383736263629
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -1270,7 +1270,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.82004253903
+,,,distance,3.820042539030169
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2
@@ -1285,7 +1285,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.99145224198
+,,,distance,3.991452241979104
 ,,receptorAtoms
 ,,,atomIndex,199
 ,,,atomName,CA
@@ -1300,7 +1300,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.81228382994
+,,,distance,3.8122838299371167
 ,,receptorAtoms
 ,,,atomIndex,204
 ,,,atomName,C
@@ -1315,7 +1315,7 @@ hydrophobicContacts
 ,,,resID,501
 ,,,resName,3WH
 ,,metrics
-,,,distance,3.83782659848
+,,,distance,3.8378265984799262
 ,,receptorAtoms
 ,,,atomIndex,240
 ,,,atomName,CG2

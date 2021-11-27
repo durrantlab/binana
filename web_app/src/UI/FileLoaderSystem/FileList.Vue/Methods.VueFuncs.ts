@@ -1,8 +1,7 @@
-// import { dbVueFuncs } from "../Common/DB.VueFuncs";
-// import { clearAllInDatabase } from "../DataBase";
-// import { removeFileFromDatabase } from "../DataBase/Internal";
+// This file is released under the Apache 2.0 License. See
+// https://opensource.org/licenses/Apache-2.0 for full details. Copyright 2021
+// Jacob D. Durrant.
 
-import { IFileInfo } from "../Common/Interfaces";
 import { deepCopy } from "../Common/Utils";
 
 /** An object containing the vue-component methods functions. */

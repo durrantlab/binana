@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 import __future__
 from binana.output import _write_main
@@ -24,7 +24,7 @@ textwrap = shim
 from binana._utils.shim import fabs
 ?"""
 
-VERSION = "2.0"
+VERSION = "2.1"
 
 
 def _get_all_interactions(parameters):
@@ -114,6 +114,13 @@ def _intro():
     if os.path.exists(dir_path):
         with open(dir_path) as f:
             print("\n" + f.read().rstrip())
+
+    import sys
+    import time
+    if sys.version_info[0] < 3:
+        print("\nWARNING: Only Python 3 is officially supported!\n")
+        time.sleep(2)
+
     # __pragma__ ('noskip')
 
     print("\n                            [- END INTRO -]\n")

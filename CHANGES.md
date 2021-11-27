@@ -1,8 +1,8 @@
 Changes
 =======
 
-WIP
----
+2.1 WIP
+-------
 
 1. Can select multiple interactions at once.
 2. PNG file included in download from "Save" button. Also, log.txt file, for
@@ -31,40 +31,19 @@ WIP
 19. output_csv option now also prints csv file containing same information as json.
 20. Possible to toggle ribbon on and off.
 21. Updated documentation.
+22. chain and resid now included in output PDB files.
+23. Throws a warning when using Python 2. Only Python 3 now offically supported.
 
 TODO:
 
-Hydrogen bonds w/o hydrogens added. Need to be more judicious. Remove certain
-bonds per this heuristic:
-
-* For oxygen and sulfur, sum of actual neighbors and hydrogen bonds cannot be >
-  two. Remember to account for water molecules. Pick based on distance, dihedral
-  angle. =O not marked as donor, so don't need to worry about that.
-* Nitrogen cannot donate to more than actual neighbors + hydrogen bonds > 4, as
-  above.
-* chain and resid now included in output PDB files.
-
 Tests on all operating systems (including mobile).
-
-Be sure to compress javascript
-
-MAke sure not javascript is external.
-
-Clean up examples directory
-
-Tests both python2 and python3
-
-Test should also test version of protein without hydrogens, and make sure you
-get all interactions tested. Metal, halogen, hydrogen with S.
-
-finish README.md on file loading component.
-
-PDBQT in webapp looks strange?
 
 *** Makesure can loadin multipleligands. Probably need to rewritecodethat
 triggersbinana run. Also, can run if restart.
 
 And you need a message explaining the difference between delete/extract. 
+
+Push updated documentation somewhere.
 
 2.0
 ---

@@ -12,7 +12,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.94570526015
+,,,distance,3.9457052601531233
 ,,receptorAtoms
 ,,,atomIndex,1406
 ,,,atomName,O
@@ -27,7 +27,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.48593703328
+,,,distance,3.485937033281005
 ,,receptorAtoms
 ,,,atomIndex,1421
 ,,,atomName,CA
@@ -42,7 +42,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.58561933283
+,,,distance,3.585619332834985
 ,,receptorAtoms
 ,,,atomIndex,1424
 ,,,atomName,CB
@@ -57,7 +57,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.12695219023
+,,,distance,3.1269521902325215
 ,,receptorAtoms
 ,,,atomIndex,1425
 ,,,atomName,CG
@@ -72,7 +72,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.9749868354
+,,,distance,1.974986835399159
 ,,receptorAtoms
 ,,,atomIndex,1426
 ,,,atomName,ND1
@@ -87,7 +87,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.8912822415
+,,,distance,2.8912822414977004
 ,,receptorAtoms
 ,,,atomIndex,1428
 ,,,atomName,CE1
@@ -102,7 +102,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.601606619
+,,,distance,2.601606618995271
 ,,receptorAtoms
 ,,,atomIndex,1431
 ,,,atomName,HA
@@ -117,7 +117,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.6916634462
+,,,distance,3.691663446198745
 ,,receptorAtoms
 ,,,atomIndex,1432
 ,,,atomName,HB2
@@ -132,7 +132,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.17700786905
+,,,distance,3.177007869049111
 ,,receptorAtoms
 ,,,atomIndex,1435
 ,,,atomName,HE1
@@ -147,7 +147,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.95000576271
+,,,distance,2.9500057627062395
 ,,receptorAtoms
 ,,,atomIndex,1468
 ,,,atomName,CD2
@@ -162,7 +162,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.10216392217
+,,,distance,3.102163922167877
 ,,receptorAtoms
 ,,,atomIndex,1469
 ,,,atomName,CE1
@@ -177,7 +177,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.0332422384
+,,,distance,2.0332422383965976
 ,,receptorAtoms
 ,,,atomIndex,1470
 ,,,atomName,NE2
@@ -192,7 +192,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.16172816668
+,,,distance,3.161728166683533
 ,,receptorAtoms
 ,,,atomIndex,1476
 ,,,atomName,HD2
@@ -207,7 +207,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.438283438
+,,,distance,3.438283437996349
 ,,receptorAtoms
 ,,,atomIndex,1477
 ,,,atomName,HE1
@@ -222,7 +222,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.6878173301
+,,,distance,2.6878173301026256
 ,,receptorAtoms
 ,,,atomIndex,2745
 ,,,atomName,CG
@@ -237,7 +237,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.5073890803
+,,,distance,2.507389080298465
 ,,receptorAtoms
 ,,,atomIndex,2746
 ,,,atomName,OD1
@@ -252,7 +252,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.13927768184
+,,,distance,2.1392776818356247
 ,,receptorAtoms
 ,,,atomIndex,2747
 ,,,atomName,OD2
@@ -267,7 +267,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.35551024436
+,,,distance,3.355510244359267
 ,,receptorAtoms
 ,,,atomIndex,2775
 ,,,atomName,CB
@@ -282,7 +282,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.96215614038
+,,,distance,2.962156140381529
 ,,receptorAtoms
 ,,,atomIndex,2776
 ,,,atomName,CG
@@ -297,7 +297,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.91030259383
+,,,distance,1.910302593831671
 ,,receptorAtoms
 ,,,atomIndex,2777
 ,,,atomName,ND1
@@ -312,7 +312,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.9693544753
+,,,distance,2.9693544753026746
 ,,receptorAtoms
 ,,,atomIndex,2779
 ,,,atomName,CE1
@@ -327,7 +327,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.86370633969
+,,,distance,2.8637063396933673
 ,,receptorAtoms
 ,,,atomIndex,2783
 ,,,atomName,HB2
@@ -342,7 +342,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.99939920488
+,,,distance,3.9993992048806546
 ,,receptorAtoms
 ,,,atomIndex,2784
 ,,,atomName,HB3
@@ -357,7 +357,7 @@ closeContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,3.17952653708
+,,,distance,3.1795265370806454
 ,,receptorAtoms
 ,,,atomIndex,2786
 ,,,atomName,HE1
@@ -373,7 +373,7 @@ closestContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.9749868354
+,,,distance,1.974986835399159
 ,,receptorAtoms
 ,,,atomIndex,1426
 ,,,atomName,ND1
@@ -388,7 +388,7 @@ closestContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.0332422384
+,,,distance,2.0332422383965976
 ,,receptorAtoms
 ,,,atomIndex,1470
 ,,,atomName,NE2
@@ -403,7 +403,7 @@ closestContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.13927768184
+,,,distance,2.1392776818356247
 ,,receptorAtoms
 ,,,atomIndex,2747
 ,,,atomName,OD2
@@ -418,7 +418,7 @@ closestContacts
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.91030259383
+,,,distance,1.910302593831671
 ,,receptorAtoms
 ,,,atomIndex,2777
 ,,,atomName,ND1
@@ -445,7 +445,7 @@ metalCoordinations
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.9749868354
+,,,distance,1.974986835399159
 ,,receptorAtoms
 ,,,atomIndex,1426
 ,,,atomName,ND1
@@ -460,7 +460,7 @@ metalCoordinations
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.0332422384
+,,,distance,2.0332422383965976
 ,,receptorAtoms
 ,,,atomIndex,1470
 ,,,atomName,NE2
@@ -475,7 +475,7 @@ metalCoordinations
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.5073890803
+,,,distance,2.507389080298465
 ,,receptorAtoms
 ,,,atomIndex,2746
 ,,,atomName,OD1
@@ -490,7 +490,7 @@ metalCoordinations
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,2.13927768184
+,,,distance,2.1392776818356247
 ,,receptorAtoms
 ,,,atomIndex,2747
 ,,,atomName,OD2
@@ -505,7 +505,7 @@ metalCoordinations
 ,,,resID,201
 ,,,resName,ZN
 ,,metrics
-,,,distance,1.91030259383
+,,,distance,1.910302593831671
 ,,receptorAtoms
 ,,,atomIndex,2777
 ,,,atomName,ND1
@@ -521,7 +521,7 @@ saltBridges
 ,,resID,201
 ,,resName,ZN
 ,metrics
-,,distance,2.04391688921
+,,distance,2.043916889210516
 ,receptorAtoms
 ,,receptorAtoms.1
 ,,,atomIndex,2745

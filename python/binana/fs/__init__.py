@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 """When used as a JavaScript library, BINANA cannot access the local file system
 to save and load files. These functions save and read files to a fake in-memory

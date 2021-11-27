@@ -1,3 +1,7 @@
+# This file is part of BINANA, released under the Apache 2.0 License. See
+# LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
+# details. Copyright 2021 Jacob D. Durrant.
+
 # This script only works if transcrypt is installed.
 # pip install transcrypt
 
@@ -7,7 +11,7 @@ rm -rf ../python/__target__/ ./lib/
 # Compile the python file.
 cd ../python/
 # --nomin
-transcrypt --build --nomin --ecom --verbose binana.py
+transcrypt --build --ecom --verbose binana.py
 cd -
 
 # Move the javascript library to the lib directory.

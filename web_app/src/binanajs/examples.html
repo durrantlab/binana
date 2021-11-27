@@ -4,7 +4,7 @@
     <!--
         This file is part of BINANA, released under the Apache 2.0 License. See
         LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-        details. Copyright 2020 Jacob D. Durrant.
+        details. Copyright 2021 Jacob D. Durrant.
     -->
 
     <title>BINANA.js Demo</title>
@@ -36,6 +36,15 @@
         outputDiv.append(txtArea);
         // outputDiv.append(hr);
       };
+
+      var bigTitle = function(title) {
+        let outputDiv = document.getElementById("output");
+        let header = document.createElement("H2");
+        header.style.marginBottom = "5px";
+        header.innerHTML = title;
+
+        outputDiv.append(header);
+      }
 
       // A functon to wait for BINANA to load. (Because loading as a
       // module.)
@@ -79,6 +88,8 @@
         let ligand = models[0];
         let receptor = models[1];
 
+        bigTitle("Get information about the hydrogen bonds (example)")
+
         // Get information about the hydrogen bonds (example)
         let hbondInf = binana.interactions.get_hydrogen_bonds(ligand, receptor);
 
@@ -88,12 +99,15 @@
           JSON.stringify(hbondInf["counts"], null, 2)
         );
 
-        // List the atoms involved in each hydrogen bond
+        // List the atoms involved in each hydrogen bond, and the
+        // angles/distances
         let toShow = "";
         for (let hbondLabel of hbondInf["labels"]) {
           toShow += JSON.stringify(hbondLabel, null, 2) + "\n";
         }
         output("Hydrogen-bond information", toShow);
+
+        bigTitle("Get information about the cation-pi interactions (example)")
 
         // Get information about the cation-pi interactions (example)
         cationPiInf = binana.interactions.get_cation_pi(ligand, receptor);
@@ -111,6 +125,8 @@
         }
         output("Cation-pi information", toShow);
 
+        bigTitle("Other interactions are also available")
+
         // Other interactions are also available
         toShow = "";
         toShow += "Available functions for detecting interactions:\n";
@@ -120,6 +136,8 @@
         toShow += funcNames.join("\n");
         output("Available functions", toShow);
 
+        bigTitle("Get PDB-formatted text")
+
         // Get PDB-formatted text
         pdbTxt = binana.output.pdb_file.write(
           ligand,
@@ -127,8 +145,10 @@
           null, // closest
           null, // close
           null, // hydrophobics
-          hbondInf, // hydrogen bonds
+          hbondInf, // hydrogen_bonds
+          null,  // halogen_bonds
           null, // salt_bridges
+          null, // metal_coordinations
           null, // pi_pi
           cationPiInf, // cat_pi
           null, // active_site_flexibility
@@ -147,6 +167,8 @@
 
         output("Full PDB text", pdbTxt);
 
+        bigTitle("Get the interactions as a dictionary for easier big-data analysis")
+
         // Get the interactions as a dictionary for easier big-data
         // analysis
 
@@ -154,8 +176,10 @@
           null, // closest
           null, // close
           null, // hydrophobics
-          hbondInf, // hydrogen bonds
+          hbondInf, // hydrogen_bonds
+          null, // halogen_bonds
           null, // salt_bridges
+          null, // metal_coordinations
           null, // pi_pi
           cationPiInf, // cat_pi
           null, // active_site_flexibility
@@ -170,6 +194,13 @@
 
         output("Interactions as a dictionary", toShow);
 
+        bigTitle("Some prefer CSV-formatted data")
+
+        let csv = binana.output.csv.collect(data);
+        output("CSV-formatted data", csv);
+
+        bigTitle("Get all the interactions at once")
+
         // Get all the interactions at once
         allInf = binana.interactions.get_all_interactions(ligand, receptor);
 
@@ -177,6 +208,8 @@
           "All available interactions",
           JSON.stringify(Object.keys(allInf), null, 2)
         );
+
+        bigTitle("Get and display PDB-formatted text containing allinteractions")
 
         // Get and display PDB-formatted text
         pdbTxt = binana.output.pdb_file.write_all(
@@ -187,6 +220,15 @@
           true // as_str
         );
         output("PDB-formatted text including interacting atoms", pdbTxt);
+
+        bigTitle("Get all interactions as a single dictionary")
+
+        let allData = binana.output.dictionary.collect_all(allInf);
+        let out = JSON.stringify(Object.keys(allData));
+        out += "\n\nHydrogen bonds (example):\n\n";
+        out += JSON.stringify(allData["hydrogenBonds"], null, 4);
+
+        output("Using all data as a dictionary", out)
       });
     </script>
   </head>

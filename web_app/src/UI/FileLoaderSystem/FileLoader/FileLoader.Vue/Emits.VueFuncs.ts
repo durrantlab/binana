@@ -1,4 +1,8 @@
-import { IAllFiles, IConvert, IFileInfo, IFileLoadError } from "../../Common/Interfaces";
+// This file is released under the Apache 2.0 License. See
+// https://opensource.org/licenses/Apache-2.0 for full details. Copyright 2021
+// Jacob D. Durrant.
+
+import { IConvert, IFileInfo, IFileLoadError } from "../../Common/Interfaces";
 import { deepCopy } from "../../Common/Utils";
 
 // Note that plugin emits (with same name) are present in PluginParent.ts. These

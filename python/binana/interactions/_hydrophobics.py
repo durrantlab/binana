@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import HYDROPHOBIC_DIST_CUTOFF
@@ -63,9 +63,11 @@ def get_hydrophobics(ligand, receptor, cutoff=None):
         hashtable_entry_add_one(hydrophobics, hydrophobic_key)
 
         hydrophobic_labels.append(
-            (ligand_atom.string_id(), receptor_atom.string_id(), {
-                "distance": dist
-            })
+            (
+                ligand_atom.string_id(),
+                receptor_atom.string_id(),
+                {"distance": dist},
+            )
         )
 
     return {

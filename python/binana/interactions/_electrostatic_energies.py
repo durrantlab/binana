@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 from binana._utils.shim import _set_default
 from binana.interactions.default_params import ELECTROSTATIC_DIST_CUTOFF
@@ -51,9 +51,7 @@ def get_electrostatic_energies(ligand, receptor, cutoff=None):
         ligand_charge = ligand_atom.charge
         receptor_charge = receptor_atom.charge
         # to convert into J/mol # might be nice to double check this
-        coulomb_energy = (
-            ligand_charge * receptor_charge / dist
-        ) * 138.94238460104697e4
+        coulomb_energy = (ligand_charge * receptor_charge / dist) * 138.94238460104697e4
         list_ligand_atom = [ligand_atom.atom_type, receptor_atom.atom_type]
         hashtable_entry_add_one(
             ligand_receptor_atom_type_pairs_electrostatic,

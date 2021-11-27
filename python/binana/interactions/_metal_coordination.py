@@ -1,6 +1,6 @@
 # This file is part of BINANA, released under the Apache 2.0 License. See
 # LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
-# details. Copyright 2020 Jacob D. Durrant.
+# details. Copyright 2021 Jacob D. Durrant.
 
 import math
 from binana._utils.shim import _set_default
@@ -219,9 +219,11 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
             )
 
             metal_coordinations_labels.append(
-                (ligand_atom.string_id(), receptor_atom.string_id(), {
-                    "distance": dist
-                })
+                (
+                    ligand_atom.string_id(),
+                    receptor_atom.string_id(),
+                    {"distance": dist},
+                )
             )
 
     # for metal_id in metal_coordinations.keys():

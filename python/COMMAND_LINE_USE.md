@@ -29,17 +29,7 @@
                        ]{};:'"/|\         []{};:'"
                                 \<>,-_=+.|
 
-# BINANA 2.0
-
-BINANA is released under the [GNU General Public
-License](http://www.gnu.org/licenses/gpl.html). If you use BINANA in your work,
-please cite:
-
-BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD,
-McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi:
-10.1016/j.jmgm.2011.01.004
-
-## Introduction
+# BINANA 2.1
 
 BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing ligand
 binding. The program identifies key binding characteristics like hydrogen bonds,
@@ -48,6 +38,19 @@ files in the PDBQT (preferred) or PDB formats. PDBQT files can be generated from
 the more common PDB file format using the [free converter provided with
 AutoDockTools](http://mgltools.scripps.edu/downloads). As output, BINANA
 identifies and describes key protein/ligand interactions.
+
+## Citation
+
+If you use BINANA in your work, please cite:
+
+BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD,
+McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi:
+10.1016/j.jmgm.2011.01.004
+
+## License
+
+BINANA 2.1 is released under the [Apache License, Version
+2.0](https://opensource.org/licenses/Apache-2.0). 
 
 ## Examples of Command-line Use
 
