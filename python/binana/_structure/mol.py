@@ -186,6 +186,7 @@ class Mol:
                         atom_already_loaded.append(key)
 
                         # So you're actually reindexing everything here.
+                        temp_atom.all_atoms_index = autoindex
                         self.all_atoms[autoindex] = temp_atom
 
                         if temp_atom.residue[-3:] not in protein_resnames:
@@ -413,21 +414,41 @@ class Mol:
         for atom_index1 in non_protein_atoms:
             atom1 = self.non_protein_atoms[atom_index1]
             if atom1.residue[-3:] in protein_resnames:
+                # so it's a protein residue. Not calculating bonds for protein
+                # residues (because can be infered by distance).
                 continue
 
-            # so it's not a protein residue
             for atom_index2 in non_protein_atoms:
                 if atom_index1 == atom_index2:
+                    # No bonds between two identical atoms.
                     continue
 
                 atom2 = self.non_protein_atoms[atom_index2]
                 if atom2.residue[-3:] not in protein_resnames:
                     # so it's not a protein residue
-                    dist = distance(atom1.coordinates, atom2.coordinates)
+                    self.create_bond_by_distance_between_two_atoms(atom1, atom2)
 
-                    if dist < self.bond_length(atom1.element, atom2.element) * 1.2:
-                        atom1.add_neighbor_atom_index(atom_index2)
-                        atom2.add_neighbor_atom_index(atom_index1)
+    def create_bond_by_distance_between_two_atoms(self, atom1, atom2):
+        dist = distance(atom1.coordinates, atom2.coordinates)
+        if dist < self.bond_length(atom1.element, atom2.element) * 1.2:
+            # atom1.add_neighbor_atom_index(atom_index2)
+            # atom2.add_neighbor_atom_index(atom_index1)
+            atom1.add_neighbor_atom_index(atom2.all_atoms_index)
+            atom2.add_neighbor_atom_index(atom1.all_atoms_index)
+
+    def create_bond_by_distance(self, atom):
+        idx1 = atom.all_atoms_index
+        coor1 = atom.coordinates
+        for idx2 in self.all_atoms.keys():
+            if idx1 != idx2:
+                other_atom = self.all_atoms[idx2]
+                dist = distance(coor1, other_atom.coordinates)
+                if dist < self.bond_length(atom.element, other_atom.element) * 1.2:
+                    atom.add_neighbor_atom_index(other_atom.all_atoms_index)
+                    # Note that not adding atom index to other_atom. Because
+                    # it's not a full exploration of other_atom's neighbors, so
+                    # best to leave unchanged to not give the impression it has
+                    # been thouroughly explored.
 
     def update_distance(self, element1, element2, orig_distance, match):
         match_element1, match_element2, match_dist = match
@@ -615,7 +636,7 @@ class Mol:
                     neighboring_h_or_hals.append(central_atom)
 
         # N and O can always be acceptors. For halogen bond, C can be donor, but
-        # never acceptor.
+        # never acceptor, so remove C's.
         charaterizations = [["ACCEPTOR", None]] if atom.element != "C" else []
 
         # Might also be donors
@@ -678,6 +699,9 @@ class Mol:
             # Note that phosphates, sulfonates, etc., always considered
             # deprotonated (not donors).
 
+        elif atom.element == "O" and num_neighbors == 0:
+            # Water
+            charaterizations.append(["DONOR", atom])
         elif atom.element == "N":
             # Note that if bound to only one atom, assuming sp3.
             is_sp3 = atom.has_sp3_geometry(self) if num_neighbors > 1 else True
@@ -820,8 +844,23 @@ class Mol:
             # atom or ones that could be SP3 hybridized are charged. Case of
             # quartinary amine covered above.
 
-            chrg = self.Charged(atom.coordinates, [atom_index], True)
-            self.charges.append(chrg)
+            # Exception: Nitrogens in five-membered aromatic rings get flagged
+            # as having SP3 geometry, unfortunately. That angle is 108 degrees,
+            # very close to the 109 of SP3 hybridized atoms. Accuracy is better
+            # if users add hydrogen atoms.
+
+            # Discover if nitrogen atom is in aromatic ring. If so, assume not
+            # charged (though there are some that could be charged).
+
+            is_in_aromatic_ring = any(
+                int(atom_index) in ring.indices for ring in self.aromatic_rings
+            )
+
+            if not is_in_aromatic_ring:
+                #  It's not in an aromatic ring, so assume it's a charged
+                #  SP3-hybridized amine.
+                chrg = self.Charged(atom.coordinates, [atom_index], True)
+                self.charges.append(chrg)
 
     def charges_carboxylate(self, atom_index, atom):
         if atom.element != "C":
@@ -1108,6 +1147,11 @@ class Mol:
     # Marks atoms present in an aromatic ring
     # Param indicies_of_ring (list): indecies of atoms in ring
     def add_aromatic_marker(self, indicies_of_ring):
+        # Make sure indicies_of_ring are integers. TODO: Would be better to
+        # identify why the first index is sometimes a string in the javascript
+        # version of the library.
+        indicies_of_ring = [int(i) for i in indicies_of_ring]
+
         # first identify the center point
         points_list = []
         total = len(indicies_of_ring)
@@ -1200,9 +1244,11 @@ class Mol:
                 for ring_index_2 in range(len(all_rings)):
                     if ring_index_1 != ring_index_2:
                         ring2 = all_rings[ring_index_2]
-                        if len(ring2) != 0:
-                            if self.set1_is_subset_of_set2(ring1, ring2) == True:
-                                all_rings[ring_index_2] = []
+                        if (
+                            len(ring2) != 0
+                            and self.set1_is_subset_of_set2(ring1, ring2) == True
+                        ):
+                            all_rings[ring_index_2] = []
 
         while [] in all_rings:
             all_rings.remove([])
@@ -1249,7 +1295,7 @@ class Mol:
                         is_flat = False
                         break
 
-            if is_flat == False:
+            if not is_flat:
                 all_rings[ring_index] = []
             if len(ring) < 5:
                 all_rings[
@@ -1280,7 +1326,7 @@ class Mol:
 
             key = atom.residue + "_" + str(atom.resid) + "_" + atom.chain
 
-            if first == True:
+            if first:
                 curr_res = key
                 first = False
 

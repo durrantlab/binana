@@ -26,18 +26,26 @@ export function showSticksOrRibbonAsAppropriate(): void {
         return;
     }
 
+    // This is better. Clear first.
+    store.state["receptorMol"].setStyle({}, {});
+
     if (store.state["renderProteinSticks"] === true) {
-        // Set up the style.
+        // Render all the sticks
         receptorMol.setStyle(
             {},
             {
                 "stick": { "radius": 0.1 },  // 0.15
-                "cartoon": { "color": 'spectrum' },
-            }
+                // "cartoon": { "color": 'spectrum' },
+            },
+            true
         );
-        viewer["render"]();
     } else {
-        showProteinRibbon();
+        // Render only the sticks around the ligand
+        BINANAInterface.showDetectedLigandInteractingResidues(receptorMol, false);
+    }
+    
+    if (store.state["renderProteinRibbon"] === true) {
+        showProteinRibbon(true);
     }
 
     // Non-protein residiues should be visible as sticks, but with low opacity.
@@ -47,23 +55,24 @@ export function showSticksOrRibbonAsAppropriate(): void {
         }),
         "invert": true
     };
-
-    // @ts-ignore
-    // notProtSel = {"resn": "TRP"};
-    // var atoms = receptorMol["selectedAtoms"](notProtSel);
-
-    // debugger
     receptorMol.setStyle(
         notProtSel, 
         {
             "stick": { "radius": 0.4, "opacity": 0.5 }
-        }
+        },
+        true  // add
     );
 
     // Remember water molecules and metals.
-    receptorMol.setStyle({"bonds":0}, {
-        "sphere": { "radius": 0.5, "opacity": 0.5 }
-    });
+    receptorMol.setStyle(
+        {"bonds":0}, 
+        {
+            "sphere": { "radius": 0.5, "opacity": 0.5 }
+        },
+        true  // add
+    );
+
+    viewer["render"]();
 }
 
 export function showProteinRibbon(add=false): void {
@@ -106,6 +115,14 @@ let computedFunctions = {
      */
     "surfBtnVariant"(): string|boolean {
         return (this["renderProteinSurface"] === true) ? undefined : "default";
+    },
+
+    /**
+     * Get the value of the ribbonBtnVariant variable.
+     * @returns string|boolean  The value.
+     */
+    "ribbonBtnVariant"(): string|boolean {
+        return (this.$store.state["renderProteinRibbon"] === true) ? undefined : "default";
     },
 
     /**
@@ -391,6 +408,17 @@ let methodsFunctions = {
     },
 
     /**
+     * Toggles the ribbon representation on and off.
+     * @returns void
+     */
+    "toggleRibbon"(): void {
+        this.$store.commit("setVar", {
+            name: "renderProteinRibbon",
+            val: !this.$store.state["renderProteinRibbon"]
+        })
+        showSticksOrRibbonAsAppropriate();
+    },
+    /**
      * Toggles the sricks representation on and off.
      * @returns void
      */
@@ -596,6 +624,7 @@ export function setup(): void {
                 <div v-if="type!=='ligand'" style="margin-top:-34px; padding-right:9px;" class="mr-1">
                     <form-button :variant="surfBtnVariant" @click.native="toggleSurface" :small="true">Surface</form-button>
                     <form-button :variant="allAtmBtnVariant" @click.native="toggleSticks" :small="true">All Atoms</form-button>
+                    <form-button :variant="ribbonBtnVariant" @click.native="toggleRibbon" :small="true">Ribbon</form-button>
                 </div>
             </div>
             `,

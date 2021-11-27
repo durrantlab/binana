@@ -10,6 +10,7 @@ from binana._structure.point import Point
 from binana._utils.shim import r_just, round_to_thousandths_to_str
 from binana._utils._math_functions import angle_between_three_points
 from binana._structure.consts import to_deg, two_leter_atom_names, protein_resnames
+import re
 
 # __pragma__ ('skip')
 # Python
@@ -38,6 +39,7 @@ class Atom:
         self.coordinates = Point(99999, 99999, 99999)
         self.element = ""
         self.pdb_index = ""
+        self.all_atoms_index = -1
         self.line = ""
         self.atom_type = ""
         self.indecies_of_atoms_connecting = []
@@ -64,6 +66,7 @@ class Atom:
         theatom.chain = self.chain
         theatom.structure = self.structure
         theatom.comment = self.comment
+        theatom.all_atoms_index = self.all_atoms_index
 
         return theatom
 
@@ -96,9 +99,11 @@ class Atom:
             + r_just(str(index), 6)
             + r_just(self.atom_name, 5)
             + r_just(self.residue, 4)
+            + r_just(self.chain, 2)
+            + r_just(str(self.resid), 4)
         )
 
-        output += r_just(round_to_thousandths_to_str(self.coordinates.x), 18)
+        output += r_just(round_to_thousandths_to_str(self.coordinates.x), 12)
         output += r_just(round_to_thousandths_to_str(self.coordinates.y), 8)
         output += r_just(round_to_thousandths_to_str(self.coordinates.z), 8)
         output += r_just(self.element, 24)
@@ -154,9 +159,15 @@ class Atom:
         # unique rotamer identification
         self.residue = " " + self.residue[-3:]
 
-        # Try to guess at element from name
         if self.element == "":
-            two_letters = self.atom_name[0:2].strip().upper()
+            # First, see if the element is given in the pdb line
+            element = line[76:].strip().upper()
+
+            if element != "":
+                two_letters = re.sub("[^A-Z]", "", element)[:2]
+            else:
+                # Try to guess at element from atom name instead
+                two_letters = self.atom_name[0:2].strip().upper()
 
             if (
                 two_letters in two_leter_atom_names
@@ -225,7 +236,80 @@ class Atom:
             self.residue = " MOL"
 
     # TODO: Might make more sense to put this in mol.
+    def _has_sp3_geometry_if_protein(self, resname):
+        # Assign hybridization based on the protein name.
+        # Most are sp3, so assume that.
+
+        atomname = self.atom_name.strip()
+        if atomname in ["C", "O", "N"]:
+            # Some are always sp2
+            return False
+
+        # These are SP2 hybridized
+        # ARG: NE, NH1, NH2
+        # HIS: CG, CD2, NE2, CE1, ND1
+        # ASP: CG, OD1 (assuming only OD1 sp2, arbitrary choice)
+        # GLU: CD, OE1 (assuming only OE1)
+        # ASN: CG, OD1, ND2
+        # GLN: CD, OE1, NE2
+        # PHE: CE1, CZ, CE2, CD2, CG, CD1
+        # TYR: CE1, CZ, CE2, CD2, CG, CD1 (SAME)
+        # TRP: CG, CD1, NE1, CE2, CD2, CE3, CZ2, CZ3, CH2
+
+        if resname == "ARG":
+            if atomname in ["NE", "NH1", "NH2"]:
+                return False
+        elif resname == "ASN":
+            if atomname in ["CG", "OD1", "ND2"]:
+                return False
+        elif resname == "ASP":
+            if atomname in ["CG", "OD1"]:
+                # (assuming only OD1 sp2. arbitrary choice)
+                return False
+        elif resname == "GLN":
+            if atomname in ["CD", "OE1", "NE2"]:
+                return False
+        elif resname == "GLU":
+            if atomname in ["CD", "OE1"]:
+                # (assuming only OE1)
+                return False
+        elif resname == "HIS":
+            if atomname in ["CG", "CD2", "NE2", "CE1", "ND1"]:
+                return False
+        elif resname in ["PHE", "TYR"]:
+            if atomname in [
+                "CE1",
+                "CZ",
+                "CE2",
+                "CD2",
+                "CG",
+                "CD1",
+            ]:
+                return False
+        elif resname == "TRP":
+            if atomname in [
+                "CG",
+                "CD1",
+                "NE1",
+                "CE2",
+                "CD2",
+                "CE3",
+                "CZ2",
+                "CZ3",
+                "CH2",
+            ]:
+                return False
+
+        # Everything else is sp3 (most atoms).
+        return True
+
+    # TODO: Might make more sense to put this in mol.
     def has_sp3_geometry(self, parent_mol):
+        resname = self.residue[-3:]
+        if resname in protein_resnames:
+            # It's a protein, so determine hybridization that way.
+            return self._has_sp3_geometry_if_protein(resname)
+        
         ncrs = [
             parent_mol.all_atoms[i].coordinates
             for i in self.indecies_of_atoms_connecting
@@ -251,3 +335,6 @@ class Atom:
         average_angle = sum(angles) / float(len(angles))
 
         return fabs(average_angle - 109.0) < 5.0
+
+    def belongs_to_protein(self):
+        return self.residue[-3:] in protein_resnames

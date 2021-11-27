@@ -1514,68 +1514,6 @@
     {
       "ligandAtoms": [
         {
-          "atomIndex": 5203,
-          "atomName": "N03",
-          "chain": "A",
-          "resID": 501,
-          "resName": "3WH"
-        },
-        {
-          "atomIndex": 5203,
-          "atomName": "N03",
-          "chain": "A",
-          "resID": 501,
-          "resName": "3WH"
-        }
-      ],
-      "metrics": {
-        "angle": null,
-        "distance": 3.7553961175886643
-      },
-      "receptorAtoms": [
-        {
-          "atomIndex": 804,
-          "atomName": "OD1",
-          "chain": "A",
-          "resID": 152,
-          "resName": "ASN"
-        }
-      ]
-    },
-    {
-      "ligandAtoms": [
-        {
-          "atomIndex": 5203,
-          "atomName": "N03",
-          "chain": "A",
-          "resID": 501,
-          "resName": "3WH"
-        }
-      ],
-      "metrics": {
-        "angle": null,
-        "distance": 3.7038570436775737
-      },
-      "receptorAtoms": [
-        {
-          "atomIndex": 805,
-          "atomName": "ND2",
-          "chain": "A",
-          "resID": 152,
-          "resName": "ASN"
-        },
-        {
-          "atomIndex": 805,
-          "atomName": "ND2",
-          "chain": "A",
-          "resID": 152,
-          "resName": "ASN"
-        }
-      ]
-    },
-    {
-      "ligandAtoms": [
-        {
           "atomIndex": 5210,
           "atomName": "N12",
           "chain": "A",
@@ -1629,37 +1567,6 @@
         {
           "atomIndex": 777,
           "atomName": "N",
-          "chain": "A",
-          "resID": 149,
-          "resName": "MET"
-        }
-      ]
-    },
-    {
-      "ligandAtoms": [
-        {
-          "atomIndex": 5216,
-          "atomName": "N19",
-          "chain": "A",
-          "resID": 501,
-          "resName": "3WH"
-        },
-        {
-          "atomIndex": 5216,
-          "atomName": "N19",
-          "chain": "A",
-          "resID": 501,
-          "resName": "3WH"
-        }
-      ],
-      "metrics": {
-        "angle": null,
-        "distance": 3.752648398131648
-      },
-      "receptorAtoms": [
-        {
-          "atomIndex": 780,
-          "atomName": "O",
           "chain": "A",
           "resID": 149,
           "resName": "MET"

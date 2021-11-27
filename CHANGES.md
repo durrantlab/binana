@@ -14,21 +14,23 @@ WIP
 7. JSZip now dynamic import.
 8. zip download now includes vmd state directory.
 9. Vmd state file centers on ligand automatically.
-10. changed hydrogen_bond_dist_cutoff and hydrogen_bond_angle_cutoff parameter
-    names to hydrogen_bond_dist_cutoff
-    hydrogen_halogen_bond_angle_cutoff
+10. changed hydrogen_bond_angle_cutoff parameter name to
+    hydrogen_halogen_bond_angle_cutoff. Added OTHER HALOGEN DIST HERE PARAM
+    HERE.
 11. Removed ability to toggle on and off cylinder interactions, to simplify UI.
     Always on for those interaction where appropriate.
 12. Some interactions are shown as spheres, others as bonds. Keeps it simplier.
 13. Improved ability to detect salt bridges and hydrogen bonds even if protein
     and ligand models do not have hydrogen atoms.
-14. Speed improvements
+14. Speed and memory improvements
 15. Revised file input system. Can now also specify PDB ID, extract delete
     non-protein residues, etc.
 16. Sulfur can now be a hydrogen bond donor and acceptor.
 17. If input structure has mmultiple frames, keepsfirst one.
 18. JSON file now includes distances and angles.
 19. output_csv option now also prints csv file containing same information as json.
+20. Possible to toggle ribbon on and off.
+21. Updated documentation.
 
 TODO:
 
@@ -40,37 +42,42 @@ bonds per this heuristic:
   angle. =O not marked as donor, so don't need to worry about that.
 * Nitrogen cannot donate to more than actual neighbors + hydrogen bonds > 4, as
   above.
-
-Are water molecules able to be hydrogen bond donors?
+* chain and resid now included in output PDB files.
 
 Tests on all operating systems (including mobile).
 
 Be sure to compress javascript
 
-Halogen bonds mention in all documentation?
+MAke sure not javascript is external.
+
+DOCUMENTATION:
+
+1. Halogen bonds mention in all documentation?
+2. METAL_COORDINATION_CUTOFF. Get into web app (DONE), documentation,
+   parameters, etc.
+3. Make sure all documentation/examples account for get_all_interactions
+   (updated for metal coordination, halogen bonds)
+4. Make sure output_csv parameter documented.
+
+hydrogen_halogen_bond_angle_cutoff
+halogen_bond_dist_cutoff
+metal_coordination_dist_cutoff
+output_csv
+
+(COMMAND_LINE_USE updated)
+
 
 Test should also test version of protein without hydrogens, and make sure you
 get all interactions tested. Metal, halogen, hydrogen with S.
 
-METAL_COORDINATION_CUTOFF. Get into web app (DONE), documentation, parameters, etc.
-
-Make sure all documentation/examples account for get_all_interactions (updated for metal coordination, halogen bonds)
-
 finish README.md on file loading component.
-
-Check all docstrings on functions.
 
 PDBQT in webapp looks strange?
 
-SDF on ligand works?
+*** Makesure can loadin multipleligands. Probably need to rewritecodethat
+triggersbinana run. Also, can run if restart.
 
-Makesure can loadin multipleligands. Probably need to rewritecodethat triggersbinana run. Also, can run if restart.
-
-Make sure output_csv parameter documented.
-
-// And you need a message explaining difference between delete/extract. Also,
-// converting files hasn't been implemented.
-
+And you need a message explaining the difference between delete/extract. 
 
 2.0
 ---

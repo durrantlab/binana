@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-20 02:43:21
+// Transcrypt'ed from Python, 2021-11-23 00:01:20
 var binana = {};
 var math = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -110,6 +110,7 @@ export var Mol =  __class__ ('Mol', [object], {
 					}
 					if (!__in__ (key, atom_already_loaded) || !__in__ (temp_residue, protein_resnames)) {
 						atom_already_loaded.append (key);
+						temp_atom.all_atoms_index = autoindex;
 						self.all_atoms [autoindex] = temp_atom;
 						if (!__in__ (temp_atom.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
 							self.non_protein_atoms [autoindex] = temp_atom;
@@ -292,11 +293,27 @@ export var Mol =  __class__ ('Mol', [object], {
 				}
 				var atom2 = self.non_protein_atoms [atom_index2];
 				if (!__in__ (atom2.residue.__getslice__ (-(3), null, 1), protein_resnames)) {
-					var dist = distance (atom1.coordinates, atom2.coordinates);
-					if (dist < self.bond_length (atom1.element, atom2.element) * 1.2) {
-						atom1.add_neighbor_atom_index (atom_index2);
-						atom2.add_neighbor_atom_index (atom_index1);
-					}
+					self.create_bond_by_distance_between_two_atoms (atom1, atom2);
+				}
+			}
+		}
+	});},
+	get create_bond_by_distance_between_two_atoms () {return __get__ (this, function (self, atom1, atom2) {
+		var dist = distance (atom1.coordinates, atom2.coordinates);
+		if (dist < self.bond_length (atom1.element, atom2.element) * 1.2) {
+			atom1.add_neighbor_atom_index (atom2.all_atoms_index);
+			atom2.add_neighbor_atom_index (atom1.all_atoms_index);
+		}
+	});},
+	get create_bond_by_distance () {return __get__ (this, function (self, atom) {
+		var idx1 = atom.all_atoms_index;
+		var coor1 = atom.coordinates;
+		for (var idx2 of self.all_atoms.py_keys ()) {
+			if (idx1 != idx2) {
+				var other_atom = self.all_atoms [idx2];
+				var dist = distance (coor1, other_atom.coordinates);
+				if (dist < self.bond_length (atom.element, other_atom.element) * 1.2) {
+					atom.add_neighbor_atom_index (other_atom.all_atoms_index);
 				}
 			}
 		}
@@ -431,6 +448,9 @@ export var Mol =  __class__ ('Mol', [object], {
 				charaterizations.append (['DONOR', atom]);
 			}
 		}
+		else if (atom.element == 'O' && num_neighbors == 0) {
+			charaterizations.append (['DONOR', atom]);
+		}
 		else if (atom.element == 'N') {
 			var is_sp3 = (num_neighbors > 1 ? atom.has_sp3_geometry (self) : true);
 			if (is_sp3 && num_neighbors < 4 || !(is_sp3) && num_neighbors < 3) {
@@ -514,8 +534,17 @@ export var Mol =  __class__ ('Mol', [object], {
 			}
 		}
 		else if (num_neighors == 1 || atom.has_sp3_geometry (self)) {
-			var chrg = self.Charged (atom.coordinates, [atom_index], true);
-			self.charges.append (chrg);
+			var is_in_aromatic_ring = any ((function () {
+				var __accu0__ = [];
+				for (var ring of self.aromatic_rings) {
+					__accu0__.append (__in__ (int (atom_index), ring.indices));
+				}
+				return py_iter (__accu0__);
+			}) ());
+			if (!(is_in_aromatic_ring)) {
+				var chrg = self.Charged (atom.coordinates, [atom_index], true);
+				self.charges.append (chrg);
+			}
 		}
 	});},
 	get charges_carboxylate () {return __get__ (this, function (self, atom_index, atom) {
@@ -754,6 +783,13 @@ export var Mol =  __class__ ('Mol', [object], {
 		});}
 	}),
 	get add_aromatic_marker () {return __get__ (this, function (self, indicies_of_ring) {
+		var indicies_of_ring = (function () {
+			var __accu0__ = [];
+			for (var i of indicies_of_ring) {
+				__accu0__.append (int (i));
+			}
+			return __accu0__;
+		}) ();
 		var points_list = [];
 		var total = len (indicies_of_ring);
 		var x_sum = 0.0;
@@ -829,10 +865,8 @@ export var Mol =  __class__ ('Mol', [object], {
 				for (var ring_index_2 = 0; ring_index_2 < len (all_rings); ring_index_2++) {
 					if (ring_index_1 != ring_index_2) {
 						var ring2 = all_rings [ring_index_2];
-						if (len (ring2) != 0) {
-							if (self.set1_is_subset_of_set2 (ring1, ring2) == true) {
-								all_rings [ring_index_2] = [];
-							}
+						if (len (ring2) != 0 && self.set1_is_subset_of_set2 (ring1, ring2) == true) {
+							all_rings [ring_index_2] = [];
 						}
 					}
 				}
@@ -871,7 +905,7 @@ export var Mol =  __class__ ('Mol', [object], {
 					}
 				}
 			}
-			if (is_flat == false) {
+			if (!(is_flat)) {
 				all_rings [ring_index] = [];
 			}
 			if (len (ring) < 5) {
@@ -894,7 +928,7 @@ export var Mol =  __class__ ('Mol', [object], {
 		for (var atom_index of self.all_atoms.py_keys ()) {
 			var atom = self.all_atoms [atom_index];
 			var key = (((atom.residue + '_') + str (atom.resid)) + '_') + atom.chain;
-			if (first == true) {
+			if (first) {
 				var curr_res = key;
 				var first = false;
 			}

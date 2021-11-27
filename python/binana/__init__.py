@@ -43,7 +43,8 @@ def run(args=None):
             "-T_stacking_angle_tolerance", "30",
             "-T_stacking_closest_dist_cutoff", "5",
             "-cation_pi_dist_cutoff", "6",
-            "-salt_bridge_dist_cutoff", "5.5"
+            "-salt_bridge_dist_cutoff", "5.5",
+            "-metal_coordination_dist_cutoff", "3.5"
         ]
 
     If any of the parameters above are omitted, default values will be used.

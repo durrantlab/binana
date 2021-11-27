@@ -60,12 +60,11 @@ SALT_BRIDGE_DIST_CUTOFF = 5.5
 """float: Charged-moiety/charged-moiety distance cutoff for salt-bridge
 interactions."""
 
+#  I think 3.0 is reasonable, based on:
+# * https://www.degruyter.com/document/doi/10.1524/zkri.2013.1605/html
+# * https://pubs.acs.org/doi/10.1021/ic971462p
 METAL_COORDINATION_CUTOFF = 3.5
-"""float: Metal-ligand distance cutoff for metal-coordination interactions. I
-think 3.0 is reasonable, based on:
-* https://www.degruyter.com/document/doi/10.1524/zkri.2013.1605/html
-* https://pubs.acs.org/doi/10.1021/ic971462p
-"""
+"""float: Metal-ligand distance cutoff for metal-coordination interactions."""
 
 RECEPTOR = ""
 LIGAND = ""

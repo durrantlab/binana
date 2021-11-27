@@ -6,7 +6,6 @@ import __future__
 from binana.output import _write_main
 from binana.interactions import get_all_interactions
 from binana.load_ligand_receptor import from_files
-import os
 
 import math
 import binana
@@ -37,17 +36,25 @@ def _get_all_interactions(parameters):
             The BINANA parameters to use.
     """
 
+    max_cutoff = (
+        max(
+            i[1]
+            for i in parameters.params.items()
+            if "dist" in i[0] and "cutoff" in i[0]
+        )
+        + 15
+    )
+
     ligand, receptor = from_files(
-        parameters.params["ligand"], parameters.params["receptor"]
+        parameters.params["ligand"], parameters.params["receptor"], max_cutoff
     )
 
     # This is perhaps controversial. I noticed that often a pi-cation
-    # interaction or other pi interaction was only slightly off, but looking
-    # at the structure, it was clearly supposed to be a pi-cation
-    # interaction. I've decided then to artificially expand the radius of
-    # each pi ring. Think of this as adding in a VDW radius, or accounting
-    # for poor crystal-structure resolution, or whatever you want to justify
-    # it.
+    # interaction or other pi interaction was only slightly off, but looking at
+    # the structure, it was clearly supposed to be a pi-cation interaction. I've
+    # decided then to artificially expand the radius of each pi ring. Think of
+    # this as adding in a VDW radius, or accounting for poor crystal-structure
+    # resolution, or whatever you want to justify it.
     pi_padding = parameters.params["pi_padding_dist"]
 
     all_interacts = get_all_interactions(
@@ -97,6 +104,9 @@ def _get_all_interactions(parameters):
 
 
 def _intro():
+    # __pragma__ ('skip')
+    import os
+
     dir_path = os.path.abspath(
         os.path.dirname(os.path.realpath(__file__)) + "/../COMMAND_LINE_USE.md"
     )
@@ -104,5 +114,6 @@ def _intro():
     if os.path.exists(dir_path):
         with open(dir_path) as f:
             print("\n" + f.read().rstrip())
-    
+    # __pragma__ ('noskip')
+
     print("\n                            [- END INTRO -]\n")

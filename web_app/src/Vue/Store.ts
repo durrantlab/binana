@@ -103,6 +103,7 @@ export const store = new Vuex.Store({
         "receptorMol": undefined,
         "ligandMol": undefined,
         "renderProteinSticks": false,
+        "renderProteinRibbon": true,
         "colorByInteraction": InteractionColoring.MOLECULE,
         "bondVisible": true,
 

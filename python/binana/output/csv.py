@@ -39,6 +39,19 @@ def _recurse(pre_commas, data, csv):
 
 
 def collect(data):
+    """Collects all the characterized interactions between the protein and
+    ligand into a CSV-formatted string.
+
+    Args:
+        data (dict): A dictionary containing information about all the
+            interactions. The output of 
+            :py:func:`~binana.output.dictionary.collect`
+
+    Returns:
+        str: A CSV-formatted string containing the same information present in
+        the input dictionary.
+    """
+
     csv = _recurse("", data, "")
 
     while "\n\n" in csv:

@@ -19,7 +19,7 @@ _ligand_receptor_aromatic_dists = None
 # pi_interactions = None
 
 
-def from_texts(ligand_text, receptor_text):
+def from_texts(ligand_text, receptor_text, max_cutoff=None):
     """Loads a ligand and receptor from a PDBQT- or PDB-formatted string
     (text). PDBQT recommended.
 
@@ -29,6 +29,13 @@ def from_texts(ligand_text, receptor_text):
         receptor_text (str): The receptor text to load. Preferably PDBQT
             formatted, though BINANA and perform most analyses on PDB files as
             well.
+        max_cutoff (float, optional): If specified, will only load receptor
+            atoms that fall within a cube extending this many angstroms beyond
+            the ligand in the x, y, and z directions. Can dramatically speed
+            calculations on large proteins, if an appropriate max_cutoff is
+            known beforehand. On the other hand, may prevent proper assignment
+            of secondary structure. Defaults to None, meaning load all receptor
+            atoms.
 
     Returns:
         list: A list of binana._structure.mol.Mol objects, for the ligand and
@@ -39,7 +46,21 @@ def from_texts(ligand_text, receptor_text):
     ligand.load_pdb_from_text(ligand_text)
 
     receptor = _Mol()
-    receptor.load_pdb_from_text(receptor_text)
+    if max_cutoff is None:
+        # Load the full receptor (all atoms).
+        receptor.load_pdb_from_text(receptor_text)
+    else:
+        receptor.load_pdb_from_text(
+            receptor_text,
+            None,
+            ligand.min_x - max_cutoff,
+            ligand.max_x + max_cutoff,
+            ligand.min_y - max_cutoff,
+            ligand.max_y + max_cutoff,
+            ligand.min_z - max_cutoff,
+            ligand.max_z + max_cutoff,
+        )
+
     receptor.assign_secondary_structure()
 
     # Clears the cache
@@ -48,7 +69,7 @@ def from_texts(ligand_text, receptor_text):
     return ligand, receptor
 
 
-def from_files(ligand_filename, receptor_filename):
+def from_files(ligand_filename, receptor_filename, max_cutoff=None):
     """Loads a ligand and receptor from PDBQT or PDB files. PDBQT recommended.
 
     Args:
@@ -58,17 +79,39 @@ def from_files(ligand_filename, receptor_filename):
         receptor_pdbqt_filename (str): The receptor filename to load.
             Preferably PDBQT formatted, though BINANA and perform most analyses
             on PDB files as well.
+        max_cutoff (float, optional): If specified, will only load receptor
+            atoms that fall within a cube extending this many angstroms beyond
+            the ligand in the x, y, and z directions. Can dramatically speed
+            calculations on large proteins, if an appropriate max_cutoff is
+            known beforehand. On the other hand, may prevent proper assignment
+            of secondary structure. Defaults to None, meaning load all receptor
+            atoms.
 
     Returns:
         list: A list of binana._structure.mol.Mol objects, for the ligand and
         receptor, respectively.
     """
 
+    # import pdb; pdb.set_trace()
+
     ligand = _Mol()
     ligand.load_pdb_file(ligand_filename)
 
     receptor = _Mol()
-    receptor.load_pdb_file(receptor_filename)
+    if max_cutoff is None:
+        # Load the full receptor (all atoms).
+        receptor.load_pdb_file(receptor_filename)
+    else:
+        receptor.load_pdb_file(
+            receptor_filename,
+            ligand.min_x - max_cutoff,
+            ligand.max_x + max_cutoff,
+            ligand.min_y - max_cutoff,
+            ligand.max_y + max_cutoff,
+            ligand.min_z - max_cutoff,
+            ligand.max_z + max_cutoff,
+        )
+
     receptor.assign_secondary_structure()
 
     # Clears the cache

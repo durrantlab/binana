@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-20 02:43:21
+// Transcrypt'ed from Python, 2021-11-23 00:01:20
 var binana = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
 import * as _math_functions from './binana._utils._math_functions.js';
@@ -11,24 +11,40 @@ import {Point as _Point} from './binana._structure.point.js';
 import {pi, sqrt} from './math.js';
 import * as __module_binana__ from './binana.js';
 __nest__ (binana, '', __module_binana__);
-export {sqrt, pi, _Point, _Mol, _math_functions};
+export {_Point, _Mol, pi, sqrt, _math_functions};
 var __name__ = 'binana.load_ligand_receptor';
 export var _ligand_receptor_dists_cache = dict ({});
 export var _ligand_receptor_aromatic_dists = null;
-export var from_texts = function (ligand_text, receptor_text) {
+export var from_texts = function (ligand_text, receptor_text, max_cutoff) {
+	if (typeof max_cutoff == 'undefined' || (max_cutoff != null && max_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var max_cutoff = null;
+	};
 	var ligand = _Mol ();
 	ligand.load_pdb_from_text (ligand_text);
 	var receptor = _Mol ();
-	receptor.load_pdb_from_text (receptor_text);
+	if (max_cutoff === null) {
+		receptor.load_pdb_from_text (receptor_text);
+	}
+	else {
+		receptor.load_pdb_from_text (receptor_text, null, ligand.min_x - max_cutoff, ligand.max_x + max_cutoff, ligand.min_y - max_cutoff, ligand.max_y + max_cutoff, ligand.min_z - max_cutoff, ligand.max_z + max_cutoff);
+	}
 	receptor.assign_secondary_structure ();
 	_clear_cache ();
 	return tuple ([ligand, receptor]);
 };
-export var from_files = function (ligand_filename, receptor_filename) {
+export var from_files = function (ligand_filename, receptor_filename, max_cutoff) {
+	if (typeof max_cutoff == 'undefined' || (max_cutoff != null && max_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var max_cutoff = null;
+	};
 	var ligand = _Mol ();
 	ligand.load_pdb_file (ligand_filename);
 	var receptor = _Mol ();
-	receptor.load_pdb_file (receptor_filename);
+	if (max_cutoff === null) {
+		receptor.load_pdb_file (receptor_filename);
+	}
+	else {
+		receptor.load_pdb_file (receptor_filename, ligand.min_x - max_cutoff, ligand.max_x + max_cutoff, ligand.min_y - max_cutoff, ligand.max_y + max_cutoff, ligand.min_z - max_cutoff, ligand.max_z + max_cutoff);
+	}
 	receptor.assign_secondary_structure ();
 	_clear_cache ();
 	return tuple ([ligand, receptor]);

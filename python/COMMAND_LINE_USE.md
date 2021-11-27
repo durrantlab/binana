@@ -29,36 +29,62 @@
                        ]{};:'"/|\         []{};:'"
                                 \<>,-_=+.|
 
-BINANA 2.0
-==========
+# BINANA 2.0
 
-BINANA is released under the GNU General Public License (see
-http://www.gnu.org/licenses/gpl.html). If you use BINANA in your work, please
-cite:
+BINANA is released under the [GNU General Public
+License](http://www.gnu.org/licenses/gpl.html). If you use BINANA in your work,
+please cite:
 
 BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD,
 McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi:
 10.1016/j.jmgm.2011.01.004
 
-Introduction, Examples of Use
-=============================
+## Introduction
 
 BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing ligand
 binding. The program identifies key binding characteristics like hydrogen bonds,
 salt bridges, and pi interactions. As input, BINANA accepts receptor and ligand
-files in the PDBQT format. PDBQT files can be generated from the more common PDB
-file format using the free converter provided with AutoDockTools, available at
-http://mgltools.scripps.edu/downloads
+files in the PDBQT (preferred) or PDB formats. PDBQT files can be generated from
+the more common PDB file format using the [free converter provided with
+AutoDockTools](http://mgltools.scripps.edu/downloads). As output, BINANA
+identifies and describes key protein/ligand interactions.
 
-As output, BINANA describes ligand binding. Here's a simple example of how to
-run the program:
+## Examples of Command-line Use
+
+### Suggested Use
+
+We recommend using BINANA with the `-output_dir` parameter, which will save all
+output files to a specified directory:
+
+```bash
+python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/ > errors.txt
+```
+
+If a directory is specified, BINANA creates the following files:
+
+1. Separate PDB files containing the atoms involved in each interaction
+   analyzed.
+2. A description of the interactions written to a file called `log.txt`.
+3. Detailed information about the identified interaction saved to `output.json`
+   and `output.csv`.
+4. A VMD state file (`state.vmd`) so the results can be easily visualized in
+   [VMD, a free program available for
+   download](http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD).
+
+To save warnings and errors, append something like `> errors.txt` to the end of
+your command.
+
+### Alternative Methods of Use
+
+To output limited information about the detected interactions to the standard
+output:
 
 ```bash
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt
 ```
 
-To create a single PDB file showing the different binding characteristics with
-those characteristics described in the PDB header:
+To create a single PDB file that includes the atoms involved in the identified
+interactions, with interaction characteristics described in the PDB header:
 
 ```bash
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb
@@ -71,35 +97,48 @@ output file. To save these to a file, try:
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_file /path/to/output.pdb > errors.txt
 ```
 
-To additionally output a JSON file with all the characterized interactions
-between the protein and ligand:
+To output a JSON file with all the characterized interactions between the
+protein and ligand:
 
 ```bash
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_json /path/to/output.json
 ```
 
-You can also send the program output to a directory, which will be created if it
-does not already exist. If a directory is specified, the program automatically
-separates the output PDB file into separate files for each interaction analyzed,
-and a description of the interactions is written to a file called `log.txt`.
-Additionally, a VMD state file is created so the results can be easily
-visualized in VMD, a free program available for download at
-http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD Again,
-to save warnings and errors, append something like `> errors.txt` to the end of
-your command:
+To output a CSV file with the same information:
 
 ```bash
-python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/ > errors.txt
+python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_csv /path/to/output.csv
 ```
+
+### Caveats
+
+We recommend using PDBQT files as input because they include polar hydrogen
+atoms and partial electric charges. PDBQT files can be generated from the more
+common PDB file format using the [free converter provided with
+AutoDockTools](http://mgltools.scripps.edu/downloads).
+
+When using PDB files, we recommend adding hydrogen atoms to both the protein and
+ligand structures using external tools. To add hydrogen atoms to your receptor,
+consider using [MolProbity](http://molprobity.biochem.duke.edu/) or
+[PDB2PQR](http://server.poissonboltzmann.org/). To add hydrogen atoms to your
+ligand, consider [Gypsum-DL](http://durrantlab.com/gypsum-dl/) or
+[Avogadro](https://avogadro.cc/docs/menus/build-menu/).
+
+You can use BINANA to analyze structures that do not contain hydrogen atoms,
+though the results will likely be less accurate because BINANA must make some
+guesses about protonation based on geometry.
+
+### Specifying Custom Parameters
 
 Though we recommend using program defaults, the following command-line tags can
 also be specified: `-close_contacts_dist1_cutoff` `-close_contacts_dist2_cutoff`
 `-electrostatic_dist_cutoff` `-active_site_flexibility_dist_cutoff`
 `-hydrophobic_dist_cutoff` `-hydrogen_bond_dist_cutoff`
-`-hydrogen_halogen_bond_angle_cutoff` `-pi_padding_dist`
-`-pi_pi_interacting_dist_cutoff` `-pi_stacking_angle_tolerance`
-`-T_stacking_angle_tolerance` `-T_stacking_closest_dist_cutoff`
-`-cation_pi_dist_cutoff` `-salt_bridge_dist_cutoff`
+`-hydrogen_halogen_bond_angle_cutoff` `-halogen_bond_dist_cutoff`
+`-pi_padding_dist` `-pi_pi_interacting_dist_cutoff`
+`-pi_stacking_angle_tolerance` `-T_stacking_angle_tolerance`
+`-T_stacking_closest_dist_cutoff` `-cation_pi_dist_cutoff`
+`-salt_bridge_dist_cutoff` `-metal_coordination_dist_cutoff`
 
 For example, if you want to tell BINANA to detect only hydrogen bonds where the
 donor and acceptor are less than 3.0 angstroms distant, run:
@@ -109,11 +148,12 @@ python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.
 ```
 
 What follows is a detailed description of the BINANA algorithm and a further
-explaination of the optional parameters described above. Parameter names are
+explanation of the optional parameters described above. Parameter names are
 enclosed in braces.
 
-Close Contacts
-==============
+## Description of Interactions
+
+### Close Contacts
 
 BINANA begins by identifying all ligand and protein atoms that come within
 `close_contacts_dist1_cutoff` angstroms of each other. These close-contact atoms
@@ -128,15 +168,13 @@ similar list of atom-type pairs is tallied for all ligand and receptor atoms
 that come within `close_contacts_dist2_cutoff` angstroms of each other, where
 `close_contacts_dist2_cutoff` > `close_contacts_dist1_cutoff`.
 
-Electrostatic Interactions
-==========================
+### Electrostatic Interactions
 
 For each atom-type pair of atoms that come within `electrostatic_dist_cutoff`
 angstroms of each other, as described above, a summed electrostatic energy is
 calculated using the Gasteiger partial charges assigned by AutoDockTools.
 
-Binding-Pocket Flexibility
-==========================
+### Binding-pocket Flexibility
 
 BINANA also provides useful information about the flexibility of a binding
 pocket. Each receptor atom that comes with `active_site_flexibility_dist_cutoff`
@@ -177,8 +215,7 @@ criteria is labeled "other" instead. Additionally, the residues of beta strands
 that are less than three residues long are likewise labeled "other," as these
 residues typically belong to loops rather than legitimate strands.
 
-Hydrophobic Contacts
-====================
+### Hydrophobic Contacts
 
 To identify hydrophobic contacts, BINANA simply tallies the number of times a
 ligand carbon atom comes within `hydrophobic_dist_cutoff` angstroms of a
@@ -188,15 +225,14 @@ classifications: alpha-sidechain, alpha-backbone, beta-sidechain, beta-backbone,
 other-sidechain, other-backbone. The total number of hydrophobic contacts is
 simply the sum of these six counts.
 
-Hydrogen Bonds
-==============
+### Hydrogen Bonds
 
-BINANA allows hydroxyl and amine groups to act as hydrogen-bond donors. Oxygen
-and nitrogen atoms can act as hydrogen-bond acceptors. Fairly liberal cutoffs
-are implemented in order to accommodate low-resolution crystal structures. A
-hydrogen bond is identified if the hydrogen-bond donor comes within
-`hydrogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and the
-angle formed between the donor, the hydrogen atom, and the acceptor is no
+BINANA allows hydroxyl, amine, and thiol groups to act as hydrogen-bond donors.
+Oxygen, nitrogen, and sulfur atoms can act as hydrogen-bond acceptors. Fairly
+liberal cutoffs are implemented in order to accommodate low-resolution crystal
+structures. A hydrogen bond is identified if the hydrogen-bond donor comes
+within `hydrogen_bond_dist_cutoff` angstroms of the hydrogen-bond acceptor, and
+the angle formed between the donor, the hydrogen atom, and the acceptor is no
 greater than `hydrogen_halogen_bond_angle_cutoff` degrees. BINANA tallies the
 number of hydrogen bonds according to the secondary structure of the receptor
 atom, the side-chain/backbone status of the receptor atom, and the location
@@ -206,8 +242,17 @@ ligand, beta-backbone-ligand, other-sidechain-ligand, other-backbone-ligand,
 alpha-sidechain-receptor, alpha-backbone-receptor, beta-sidechain-receptor,
 beta-backbone-receptor, other-sidechain-receptor, other-backbone-receptor.
 
-Salt Bridges
-============
+### Halogen Bonds
+
+BINANA identifies halogen bonds much as it identifies hydrogen bonds. Halogen
+bond donors include O-X, N-X, S-X, and C-X, where X is I, Br, Cl, or F. Oxygen,
+nitrogen, and sulfur atoms can act as halogen-bond acceptors. A halogen bond is
+identified if the halogen-bond donor comes within `halogen_bond_dist_cutoff`
+angstroms of the halogen-bond acceptor, and the angle formed between the donor,
+the halogen atom, and the acceptor is no greater than
+`hydrogen_halogen_bond_angle_cutoff` degrees. 
+
+### Salt Bridges
 
 BINANA also seeks to identify possible salt bridges binding the ligand to the
 receptor. First, charged functional groups are identified and labeled with a
@@ -252,8 +297,7 @@ are opposite. If so, a salt bridge is detected. These salt bridges are
 characterized and tallied by the secondary structure of the associated protein
 residue: alpha helix, beta sheet, or other.
 
-pi Interactions
-===============
+### pi Interactions
 
 A number of interactions are known to involve pi systems. In order to detect the
 aromatic rings of non-protein residues, a recursive subroutine identifies all
@@ -315,8 +359,18 @@ pi-pi stacking, T-stacking, and cation-pi interactions are tallied according to
 the secondary structure of the receptor residue containing the associated
 aromatic ring or charged functional group: alpha helix, beta sheet, or other.
 
-Ligand Atom Types and Rotatable Bonds
-=====================================
+### Metal Coordination Bonds
+
+BINANA detects metal bonds whenever a N, O, Cl, F, Br, I, or S is located near a
+metal cation (specified using the `-metal_coordination_dist_cutoff` parameter).
+We note that BINANA does not account for the angles between the coordinating
+atoms and the metal cation. We opted for a straightforward distance-based
+approach because (1) many such molecular geometries are possible, (2) in
+practice the L-M-L angles can deviate substantially from the ideal, and (3) some
+positions may be unoccupied (vacancy). Fortunately, detecting metal-coordination
+bonds by distance is sufficient in almost all cases.
+
+### Ligand Atom Types and Rotatable Bonds
 
 BINANA also tallies the number of atoms of each AutoDock type present in the
 ligand as well as the number of ligand rotatable bonds identified by the

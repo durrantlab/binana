@@ -18,6 +18,8 @@ let binanaFiles;
 // Make sure each atom is rendered in the viewer only once.
 let idxOfAtomsSeen;
 
+export var ligandInteractingResidues = [];
+
 interface ILegendItem {
     name: string;
     color: string;
@@ -193,7 +195,7 @@ export function highlight(highlightInfos: IHighlightInfo[]) {
     // rendering.
     ThreeDMol.showSticksOrRibbonAsAppropriate();
 
-    let residues = [];
+    ligandInteractingResidues = [];
 
     for (let highlightInfo of highlightInfos) {
         // Add spheres
@@ -205,31 +207,33 @@ export function highlight(highlightInfos: IHighlightInfo[]) {
             drawCylinders(highlightInfo.interactionType, highlightInfo.interactionName);
         }
 
-        residues.push(...highlightInfo.recAtomInfs.map(
+        ligandInteractingResidues.push(...highlightInfo.recAtomInfs.map(
             i => i[0]["index"]
         ));
     }
 
-    // console.log(residues);
+    showDetectedLigandInteractingResidues(receptorMol);
 
+    // Show protein ribbon again (otherwise sometimes parts of ribbon
+    // disappear).
+    // ThreeDMol.showProteinRibbon(true);
+
+    viewer["render"]();
+}
+
+export function showDetectedLigandInteractingResidues(receptorMol: any, clearExisting=false): void {
     // Regardless, make sure residues participating in interactions appear.
     receptorMol["setStyle"](
         {
-            "index": residues,
+            "index": ligandInteractingResidues,
             "byres": true
         },
         {
             "stick": { "radius": 0.1 },  // 0.15
-            "cartoon": { "color": 'spectrum' },
+            // "cartoon": { "color": 'spectrum' },
         },
-        true  // add
+        !clearExisting  // add
     );
-
-    // Show protein ribbon again (otherwise sometimes parts of ribbon
-    // disappear).
-    ThreeDMol.showProteinRibbon(true);
-
-    viewer["render"]();
 }
 
 /**

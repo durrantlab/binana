@@ -79,9 +79,9 @@ def _run_test(cmd_params):
                 print("        " + expect_file)
 
         # Delete output files (clean up)
-        for ext in [".pdb", "state.vmd", "output.json", "log.txt"]:
-            for fl in glob.glob(out_dir + "*" + ext):
-                os.unlink(fl)
+        # for ext in [".pdb", "state.vmd", "output.json", "log.txt"]:
+        #     for fl in glob.glob(out_dir + "*" + ext):
+        #         os.unlink(fl)
 
         print("")
         try:

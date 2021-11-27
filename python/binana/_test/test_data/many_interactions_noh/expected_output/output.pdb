@@ -239,27 +239,13 @@ REMARK
 REMARK Hydrogen bonds:
 REMARK     Location of Donor | Sidechain/Backbone | Secondary Structure | Count 
 REMARK    -------------------|--------------------|---------------------|-------
-REMARK           LIGAND      |      SIDECHAIN     |        OTHER        |   5   
-REMARK          RECEPTOR     |      SIDECHAIN     |        ALPHA        |   2   
-REMARK          RECEPTOR     |      SIDECHAIN     |         BETA        |   3   
-REMARK          RECEPTOR     |      SIDECHAIN     |        OTHER        |   5   
+REMARK           LIGAND      |      SIDECHAIN     |        OTHER        |   2   
+REMARK          RECEPTOR     |      SIDECHAIN     |        OTHER        |   1   
 REMARK 
 REMARK Raw data:
-REMARK      A:CHT(1):N1(2) - A:TRP(90):NE1(88) - A:TRP(90):NE1(88)
-REMARK      A:CHT(1):O2(8) - A:TRP(205):NE1(392) - A:TRP(205):NE1(392)
-REMARK      A:CHT(1):O4(11) - A:TRP(43):NE1(28) - A:TRP(43):NE1(28)
-REMARK      A:CHT(1):O4(11) - A:LYS(183):NZ(295) - A:LYS(183):NZ(295)
-REMARK      A:CHT(1):O4(11) - A:TRP(205):NE1(392) - A:TRP(205):NE1(392)
-REMARK      A:CHT(1):O3(12) - A:TRP(43):NE1(28) - A:TRP(43):NE1(28)
-REMARK      A:CHT(1):O3(12) - A:LYS(183):NZ(295) - A:LYS(183):NZ(295)
-REMARK      A:CHT(1):N1(14) - A:CHT(1):N1(14) - A:ASP(157):OD1(237)
 REMARK      A:CHT(1):N1(14) - A:CHT(1):N1(14) - A:ASP(157):OD2(238)
-REMARK      A:CHT(1):O1(16) - A:LYS(94):NZ(124) - A:LYS(94):NZ(124)
-REMARK      A:CHT(1):O1(16) - A:ASN(156):ND2(230) - A:ASN(156):ND2(230)
 REMARK      A:CHT(1):O6(20) - A:CHT(1):O6(20) - A:ASN(156):OD1(229)
 REMARK      A:CHT(1):O6(20) - A:ASN(156):ND2(230) - A:ASN(156):ND2(230)
-REMARK      A:CHT(1):O6(20) - A:CHT(1):O6(20) - A:ASP(157):OD1(237)
-REMARK      A:CHT(1):O6(20) - A:CHT(1):O6(20) - A:ASP(157):OD2(238)
 REMARK 
 REMARK Halogen bonds:
 REMARK     Location of Donor | Sidechain/Backbone | Secondary Structure | Count 
@@ -4785,254 +4771,6 @@ REMARK   "hydrogenBonds": [
 REMARK     {
 REMARK       "ligandAtoms": [
 REMARK         {
-REMARK           "atomIndex": 2,
-REMARK           "atomName": "N1",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.8187145743037676
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 88,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 90,
-REMARK           "resName": "TRP"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 88,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 90,
-REMARK           "resName": "TRP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 8,
-REMARK           "atomName": "O2",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.0831511477707343
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 392,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 205,
-REMARK           "resName": "TRP"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 392,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 205,
-REMARK           "resName": "TRP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 11,
-REMARK           "atomName": "O4",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.8509082045668137
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 28,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 43,
-REMARK           "resName": "TRP"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 28,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 43,
-REMARK           "resName": "TRP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 11,
-REMARK           "atomName": "O4",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 2.8536702682685675
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 295,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 183,
-REMARK           "resName": "LYS"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 295,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 183,
-REMARK           "resName": "LYS"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 11,
-REMARK           "atomName": "O4",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.57628997705723
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 392,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 205,
-REMARK           "resName": "TRP"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 392,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 205,
-REMARK           "resName": "TRP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 12,
-REMARK           "atomName": "O3",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.391607436010248
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 28,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 43,
-REMARK           "resName": "TRP"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 28,
-REMARK           "atomName": "NE1",
-REMARK           "chain": "A",
-REMARK           "resID": 43,
-REMARK           "resName": "TRP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 12,
-REMARK           "atomName": "O3",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 2.5413171781578154
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 295,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 183,
-REMARK           "resName": "LYS"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 295,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 183,
-REMARK           "resName": "LYS"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 14,
-REMARK           "atomName": "N1",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 14,
-REMARK           "atomName": "N1",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 2.7975793107613574
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 237,
-REMARK           "atomName": "OD1",
-REMARK           "chain": "A",
-REMARK           "resID": 157,
-REMARK           "resName": "ASP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
 REMARK           "atomIndex": 14,
 REMARK           "atomName": "N1",
 REMARK           "chain": "A",
@@ -5058,68 +4796,6 @@ REMARK           "atomName": "OD2",
 REMARK           "chain": "A",
 REMARK           "resID": 157,
 REMARK           "resName": "ASP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 16,
-REMARK           "atomName": "O1",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.0883751391306076
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 124,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 94,
-REMARK           "resName": "LYS"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 124,
-REMARK           "atomName": "NZ",
-REMARK           "chain": "A",
-REMARK           "resID": 94,
-REMARK           "resName": "LYS"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 16,
-REMARK           "atomName": "O1",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.881356077455404
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 230,
-REMARK           "atomName": "ND2",
-REMARK           "chain": "A",
-REMARK           "resID": 156,
-REMARK           "resName": "ASN"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 230,
-REMARK           "atomName": "ND2",
-REMARK           "chain": "A",
-REMARK           "resID": 156,
-REMARK           "resName": "ASN"
 REMARK         }
 REMARK       ]
 REMARK     },
@@ -5182,68 +4858,6 @@ REMARK           "atomName": "ND2",
 REMARK           "chain": "A",
 REMARK           "resID": 156,
 REMARK           "resName": "ASN"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 20,
-REMARK           "atomName": "O6",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 20,
-REMARK           "atomName": "O6",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 2.538558843123397
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 237,
-REMARK           "atomName": "OD1",
-REMARK           "chain": "A",
-REMARK           "resID": 157,
-REMARK           "resName": "ASP"
-REMARK         }
-REMARK       ]
-REMARK     },
-REMARK     {
-REMARK       "ligandAtoms": [
-REMARK         {
-REMARK           "atomIndex": 20,
-REMARK           "atomName": "O6",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         },
-REMARK         {
-REMARK           "atomIndex": 20,
-REMARK           "atomName": "O6",
-REMARK           "chain": "A",
-REMARK           "resID": 1,
-REMARK           "resName": "CHT"
-REMARK         }
-REMARK       ],
-REMARK       "metrics": {
-REMARK         "angle": null,
-REMARK         "distance": 3.7884114084930114
-REMARK       },
-REMARK       "receptorAtoms": [
-REMARK         {
-REMARK           "atomIndex": 238,
-REMARK           "atomName": "OD2",
-REMARK           "chain": "A",
-REMARK           "resID": 157,
-REMARK           "resName": "ASP"
 REMARK         }
 REMARK       ]
 REMARK     }
@@ -9065,51 +8679,15 @@ ATOM    150 CD1  HYD            15.070  -0.651   7.015                       C
 ATOM    151  C3  HYD            17.983  -0.864   6.957                       C
 ATOM    152  CE  HYD            18.768  -2.336   4.134                       C
 TER
-ATOM      1  N1  HBN            15.723   3.326   7.619                       N
-ATOM      2 NE1  HBN            14.322  -0.196   8.083                       N
-ATOM      3 NE1  HBN            14.322  -0.196   8.083                       N
-ATOM      4  O2  HBN            13.332   4.389   7.437                       O
-ATOM      5 NE1  HBN            13.351   5.771  10.193                       N
-ATOM      6 NE1  HBN            13.351   5.771  10.193                       N
-ATOM      7  O4  HBN            16.818   5.027   9.728                       O
-ATOM      8 NE1  HBN            20.356   3.632   9.123                       N
-ATOM      9 NE1  HBN            20.356   3.632   9.123                       N
-ATOM     10  O4  HBN            16.818   5.027   9.728                       O
-ATOM     11  NZ  HBN            18.466   6.708  11.341                       N
-ATOM     12  NZ  HBN            18.466   6.708  11.341                       N
-ATOM     13  O4  HBN            16.818   5.027   9.728                       O
-ATOM     14 NE1  HBN            13.351   5.771  10.193                       N
-ATOM     15 NE1  HBN            13.351   5.771  10.193                       N
-ATOM     16  O3  HBN            18.046   6.106   8.908                       O
-ATOM     17 NE1  HBN            20.356   3.632   9.123                       N
-ATOM     18 NE1  HBN            20.356   3.632   9.123                       N
-ATOM     19  O3  HBN            18.046   6.106   8.908                       O
-ATOM     20  NZ  HBN            18.466   6.708  11.341                       N
-ATOM     21  NZ  HBN            18.466   6.708  11.341                       N
-ATOM     22  N1  HBN            17.117   0.715   5.182                       N
-ATOM     23  N1  HBN            17.117   0.715   5.182                       N
-ATOM     24 OD1  HBN            19.182   1.675   3.557                       O
-ATOM     25  N1  HBN            17.117   0.715   5.182                       N
-ATOM     26  N1  HBN            17.117   0.715   5.182                       N
-ATOM     27 OD2  HBN            17.582   0.644   2.574                       O
-ATOM     28  O1  HBN            19.656   0.045   5.545                       O
-ATOM     29  NZ  HBN            18.930  -2.951   5.358                       N
-ATOM     30  NZ  HBN            18.930  -2.951   5.358                       N
-ATOM     31  O1  HBN            19.656   0.045   5.545                       O
-ATOM     32 ND2  HBN            20.916   3.707   5.804                       N
-ATOM     33 ND2  HBN            20.916   3.707   5.804                       N
-ATOM     34  O6  HBN            18.398   2.270   5.897                       O
-ATOM     35  O6  HBN            18.398   2.270   5.897                       O
-ATOM     36 OD1  HBN            20.164   4.472   3.840                       O
-ATOM     37  O6  HBN            18.398   2.270   5.897                       O
-ATOM     38 ND2  HBN            20.916   3.707   5.804                       N
-ATOM     39 ND2  HBN            20.916   3.707   5.804                       N
-ATOM     40  O6  HBN            18.398   2.270   5.897                       O
-ATOM     41  O6  HBN            18.398   2.270   5.897                       O
-ATOM     42 OD1  HBN            19.182   1.675   3.557                       O
-ATOM     43  O6  HBN            18.398   2.270   5.897                       O
-ATOM     44  O6  HBN            18.398   2.270   5.897                       O
-ATOM     45 OD2  HBN            17.582   0.644   2.574                       O
+ATOM      1  N1  HBN            17.117   0.715   5.182                       N
+ATOM      2  N1  HBN            17.117   0.715   5.182                       N
+ATOM      3 OD2  HBN            17.582   0.644   2.574                       O
+ATOM      4  O6  HBN            18.398   2.270   5.897                       O
+ATOM      5  O6  HBN            18.398   2.270   5.897                       O
+ATOM      6 OD1  HBN            20.164   4.472   3.840                       O
+ATOM      7  O6  HBN            18.398   2.270   5.897                       O
+ATOM      8 ND2  HBN            20.916   3.707   5.804                       N
+ATOM      9 ND2  HBN            20.916   3.707   5.804                       N
 TER
 TER
 ATOM      1  C6  PIS            14.451   3.555   6.881                       C

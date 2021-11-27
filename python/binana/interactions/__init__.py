@@ -292,7 +292,7 @@ def get_hydrogen_or_halogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_BOND_DIST_CUTOFF or HALOGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
             HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
         hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds.
