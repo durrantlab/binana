@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-23 00:01:21
+// Transcrypt'ed from Python, 2021-11-27 01:23:32
 var __future__ = {};
 var binana = {};
 var math = {};
@@ -15,7 +15,7 @@ __nest__ (__future__, '', __module___future____);
 import {to_deg} from './binana._structure.consts.js';
 import {angle_between_three_points} from './binana._utils._math_functions.js';
 import {Mol} from './binana._structure.mol.js';
-import {hashtable_entry_add_one, list_alphebetize_and_combine} from './binana._utils.utils.js';
+import {hashtable_entry_add_one} from './binana._utils.utils.js';
 import {_get_ligand_receptor_dists} from './binana.load_ligand_receptor.js';
 import * as __module_binana__ from './binana.js';
 __nest__ (binana, '', __module_binana__);
@@ -83,9 +83,9 @@ export var _score_angle_deviation_from_sp3_sp2 = function (angle, donor_has_sp3_
 		var max_angle = 129;
 	}
 	else {
+		var diff = fabs (120 - angle);
 		var min_angle = 100;
 		var max_angle = 150;
-		var diff = fabs (120 - angle);
 	}
 	return tuple ([diff, angle < min_angle || angle > max_angle]);
 };
@@ -213,7 +213,7 @@ export var _remove_extra_noh_hydrogen_bonds = function (ligand, receptor, accept
 		}) ();
 	}
 };
-export var get_hydrogen_or_halogen_bonds = function (ligand, receptor, dist_cutoff, angle_cutoff, hydrogen_bond) {
+export var _get_hydrogen_or_halogen_bonds = function (ligand, receptor, dist_cutoff, angle_cutoff, hydrogen_bond) {
 	if (typeof dist_cutoff == 'undefined' || (dist_cutoff != null && dist_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
 		var dist_cutoff = null;
 	};
@@ -271,6 +271,24 @@ export var get_hydrogen_or_halogen_bonds = function (ligand, receptor, dist_cuto
 	}
 	_collect_bonds (bonds_organized_by_donor, pdb_hbonds, hbonds, hbonds_labels);
 	return dict ({'counts': hbonds, 'mol': pdb_hbonds, 'labels': hbonds_labels});
+};
+export var get_hydrogen_bonds = function (ligand, receptor, dist_cutoff, angle_cutoff) {
+	if (typeof dist_cutoff == 'undefined' || (dist_cutoff != null && dist_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var dist_cutoff = null;
+	};
+	if (typeof angle_cutoff == 'undefined' || (angle_cutoff != null && angle_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var angle_cutoff = null;
+	};
+	return _get_hydrogen_or_halogen_bonds (ligand, receptor, dist_cutoff, angle_cutoff, true);
+};
+export var get_halogen_bonds = function (ligand, receptor, dist_cutoff, angle_cutoff) {
+	if (typeof dist_cutoff == 'undefined' || (dist_cutoff != null && dist_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var dist_cutoff = null;
+	};
+	if (typeof angle_cutoff == 'undefined' || (angle_cutoff != null && angle_cutoff.hasOwnProperty ("__kwargtrans__"))) {;
+		var angle_cutoff = null;
+	};
+	return _get_hydrogen_or_halogen_bonds (ligand, receptor, dist_cutoff, angle_cutoff, false);
 };
 
 //# sourceMappingURL=binana.interactions._hydrogen_halogen_bonds.map

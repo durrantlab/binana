@@ -461,12 +461,15 @@ def collect_all(all_interactions):
         for conversion to JSON.
     """
 
+    # __pragma__ ('skip')
     return collect(
         closest=all_interactions["closest"],
         close=all_interactions["close"],
         hydrophobics=all_interactions["hydrophobics"],
         hydrogen_bonds=all_interactions["hydrogen_bonds"],
+        halogen_bonds=all_interactions["halogen_bonds"],
         salt_bridges=all_interactions["salt_bridges"],
+        metal_coordinations=all_interactions["metal_coordinations"],
         pi_pi=all_interactions["pi_pi"],
         cat_pi=all_interactions["cat_pi"],
         electrostatic_energies=all_interactions["electrostatic_energies"],
@@ -474,3 +477,23 @@ def collect_all(all_interactions):
         ligand_atom_types=all_interactions["ligand_atom_types"],
         ligand_rotatable_bonds=all_interactions["ligand_rotatable_bonds"],
     )
+    # __pragma__ ('noskip')
+
+    """?
+    # Odd that transcrypt requires it this other way.
+    return collect(
+        all_interactions["closest"],
+        all_interactions["close"],
+        all_interactions["hydrophobics"],
+        all_interactions["hydrogen_bonds"],
+        all_interactions["halogen_bonds"],
+        all_interactions["salt_bridges"],
+        all_interactions["metal_coordinations"],
+        all_interactions["pi_pi"],
+        all_interactions["cat_pi"],
+        all_interactions["electrostatic_energies"],
+        all_interactions["active_site_flexibility"],
+        all_interactions["ligand_atom_types"],
+        all_interactions["ligand_rotatable_bonds"],
+    )
+    ?"""

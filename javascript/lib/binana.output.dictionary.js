@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-23 00:01:22
+// Transcrypt'ed from Python, 2021-11-27 01:23:33
 var binana = {};
 var re = {};
 import {AssertionError, AttributeError, BaseException, DeprecationWarning, Exception, IndexError, IterableError, KeyError, NotImplementedError, RuntimeWarning, StopIteration, UserWarning, ValueError, Warning, __JsIterator__, __PyIterator__, __Terminal__, __add__, __and__, __call__, __class__, __envir__, __eq__, __floordiv__, __ge__, __get__, __getcm__, __getitem__, __getslice__, __getsm__, __gt__, __i__, __iadd__, __iand__, __idiv__, __ijsmod__, __ilshift__, __imatmul__, __imod__, __imul__, __in__, __init__, __ior__, __ipow__, __irshift__, __isub__, __ixor__, __jsUsePyNext__, __jsmod__, __k__, __kwargtrans__, __le__, __lshift__, __lt__, __matmul__, __mergefields__, __mergekwargtrans__, __mod__, __mul__, __ne__, __neg__, __nest__, __or__, __pow__, __pragma__, __proxy__, __pyUseJsNext__, __rshift__, __setitem__, __setproperty__, __setslice__, __sort__, __specialattrib__, __sub__, __super__, __t__, __terminal__, __truediv__, __withblock__, __xor__, abs, all, any, assert, bool, bytearray, bytes, callable, chr, copy, deepcopy, delattr, dict, dir, divmod, enumerate, filter, float, getattr, hasattr, input, int, isinstance, issubclass, len, list, map, max, min, object, ord, pow, print, property, py_TypeError, py_iter, py_metatype, py_next, py_reversed, py_typeof, range, repr, round, set, setattr, sorted, str, sum, tuple, zip} from './org.transcrypt.__runtime__.js';
@@ -382,7 +382,7 @@ export var collect = function (closest, close, hydrophobics, hydrogen_bonds, hal
 	return json_output;
 };
 export var collect_all = function (all_interactions) {
-	return collect (__kwargtrans__ ({closest: all_interactions ['closest'], close: all_interactions ['close'], hydrophobics: all_interactions ['hydrophobics'], hydrogen_bonds: all_interactions ['hydrogen_bonds'], salt_bridges: all_interactions ['salt_bridges'], pi_pi: all_interactions ['pi_pi'], cat_pi: all_interactions ['cat_pi'], electrostatic_energies: all_interactions ['electrostatic_energies'], active_site_flexibility: all_interactions ['active_site_flexibility'], ligand_atom_types: all_interactions ['ligand_atom_types'], ligand_rotatable_bonds: all_interactions ['ligand_rotatable_bonds']}));
+	return collect (all_interactions ['closest'], all_interactions ['close'], all_interactions ['hydrophobics'], all_interactions ['hydrogen_bonds'], all_interactions ['halogen_bonds'], all_interactions ['salt_bridges'], all_interactions ['metal_coordinations'], all_interactions ['pi_pi'], all_interactions ['cat_pi'], all_interactions ['electrostatic_energies'], all_interactions ['active_site_flexibility'], all_interactions ['ligand_atom_types'], all_interactions ['ligand_rotatable_bonds']);
 };
 
 //# sourceMappingURL=binana.output.dictionary.map

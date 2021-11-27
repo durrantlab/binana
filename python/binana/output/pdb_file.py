@@ -68,8 +68,8 @@ def write(
         salt_bridges (dict, optional): A dictionary containing information
             about the salt-bridges protein/ligand interactions. Defaults to
             None.
-        metal_coordinations (dict, optional): A dictionary containing 
-            information about the metal-coordination protein/ligand 
+        metal_coordinations (dict, optional): A dictionary containing
+            information about the metal-coordination protein/ligand
             interactions. Defaults to None.
         pi_pi (dict, optional): A dictionary containing information about the
             pi-pi (stacking and T-shaped) protein/ligand interactions. Defaults
@@ -173,7 +173,7 @@ def write(
     if hydrogen_bonds is not None:
         hydrogen_bonds["mol"].set_resname("HBN")
         log_output = log_output + hydrogen_bonds["mol"].save_pdb_string() + "TER\n"
-    
+
     if halogen_bonds is not None:
         halogen_bonds["mol"].set_resname("HAL")
         log_output = log_output + halogen_bonds["mol"].save_pdb_string() + "TER\n"
@@ -254,7 +254,9 @@ def write_all(
         all_interactions["close"],
         all_interactions["hydrophobics"],
         all_interactions["hydrogen_bonds"],
+        all_interactions["halogen_bonds"],
         all_interactions["salt_bridges"],
+        all_interactions["metal_coordinations"],
         all_interactions["pi_pi"],
         all_interactions["cat_pi"],
         all_interactions["active_site_flexibility"],

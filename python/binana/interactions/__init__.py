@@ -251,9 +251,7 @@ def get_ligand_atom_types(ligand):
     return _ligand_atom_types.get_ligand_atom_types(ligand)
 
 
-def get_hydrogen_or_halogen_bonds(
-    ligand, receptor, dist_cutoff=None, angle_cutoff=None, hydrogen_bond=True
-):
+def get_hydrogen_bonds(ligand, receptor, dist_cutoff=None, angle_cutoff=None):
     """Identifies and counts the number of hydrogen bonds between the protein
     and ligand. Output is formatted like this::
 
@@ -263,27 +261,9 @@ def get_hydrogen_or_halogen_bonds(
                 'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
             },
             'labels': [
-                (
-                    'A:CHT(1):N1(14)',
-                    'A:CHT(1):H1(16)',
-                    'A:ASP(157):OD2(285)',
-                    'LIGAND',
-                    {'distance': 3.2340811308335455, 'angle': 16.087842801376098}
-                ),
-                (
-                    'A:CHT(1):O6(22)',
-                    'A:ASN(156):2HD2(276)',
-                    'A:ASN(156):ND2(274)',
-                    'RECEPTOR',
-                    {'distance': 2.8230811308335455, 'angle': 6.542342801376098}
-                ),
-                (
-                    'A:CHT(1):O6(22)',
-                    'A:CHT(1):HO6(23)',
-                    'A:ASP(157):OD1(284)',
-                    'LIGAND',
-                    {'distance': 3.2130811308335455, 'angle': 25.234842801376098}
-                )
+                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'),
+                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'),
+                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
             ],
             'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
         }
@@ -292,11 +272,9 @@ def get_hydrogen_or_halogen_bonds(
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         dist_cutoff (float, optional): The distance cutoff. Defaults to
-            HYDROGEN_BOND_DIST_CUTOFF or HALOGEN_BOND_DIST_CUTOFF.
+            HYDROGEN_BOND_DIST_CUTOFF.
         angle_cutoff (float, optional): The angle cutoff. Defaults to
             HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
-        hydrogen_bond (boolean, optional): If True, calculates hydrogen bonds.
-            Otherwise, calculates halogen bonds. Defaults to True.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -304,14 +282,50 @@ def get_hydrogen_or_halogen_bonds(
         the log file ("labels").
     """
 
-    dist_cutoff = _set_default(
-        dist_cutoff,
-        HYDROGEN_BOND_DIST_CUTOFF if hydrogen_bond else HALOGEN_BOND_DIST_CUTOFF,
-    )
+    dist_cutoff = _set_default(dist_cutoff, HYDROGEN_BOND_DIST_CUTOFF)
     angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
 
-    return _hydrogen_halogen_bonds.get_hydrogen_or_halogen_bonds(
-        ligand, receptor, dist_cutoff, angle_cutoff, hydrogen_bond
+    return _hydrogen_halogen_bonds.get_hydrogen_bonds(
+        ligand, receptor, dist_cutoff, angle_cutoff
+    )
+
+
+def get_halogen_bonds(ligand, receptor, dist_cutoff=None, angle_cutoff=None):
+    """Identifies and counts the number of halogen bonds between the protein
+    and ligand. Output is formatted like this::
+
+        {
+            'counts': {
+                'HDONOR_RECEPTOR_SIDECHAIN_OTHER': 1,
+                'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
+            },
+            'labels': [
+                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'),
+                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'),
+                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
+            ],
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
+        }
+
+    Args:
+        ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
+        receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
+        dist_cutoff (float, optional): The distance cutoff. Defaults to
+            HALOGEN_BOND_DIST_CUTOFF.
+        angle_cutoff (float, optional): The angle cutoff. Defaults to
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
+        object with the participating atoms ("mol"), and the labels to use in
+        the log file ("labels").
+    """
+
+    dist_cutoff = _set_default(dist_cutoff, HALOGEN_BOND_DIST_CUTOFF)
+    angle_cutoff = _set_default(angle_cutoff, HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF)
+
+    return _hydrogen_halogen_bonds.get_halogen_bonds(
+        ligand, receptor, dist_cutoff, angle_cutoff
     )
 
 
@@ -636,8 +650,8 @@ def get_all_interactions(
             cutoff. Defaults to CATION_PI_DIST_CUTOFF.
         salt_bridge_dist_cutoff (float, optional): The salt-bridge distance
             cutoff. Defaults to SALT_BRIDGE_DIST_CUTOFF.
-        metal_coordination_dist_cutoff (float, optional): The 
-            metal-coordination distance cutoff. Defaults to 
+        metal_coordination_dist_cutoff (float, optional): The
+            metal-coordination distance cutoff. Defaults to
             METAL_COORDINATION_CUTOFF.
         pi_padding (float, optional): The amount by which the radius of each pi
             ring should be artificially expanded, to be sure to catch the
@@ -699,20 +713,18 @@ def get_all_interactions(
     )
     hydrophobics = get_hydrophobics(ligand, receptor, hydrophobic_dist_cutoff)
 
-    hydrogen_bonds = get_hydrogen_or_halogen_bonds(
+    hydrogen_bonds = get_hydrogen_bonds(
         ligand,
         receptor,
         hydrogen_bond_dist_cutoff,
-        hydrogen_halogen_bond_angle_cutoff,
-        True,
+        hydrogen_halogen_bond_angle_cutoff
     )
 
-    halogen_bonds = get_hydrogen_or_halogen_bonds(
+    halogen_bonds = get_halogen_bonds(
         ligand,
         receptor,
         halogen_bond_dist_cutoff,
-        hydrogen_halogen_bond_angle_cutoff,
-        False,
+        hydrogen_halogen_bond_angle_cutoff
     )
 
     metal_coordinations = get_metal_coordinations(

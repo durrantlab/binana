@@ -190,8 +190,8 @@ def _remove_extra_noh_hydrogen_bonds(
         # if donor_atom.residue[-3:] == "ASN" and donor_atom.atom_name.strip() == "ND2":
         # if donor_atom.residue[-3:] == "TRP" and donor_atom.atom_name.strip() == "NE1":
         # if donor_atom.residue[-3:] == "ARG" and donor_atom.atom_name.strip() == "NH2":
-            # Should be sp2, but will return sp3...
-            # import pdb; pdb.set_trace()
+        # Should be sp2, but will return sp3...
+        # import pdb; pdb.set_trace()
 
         if donor_atom.belongs_to_protein():
             donor_has_sp3_geometry = donor_atom.has_sp3_geometry(donor_mol)
@@ -308,11 +308,11 @@ def _remove_extra_noh_hydrogen_bonds(
         bonds_organized_by_donor[donor_key] = [s[1] for s in scores_and_bond_infs]
 
 
-def get_hydrogen_or_halogen_bonds(
+def _get_hydrogen_or_halogen_bonds(
     ligand, receptor, dist_cutoff=None, angle_cutoff=None, hydrogen_bond=True
 ):
-    """Identifies and counts the number of hydrogen bonds between the protein
-    and ligand. Output is formatted like this::
+    """Identifies and counts the number of hydrogen or halogen bonds between
+    the protein and ligand. Output is formatted like this::
 
         {
             'counts': {
@@ -453,3 +453,77 @@ def get_hydrogen_or_halogen_bonds(
         "mol": pdb_hbonds,
         "labels": hbonds_labels,
     }
+
+
+def get_hydrogen_bonds(ligand, receptor, dist_cutoff=None, angle_cutoff=None):
+    """Identifies and counts the number of hydrogen bonds between the protein
+    and ligand. Output is formatted like this::
+
+        {
+            'counts': {
+                'HDONOR_RECEPTOR_SIDECHAIN_OTHER': 1,
+                'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
+            },
+            'labels': [
+                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'),
+                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'),
+                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
+            ],
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
+        }
+
+    Args:
+        ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
+        receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
+        dist_cutoff (float, optional): The distance cutoff. Defaults to
+            HYDROGEN_BOND_DIST_CUTOFF.
+        angle_cutoff (float, optional): The angle cutoff. Defaults to
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
+        object with the participating atoms ("mol"), and the labels to use in
+        the log file ("labels").
+    """
+
+    # True means hydrogen bonds instead of halogen bonds.
+    return _get_hydrogen_or_halogen_bonds(
+        ligand, receptor, dist_cutoff, angle_cutoff, True
+    )
+
+
+def get_halogen_bonds(ligand, receptor, dist_cutoff=None, angle_cutoff=None):
+    """Identifies and counts the number of halogen bonds between the protein
+    and ligand. Output is formatted like this::
+
+        {
+            'counts': {
+                'HDONOR_RECEPTOR_SIDECHAIN_OTHER': 1,
+                'HDONOR_LIGAND_SIDECHAIN_OTHER': 2
+            },
+            'labels': [
+                ('A:CHT(1):N1(14)', 'A:CHT(1):H1(16)', 'A:ASP(157):OD2(285)', 'LIGAND'),
+                ('A:CHT(1):O6(22)', 'A:ASN(156):2HD2(276)', 'A:ASN(156):ND2(274)', 'RECEPTOR'),
+                ('A:CHT(1):O6(22)', 'A:CHT(1):HO6(23)', 'A:ASP(157):OD1(284)', 'LIGAND')
+            ],
+            'mol': <binana._structure.mol.Mol instance at 0x7feb20478518>
+        }
+
+    Args:
+        ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
+        receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
+        dist_cutoff (float, optional): The distance cutoff. Defaults to
+            HALOGEN_BOND_DIST_CUTOFF.
+        angle_cutoff (float, optional): The angle cutoff. Defaults to
+            HYDROGEN_HALOGEN_BOND_ANGLE_CUTOFF.
+
+    Returns:
+        dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
+        object with the participating atoms ("mol"), and the labels to use in
+        the log file ("labels").
+    """
+
+    # False means halogen bonds instead of hydrogen bonds.
+    return _get_hydrogen_or_halogen_bonds(
+        ligand, receptor, dist_cutoff, angle_cutoff, False
+    )

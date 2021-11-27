@@ -2,7 +2,7 @@
 // LICENSE.md or go to https://opensource.org/licenses/Apache-2.0 for full
 // details. Copyright 2020 Jacob D. Durrant.
 
-// Transcrypt'ed from Python, 2021-11-23 00:01:20
+// Transcrypt'ed from Python, 2021-11-26 23:51:09
 var binana = {};
 var math = {};
 var re = {};
@@ -68,8 +68,8 @@ export var Atom =  __class__ ('Atom', [object], {
 	});},
 	get create_pdb_line () {return __get__ (this, function (self, index) {
 		var output = 'ATOM ';
-		var output = ((output + r_just (str (index), 6)) + r_just (self.atom_name, 5)) + r_just (self.residue, 4);
-		output += r_just (round_to_thousandths_to_str (self.coordinates.x), 18);
+		var output = ((((output + r_just (str (index), 6)) + r_just (self.atom_name, 5)) + r_just (self.residue, 4)) + r_just (self.chain, 2)) + r_just (str (self.resid), 4);
+		output += r_just (round_to_thousandths_to_str (self.coordinates.x), 12);
 		output += r_just (round_to_thousandths_to_str (self.coordinates.y), 8);
 		output += r_just (round_to_thousandths_to_str (self.coordinates.z), 8);
 		output += r_just (self.element, 24);

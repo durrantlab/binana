@@ -67,6 +67,10 @@ output_csv
 (COMMAND_LINE_USE updated)
 
 
+Clean up examples directory
+
+Tests both python2 and python3
+
 Test should also test version of protein without hydrogens, and make sure you
 get all interactions tested. Metal, halogen, hydrogen with S.
 
