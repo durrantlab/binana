@@ -36,6 +36,9 @@ Changes
 
 TODO:
 
+Make sure INTERACTIONS.md mentioned in documentation (throughout). Incorporate
+it into the web app too.
+
 Tests on all operating systems (including mobile).
 
 *** Makesure can loadin multipleligands. Probably need to rewritecodethat
@@ -44,6 +47,8 @@ triggersbinana run. Also, can run if restart.
 And you need a message explaining the difference between delete/extract. 
 
 Push updated documentation somewhere.
+
+Add defaults to documentation.
 
 2.0
 ---

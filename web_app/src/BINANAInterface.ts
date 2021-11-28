@@ -151,6 +151,11 @@ export function start(pdbtxt: string, ligtxt: string): void {
 
     jQuery("body").addClass("waiting");
 
+    Store.store.commit("setVar", {
+        name: "filesToSave",
+        val: {}
+    });
+
     setTimeout(() => {
         var myWorker = new Worker('binanaWebWorker.js', { type: "module" });
         myWorker.postMessage([pdbtxt, ligtxt, binanaParams]);

@@ -40,7 +40,7 @@ from binana.interactions import _electrostatic_energies
 from binana.interactions import _close
 from binana.interactions import _closest
 from binana.interactions import _metal_coordination
-from binana.interactions.default_params import METAL_COORDINATION_CUTOFF
+from binana.interactions.default_params import METAL_COORDINATION_DIST_CUTOFF
 
 
 def get_cation_pi(ligand, receptor, cutoff=None, pi_padding=None):
@@ -560,7 +560,7 @@ def get_metal_coordinations(ligand, receptor, cutoff=None):
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         cutoff (float, optional): The distance cutoff. Defaults to
-            METAL_COORDINATION_CUTOFF.
+            METAL_COORDINATION_DIST_CUTOFF.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -568,7 +568,7 @@ def get_metal_coordinations(ligand, receptor, cutoff=None):
         the log file ("labels").
     """
 
-    cutoff = _set_default(cutoff, METAL_COORDINATION_CUTOFF)
+    cutoff = _set_default(cutoff, METAL_COORDINATION_DIST_CUTOFF)
 
     return _metal_coordination.get_metal_coordination(ligand, receptor, cutoff)
 
@@ -652,7 +652,7 @@ def get_all_interactions(
             cutoff. Defaults to SALT_BRIDGE_DIST_CUTOFF.
         metal_coordination_dist_cutoff (float, optional): The
             metal-coordination distance cutoff. Defaults to
-            METAL_COORDINATION_CUTOFF.
+            METAL_COORDINATION_DIST_CUTOFF.
         pi_padding (float, optional): The amount by which the radius of each pi
             ring should be artificially expanded, to be sure to catch the
             interactions. Defaults to PI_PADDING_DIST.

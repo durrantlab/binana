@@ -104,6 +104,8 @@ def _get_all_interactions(parameters):
 
 
 def _intro():
+    print("# BINANA " + VERSION + "\n")
+
     # __pragma__ ('skip')
     import os
 

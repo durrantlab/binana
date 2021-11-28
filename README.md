@@ -1,4 +1,27 @@
-# Git Repository Contents (Select Directories and Files)
+# Introduction
+
+BINANA (BINding ANAlyzer) is a python-implemented algorithm for analyzing ligand
+binding. The program identifies key binding characteristics like hydrogen bonds,
+salt bridges, and pi interactions. As input, BINANA accepts receptor and ligand
+files in the PDBQT (preferred) or PDB formats. PDBQT files can be generated from
+the more common PDB file format using the [free converter provided with
+AutoDockTools](http://mgltools.scripps.edu/downloads). As output, BINANA
+identifies and describes key protein/ligand interactions.
+
+# Citation
+
+If you use BINANA in your work, please cite:
+
+BINANA: A Novel Algorithm for Ligand-Binding Characterization. Durrant JD,
+McCammon JA. J Mol Graph Model. 2011 Apr; 29(6): 888-893. doi:
+10.1016/j.jmgm.2011.01.004
+
+# License
+
+BINANA 2.1 is released under the [Apache License, Version
+2.0](https://opensource.org/licenses/Apache-2.0). 
+
+# Description of select directories and files
 
 The BINANA Git repository is hosted at
 [http://git.durrantlab.com/jdurrant/binana](http://git.durrantlab.com/jdurrant/binana).
@@ -15,9 +38,9 @@ The BINANA Git repository is hosted at
 | `./web_app/`                      | Web app
 | `./web_app/src/`                  | Web-app source code
 
-# Using BINANA
+# Locations of BINANA tutorials
 
-## Command-Line Use
+## Command-line use
 
 See `./python/COMMAND_LINE_USE.md` in the Git repository for detailed instructions.
 Here is a simple example:
@@ -27,7 +50,7 @@ cd python
 python3 run_binana.py -receptor /path/to/receptor.pdbqt -ligand /path/to/ligand.pdbqt -output_dir /path/to/output/directory/
 ```
 
-## Python Library
+## Python library
 
 The following files in the Git repository describe how to use BINANA as a Python
 library that can be accessed from other Python scripts:
@@ -37,7 +60,7 @@ library that can be accessed from other Python scripts:
   those who don't use Jupyter.
 - `./python/example/Examples.md`: A Markdown version of the notebook.
 
-## JavaScript Library
+## JavaScript library
 
 These files describe how to use BINANA as a JavaScript library that can be
 accessed from the web browser (e.g., from web apps).

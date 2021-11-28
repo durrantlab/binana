@@ -23,7 +23,7 @@ from binana.interactions.default_params import (
     PI_PADDING_DIST,
     PI_PI_INTERACTING_DIST_CUTOFF,
     PI_STACKING_ANGLE_TOLERANCE,
-    METAL_COORDINATION_CUTOFF,
+    METAL_COORDINATION_DIST_CUTOFF,
     RECEPTOR,
     SALT_BRIDGE_DIST_CUTOFF,
     T_STACKING_ANGLE_TOLERANCE,
@@ -76,7 +76,7 @@ class CommandLineParameters:
         self.params["T_stacking_closest_dist_cutoff"] = T_STACKING_CLOSEST_DIST_CUTOFF
         self.params["cation_pi_dist_cutoff"] = CATION_PI_DIST_CUTOFF
         self.params["salt_bridge_dist_cutoff"] = SALT_BRIDGE_DIST_CUTOFF
-        self.params["metal_coordination_dist_cutoff"] = METAL_COORDINATION_CUTOFF
+        self.params["metal_coordination_dist_cutoff"] = METAL_COORDINATION_DIST_CUTOFF
         self.params["receptor"] = RECEPTOR
         self.params["ligand"] = LIGAND
         self.params["output_dir"] = OUTPUT_DIR

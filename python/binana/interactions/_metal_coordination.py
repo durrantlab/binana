@@ -4,7 +4,7 @@
 
 import math
 from binana._utils.shim import _set_default
-from binana.interactions.default_params import METAL_COORDINATION_CUTOFF
+from binana.interactions.default_params import METAL_COORDINATION_DIST_CUTOFF
 import binana
 from binana.load_ligand_receptor import _get_ligand_receptor_dists
 from binana._utils.utils import hashtable_entry_add_one, list_alphebetize_and_combine
@@ -97,7 +97,7 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
         ligand (binana._structure.mol.Mol): The ligand molecule to analyze.
         receptor (binana._structure.mol.Mol): The receptor molecule to analyze.
         cutoff (float, optional): The distance cutoff. Defaults to
-            METAL_COORDINATION_CUTOFF.
+            METAL_COORDINATION_DIST_CUTOFF.
 
     Returns:
         dict: Contains the atom tallies ("counts"), a binana._structure.mol.Mol
@@ -105,7 +105,7 @@ def get_metal_coordination(ligand, receptor, cutoff=None):
         the log file ("labels").
     """
 
-    cutoff = _set_default(cutoff, METAL_COORDINATION_CUTOFF)
+    cutoff = _set_default(cutoff, METAL_COORDINATION_DIST_CUTOFF)
 
     # Calculate the distances. See
     # https://chem.libretexts.org/Bookshelves/General_Chemistry/Chemistry_(OpenSTAX)/19%3A_Transition_Metals_and_Coordination_Chemistry/19.2%3A_Coordination_Chemistry_of_Transition_Metals
