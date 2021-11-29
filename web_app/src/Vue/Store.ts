@@ -111,7 +111,6 @@ export const store = new Vuex.Store({
         // case you want to bring it back.
         // "colorMessage": defaultColorMsg,
         
-        // "jsonOutput": "{}",
         "interactionVisibilityStatus": defaultInteractionVisibilityStatus,
         "filesToSave": {},
         "legendItems": [],

@@ -35,7 +35,6 @@ self.onmessage = function(e) {
     let fakeFS = binana["fs"]["shim"]["fake_fs"];
     let newFS = {};
     for (let flnm of Object.keys(fakeFS)) {
-        // if (["/vmd/output.json", "/vmd/log.txt"].indexOf(flnm) !== -1) {
         if (flnm.startsWith("/vmd/")) {
             let content = fakeFS[flnm];
             flnm = flnm.slice(5);

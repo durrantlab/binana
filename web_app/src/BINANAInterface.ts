@@ -252,23 +252,6 @@ export function getInfoForHighlight(interactionName: string): IHighlightInfo {
     // make an array for the interactions
     let interactionType = binanaData[interactionName];
 
-    // if (interactionName === "metalCoordinations") {
-    //     // In this case, organized by "coordinatingAtoms" and "metalAtoms".
-    //     // Trick it into using "ligandAtoms" and "receptorAtoms" so below code
-    //     // will work without modification.
-    //     let newInteractionType = [];
-    //     for (let idx in interactionType) {
-    //         let metalAtomInf = interactionType[idx]["metalAtoms"][0];
-    //         for (let coordinatingAtom of interactionType[idx]["coordinatingAtoms"]) {
-    //             newInteractionType.push({
-    //                 "ligandAtoms": [metalAtomInf],
-    //                 "receptorAtoms": [coordinatingAtom]
-    //             })
-    //         }
-    //     }
-    //     interactionType = newInteractionType;
-    // }
-
     // A single atom may participate in multiple interactions with other
     // atoms. Make sure each atom is rendered in the viewer only once.
     idxOfAtomsSeen = new Set([]);
@@ -317,11 +300,6 @@ export function getInfoForHighlight(interactionName: string): IHighlightInfo {
                     break;
             }
         }
-
-        // Store.store.commit("setVar", {
-        //     name: "colorMessage",
-        //     val: colorMsg
-        // });
 
         ligAtomInfs = ligAtomInfs.concat(
             getAtomObjRadiusColor(ligandMol, ligandAtomInfs, ligColor)
@@ -559,11 +537,6 @@ function getAtomObjRadiusColor(mol: any, atomInfs: any, color: string): any[] {
  * @returns void
  */
 export function clearInteraction(): void {
-    // Store.store.commit("setVar", {
-    //     name: "colorMessage",
-    //     val: Store.defaultColorMsg
-    // });
-
     if (viewer === undefined) {
         return;
     }
@@ -577,13 +550,11 @@ export function clearInteraction(): void {
 export function highlightAll(): void {
     let interactionVisibilityStatus = JSON.parse(Store.store.state["interactionVisibilityStatus"]);
 
-    // if (interactionName !== undefined) {
     clearInteraction();
 
     let highlightInfos = [];
     let tableData = [];
     for (let interactionName of renderOrder) {
-    // for (let interactionName in interactionVisibilityStatus) {
         if (interactionVisibilityStatus[interactionName]) {
             highlightInfos.push(
                 getInfoForHighlight(interactionName)
@@ -612,6 +583,4 @@ export function highlightAll(): void {
     })
 
     highlight(highlightInfos);
-
-    // }
 }

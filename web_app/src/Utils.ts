@@ -59,49 +59,6 @@ export function curPath(): string {
 }
 
 /**
- * Given some PDB text, keep only those lines that describe protein atoms.
- * @param  {string}  pdbTxt  The original PDB text.
- * @param  {boolean} invert  If true, returns only non-protein atoms.
- * @returns string  the PDB text containing only the protein atoms.
- */
-//  export function keepOnlyProteinAtoms(pdbTxt: string, invert: boolean = false): string {
-//     let proteinResidues = [
-//         "ALA", "ARG", "ASH", "ASN", "ASP", "ASX", "CYM", "CYS", "CYX",
-//         "GLH", "GLN", "GLU", "GLX", "GLY", "HID", "HIE", "HIP", "HIS",
-//         "HSD", "HSE", "HSP", "ILE", "LEU", "LYN", "LYS", "MET", "MSE",
-//         "PHE", "PRO", "SER", "THR", "TRP", "TYR", "VAL"
-//     ];
-//     let lines: string[] = pdbTxt.split("\n");
-//     let l = lines.length;
-//     let linesToKeep = "";
-//     for (let i = 0; i < l; i++) {
-//         if ((lines[i].substr(0, 5) !== "ATOM ") && (lines[i].substr(0, 7) !== "HETATM ")) {
-//             // Not an atom line.
-//             continue;
-//         }
-
-//         const resname = lines[i].substr(17,3);
-
-//         if (invert === false) {
-//             // Keep only receptor atoms.
-//             if (proteinResidues.indexOf(resname) !== -1) {
-//                 linesToKeep += lines[i] + "\n";
-//             }
-//         } else {
-//             // Keep only ligand atoms. (But not waters).
-//             if (
-//                 (proteinResidues.indexOf(resname) === -1) && 
-//                 (waterResidues.indexOf(resname) === -1)
-//             ) {
-//                 linesToKeep += lines[i] + "\n";
-//             }
-//         }
-//     }
-
-//     return linesToKeep;
-// }
-
-/**
  * Given a filename, replace its extension.
  * @param  {string} filename  The original filename.
  * @param  {string} newExt    The new extension.

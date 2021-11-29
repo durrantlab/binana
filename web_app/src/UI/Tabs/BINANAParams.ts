@@ -43,26 +43,6 @@ let computedFunctions = {
         }
     },
 
-    /**
-     * Whether to show a link allowing the user to separate a ligand from the
-     * protein structure.
-     * @returns boolean  True if it should be shown. False otherwise.
-     */
-    // "showKeepProteinOnlyLink"(): boolean {
-    //     let ligLines = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
-
-    //     let allResidues = ligLines.split("\n").map(l => l.substr(17,3).trim());
-    //     let residues = allResidues.filter(function(item, pos) {
-    //         return allResidues.indexOf(item) == pos;
-    //     }).filter(r => r !== "").sort();
-
-    //     // Don't include waters.
-    //     residues = residues.filter(r => Utils.waterResidues.indexOf(r) === -1);
-
-    //     this["nonProteinResidues"] = ": " + residues.join(", ");
-    //     return ligLines.length > 0;
-    // },
-
     interactionVisibilityStatus: {
         get(): string {
             return this.$store.state["interactionVisibilityStatus"];
@@ -326,35 +306,6 @@ let methodsFunctions = {
                 "log.txt", this.$store.state["filesToSave"]["log.txt"]
             );
     
-            // let ligTxt = Store.store.state.ligandContents;
-            // let recepTxt = Store.store.state.receptorContents;
-            // let models = binana.load_ligand_receptor.from_texts(ligTxt, recepTxt)
-            // let ligand, receptor;
-            // [ligand, receptor] = models;
-
-            // let data = JSON.parse(Store.store.state["filesToSave"]["output.json"]);
-            // console.log(data)
-
-            // let hbondInf = binana.interactions.get_hydrogen_or_halogen_bonds(ligand, receptor);
-            // console.log(hbondInf);
-            // console.log(data["hydrogenBonds"]);
-
-            // ["closestContacts",
-            // "closeContacts",
-            // "hydrophobicContacts",
-            // "hydrogenBonds",
-            // "piPiStackingInteractions",
-            // "tStackingInteractions",
-            // "cationPiInteractions",
-            // "saltBridges",
-            // "activeSiteFlexibility",
-            // "electrostaticEnergies",
-            // "ligandAtomTypes"]
-
-            // let pdbTxt = binana.output.pdb_file.write(ligand, receptor, null, null, null, data["hydrogenBonds"], null, null, null, null, null, true);
-            
-            // debugger;
-    
             for (let flnm in this.$store.state["filesToSave"]) {
                 zip["folder"]("binana_output")["file"](
                     "vmd/" + flnm, this.$store.state["filesToSave"][flnm]
@@ -418,58 +369,6 @@ let methodsFunctions = {
         return pass;
     },
 
-    /**
-     * Removes residues from protein model that are not protein amino acids.
-     * @param  {any} e  The click event.
-     * @returns void
-     */
-    //  "onShowKeepProteinOnlyClick"(e: any): void {
-    //     // let proteinLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"]);
-    //     // let ligandLinesToKeep = Utils.keepOnlyProteinAtoms(this.$store.state["receptorContents"], true);
-
-    //     let proteinLinesToKeep = this.$store.state["receptorContents"];
-    //     let ligandLinesToKeep = this.$store.state["receptorContents"];
-
-
-    //     // Get new ligand filename
-    //     let receptorExt = Utils.getExt(this.$store.state["receptorFileName"]);
-    //     let newLigFilename = Utils.replaceExt(
-    //         this.$store.state["receptorFileName"],
-    //         "ligand." + receptorExt
-    //     );
-
-    //     // Update receptor contents.
-    //     this.$store.commit("setVar", {
-    //         name: "receptorContents",
-    //         val: proteinLinesToKeep
-    //     });
-
-    //     // Update receptor filename
-    //     this.$store.commit("updateFileName", {
-    //         type: "receptor",
-    //         filename: Utils.replaceExt(
-    //             this.$store.state["receptorFileName"],
-    //             "protein." + receptorExt
-    //         )
-    //     });
-
-    //     // Update ligand contents
-    //     this.$store.commit("setVar", {
-    //         name: "ligandContents",
-    //         val: ligandLinesToKeep
-    //     });
-
-    //     this.$store.commit("updateFileName", {
-    //         type: "ligand",
-    //         filename: newLigFilename
-    //     });
-
-    //     this["forceLigandFileName"] = newLigFilename;
-
-    //     e.preventDefault();
-    //     e.stopPropagation();
-    // },
-
     "getInteractionVisibility"(interactionID: string): boolean {
         let interactionVisibilityStatus = JSON.parse(this.interactionVisibilityStatus);
         if (interactionVisibilityStatus[interactionID] === undefined) {
@@ -509,20 +408,8 @@ let methodsFunctions = {
 
     "onExtractReceptorAtomsToLigand"(residueInfo: IResidueInfo): void {
         // Get the existing ligand contents
-        // let ligContents: string = this.$store.state["ligandContents"];
-        // let ligFilename: string = this.$store.state["ligandFileName"]
-        
         let ligContents = residueInfo.residuePdbLines;
         let ligFilename = residueInfo.residueId.filter(r => [undefined, ""].indexOf(r) === -1).join("-") + ".pdb";
-
-        // ligContents = ligContents.trim();
-        // ligFilename += "_" + residueInfo.residueId.join("-");
-        
-        // if (ligFilename.slice(0, 1) === "_") {
-        //     ligFilename = ligFilename.slice(1);
-        // }
-
-        // ligFilename += ".pdb";
 
         this.$refs["ligandMolLoader"]["loadMolFromExternal"](
             ligFilename, ligContents
@@ -583,16 +470,6 @@ export function setup(): void {
     Vue.component('binana-params', {
         "template": /* html */ `
             <div>
-                <!-- <b-card
-                    class="mb-2 text-center"
-                    style="margin-bottom:1.4rem !important;"
-                >
-                    <b-card-text>
-                        Use this tab to setup a analysis in your browser.
-                        Specify the input files and BINANA parameters below.
-                    </b-card-text>
-                </b-card> -->
-
                 <sub-section
                     v-if="$store.state.receptorContents === '' || $store.state.ligandContents === ''"
                 >
@@ -778,31 +655,6 @@ export function setup(): void {
                     ></mol-loader>
                     <!-- , 'url-input']" -->
 
-                    <!-- <file-input
-                        label="Receptor"
-                        id="receptor"
-                        description="Formats: PDB, PDBQT. Be sure to (1) add polar hydrogen atoms if necessary and (2) remove any ligands from the file."
-                        accept=".pdb, .pdbqt"
-                    >
-                        <template v-slot:extraDescription>
-                            <span v-if="showKeepProteinOnlyLink">
-                                <span style="color:red;">Your receptor file includes non-protein residue(s){{nonProteinResidues}}</span>.
-                                <a href='' @click="onShowKeepProteinOnlyClick($event);">Treat these as the ligand instead?</a>
-                            </span>
-                                <b>(Removed all non-protein atoms!)</b>
-                        </template>
-                    </file-input>
-
-                    <file-input
-                        label="Ligand"
-                        id="ligand"
-                        description="Formats: PDB, PDBQT, SDF. Be sure to add polar hydrogen atoms if necessary."
-                        accept=".pdb, .pdbqt, .sdf"
-                        :forceFileName="forceLigandFileName"
-                    >
-                    </file-input>
-                    -->
-
                     <form-button @click.native="useExampleInputFiles" cls="float-right">Use Example Files</form-button>  <!-- variant="default" -->
                     <form-button @click.native="videoTutorial" cls="float-right mr-2">Video Tutorial</form-button>  <!-- variant="default" -->
                 </sub-section>
@@ -966,7 +818,6 @@ export function setup(): void {
                                 improperly formatted.
                             </b-alert>
 
-
                             <!--
                             DEPRECIATED IN FAVOR OF TABLE DECRIPTION, but leave this 
                             commented in case you want to bring it back.
@@ -997,9 +848,6 @@ export function setup(): void {
                 lastInteractionNameUsed: undefined,
                 "forceLigandFileName": null,
                 "nonProteinResidues": ""
-
-                // "forcedLigandFile": null
-                // "showKeepProteinOnlyLink": true
             }
         },
         "methods": methodsFunctions,

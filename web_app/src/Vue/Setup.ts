@@ -4,7 +4,6 @@
 
 
 import * as NumericInput from "../UI/Forms/NumericInput";
-import * as FileInput from "../UI/Forms/FileInput";
 import * as BINANAParams from "../UI/Tabs/BINANAParams";
 import * as StartOver from "../UI/Tabs/StartOver";
 import * as FormGroup from "../UI/Forms/FormGroup";
@@ -12,7 +11,6 @@ import * as ThreeDMol from "../UI/ThreeDMol";
 import * as OpenModal from "../UI/Modal/OpenModal";
 import * as SubSection from "../UI/SubSection";
 import * as FormButton from "../UI/Forms/FormButton";
-import * as CheckMark from "../UI/CheckMark";
 import { setupMolLoader } from "../UI/FileLoaderSystem/MolLoader.Vue";
 
 declare var Vue;
@@ -27,14 +25,12 @@ export function setup(): void {
     Vue.use(BootstrapVue)
     Vue.use(Vuex)
 
-    CheckMark.setup();
     SubSection.setup();
     FormButton.setup();
     OpenModal.setup();
     FormGroup.setup();
     ThreeDMol.setup();
     NumericInput.setup();
-    FileInput.setup();
     setupMolLoader();
     BINANAParams.setup();
     StartOver.setup();
