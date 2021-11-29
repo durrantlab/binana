@@ -132,38 +132,38 @@ export const store = new Vuex.Store({
         },
 
         /**
-         * Set one of the binana parameters.
+         * DEPRECIATED. Set one of the binana parameters.
          * @param  {*}          state    The VueX state.
-         * @param  {iVueXParam} payload  An object with information about
-         *                               which binana parameter to set.
+         * @param  {iVueXParam} payload  An object with information about which
+         *                               binana parameter to set.
          * @returns void
          */
-        "setBinanaParam"(state: any, payload: iVueXParam): void {
-            // By redefining the whole variable, it becomes reactive. Directly
-            // changing individual properties is not reactive.
-            state["binanaParams"] = Utils.getNewObjWithUpdate(
-                state["binanaParams"],
-                payload.name,
-                payload.val
-            );
-        },
+        // "setBinanaParam"(state: any, payload: iVueXParam): void {
+        //     // By redefining the whole variable, it becomes reactive. Directly
+        //     // changing individual properties is not reactive.
+        //     state["binanaParams"] = Utils.getNewObjWithUpdate(
+        //         state["binanaParams"],
+        //         payload.name,
+        //         payload.val
+        //     );
+        // },
 
         /**
-         * Set a validation parameter (either validates or doesn't).
+         * DEPRECIATED. Set a validation parameter (either validates or doesn't).
          * @param  {*}          state    The VueX state.
          * @param  {iVueXParam} payload  An object containing information
          *                               about what to set.
          * @returns void
          */
-        "setValidationParam"(state: any, payload: iVueXParam): void {
-            // By redefining the whole variable, it becomes reactive. Directly
-            // changing individual properties is not reactive.
-            state["validation"] = Utils.getNewObjWithUpdate(
-                state["validation"],
-                payload.name,
-                payload.val
-            );
-        },
+        // "setValidationParam"(state: any, payload: iVueXParam): void {
+        //     // By redefining the whole variable, it becomes reactive. Directly
+        //     // changing individual properties is not reactive.
+        //     state["validation"] = Utils.getNewObjWithUpdate(
+        //         state["validation"],
+        //         payload.name,
+        //         payload.val
+        //     );
+        // },
 
         /**
          * Open the modal.

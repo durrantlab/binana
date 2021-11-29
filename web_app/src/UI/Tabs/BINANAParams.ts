@@ -32,16 +32,16 @@ let computedFunctions = {
     // },
 
     /**
-     * Gets the text too use on the bond-visible buttton.
+     * DEPRECIATED. Gets the text too use on the bond-visible buttton.
      * @returns string  The text to use.
      */
-    "bondVisBtnTxt"(): string {
-        if (this.$store.state["bondVisible"]) {
-            return "Interactions";
-        } else {
-            return "<span style='text-decoration: line-through;'>Interactions</span>";
-        }
-    },
+    // "bondVisBtnTxt"(): string {
+    //     if (this.$store.state["bondVisible"]) {
+    //         return "Interactions";
+    //     } else {
+    //         return "<span style='text-decoration: line-through;'>Interactions</span>";
+    //     }
+    // },
 
     interactionVisibilityStatus: {
         get(): string {
@@ -208,42 +208,42 @@ let methodsFunctions = {
     },
 
     /**
-     * Fires when the user indicates s/he would like to change the color
-     * scheme.
+     * DEPRECIATED. Fires when the user indicates s/he would like to change the
+     * color scheme.
      * @returns void
      */
-    "onChangeColor"(): void {
-        let newVal = undefined;
-        switch (this.$store.state["colorByInteraction"]) {
-            case Store.InteractionColoring.MOLECULE:
-                newVal = Store.InteractionColoring.INTERACTION;
-                break;
-            case Store.InteractionColoring.INTERACTION:
-                newVal = Store.InteractionColoring.NONE;
+    // "onChangeColor"(): void {
+    //     let newVal = undefined;
+    //     switch (this.$store.state["colorByInteraction"]) {
+    //         case Store.InteractionColoring.MOLECULE:
+    //             newVal = Store.InteractionColoring.INTERACTION;
+    //             break;
+    //         case Store.InteractionColoring.INTERACTION:
+    //             newVal = Store.InteractionColoring.NONE;
 
-                // If none, make sure bonds are visible.
-                this.$store.commit("setVar", {
-                    name: "bondVisible",
-                    val: true
-                });
+    //             // If none, make sure bonds are visible.
+    //             this.$store.commit("setVar", {
+    //                 name: "bondVisible",
+    //                 val: true
+    //             });
 
-                break;
-            case Store.InteractionColoring.NONE:
-                newVal = Store.InteractionColoring.MOLECULE;
-                break;
-        }
+    //             break;
+    //         case Store.InteractionColoring.NONE:
+    //             newVal = Store.InteractionColoring.MOLECULE;
+    //             break;
+    //     }
 
-        this.$store.commit("setVar", {
-            name: "colorByInteraction",
-            val: newVal
-        });
+    //     this.$store.commit("setVar", {
+    //         name: "colorByInteraction",
+    //         val: newVal
+    //     });
 
-        this["updateHighlight"]();
-    },
+    //     this["updateHighlight"]();
+    // },
 
     /**
-     * Runs when the bond-visibility button is pressed. DEPRECIATED, but
-     * keep commented out in case you bring it back in the future.
+     * Runs when the bond-visibility button is pressed. DEPRECIATED, but keep
+     * commented out in case you bring it back in the future.
      * @returns void
      */
     // "onBondVisChange"(): void {
@@ -458,9 +458,7 @@ let methodsFunctions = {
  * The vue-component mounted function.
  * @returns void
  */
-function mountedFunction(): void {
-    this["webAssemblyAvaialble"] = Utils.webAssemblySupported();
-}
+function mountedFunction(): void {}
 
 /**
  * Setup the binana-params Vue commponent.
@@ -844,7 +842,6 @@ export function setup(): void {
         "data"() {
             return {
                 "showFileInputs": true,
-                "webAssemblyAvaialble": true,
                 lastInteractionNameUsed: undefined,
                 "forceLigandFileName": null,
                 "nonProteinResidues": ""

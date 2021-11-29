@@ -11,6 +11,7 @@ import * as ThreeDMol from "../UI/ThreeDMol";
 import * as OpenModal from "../UI/Modal/OpenModal";
 import * as SubSection from "../UI/SubSection";
 import * as FormButton from "../UI/Forms/FormButton";
+import * as CheckMark from "../UI/CheckMark";
 import { setupMolLoader } from "../UI/FileLoaderSystem/MolLoader.Vue";
 
 declare var Vue;
@@ -25,6 +26,7 @@ export function setup(): void {
     Vue.use(BootstrapVue)
     Vue.use(Vuex)
 
+    CheckMark.setup();
     SubSection.setup();
     FormButton.setup();
     OpenModal.setup();
