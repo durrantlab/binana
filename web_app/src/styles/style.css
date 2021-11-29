@@ -256,3 +256,8 @@ div.better-btn-spacing {
 td {
   cursor: inherit;
 }
+
+.learnMoreLink {
+  text-align: right;
+  font-size: 12px;
+}

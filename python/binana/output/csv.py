@@ -15,10 +15,16 @@ def _recurse(pre_commas, data, csv):
 
         csv += pre_commas + key
 
+        # __pragma__ ('skip')
         try:
             single_types = [int, float, str, unicode]
         except:
             single_types = [int, float, str]
+        # __pragma__ ('noskip')
+
+        """?
+        single_types = [int, float, str]
+        ?"""
 
         if type(val) in single_types:
             csv += "," + _sanitize(str(val)) + "\n"

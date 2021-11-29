@@ -37,6 +37,7 @@ The BINANA Git repository is hosted at
 | `./javascript/lib/examples.html`  | HTML file, JavaScript-library demo
 | `./web_app/`                      | Web app
 | `./web_app/src/`                  | Web-app source code
+| `./INTERACTIONS.md`               | Descriptions of the detected interactions.
 
 # Locations of BINANA tutorials
 

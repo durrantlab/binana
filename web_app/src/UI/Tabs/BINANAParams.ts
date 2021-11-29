@@ -171,6 +171,24 @@ let methodsFunctions = {
     },
 
     /**
+     * Displays a modal with a video tutorial.
+     * @returns void
+     */
+    "videoTutorial"(): void {
+        this.$store.commit("openModal", {
+            title: "Video Tutorial",
+            body: `<iframe style="height: 479px; box-shadow: 0px 0px 5px rgb(150 150 150);" id="tutorial-iframe" width="100%" height="315" src="https://www.youtube.com/embed/BMnSYvH4Qwg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+        });
+
+        setTimeout(() => {
+            let iframe = document.querySelectorAll("#tutorial-iframe")[0] as HTMLIFrameElement;
+            let width = iframe.offsetWidth;
+            let height = Math.round(width / 1.6);
+            iframe.style.height = height.toString() + "px";
+        }, 1000);
+    },
+
+    /**
      * Highlights interactions in the 3Dmoljs viewer.
      * @param  {string} interactionName  The name of the interaction type to
      *                                   highlight.
@@ -509,6 +527,43 @@ let methodsFunctions = {
         this.$refs["ligandMolLoader"]["loadMolFromExternal"](
             ligFilename, ligContents
         );
+    },
+
+    /**
+     * Shows more details about how the interactions are detected.
+     * @returns void
+     */
+    "moreDetails"(): void {
+        let getInteractionsMD = fetch("INTERACTIONS.md")
+            .then((response) => response.text())
+            .then((data) => Promise.resolve(data));
+
+        let getMarkdownIt = import(
+            /* webpackChunkName: "MarkdownIt" */ 
+            /* webpackMode: "lazy" */
+            'markdown-it'
+        ).then((mod) => {
+            // @ts-ignore
+            let MarkdownIt = mod.default;
+            return Promise.resolve(MarkdownIt);
+        });
+
+        Promise.all([getInteractionsMD, getMarkdownIt]).then((payload) => {
+            let interactions: string;
+            let MarkdownIt: any;
+            [interactions, MarkdownIt] = payload;
+            let md = new MarkdownIt();
+            var result = md.render(interactions);
+            this.$store.commit("openModal", {
+                title: "Detecting Intramolecular Interactions",
+                body: result
+                    .replace(/h1\>/g, "h5>")
+                    .replace(/\<a /g, '<a target="_blank" ')
+                    .replace(/\<table/g, '<table style="margin-bottom:8px;"')
+                    .replace(/\<td/g, '<td style="min-width:45px;font-size:80%;padding:4px;"')
+                    .replace(/\<th/g, '<th style="min-width:45px;font-size:80%;padding:4px;"')
+            });
+        })
     }
 }
 
@@ -562,6 +617,7 @@ export function setup(): void {
                                             description="Ligand/protein atoms that come within this number of
                                             angstroms are &quot;close contacts.&quot;" placeholder="$store.state.close_contacts_dist2_cutoff"
                                         ></numeric-input>
+                                        <div class="learnMoreLink"><b-link href="#" @click="moreDetails">(Learn more about advanced parameters)</b-link></div>
                                     </b-card>
                                     <!-- <numeric-input
                                         label="Electrostatic Dist Cutoff"
@@ -597,6 +653,7 @@ export function setup(): void {
                                             donor comes within this number of angstroms of the halogen-bond
                                             acceptor." placeholder="$store.state.halogen_bond_dist_cutoff"
                                         ></numeric-input>
+                                        <div class="learnMoreLink"><b-link href="#" @click="moreDetails">(Learn more about advanced parameters)</b-link></div>
                                     </b-card>
 
                                     <b-card class="mb-2 text-center" style="margin-bottom:1.4rem !important;">
@@ -652,6 +709,7 @@ export function setup(): void {
                                             description="A Cation-π interaction is identified if a charged functional
                                             group comes within this distance of an aromaic-ring center." placeholder="$store.state.cation_pi_dist_cutoff"
                                         ></numeric-input>
+                                        <div class="learnMoreLink"><b-link href="#" @click="moreDetails">(Learn more about advanced parameters)</b-link></div>
                                     </b-card>
 
                                     <b-card class="mb-2 text-center" style="margin-bottom:1.4rem !important;">
@@ -677,8 +735,7 @@ export function setup(): void {
                                             number of angstroms of a metal cation participate in &quot;metal coordination
                                             contacts.&quot;" placeholder="$store.state.metal_coordination_dist_cutoff"
                                         ></numeric-input>
-
-                                        
+                                        <div class="learnMoreLink"><b-link href="#" @click="moreDetails">(Learn more about advanced parameters)</b-link></div>
                                     </b-card>
                                 </b-card-body>
                             </b-collapse>
@@ -747,6 +804,7 @@ export function setup(): void {
                     -->
 
                     <form-button @click.native="useExampleInputFiles" cls="float-right">Use Example Files</form-button>  <!-- variant="default" -->
+                    <form-button @click.native="videoTutorial" cls="float-right mr-2">Video Tutorial</form-button>  <!-- variant="default" -->
                 </sub-section>
 
                 <sub-section title="Molecular Viewer">
@@ -895,8 +953,11 @@ export function setup(): void {
                                     <span v-html="data.value"></span>
                                 </template>
                             </b-table>
+                            <div class="learnMoreLink" style="margin-top: -12px;">
+                                (<b-link href="#" @click="moreDetails">More details about interaction detection</b-link>)
+                            </div>
 
-                            <b-alert show variant="warning" v-if="missingHydrogensWarning !== ''">
+                            <b-alert show style="margin-top:8px;" variant="warning" v-if="missingHydrogensWarning !== ''">
                                 <span v-html="missingHydrogensWarning"></span>
 
                                 <br /><br />

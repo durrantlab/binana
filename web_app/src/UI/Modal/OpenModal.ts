@@ -55,7 +55,7 @@ export function setup(): void {
         "computed": computedFunctions,
         "template": `
             <b-modal ok-only :size="size" ok-title="Close" v-model="modalShow" id="msg-modal" :title="title">
-                <p class="my-4" v-html="body"><slot></slot></p>
+                <p class="my-2" v-html="body"><slot></slot></p>
             </b-modal>
         `,
         "props": {

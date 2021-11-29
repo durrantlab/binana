@@ -33,22 +33,16 @@ Changes
 21. Updated documentation.
 22. chain and resid now included in output PDB files.
 23. Throws a warning when using Python 2. Only Python 3 now offically supported.
+24. Added link to the app where users can learn more about how interactions are
+    detected, advanced parameters.
 
 TODO:
 
-Make sure INTERACTIONS.md mentioned in documentation (throughout). Incorporate
-it into the web app too.
-
 Tests on all operating systems (including mobile).
 
-*** Makesure can loadin multipleligands. Probably need to rewritecodethat
-triggersbinana run. Also, can run if restart.
+Push updated documentation somewhere. (just rsync, works).
 
-And you need a message explaining the difference between delete/extract. 
-
-Push updated documentation somewhere.
-
-Add defaults to documentation.
+Cruft?  Good to check throughout.
 
 2.0
 ---

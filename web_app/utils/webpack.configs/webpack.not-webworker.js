@@ -88,6 +88,10 @@ module.exports = merge(common, {
                 from: 'node_modules/jquery/dist/jquery.min.js',
                 to: 'jquery.min.js'
             },
+            {
+                from: '../INTERACTIONS.md',
+                to: 'INTERACTIONS.md'
+            },
             // {
             //     from: 'src/Webina/dist',
             //     to: 'Webina'
