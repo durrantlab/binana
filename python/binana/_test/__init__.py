@@ -18,6 +18,7 @@ def _remove_lines_with_pass(txt):
         "output_dir",
         "output_file",
         "output_json",
+        "output_csv",
         "receptor",
         "test",
     ]:
