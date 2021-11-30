@@ -24,6 +24,9 @@ def _remove_lines_with_pass(txt):
     ]:
         txt = re.sub(r"^REMARK +?" + val + r".+?\n", "", txt, flags=re.M | re.S)
         txt = re.sub(r"^ +?" + val + r".+?\n", "", txt, flags=re.M | re.S)
+
+        # "Rounds" numbers (to account for minor system differences)
+        txt = re.sub(r"([0-9]\.[0-9]{4})[0-9]{1,15},", r"\1", txt)
     return txt
 
 
