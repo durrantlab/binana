@@ -41,7 +41,7 @@
     "dependencies": {
         "3dmol": "^1.6.1",
         "bootstrap": "^4.5.3",
-        "bootstrap-vue": "^2.19.0",
+        "bootstrap-vue": "^2.21.2",
         "file-saver": "^2.0.5",
         "google-closure-compiler": "^20210601.0.0",
         "jszip": "^3.5.0",

@@ -11,10 +11,12 @@ let computedFunctions = {
      * the value meets min/max requirements, etc.*/
     "val": {
         get(): any {
-            return this.$store.state["binanaParams"][this["id"]];
+            let name = this["id"];
+            return this.$store.state["binanaParams"][name];
         },
 
         set(val: any): void {
+            // debugger
             // Save the value to the store
             val = (val === "") ? undefined : +val;
             if (isNaN(val)) {
@@ -28,8 +30,9 @@ let computedFunctions = {
             // Determine if it is valid. First, make sure there's
             // something here if its required.
             let valid = true;
-            let scoreOnly = this.$store.state["binanaParams"]["score_only"];
-            if ((this["required"] === true) && (scoreOnly !== true)) {
+            // let scoreOnly = this.$store.state["binanaParams"]["score_only"];
+            // if ((this["required"] === true) && (scoreOnly !== true)) {
+            if (this["required"] === true) {
                 this["invalidMsg"] = "This field is required.";
                 valid = val !== undefined;
             }
@@ -45,8 +48,9 @@ let computedFunctions = {
                 valid = false;
             }
 
+            let name = this["id"];
             this.$store.commit("setValidationParam", {
-                name: this["id"],
+                name: name,
                 val: valid
             });
         }
@@ -66,8 +70,10 @@ let computedFunctions = {
      * @returns boolean  True if it is valid, false otherwise.
      */
     "isValid"(): boolean {
-        let val = this.$store.state["validation"][this["id"]];
-        return val;
+        // DEPRECIATED
+        return true;
+        // let val = this.$store.state["validation"][this["id"]];
+        // return val;
     }
 }
 
@@ -109,7 +115,7 @@ export function setup(): void {
             }
         },
         "computed": computedFunctions,
-        "template": `
+        "template": /*html*/ `
             <form-group
                 :label="label"
                 :id="'input-group-' + id"
@@ -135,7 +141,10 @@ export function setup(): void {
             "id": String,
             "description": String,
             "placeholder": String,
-            "required": Boolean,
+            "required": {
+                "type": Boolean,
+                "default": false
+            },
             "styl": String,
             "default": Number,
             "formGroupWrapper": {

@@ -16,8 +16,10 @@ cd -
 # compatibility.
 echo "Check for errors above. Enter to start compiling vendor js and other js files..."
 cd dist
-ls app*js vendors*js runtime*js styles*js *Worker.js | awk '{print "echo Compiling " $1 ";node ../node_modules/google-closure-compiler/cli.js " $1 " > t; mv t " $1}' | bash
+ls app*js vendors*js runtime*js styles*js binana.*js | awk '{print "echo Compiling " $1 ";node ../node_modules/google-closure-compiler/cli.js " $1 " > t; mv t " $1}' | bash
+ls *Worker.js | awk '{print "echo Compiling " $1 ";node ../node_modules/google-closure-compiler/cli.js --language_out ECMASCRIPT_2015 " $1 " > t; mv t " $1}' | bash
 cd -
+# -O WHITESPACE_ONLY
 
 # If there is a .min.js file, delete any associated .js file.
 find dist/ -name "*.min.js" | sed "s/\.min\././g" | awk '{print "rm -rf " $0}' | bash
@@ -40,7 +42,7 @@ echo "/**
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */" > t
-ls app.*js *Worker.js | awk '{print "cat t > " $1 ".tmp; cat " $1 " >> " $1 ".tmp; mv " $1 ".tmp " $1}' | bash
+ls app.*js *Worker.js binana.*js | awk '{print "cat t > " $1 ".tmp; cat " $1 " >> " $1 ".tmp; mv " $1 ".tmp " $1}' | bash
 rm t
 cd -
 

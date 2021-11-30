@@ -31,15 +31,6 @@ let computedFunctions = {
 
         // return ((this.hasLabel === true)  && (this["labelToLeft"] === true)) ? 2 : 0;
     },
-
-    /**
-     * Determines if label should be placed to the left or above. Number of
-     * columns for the label width 'md' screens and up.
-     * @returns number  Returns 2 if it has a label, 0 otherwise.
-     */
-    "labelColsMd"(): number {
-        return ((this.hasLabel === true)  && (this["labelToLeft"] === true)) ? 2 : 0;
-    }
 }
 
 /**
@@ -58,16 +49,14 @@ export function setupFileLoaderFormGroup(): void {
         "computed": computedFunctions,
         "template": /* html */ `
             <span class="file-loader-form-group">
-                <!-- :label-cols="labelCols" 
-                :label-cols-lg="labelColsMd" -->
                 <b-form-group
                     v-if="formGroupWrapper"
                     :label="label"
                     :label-for="id"
                     :id="'input-group-' + id"
                     :style="styl"
-                    :label-cols="0"
-                    :label-cols-md="labelColsMd"
+                    label-cols="0"
+                    label-cols-xl="1"
                 >
                     <slot></slot>
                     <small
@@ -101,7 +90,8 @@ export function setupFileLoaderFormGroup(): void {
         },
         "methods": {},
         "mounted"() {
-            addCSS(`.file-loader-form-group .col-form-label { hyphens: auto; max-width: 100px !important; }`);
+            addCSS(`.file-loader-form-group .col-form-label { hyphens: auto; }`);
+            // max-width: 100px !important;
         }
     })
 }

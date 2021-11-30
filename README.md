@@ -70,3 +70,8 @@ accessed from the web browser (e.g., from web apps).
 - `./javascript/lib/Examples.ipynb.pdf`: A PDF version of the notebook, for
   those who don't use Jupyter.
 - `./javascript/lib/examples.html`: An HTML file demonstrating use.
+
+## Web-browser app
+
+A [video tutorial](https://youtu.be/BMnSYvH4Qwg) describes how to use the
+[BINANA web-browser app](http://durrantlab.com/binana).

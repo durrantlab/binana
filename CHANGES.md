@@ -1,40 +1,59 @@
-Changes
-=======
+# Changes
 
-2.1 WIP
--------
+## 2.1 WIP
 
-1. Can select multiple interactions at once.
-2. PNG file included in download from "Save" button. Also, log.txt file, for
-   those not comfortable with JSON.
-3. Bonds now color coded.
-4. Certain interactions turned on by default.
-5. Clear button changed to "Reset" because resets to default value.
-6. No more coloring by molecule, interaction, etc. Too confusing.
-7. JSZip now dynamic import.
-8. zip download now includes vmd state directory.
-9. Vmd state file centers on ligand automatically.
-10. changed hydrogen_bond_angle_cutoff parameter name to
-    hydrogen_halogen_bond_angle_cutoff. Added OTHER HALOGEN DIST HERE PARAM
-    HERE.
-11. Removed ability to toggle on and off cylinder interactions, to simplify UI.
-    Always on for those interaction where appropriate.
-12. Some interactions are shown as spheres, others as bonds. Keeps it simplier.
-13. Improved ability to detect salt bridges and hydrogen bonds even if protein
-    and ligand models do not have hydrogen atoms.
-14. Speed and memory improvements
-15. Revised file input system. Can now also specify PDB ID, extract delete
-    non-protein residues, etc.
-16. Sulfur can now be a hydrogen bond donor and acceptor.
-17. If input structure has mmultiple frames, keepsfirst one.
-18. JSON file now includes distances and angles.
-19. output_csv option now also prints csv file containing same information as json.
-20. Possible to toggle ribbon on and off.
-21. Updated documentation.
-22. chain and resid now included in output PDB files.
-23. Throws a warning when using Python 2. Only Python 3 now offically supported.
-24. Added link to the app where users can learn more about how interactions are
-    detected, advanced parameters.
+1. Web-browser app: changes to how interactions are displayed.
+   - Now possible to visualize multiple interactions at once. Select
+     interactions are turned on by default.
+   - Bonds are now color coded.
+   - Now possible to toggle the receptor ribbon representation.
+   - Changed text of "Clear" button to "Reset" because it resets the
+     visualization to the default.
+   - To simplify the visualization:
+     - Some interactions are now shown as spheres, and others as bonds.
+     - Removed the ability to toggle cylinder-representation interactions. These
+       are always on for those interactions where cylinder representations are
+       appropriate.
+     - Removed ability to color by molecule, interaction, etc.
+
+2. Web-browser app: changes to output download (via "Save" button).
+   - JSZip library is now a dynamic import (loaded only when needed).
+   - Added PNG file.
+   - Added `log.txt` file for those not comfortable with JSON.
+   - Added VMD state file.
+
+3. Web-browser app: Miscellaneous
+   - If an input structure includes multiple frames, the web app retains only
+     the first frame.
+   - Revised the file-input system. Aside from loading files from their local
+     computers, users can now also specify PDB IDs. They can also delete
+     non-protein residues or use a non-protein residue as the ligand.
+   - Added a link that allows users to learn more about how interactions are
+     detected, advanced BINANA parameters, etc.
+
+4. Changes to how interactions are detected.
+   - Sulfur atoms can now serve as hydrogen bond donors and acceptors.
+   - BINANA can now better detect salt bridges and hydrogen bonds even if
+     protein and ligand models do not include hydrogen atoms, though using
+     protonated models does improve accuracy.
+   - Added the ability to detect halogen bonds. The `hydrogen_bond_angle_cutoff`
+     parameter has been renamed `hydrogen_halogen_bond_angle_cutoff`, and a new
+     parameter `halogen_bond_dist_cutoff` has been added.
+   - Added the ability to detect metal coordination bonds. Added
+     `metal_coordination_dist_cutoff` parameter.
+
+5. Changes to the output files
+   - The VMD state file is now centered on the ligand when opened in VMD.
+   - The output JSON file now includes bond distances and angles.
+   - BINANA can now output a CSV file with the same information in the JSON
+     file.  Added the `output_csv` parameter.
+   - Output PDB files now include the chain and residue ids.
+
+6. Other changes of note
+   - Speed and memory-use improvements.
+   - BINANA throws a warning when using Python 2. Only Python 3 is now
+     officially supported.
+   - Substantial updates to the documentation.
 
 TODO:
 
@@ -42,10 +61,7 @@ Tests on all operating systems (including mobile).
 
 Push updated documentation somewhere. (just rsync, works).
 
-Cruft?  Good to check throughout.
-
-2.0
----
+## 2.0
 
 1. We have refactored the code to make it more modular. BINANA still works as a
    command-line program, but it now also functions as a Python library, allowing
@@ -70,8 +86,7 @@ Cruft?  Good to check throughout.
 9. We release BINANA 2.0 under a more permissive license than previous versions
    (Apache License, Version 2.0). 
 
-1.3
----
+## 1.3
 
 1. BINANA now requires Python3. Python2 support has been discontinued.
 2. Added documentation files in MarkDown format.
@@ -80,8 +95,7 @@ Cruft?  Good to check throughout.
 5. Added roadmap.
 6. Updated example files, now located at `examples/`.
 
-1.2.0
------
+## 1.2.0
 
 1. The version previously hosted on
    [SourceForge](https://sourceforge.net/projects/binana/).

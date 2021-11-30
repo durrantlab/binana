@@ -127,13 +127,12 @@ function checkInvalidFiles(invalidFiles: IFileInfo[], exts: string[], acceptable
 }
 
 function splitPDBLikeFile(fileInfo: IFileInfo, multipleFiles: boolean): IFileInfo[] {
-    //2M30
     // Some files are PDB like and might have multiple frames. Good to split
-    // those.
+    // those. For example, 2M30.
     let pdbTxt = fileInfo.fileContents;
     if (pdbTxt.match(/^(ATOM|HETATM)/gm) != null) {
         // Let's assume it's a pdb. Thanks codex.
-        let pdbTxtModels = pdbTxt.split(/^(MODEL\s+?\d+?\s+?|ENDMDL\s+?)$/gm);
+        let pdbTxtModels = pdbTxt.split(/^(MODEL\s+?\d+?\s+?|^ENDMDL\s+?)/gm);
         let fileInfos: IFileInfo[] = [];
         for (let pdbTxtModel of pdbTxtModels) {
             let atomLines = getAtomLines(pdbTxtModel);

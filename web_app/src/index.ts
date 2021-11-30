@@ -17,6 +17,10 @@ declare var ga;
 VueSetup.setup();
 UI.setup();
 
+// setInterval(() => {
+//     document.body.innerHTML = document.body.clientWidth.toString();
+// }, 500);
+
 // If the url has "durrantlab" in it, contact google analytics. Logging all
 // usage would be ideal for grant reporting, but some users may wish to run
 // versions of binana on their own servers specifically to maintain privacy

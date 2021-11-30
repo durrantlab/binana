@@ -653,8 +653,8 @@ export function setup(): void {
                     ></mol-loader>
                     <!-- , 'url-input']" -->
 
-                    <form-button @click.native="useExampleInputFiles" cls="float-right">Use Example Files</form-button>  <!-- variant="default" -->
-                    <form-button @click.native="videoTutorial" cls="float-right mr-2">Video Tutorial</form-button>  <!-- variant="default" -->
+                    <form-button @click.native="useExampleInputFiles" cls="float-right ml-2">Use Example Files</form-button>  <!-- variant="default" -->
+                    <form-button @click.native="videoTutorial" cls="float-right">Video Tutorial</form-button>  <!-- variant="default" -->
                 </sub-section>
 
                 <sub-section title="Molecular Viewer">
