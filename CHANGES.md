@@ -55,12 +55,6 @@
      officially supported.
    - Substantial updates to the documentation.
 
-TODO:
-
-Tests on all operating systems (including mobile).
-
-Push updated documentation somewhere. (just rsync, works).
-
 ## 2.0
 
 1. We have refactored the code to make it more modular. BINANA still works as a
