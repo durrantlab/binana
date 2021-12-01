@@ -1,6 +1,6 @@
 # Changes
 
-## 2.1 WIP
+## 2.1
 
 1. Web-browser app: changes to how interactions are displayed.
    - Now possible to visualize multiple interactions at once. Select
