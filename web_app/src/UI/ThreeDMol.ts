@@ -4,7 +4,7 @@
 
 import * as BINANAInterface from "../BINANAInterface";
 import { store } from "../Vue/Store";
-import { proteinResnames } from "./FileLoaderSystem/ProteinProcessing.Vue";
+import { PROTEIN_RESNAMES } from "./FileLoaderSystem/Mols/ParentMol";
 
 declare var $3Dmol;
 declare var jQuery;
@@ -50,7 +50,7 @@ export function showSticksOrRibbonAsAppropriate(): void {
 
     // Non-protein residiues should be visible as sticks, but with low opacity.
     let notProtSel = {
-        "or": proteinResnames.map((r) => {
+        "or": Array.from(PROTEIN_RESNAMES).map((r) => {
             return {"resn": r}
         }),
         "invert": true

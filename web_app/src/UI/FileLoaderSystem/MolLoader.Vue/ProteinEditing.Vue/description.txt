@@ -1,0 +1,1 @@
+This is the protein editing widget for removing ligands, etc.

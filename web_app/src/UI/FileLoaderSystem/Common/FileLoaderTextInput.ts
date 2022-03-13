@@ -1,5 +1,5 @@
 // This file is released under the Apache 2.0 License. See
-// https://opensource.org/licenses/Apache-2.0 for full details. Copyright 2021
+// https://opensource.org/licenses/Apache-2.0 for full details. Copyright 2022
 // Jacob D. Durrant.
 
 declare var Vue;
@@ -20,20 +20,33 @@ export function setupFileLoaderTextInput(): void {
             };
         },
         "methods": {
+            /**
+             * Runs when the file is loaded.
+             * @returns void
+             */
             "onLoad"(): void {
                 this.$emit("onLoad", this["value"]);
             },
+
+            /**
+             * Detect keypress to submit on enter.
+             * @param  {KeyboardEvent} e
+             * @returns void
+             */
             "keydown"(e: KeyboardEvent): void {
                 if (e.key === "Enter") {
                     this["onLoad"]();
                 }
             },
+            
+            /**
+             * Detect keyup for v-bind.
+             * @param  {KeyboardEvent} e
+             * @returns void
+             */
             "keyup"(e: KeyboardEvent) : void {
                 this.$emit("input", this["localValue"]);
             }
-            // "clearText"(): void {
-            //     this["val"] = "";
-            // }
         },
         "template": /*html*/ `
             <b-input-group>

@@ -1,0 +1,2 @@
+This is the widget that wraps around mol-loader widgets and auto loads if it's
+in the local database. For multiple dockings in Webina, for example.

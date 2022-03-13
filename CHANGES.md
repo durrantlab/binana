@@ -1,5 +1,9 @@
 # Changes
 
+## 2.2
+
+1. Updated file loader system.
+
 ## 2.1
 
 1. Web-browser app: changes to how interactions are displayed.

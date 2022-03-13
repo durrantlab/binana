@@ -6,9 +6,8 @@ import * as Utils from "../../Utils";
 import * as BINANAInterface from "../../BINANAInterface";
 import * as Store from "../../Vue/Store";
 import { viewer } from "../ThreeDMol";
-import { IFileInfo, IFileLoadError, IResidueInfo } from "../FileLoaderSystem/Common/Interfaces";
-
-var FileSaver = require('file-saver');
+import { IExtractInfo, IFileInfo, IFileLoadError } from "../FileLoaderSystem/Common/Interfaces";
+import { jsZipAndFileSaverPromises } from "../FileLoaderSystem/Queue/LocalForageWrapper";
 
 declare var Vue;
 
@@ -260,25 +259,20 @@ let methodsFunctions = {
      * @returns void
      */
     "onSaveFiles"(): void {
-        let getJSZip = import(
-            /* webpackChunkName: "JSZip" */ 
-            /* webpackMode: "lazy" */
-            '../../../node_modules/jszip/lib/index'
-        ).then((mod) => {
-            // @ts-ignore
-            return Promise.resolve(mod.default);
-        });
-
         let getBinana = import(
             /* webpackChunkName: "binana" */ 
             /* webpackMode: "lazy" */
             '../../binanajs/binana'
         );
 
-        Promise.all([getJSZip, getBinana]).then((mods) => {
+        jsZipAndFileSaverPromises([getBinana])
+        .then((mods) => {
+            let FileSaver;
             let JSZip;
             let binana;
-            [JSZip, binana] = mods;
+            [JSZip, FileSaver, binana] = mods;
+
+            debugger;
 
             var zip = new JSZip();
             let dataURI = viewer.pngURI();
@@ -387,7 +381,7 @@ let methodsFunctions = {
     "onReceptorFileReady"(fileInfo: IFileInfo) {
         this.$store.commit("setVar", {
             name: "receptorContents",
-            val: fileInfo.fileContents,
+            val: fileInfo.mol.toText(),
         });
         this.$store.commit("updateFileName", {
             type: "receptor",
@@ -398,7 +392,7 @@ let methodsFunctions = {
     "onLigandFileReady"(fileInfo: IFileInfo) {
         this.$store.commit("setVar", {
             name: "ligandContents",
-            val: fileInfo.fileContents,
+            val: fileInfo.mol.toText(),
         });
         this.$store.commit("updateFileName", {
             type: "ligand",
@@ -406,10 +400,10 @@ let methodsFunctions = {
         });
     },
 
-    "onExtractReceptorAtomsToLigand"(residueInfo: IResidueInfo): void {
+    "onExtractReceptorAtomsToLigand"(residueInfo: IExtractInfo): void {
         // Get the existing ligand contents
-        let ligContents = residueInfo.residuePdbLines;
-        let ligFilename = residueInfo.residueId.filter(r => [undefined, ""].indexOf(r) === -1).join("-") + ".pdb";
+        let ligContents = residueInfo.pdbLines;
+        let ligFilename = residueInfo.suggestedNewFilename;  // residueInfo.residueId.filter(r => [undefined, ""].indexOf(r) === -1).join("-") + ".pdb";
 
         this.$refs["ligandMolLoader"]["loadMolFromExternal"](
             ligFilename, ligContents

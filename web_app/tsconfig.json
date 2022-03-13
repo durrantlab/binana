@@ -3,6 +3,7 @@
         "outDir": "./dist/",
         "sourceMap": true,
         "noImplicitAny": false,
+        // "moduleResolution": "node",
         "module": "es2020",
         // "es2020", 
         "target": "es5",
@@ -18,5 +19,11 @@
     "types": [
         "babylonjs",
         "babylonjs-gui"
-    ]
+    ],
+    "paths": {
+        // "jszip": [
+            // "../node_modules/jszip/lib/index"
+        // ],
+    }
+
 }

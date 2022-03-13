@@ -29,6 +29,8 @@ self.onmessage = function(e) {
         params.push(paramVal);
     }
 
+    debugger;
+
     binana["run"](params);
 
     // Get the output.
