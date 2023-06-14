@@ -1,5 +1,9 @@
 # Changes
 
+## WIP
+
+1. Minor bug fixes to address edge cases.
+
 ## 2.2
 
 1. Updated file loader system.

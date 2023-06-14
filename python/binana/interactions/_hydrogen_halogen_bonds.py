@@ -253,7 +253,7 @@ def _remove_extra_noh_hydrogen_bonds(
             if True in [a[1] for a in bad_scores]:
                 # There's a catastrophic problem
                 bad_score += 10000
-            else:
+            elif len(bad_scores) > 0:
                 # Nothing too catastrophic (use worst score based on angle).
                 bad_score += max(s[0] for s in bad_scores)
 

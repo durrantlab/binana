@@ -355,7 +355,9 @@ class Mol:
                 first = False
 
             if key != curr_res:
-
+                # print(curr_res, key)
+                # if len(residue) == 1:
+                #     import pdb; pdb.set_trace()
                 self.check_protein_format_process_residue(residue, last_key)
 
                 residue = []
